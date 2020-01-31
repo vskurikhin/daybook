@@ -1,12 +1,12 @@
 You can find the project status [here](https://github.com/users/vskurikhin/projects/4).
 
-# daybook
+# DayBook
 Day Book written on JavaEE/ThornTail with PrimeFaces.
 
 ## Table of Contents
 - [New Releases](#new-releases)
 - [Available Scripts](#available-scripts)
-  - [start](#start)
+  - [gradlew](#gradlew)
 - [Something Missing?](#something-missing)
 
 ## New Releases
@@ -14,9 +14,12 @@ Start.
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can build by:
 
-### `start`
+### `gradlew`
+
+Builds the app for production to the `gradlew clean build` folder.<br>
+It correctly bundles DayBook in production mode and optimizes the build for the best performance.
 
 ## Something Missing?
 

@@ -3,6 +3,8 @@
  */
 
 buildscript {
+  def liquibase_gradle_plugin = System.getProperty('VERSION_LIQUIBASE_GRADLE_PLUGIN') ?: VERSION_LIQUIBASE_GRADLE_PLUGIN
+  def org_liquibase_version = System.getProperty('VERSION_ORG_LIQUIBASE') ?: VERSION_ORG_LIQUIBASE
   def thorntail_version = System.getProperty('VERSION_THORNTAIL') ?: VERSION_THORNTAIL
 
   repositories {
@@ -13,12 +15,18 @@ buildscript {
   dependencies {
     classpath "io.thorntail:thorntail-gradle-plugin:$thorntail_version"
     classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
+    classpath("org.liquibase:liquibase-gradle-plugin:$liquibase_gradle_plugin") {
+      exclude(module: 'liquibase-core') // exclude the dependency on liquibase-core:3.6.3
+    }
+    classpath("org.liquibase:liquibase-core:$org_liquibase_version")
+
   }
 }
 
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
+apply plugin: 'org.liquibase.gradle'
 apply plugin: 'thorntail'
 apply plugin: 'thorntail-arquillian'
 apply plugin: 'war'
@@ -28,21 +36,24 @@ repositories {
   mavenLocal()
 }
 
+def arquillian_version = '1.5.0.Final'
+def h2_database_version = '1.4.197'
+def org_jboss_weld_se_version = '3.1.2.Final'
+def org_junit_version = '5.5.2'
+
 static def getEnv(key, defaultValue) {
   return System.getenv(key) ?: defaultValue
 }
 
+def drv_org_postgresql_version = getEnv('VERSION_DRV_ORG_POSTGRESQL', VERSION_DRV_ORG_POSTGRESQL)
 def jsf_version = getEnv('VERSION_JSF', VERSION_JSF)
+def liquibase_gradle_plugin_version = getEnv('VERSION_LIQUIBASE_GRADLE_PLUGIN', VERSION_LIQUIBASE_GRADLE_PLUGIN)
+def liquibase_groovy_dsl_version = getEnv('VERSION_LIQUIBASE_GROOVY_DSL', VERSION_LIQUIBASE_GROOVY_DSL)
+def org_hibernate_version = getEnv('VERSION_ORG_HIBERNATE', VERSION_ORG_HIBERNATE)
+def org_liquibase_version = getEnv('VERSION_ORG_LIQUIBASE', VERSION_ORG_LIQUIBASE)
+def org_slf4j_version = getEnv('VERSION_ORG_SLF4J_VERSION', VERSION_ORG_SLF4J_VERSION)
+def projectlombok_version = getEnv('VERSION_PROJECTLOMBOK', VERSION_PROJECTLOMBOK)
 def thorntail_version = getEnv('VERSION_THORNTAIL', VERSION_THORNTAIL)
-
-
-def arquillian_version = '1.5.0.Final'
-def h2_database_version = '1.4.197'
-def org_hibernate_version = '5.4.6.Final'
-def org_jboss_weld_se_version = '3.1.2.Final'
-def org_junit_version = '5.5.2'
-def org_slf4j_version = '1.7.28'
-def projectlombok_version = '1.18.10'
 
 dependencyManagement {
   imports {
@@ -53,6 +64,7 @@ dependencyManagement {
 
 dependencies {
   compile group: 'io.thorntail', name: 'thorntail-runner', version: thorntail_version
+  compile group: 'org.postgresql', name: 'postgresql', version: drv_org_postgresql_version
   compile group: 'org.slf4j', name: 'slf4j-api', version: org_slf4j_version
   compile group: 'org.slf4j', name: 'slf4j-simple', version: org_slf4j_version
 
@@ -71,6 +83,11 @@ dependencies {
   compile "io.thorntail:microprofile-metrics"
   compile "io.thorntail:microprofile-restclient"
   compile "io.thorntail:undertow"
+
+  liquibaseRuntime group: 'org.liquibase', name: 'liquibase-core', version: org_liquibase_version
+  liquibaseRuntime group: 'org.liquibase', name: 'liquibase-gradle-plugin', version: liquibase_gradle_plugin_version
+  liquibaseRuntime group: 'org.liquibase', name: 'liquibase-groovy-dsl', version: liquibase_groovy_dsl_version
+  liquibaseRuntime group: 'org.postgresql', name: 'postgresql', version: drv_org_postgresql_version
 
   compileOnly group: 'org.projectlombok', name: 'lombok', version: projectlombok_version
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: projectlombok_version
@@ -111,6 +128,9 @@ static def buildTimestamp() {
   def date = new Date()
   def formattedDate = date.format('yyyyMMdd_HHmmss')
   return formattedDate.toString()
+}
+
+liquibase {
 }
 
 test {
