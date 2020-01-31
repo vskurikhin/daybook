@@ -6,11 +6,17 @@ Day Book written on JavaEE/ThornTail with PrimeFaces.
 ## Table of Contents
 - [New Releases](#new-releases)
 - [Available Scripts](#available-scripts)
-  - [npm start](#npm-start)
+  - [start](#start)
 - [Something Missing?](#something-missing)
 
 ## New Releases
 Start.
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `start`
 
 ## Something Missing?
 

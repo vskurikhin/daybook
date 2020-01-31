@@ -1,0 +1,119 @@
+/*
+ * Copyright 2019-2020
+ */
+
+buildscript {
+  def thorntail_version = System.getProperty('VERSION_THORNTAIL') ?: VERSION_THORNTAIL
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "io.thorntail:thorntail-gradle-plugin:$thorntail_version"
+    classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
+  }
+}
+
+apply plugin: 'idea'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'maven'
+apply plugin: 'thorntail'
+apply plugin: 'thorntail-arquillian'
+apply plugin: 'war'
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+static def getEnv(key, defaultValue) {
+  return System.getenv(key) ?: defaultValue
+}
+
+def jsf_version = getEnv('VERSION_JSF', VERSION_JSF)
+def thorntail_version = getEnv('VERSION_THORNTAIL', VERSION_THORNTAIL)
+
+
+def arquillian_version = '1.5.0.Final'
+def h2_database_version = '1.4.197'
+def org_hibernate_version = '5.4.6.Final'
+def org_jboss_weld_se_version = '3.1.2.Final'
+def org_junit_version = '5.5.2'
+def org_slf4j_version = '1.7.28'
+def projectlombok_version = '1.18.10'
+
+dependencyManagement {
+  imports {
+    mavenBom "io.thorntail:bom-all:$thorntail_version"
+    mavenBom "org.jboss.arquillian:arquillian-bom:$arquillian_version"
+  }
+}
+
+dependencies {
+  compile group: 'io.thorntail', name: 'thorntail-runner', version: thorntail_version
+  compile group: 'org.slf4j', name: 'slf4j-api', version: org_slf4j_version
+  compile group: 'org.slf4j', name: 'slf4j-simple', version: org_slf4j_version
+
+  compile "com.h2database:h2:$h2_database_version"
+  compile "io.thorntail:bean-validation"
+  compile "io.thorntail:cdi"
+  compile "io.thorntail:datasources"
+  compile "io.thorntail:ee-security"
+  compile "io.thorntail:ejb"
+  compile "io.thorntail:ejb-mdb"
+  compile "io.thorntail:hibernate-validator"
+  compile "io.thorntail:jpa"
+  compile "io.thorntail:jsf"
+  compile "io.thorntail:logging"
+  compile "io.thorntail:logstash"
+  compile "io.thorntail:microprofile-metrics"
+  compile "io.thorntail:microprofile-restclient"
+  compile "io.thorntail:undertow"
+
+  compileOnly group: 'org.projectlombok', name: 'lombok', version: projectlombok_version
+  annotationProcessor group: 'org.projectlombok', name: 'lombok', version: projectlombok_version
+
+  providedCompile group: 'com.sun.faces', name: 'jsf-api', version: jsf_version
+  providedCompile group: 'com.sun.faces', name: 'jsf-impl', version: jsf_version
+  providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+  providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
+
+  testCompile group: 'io.thorntail', name: 'gradle-arquillian-adapter', version: '2.5.0.Final'
+  testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
+  testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '4.3'
+  testCompile group: 'org.hibernate', name: 'hibernate-core', version: org_hibernate_version
+  testCompile group: 'org.hibernate', name: 'hibernate-entitymanager', version: org_hibernate_version
+  testCompile group: 'org.jboss.arquillian.extension', name: 'arquillian-transaction-jta', version: '1.0.5'
+  testCompile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
+  testCompile group: 'org.jboss.naming', name: 'jnpserver', version: '5.0.5.Final'
+  testCompile group: 'org.jboss.narayana.jta', name: 'narayana-jta', version: '5.9.8.Final'
+  testCompile group: 'org.jboss.spec.javax.transaction', name: 'jboss-transaction-api_1.2_spec', version: '1.1.1.Final'
+  testCompile group: 'org.jboss.weld', name: 'weld-junit5', version: '2.0.1.Final'
+  testCompile group: 'org.jboss.weld.module', name: 'weld-ejb', version: org_jboss_weld_se_version
+  testCompile group: 'org.jboss.weld.module', name: 'weld-jta', version: org_jboss_weld_se_version
+  testCompile group: 'org.jboss.weld.se', name: 'weld-se-core', version: org_jboss_weld_se_version
+
+  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: org_junit_version
+  testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.2'
+  testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: org_junit_version
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+
+  testCompile "junit:junit:4.12"
+  testCompile "io.thorntail:arquillian:${thorntail_version}"
+  testCompile "io.thorntail:gradle-arquillian-adapter:${thorntail_version}"
+  testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${arquillian_version}"
+  testRuntime "org.jboss.logging:jboss-logging:3.1.4.GA"
+}
+
+static def buildTimestamp() {
+  def date = new Date()
+  def formattedDate = date.format('yyyyMMdd_HHmmss')
+  return formattedDate.toString()
+}
+
+test {
+  useJUnitPlatform()
+  maxHeapSize = '1G'
+}
