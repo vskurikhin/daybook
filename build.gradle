@@ -140,7 +140,24 @@ static def buildTimestamp() {
   return formattedDate.toString()
 }
 
+def db_password = getEnv('DBPASS', DATABASE_PASSWORD)
+def db_url = getEnv('DBURL', DATABASE_URL)
+def db_username = getEnv('DBUSER', DATABASE_USERNAME)
+
+def timestamp = buildTimestamp()
+def db_url_public = db_url + '?currentSchema=public'
+def run_list = project.properties['runList'] ?: 'db_public'
+
 liquibase {
+  activities {
+    db_public {
+      changeLogFile "src/main/db/public/Change_Log.xml"
+      url db_url_public
+      defaultSchemaName 'public'
+      username db_username
+      password db_password
+    }
+  }
 }
 
 test {
