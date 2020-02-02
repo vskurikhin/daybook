@@ -145,9 +145,10 @@ def db_url = getEnv('DBURL', DATABASE_URL)
 def db_username = getEnv('DBUSER', DATABASE_USERNAME)
 
 def timestamp = buildTimestamp()
+def db_url_db = db_url + '?currentSchema=db'
 def db_url_public = db_url + '?currentSchema=public'
 def db_url_dictionary = db_url + '?currentSchema=dictionary'
-def run_list = project.properties['runList'] ?: 'db_public, db_dictionary'
+def run_list = project.properties['runList'] ?: 'db_public, db_dictionary, db_db'
 
 liquibase {
   activities {
@@ -161,6 +162,13 @@ liquibase {
     db_dictionary {
       changeLogFile "src/main/db/dictionary/Change_Log.xml"
       url db_url_dictionary
+      defaultSchemaName 'public'
+      username db_username
+      password db_password
+    }
+    db_db {
+      changeLogFile "src/main/db/db/Change_Log.xml"
+      url db_url_db
       defaultSchemaName 'public'
       username db_username
       password db_password
