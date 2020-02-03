@@ -36,16 +36,27 @@ repositories {
   mavenLocal()
 }
 
+def arquillian_trn_jta = '1.0.5'
 def arquillian_version = '1.5.0.Final'
+def assertj_core_version = '3.15.0'
 def h2_database_version = '1.4.197'
+def jboss_logging_version = '3.4.1.Final'
+def jnpserver_version = '5.0.5.Final'
+def junit_platform_launcher_version = '1.6.0'
+def mockito_core_version = '3.2.4'
+def narayana_jta_version = '5.10.3.Final'
 def org_jboss_weld_se_version = '3.1.2.Final'
-def org_junit_version = '5.5.2'
+def org_junit_version = '5.6.0'
+def weld_junit5_version = '2.0.1.Final'
 
 static def getEnv(key, defaultValue) {
   return System.getenv(key) ?: defaultValue
 }
 
 def drv_org_postgresql_version = getEnv('VERSION_DRV_ORG_POSTGRESQL', VERSION_DRV_ORG_POSTGRESQL)
+def gradle_tooling_api_version = getEnv('VERSION_GRADLE_TOOLING_API', VERSION_GRADLE_TOOLING_API)
+def hibernate_jpa_2_1_api = getEnv('VERSION_HIBERNATE_JPA_2_1_API', VERSION_HIBERNATE_JPA_2_1_API)
+def javax_servlet_api_version = getEnv('VERSION_JAVAX_SERVLET_API', VERSION_JAVAX_SERVLET_API)
 def jsf_version = getEnv('VERSION_JSF', VERSION_JSF)
 def liquibase_gradle_plugin_version = getEnv('VERSION_LIQUIBASE_GRADLE_PLUGIN', VERSION_LIQUIBASE_GRADLE_PLUGIN)
 def liquibase_groovy_dsl_version = getEnv('VERSION_LIQUIBASE_GROOVY_DSL', VERSION_LIQUIBASE_GROOVY_DSL)
@@ -94,34 +105,33 @@ dependencies {
 
   providedCompile group: 'com.sun.faces', name: 'jsf-api', version: jsf_version
   providedCompile group: 'com.sun.faces', name: 'jsf-impl', version: jsf_version
-  providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-  providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: '1.0.0.Final'
+  providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: javax_servlet_api_version
+  providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: hibernate_jpa_2_1_api
 
-  testCompile group: 'io.thorntail', name: 'gradle-arquillian-adapter', version: '2.5.0.Final'
-  testCompile group: 'org.assertj', name: 'assertj-core', version: '3.13.2'
-  testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: '4.3'
+  testCompile group: 'io.thorntail', name: 'gradle-arquillian-adapter', version: thorntail_version
+  testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
+  testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: gradle_tooling_api_version
   testCompile group: 'org.hibernate', name: 'hibernate-core', version: org_hibernate_version
   testCompile group: 'org.hibernate', name: 'hibernate-entitymanager', version: org_hibernate_version
-  testCompile group: 'org.jboss.arquillian.extension', name: 'arquillian-transaction-jta', version: '1.0.5'
-  testCompile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.4.1.Final'
-  testCompile group: 'org.jboss.naming', name: 'jnpserver', version: '5.0.5.Final'
-  testCompile group: 'org.jboss.narayana.jta', name: 'narayana-jta', version: '5.9.8.Final'
+  testCompile group: 'org.jboss.arquillian.extension', name: 'arquillian-transaction-jta', version: arquillian_trn_jta
+  testCompile group: 'org.jboss.logging', name: 'jboss-logging', version: jboss_logging_version
+  testCompile group: 'org.jboss.naming', name: 'jnpserver', version: jnpserver_version
+  testCompile group: 'org.jboss.narayana.jta', name: 'narayana-jta', version: narayana_jta_version
   testCompile group: 'org.jboss.spec.javax.transaction', name: 'jboss-transaction-api_1.2_spec', version: '1.1.1.Final'
-  testCompile group: 'org.jboss.weld', name: 'weld-junit5', version: '2.0.1.Final'
+  testCompile group: 'org.jboss.weld', name: 'weld-junit5', version: weld_junit5_version
   testCompile group: 'org.jboss.weld.module', name: 'weld-ejb', version: org_jboss_weld_se_version
   testCompile group: 'org.jboss.weld.module', name: 'weld-jta', version: org_jboss_weld_se_version
   testCompile group: 'org.jboss.weld.se', name: 'weld-se-core', version: org_jboss_weld_se_version
 
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: org_junit_version
-  testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.5.2'
+  testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: junit_platform_launcher_version
   testCompile group: 'org.junit.vintage', name: 'junit-vintage-engine', version: org_junit_version
-  testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+  testCompile group: 'org.mockito', name: 'mockito-core', version: mockito_core_version
 
   testCompile "junit:junit:4.12"
   testCompile "io.thorntail:arquillian:${thorntail_version}"
   testCompile "io.thorntail:gradle-arquillian-adapter:${thorntail_version}"
   testCompile "org.jboss.arquillian.junit:arquillian-junit-container:${arquillian_version}"
-  testRuntime "org.jboss.logging:jboss-logging:3.1.4.GA"
 }
 
 static def buildTimestamp() {
@@ -130,7 +140,41 @@ static def buildTimestamp() {
   return formattedDate.toString()
 }
 
+def db_password = getEnv('DBPASS', DATABASE_PASSWORD)
+def db_url = getEnv('DBURL', DATABASE_URL)
+def db_username = getEnv('DBUSER', DATABASE_USERNAME)
+
+def timestamp = buildTimestamp()
+def db_url_db = db_url + '?currentSchema=db'
+def db_url_public = db_url + '?currentSchema=public'
+def db_url_dictionary = db_url + '?currentSchema=dictionary'
+def run_list = project.properties['runList'] ?: 'db_public, db_dictionary, db_db'
+
 liquibase {
+  activities {
+    db_public {
+      changeLogFile "src/main/db/public/Change_Log.xml"
+      url db_url_public
+      defaultSchemaName 'public'
+      username db_username
+      password db_password
+    }
+    db_dictionary {
+      changeLogFile "src/main/db/dictionary/Change_Log.xml"
+      url db_url_dictionary
+      defaultSchemaName 'public'
+      username db_username
+      password db_password
+    }
+    db_db {
+      changeLogFile "src/main/db/db/Change_Log.xml"
+      url db_url_db
+      defaultSchemaName 'public'
+      username db_username
+      password db_password
+    }
+  }
+  runList = run_list
 }
 
 test {
