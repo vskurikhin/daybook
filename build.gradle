@@ -10,9 +10,13 @@ buildscript {
   repositories {
     mavenLocal()
     mavenCentral()
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
   }
 
   dependencies {
+    classpath "gradle.plugin.com.avast.gradle:gradle-docker-compose-plugin:0.9.5"
     classpath "io.thorntail:thorntail-gradle-plugin:$thorntail_version"
     classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
     classpath("org.liquibase:liquibase-gradle-plugin:$liquibase_gradle_plugin") {
@@ -23,6 +27,7 @@ buildscript {
   }
 }
 
+apply plugin: 'com.avast.gradle.docker-compose'
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
@@ -173,11 +178,41 @@ liquibase {
       username db_username
       password db_password
     }
+
+    gen_dictionary {
+      changeLogFile "src/test/docker/sql/10-changelogs-dictionary-${timestamp}.postgresql.sql"
+      url db_url_dictionary
+      defaultSchemaName 'dictionary'
+      username db_username
+      password db_password
+    }
+    gen_db {
+      changeLogFile "src/test/docker/sql/20-changelogs-db-${timestamp}.postgresql.sql"
+      url db_url_db
+      defaultSchemaName 'db'
+      username db_username
+      password db_password
+    }
   }
   runList = run_list
+}
+
+dockerCompose {
+  useComposeFiles = [ 'src/test/docker/docker-compose.yml' ]
+  stopContainers = true
+  removeContainers = true
+  composeLogToFile = project.file('build/my-logs.txt')
+  containerLogToDir = project.file('build/logs')
 }
 
 test {
   useJUnitPlatform()
   maxHeapSize = '1G'
+}
+
+task showRepos {
+    doLast {
+        println "All repos:"
+        println repositories.collect { it.name }
+    }
 }
