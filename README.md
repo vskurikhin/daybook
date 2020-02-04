@@ -6,20 +6,29 @@ Day Book written on JavaEE/ThornTail with PrimeFaces.
 ## Table of Contents
 - [New Releases](#new-releases)
 - [Available Scripts](#available-scripts)
-  - [gradlew](#gradlew)
+  - [gradlew clean build ](#gradlew)
+  - [gradlew update](#gradlew-update)
+  - [gradlew generateChangelog](#gradlew-generateChangelog)
 - [Something Missing?](#something-missing)
 
 ## New Releases
 Start.
 
-## Available Scripts
+## Available Scripts `gradlew`
 
 In the project directory, you can build by:
-
-### `gradlew`
-
 Builds the app for production to the `gradlew clean build` folder.<br>
 It correctly bundles DayBook in production mode and optimizes the build for the best performance.
+
+### `gradlew update`
+```
+  ./gradlew update
+```
+
+### `gradlew generateChangelog`
+```
+  ./gradlew generateChangelog -PrunList='gen_dictionary, gen_db'
+```
 
 ## Something Missing?
 
