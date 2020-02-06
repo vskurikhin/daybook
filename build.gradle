@@ -48,6 +48,9 @@ repositories {
   maven {
     url "https://repo.gradle.org/gradle/libs-releases-local"
   }
+  maven {
+    url "https://repo.spring.io/plugins-release"
+  }
 }
 
 def arquillian_trn_jta = '1.0.5'
