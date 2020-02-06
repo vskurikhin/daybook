@@ -13,6 +13,9 @@ buildscript {
     maven {
       url "https://plugins.gradle.org/m2/"
     }
+    maven {
+      url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
   }
 
   dependencies {
@@ -37,8 +40,17 @@ apply plugin: 'thorntail-arquillian'
 apply plugin: 'war'
 
 repositories {
-  mavenCentral()
   mavenLocal()
+  mavenCentral()
+  maven {
+    url "https://maven.repository.redhat.com/ga"
+  }
+  maven {
+    url "https://repo.gradle.org/gradle/libs-releases-local"
+  }
+  maven {
+    url "https://repo.spring.io/plugins-release"
+  }
 }
 
 def arquillian_trn_jta = '1.0.5'
@@ -100,6 +112,7 @@ dependencies {
   compile "io.thorntail:microprofile-restclient"
   compile "io.thorntail:undertow"
 
+
   liquibaseRuntime group: 'org.liquibase', name: 'liquibase-core', version: org_liquibase_version
   liquibaseRuntime group: 'org.liquibase', name: 'liquibase-gradle-plugin', version: liquibase_gradle_plugin_version
   liquibaseRuntime group: 'org.liquibase', name: 'liquibase-groovy-dsl', version: liquibase_groovy_dsl_version
@@ -114,6 +127,8 @@ dependencies {
   providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: hibernate_jpa_2_1_api
 
   testCompile group: 'io.thorntail', name: 'gradle-arquillian-adapter', version: thorntail_version
+  testCompile group: 'io.thorntail', name: 'thorntail-gradle-tooling', version: '2.6.0.Final'
+
   testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
   testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: gradle_tooling_api_version
   testCompile group: 'org.hibernate', name: 'hibernate-core', version: org_hibernate_version
