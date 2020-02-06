@@ -11,7 +11,6 @@ package su.svn.showcase.domain;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -22,8 +21,7 @@ import java.util.UUID;
 
 // Annotation to allow an entity to inherit properties from a base class.
 @MappedSuperclass
-public class UUIDEntity implements Serializable, DBEntity<UUID> {
-    private static final long serialVersionUID = 100L;
+public class UUIDEntity implements DBEntity<UUID> {
 
     public static final UUID ZERO = UUID.fromString("00000000-0000-0000-0000-000000000000");
 

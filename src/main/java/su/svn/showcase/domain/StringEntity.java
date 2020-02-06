@@ -13,7 +13,6 @@ import su.svn.showcase.utils.StringUtil;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 /**
  * Base Entity with String key
@@ -23,8 +22,7 @@ import java.io.Serializable;
 
 // Annotation to allow an entity to inherit properties from a base class.
 @MappedSuperclass
-public class StringEntity implements Serializable, DBEntity<String> {
-    private static final long serialVersionUID = 102L;
+public class StringEntity implements DBEntity<String> {
 
     public static final String ZERO = "00000000" + "00000000";
 
