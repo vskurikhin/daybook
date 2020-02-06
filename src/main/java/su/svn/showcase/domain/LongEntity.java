@@ -15,7 +15,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -26,8 +25,7 @@ import java.util.Objects;
 
 // Annotation to allow an entity to inherit properties from a base class.
 @MappedSuperclass
-public class LongEntity implements Serializable, DBEntity<Long> {
-    private static final long serialVersionUID = 101L;
+public class LongEntity implements DBEntity<Long> {
 
     public static final long ZERO = 0;
 
@@ -64,7 +62,7 @@ public class LongEntity implements Serializable, DBEntity<Long> {
             return true;
         if (obj == null)
             return false;
-        if (!(obj instanceof LongEntity)) {
+        if ( ! (obj instanceof LongEntity)) {
             return false;
         }
         LongEntity other = (LongEntity) obj;
