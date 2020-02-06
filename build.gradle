@@ -127,7 +127,7 @@ dependencies {
   providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: hibernate_jpa_2_1_api
 
   testCompile group: 'io.thorntail', name: 'gradle-arquillian-adapter', version: thorntail_version
-  testCompile group: 'io.thorntail', name: 'thorntail-gradle-tooling', version: '2.6.0.Final'
+  testCompile group: 'io.thorntail', name: 'thorntail-gradle-tooling', version: thorntail_version
 
   testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
   testCompile group: 'org.gradle', name: 'gradle-tooling-api', version: gradle_tooling_api_version
