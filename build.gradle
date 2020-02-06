@@ -120,7 +120,7 @@ dependencies {
   testCompile group: 'org.hibernate', name: 'hibernate-entitymanager', version: org_hibernate_version
   testCompile group: 'org.jboss.arquillian.extension', name: 'arquillian-transaction-jta', version: arquillian_trn_jta
   testCompile group: 'org.jboss.logging', name: 'jboss-logging', version: jboss_logging_version
-  testCompile group: 'org.jboss.naming', name: 'jnpserver', version: jnpserver_version
+  // testCompile group: 'org.jboss.naming', name: 'jnpserver', version: jnpserver_version
   testCompile group: 'org.jboss.narayana.jta', name: 'narayana-jta', version: narayana_jta_version
   testCompile group: 'org.jboss.spec.javax.transaction', name: 'jboss-transaction-api_1.2_spec', version: '1.1.1.Final'
   testCompile group: 'org.jboss.weld', name: 'weld-junit5', version: weld_junit5_version
