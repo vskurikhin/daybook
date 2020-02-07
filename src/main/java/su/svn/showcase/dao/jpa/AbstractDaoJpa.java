@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.07 19:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.07 19:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -14,6 +14,7 @@ import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.utils.CollectionUtil;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.metamodel.EntityType;
 import java.util.ArrayList;
@@ -68,8 +69,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             return Optional.ofNullable(entry);
         } catch (IllegalArgumentException | IllegalStateException e) {
             getLogger().error("Can't search because had the exception", e);
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     /**
@@ -89,8 +90,26 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
                     .getSingleResult());
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
             getLogger().error("Can't search all because had the exception", e);
-            return Optional.empty();
         }
+        return Optional.empty();
+    }
+
+
+    /**
+     * Returns whether an entity with the given id exists.
+     *
+     * @param id must not be {@literal null}.
+     * @return {@literal true} if an entity with the given id exists, {@literal false} otherwise.
+     * @throws IllegalArgumentException if {@code id} is {@literal null}.
+     */
+    protected boolean abstractExistsById(K id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(getEClass(), id) != null;
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            getLogger().error("Can't search all because had the exception", e);
+        }
+        return false;
     }
 
     /**
@@ -105,8 +124,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             return em.createNamedQuery(namedQuery, getEClass()).getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
             getLogger().error("Can't search all because had the exception", e);
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     /**
@@ -126,8 +145,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
                     .getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
             getLogger().error("Can't search all because had the exception", e);
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     /**
@@ -196,6 +215,53 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
                 } else {
                     em.merge(entity);
                 }
+                ids.add(entity.getId());
+            }
+            em.flush();
+        } catch (RuntimeException e) {
+            getLogger().error("Can't save because had the exception", e);
+            return false;
+        }
+        getLogger().info("Save {} with ids: {}", getEClass().getSimpleName(), ids);
+        return true;
+    }
+
+    /**
+     * Deletes the entity with the given id.
+     *
+     * @param id must not be {@literal null}.
+     * @throws NoResultException in case the given {@code id} is {@literal null}
+     */
+    protected boolean abstractDaoDelete(K id) {
+        EntityManager em = getEntityManager();
+        try {
+            E merged = em.merge(abstractDaoFindById(id).orElseThrow(NoResultException::new));
+            em.remove(merged);
+            em.flush();
+        } catch (RuntimeException e) {
+            getLogger().error("Can't delete because had the exception", e);
+            return false;
+        }
+        getLogger().info("Delete {} with id: {}", getEClass().getSimpleName(), id);
+        return true;
+    }
+
+    /**
+     * Deletes the given entities.
+     *
+     * @param entities
+     * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
+     */
+    protected boolean abstractDaoDeleteAll(Iterable<? extends E> entities) {
+        List<K> ids = new ArrayList<>();
+        EntityManager em = getEntityManager();
+        try {
+            if (entities == null) {
+                return false;
+            }
+
+            for (E entity : entities) {
+                em.remove(entity);
                 ids.add(entity.getId());
             }
             em.flush();
