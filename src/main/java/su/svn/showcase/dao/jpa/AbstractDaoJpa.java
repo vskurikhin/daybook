@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.07 17:14 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.07 19:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dao.jpa;
 import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.utils.CollectionUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
@@ -55,6 +56,44 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     /**
+     * Retrieves the record of entity by key.
+     *
+     * @param id - key.
+     * @return record of entity by key.
+     */
+    protected Optional<E> abstractDaoFindById(K id) {
+        EntityManager em = getEntityManager();
+        try {
+            E entry = em.find(getEClass(), id);
+            return Optional.ofNullable(entry);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            getLogger().error("Can't search because had the exception", e);
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Retrieves the record of entity by namedQuery by the parameter and his value.
+     *
+     * @param namedQuery - query.
+     * @param parameter - name of parameter.
+     * @param value - parameter value.
+     * @param <T> - type of parameter value.
+     * @return record of entity by query or empty.
+     */
+    protected <T> Optional<E> abstractDaoFindWhereField(String namedQuery, String parameter, T value) {
+        EntityManager em = getEntityManager();
+        try {
+            return Optional.of(em.createNamedQuery(namedQuery, getEClass())
+                    .setParameter(parameter, value)
+                    .getSingleResult());
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            getLogger().error("Can't search all because had the exception", e);
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Retrieves all records of entity by namedQuery.
      *
      * @param namedQuery - query.
@@ -71,20 +110,40 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     /**
-     * Retrieves the record of entity by key.
+     * Retrieves all records of entity by namedQuery by the parameter and his value.
      *
-     * @param id - key.
-     * @return record of entity by key.
+     * @param namedQuery - query.
+     * @param parameter - name of parameter.
+     * @param value - parameter value.
+     * @param <T> - type of parameter value.
+     * @return records of entity by query.
      */
-    protected Optional<E> abstractDaoFindById(K id) {
+    protected <T> List<E> abstractDaoFindAllWhereField(String namedQuery, String parameter, T value) {
         EntityManager em = getEntityManager();
         try {
-            E entry = em.find(getEClass(), id);
-            return Optional.ofNullable(entry);
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            getLogger().error("Can't search because had the exception", e);
-            return Optional.empty();
+            return em.createNamedQuery(namedQuery, getEClass())
+                    .setParameter(parameter, value)
+                    .getResultList();
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            getLogger().error("Can't search all because had the exception", e);
+            return Collections.emptyList();
         }
+    }
+
+    /**
+     * Retrieves all records of entity by namedQuery by the parameter and his possible values.
+     *
+     * @param namedQuery - query.
+     * @param parameter - name of parameter.
+     * @param iterable - collection of parameter values.
+     * @return records of entity by query.
+     */
+    protected <T> List<E> abstractDaoFindAllWhereIn(String namedQuery, String parameter, Iterable<T> iterable) {
+        List<T> list = CollectionUtil.iterableToList(iterable);
+        if (list.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return abstractDaoFindAllWhereField(namedQuery, parameter, list);
     }
 
     /**
