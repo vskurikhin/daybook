@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.07 19:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.07 19:26 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -16,6 +16,8 @@ import su.svn.showcase.utils.CollectionUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -163,6 +165,18 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             return Collections.emptyList();
         }
         return abstractDaoFindAllWhereField(namedQuery, parameter, list);
+    }
+
+    /**
+     * Returns the number of entities available.
+     *
+     * @return the number of entities
+     */
+    protected long count() {
+        CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
+        countQuery.select(criteriaBuilder.count(countQuery.from(getEClass())));
+        return getEntityManager().createQuery(countQuery).getSingleResult();
     }
 
     /**
