@@ -49,7 +49,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> findAllWhereTag(String tag);
 
     /**
-     * Retrieves all records of entity by the tag and his possible values.
+     * Retrieves all records of an entity type by the set of possible tag values.
      *
      * @param tags - possible values.
      * @return records of entity by condition.

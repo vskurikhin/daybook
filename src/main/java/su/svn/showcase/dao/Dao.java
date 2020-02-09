@@ -37,7 +37,7 @@ public interface Dao<K, E extends DBEntity<K>> {
     Collection<E> findAll();
 
     /**
-     * Retrieves all records of entity by the key and his possible values.
+     * Retrieves all records of an entity type by the set of possible key values.
      *
      * @param ids - possible values.
      * @return records of entity by condition.

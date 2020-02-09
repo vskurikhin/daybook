@@ -22,7 +22,7 @@ import java.util.UUID;
 public interface UserRoleDao extends Dao<UUID, UserRole> {
 
     /**
-     * Retrieves all records where role equals the value.
+     * Retrieves all records of an entity type by the set of possible role values.
      *
      * @param role - the value.
      * @return records of entity by condition.
