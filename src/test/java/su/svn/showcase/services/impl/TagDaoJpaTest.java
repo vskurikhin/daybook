@@ -104,7 +104,7 @@ class TagDaoJpaTest {
         TagDao tagDao = weld.select(TagDaoJpa.class).get();
         Optional<Tag> test= tagDao.findById(StringUtil.generateStringId());
         assertNotNull(test);
-        assertTrue(test.isEmpty());
+        assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 
@@ -133,7 +133,7 @@ class TagDaoJpaTest {
     void whenTagDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         TagDao tagDao = weld.select(TagDaoJpa.class).get();
-        List<Tag> testTags = new ArrayList<>() {{ add(tag1); }};
+        List<Tag> testTags = new ArrayList<Tag>() {{ add(tag1); }};
         assertTrue(tagDao.saveAll(testTags));
         userTransaction.rollback();
     }
@@ -153,17 +153,17 @@ class TagDaoJpaTest {
         userTransaction.begin();
         TagDao tagDao = weld.select(TagDaoJpa.class).get();
         assertTrue(tagDao.save(tag1));
-        List<String> testTags = new ArrayList<>() {{
+        List<String> testTags = new ArrayList<String>() {{
             add("tag1");
             add("tagTest1");
             add("tag2");
         }};
-        Set<String> expected = new HashSet<>() {{
+        Set<String> expected = new HashSet<String>() {{
             add("tag1");
             add("tag2");
         }};
         List<String> list = tagDao.outerSection(testTags);
-        Set<String> result = new HashSet<>(list);
+        Set<String> result = new HashSet<String>(list);
         assertEquals(expected, result);
         userTransaction.rollback();
     }

@@ -103,7 +103,7 @@ class RoleDaoJpaTest {
         RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
         Optional<Role> test = roleDao.findById(UUID.randomUUID());
         assertNotNull(test);
-        assertTrue(test.isEmpty());
+        assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 
@@ -132,7 +132,7 @@ class RoleDaoJpaTest {
     void whenRoleDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        List<Role> testRoles = new ArrayList<>() {{ add(role1); }};
+        List<Role> testRoles = new ArrayList<Role>() {{ add(role1); }};
         assertTrue(roleDao.saveAll(testRoles));
         userTransaction.rollback();
     }
