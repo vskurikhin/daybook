@@ -1,3 +1,11 @@
+/*
+ * This file was last modified at 2020.02.09 17:53 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * UserLoginDaoJpaTest.java
+ * $Id$
+ */
+
 package su.svn.showcase.services.impl;
 
 import org.jboss.weld.junit5.WeldInitiator;

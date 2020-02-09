@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDao.java
@@ -49,7 +49,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> findAllWhereTag(String tag);
 
     /**
-     * Retrieves all records of entity by the tag and his possible values.
+     * Retrieves all records of an entity type by the set of possible tag values.
      *
      * @param tags - possible values.
      * @return records of entity by condition.
