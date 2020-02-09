@@ -9,6 +9,10 @@
 package su.svn.utils;
 
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.RecordBaseDto;
+import su.svn.showcase.dto.RecordDto;
+import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.TagFullDto;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -25,6 +29,10 @@ public class TestData {
 
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();
     public static final Set<Record> EMPTY_RECORDS = Collections.emptySet();
+
+    public static final Set<TagBaseDto> EMPTY_BASEDTO_TAGS = Collections.emptySet();
+    public static final Set<TagFullDto> EMPTY_FULLDTO_TAGS = Collections.emptySet();
+    public static final Set<RecordDto> EMPTY_RECORD_DTOS = Collections.emptySet();
 
     public static final List<UserRole> EMPTY_USER_ROLES = Collections.emptyList();
     public static final List<NewsEntry> EMPTY_NEWS_ENTRIES = Collections.emptyList();
