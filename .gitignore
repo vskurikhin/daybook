@@ -87,3 +87,5 @@ buildNumber.properties
 **/build/
 **/gradle/
 **/.gradle/
+**/ObjectStore/
+**/PutObjectStoreDirHere/
