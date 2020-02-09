@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 14:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 15:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -29,6 +29,7 @@ import static su.svn.showcase.utils.CollectionUtil.convertList;
 
 /**
  * Abstract Data-Access Object class to be implemented by all DAO's.
+ *
  * @author Victor N. Skurikhin
  */
 abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {

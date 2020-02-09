@@ -25,6 +25,8 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
  * The Tag DAO implementation.
+ *
+ * @author Victor N. Skurikhin
  */
 @Stateless
 public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
@@ -96,8 +98,8 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
-    public List<Tag> findAllByIdIn(Iterable<String> uuids) {
-        List<String> list = CollectionUtil.iterableToList(uuids);
+    public List<Tag> findAllByIdIn(Iterable<String> ids) {
+        List<String> list = CollectionUtil.iterableToList(ids);
         return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", list);
     }
 
@@ -129,6 +131,14 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
     @Override
     public boolean delete(String id) {
         return abstractDaoDelete(id);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean deleteAll(Iterable<Tag> entities) {
+        return abstractDaoDeleteAll(entities);
     }
 
     private boolean isValidListOfTags(Iterable<String> tags) {

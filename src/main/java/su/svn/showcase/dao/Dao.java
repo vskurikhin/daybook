@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 13:36 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 15:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Dao.java
@@ -14,14 +14,12 @@ import javax.persistence.NoResultException;
 import java.util.Collection;
 import java.util.Optional;
 
+/**
+ * The Data-Access Object interface as a contract of how to interact with all DAO's.
+ *
+ * @author Victor N. Skurikhin
+ */
 public interface Dao<K, E extends DBEntity<K>> {
-
-    /**
-     * Returns all instances of the type.
-     *
-     * @return all entities
-     */
-    Collection<E> findAll();
 
     /**
      * Retrieves the record of entity by key.
@@ -32,6 +30,21 @@ public interface Dao<K, E extends DBEntity<K>> {
     Optional<E> findById(K id);
 
     /**
+     * Returns all instances of the type.
+     *
+     * @return all entities
+     */
+    Collection<E> findAll();
+
+    /**
+     * Retrieves all records of entity by the key and his possible values.
+     *
+     * @param ids - possible values.
+     * @return records of entity by condition.
+     */
+    Collection<E> findAllByIdIn(Iterable<K> ids);
+
+    /**
      * Returns the number of entities available.
      *
      * @return the number of entities
@@ -40,11 +53,9 @@ public interface Dao<K, E extends DBEntity<K>> {
 
     /**
      * Saves a given entity.
-     * Use the returned instance for further operations
-     * as the save operation might have changed the entity instance completely.
      *
      * @param entity must not be {@literal null}.
-     * @return the saved entity will never be {@literal null}.
+     * @return {@literal true} if all entities saved, {@literal false} otherwise.
      */
     boolean save(E entity);
 
@@ -60,8 +71,19 @@ public interface Dao<K, E extends DBEntity<K>> {
      * Deletes the entity with the given id.
      *
      * @param id must not be {@literal null}.
+     * @return {@literal true} if the entity delete, {@literal false} otherwise.
      * @throws NoResultException in case the given {@code id} is {@literal null}
      */
     boolean delete(K id);
+
+
+    /**
+     * Deletes the given entities.
+     *
+     * @param entities
+     * @return {@literal true} if all entities deleted, {@literal false} otherwise.
+     * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
+     */
+    boolean deleteAll(Iterable<E> entities);
 }
 //EOF

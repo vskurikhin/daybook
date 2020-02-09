@@ -15,9 +15,9 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 /**
- * Base Entity with String key
+ * Base Entity with String key.
  *
- * @author Victor Skurikhin
+ * @author Victor N. Skurikhin
  */
 
 // Annotation to allow an entity to inherit properties from a base class.
