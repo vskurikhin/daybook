@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 12:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 13:36 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -192,7 +192,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
      *
      * @return the number of entities
      */
-    protected long count() {
+    protected long abstractCount() {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         countQuery.select(criteriaBuilder.count(countQuery.from(getEClass())));
@@ -201,8 +201,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
 
     /**
      * Saves a given entity.
-     * Use the true if further operations as the save operation might have changed
-     * the entity instance completely.
+     * Use the true if further operations as the save operation
+     * might have changed the entity instance completely.
      *
      * @param entity must not be {@literal null}.
      * @return {@literal true} if an entity saved, {@literal false} otherwise.
