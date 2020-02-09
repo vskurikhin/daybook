@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.07 19:26 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 12:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
+
+import static su.svn.showcase.utils.CollectionUtil.convertList;
 
 /**
  * Abstract Data-Access Object class to be implemented by all DAO's.
@@ -165,6 +167,24 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             return Collections.emptyList();
         }
         return abstractDaoFindAllWhereField(namedQuery, parameter, list);
+    }
+
+    /**
+     * Retrieves all records of entity by namedQuery by the native named query.
+     *
+     * @param namedQuery - query.
+     * @param tClass
+     * @param <T>
+     * @return records of entity by query.
+     */
+    protected  <T> List<T> abstractDaoNativeResultList(String namedQuery, Class<T> tClass) {
+        EntityManager em = getEntityManager();
+        try {
+            return convertList(em.createNativeQuery(namedQuery).getResultList(), tClass);
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            getLogger().error("Can't search native because had the exception", e);
+            return Collections.emptyList();
+        }
     }
 
     /**
