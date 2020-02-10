@@ -20,14 +20,11 @@ import java.util.*;
 
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
-<<<<<<< HEAD
-=======
 /**
  * The UserLogin DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
 @Stateless
 public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements UserLoginDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginDaoJpa.class);
@@ -35,51 +32,30 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
     @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
     private EntityManager entityManager;
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public EntityManager getEntityManager() {
         return this.entityManager;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public Logger getLogger() {
         return LOGGER;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public Class<UserLogin> getEClass() {
         return UserLogin.class;
     }
 
-<<<<<<< HEAD
-    @Override
-    public Collection<UserLogin> findAllByIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(UserLogin.FIND_ALL_WHERE_ID_IN, "ids", ids);
-    }
-
-    @Override
-    public Optional<UserLogin> findById(UUID id) {
-        return abstractDaoFindById(id);
-    }
-
-=======
     /**
      * {@inheritDoc }
      */
@@ -99,19 +75,11 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public List<UserLogin> findAll() {
         return abstractDaoFindAll(UserLogin.FIND_ALL);
     }
 
-<<<<<<< HEAD
-    @Override
-    public Optional<UserLogin> findWhereLogin(String login) {
-        return abstractDaoFindWhereField(UserLogin.FIND_WHERE_LOGIN, "login", login);
-    }
-
-=======
     /**
      * {@inheritDoc }
      */
@@ -123,62 +91,49 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public List<UserLogin> findAllInUserRoleByName(String name) {
         return abstractDaoFindAllWhereField(UserLogin.FIND_ALL_IN_USER_ROLE , "name", name);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public long count() {
         return abstractCount();
     }
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public boolean save(UserLogin entity) {
         return abstractDaoSave(entity);
     }
 
-<<<<<<< HEAD
-=======
     /**
      * {@inheritDoc }
      */
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     @Override
     public boolean saveAll(Iterable<UserLogin> entities) {
         return false;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public boolean delete(UUID id) {
         return abstractDaoDelete(id);
     }
 
-<<<<<<< HEAD
-    @Override
-    public boolean deleteAll(Iterable<UserLogin> entities) {
-        return false;
-=======
     /**
      * {@inheritDoc }
      */
     @Override
     public boolean deleteAll(Iterable<UserLogin> entities) {
         return abstractDaoDeleteAll(entities);
->>>>>>> 9f0b883bbe886a0452a8a17f4d85adba16a3ea79
     }
 }
 //EOF
