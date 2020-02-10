@@ -40,6 +40,10 @@ import static su.svn.showcase.domain.UserLogin.*;
         name = FIND_ALL_IN_USER_ROLE,
         query = "SELECT DISTINCT e FROM UserLogin e LEFT JOIN FETCH e.roles r WHERE r.roleName = :name"
     ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM UserLogin e WHERE e.id IN (:ids)"
+    ),
 })
 public class UserLogin extends UUIDEntity implements Serializable {
     private static final long serialVersionUID = 200L;
@@ -49,6 +53,8 @@ public class UserLogin extends UUIDEntity implements Serializable {
     public static final String FIND_WHERE_LOGIN = "UserLogin.findWhereLogin";
 
     public static final String FIND_ALL_IN_USER_ROLE = "UserLogin.findAllInUserRole";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "UserLogin.findAllByIdIn";
 
     @NotNull
     @Column(name = "date_time", nullable = false)

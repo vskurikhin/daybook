@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Dao.java
@@ -37,7 +37,7 @@ public interface Dao<K, E extends DBEntity<K>> {
     Collection<E> findAll();
 
     /**
-     * Retrieves all records of entity by the key and his possible values.
+     * Retrieves all records of an entity type by the set of possible key values.
      *
      * @param ids - possible values.
      * @return records of entity by condition.

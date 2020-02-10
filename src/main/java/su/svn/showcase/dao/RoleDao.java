@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:53 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.09 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDao.java
@@ -22,7 +22,7 @@ import java.util.UUID;
 public interface RoleDao extends Dao<UUID, Role> {
 
     /**
-     * Retrieves all records where role equals the value.
+     * Retrieves all records of an entity type by the set of possible role values.
      *
      * @param role - the value.
      * @return records of entity by condition.
