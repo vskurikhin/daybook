@@ -1,3 +1,11 @@
+/*
+ * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * RecordFullDto.java
+ * $Id$
+ */
+
 package su.svn.showcase.dto;
 
 import lombok.*;
@@ -15,6 +23,11 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * The extended DTO of Record.
+ *
+ * @author Victor N. Skurikhin
+ */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -102,3 +115,4 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
         return entity;
     }
 }
+//EOF

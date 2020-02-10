@@ -1,36 +1,34 @@
 /*
- * This file was last modified at 2020.02.10 21:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.10 21:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryBaseDto.java
+ * NewsEntryFullDto.java
  * $Id$
  */
 
 package su.svn.showcase.dto;
 
 import lombok.*;
-import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.*;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
- * The base DTO of NewsEntry.
+ * The extended DTO of NewsEntry.
  *
  * @author Victor N. Skurikhin
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializable {
+public class NewsEntryFullDto  extends UUIDDto implements NewsEntryDto, Serializable {
 
-    private static final long serialVersionUID = 9240L;
+    private static final long serialVersionUID = 9241L;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -42,28 +40,42 @@ public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializa
     @Size(min = 1, max = 1024)
     private String content;
 
+    @NotNull
+    private RecordDto record;
+
+    @NotNull
+    private NewsGroupDto newsGroup;
+
     @Builder
-    public NewsEntryBaseDto(
+    public NewsEntryFullDto(
             @NotNull UUID id,
             @NotNull LocalDateTime dateTime,
+            @NotNull RecordDto record,
             @NotNull String title,
-            String content) {
+            String content,
+            @NotNull NewsGroupDto newsGroup) {
         super(id);
         this.dateTime = dateTime;
         this.title = title;
         this.content = content;
+        this.record = record;
+        this.newsGroup = newsGroup;
     }
 
-    public NewsEntryBaseDto(@NotNull NewsEntry entity) {
+    public NewsEntryFullDto(@NotNull NewsEntry entity) {
         super(Objects.requireNonNull(entity).getId());
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.content = entity.getContent();
+        this.record = new RecordFullDto(entity.getRecord());
+        this.newsGroup = entity.getNewsGroup() != null
+                ? new NewsGroupBaseDto(entity.getNewsGroup())
+                : null;
     }
 
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return NewsEntryDto.class;
+        return null;
     }
 
     @Override
@@ -73,7 +85,10 @@ public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializa
         entity.setDateTime(this.dateTime);
         entity.setTitle(this.title);
         entity.setContent(this.content);
-
+        this.record.update(entity.getRecord());
+        if (entity.getNewsGroup() != null) {
+            this.newsGroup.update(entity.getNewsGroup());
+        }
         return entity;
     }
 }

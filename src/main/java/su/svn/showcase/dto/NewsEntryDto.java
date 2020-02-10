@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 20:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.10 21:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDto.java
@@ -18,6 +18,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * The DTO of NewsEntry is interface as a contract.
+ *
+ * @author Victor N. Skurikhin
+ */
 public interface NewsEntryDto extends Dto<UUID>, Updating<NewsEntry> {
 
     LocalDateTime getDateTime();
