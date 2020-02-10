@@ -18,9 +18,9 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 /**
- * Base Entity with long integer key
+ * Base Entity with long integer key.
  *
- * @author Victor Skurikhin
+ * @author Victor N. Skurikhin
  */
 
 // Annotation to allow an entity to inherit properties from a base class.

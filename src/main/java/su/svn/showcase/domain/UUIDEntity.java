@@ -14,9 +14,9 @@ import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
- * Base Entity with UUID key
+ * Base Entity with UUID key.
  *
- * @author Victor Skurikhin
+ * @author Victor N. Skurikhin
  */
 
 // Annotation to allow an entity to inherit properties from a base class.

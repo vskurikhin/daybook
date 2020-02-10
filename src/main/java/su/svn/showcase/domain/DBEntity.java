@@ -13,11 +13,22 @@ import javax.validation.constraints.NotNull;
 /**
  * Base interface for entities
  *
- * @author Victor Skurikhin
+ * @author Victor N. Skurikhin
  */
 
 public interface DBEntity<T> {
+
+    /**
+     * Returns the key as identifier of the entity.
+     *
+     * @return - the key.
+     */
     T getId();
 
+    /**
+     * Sets the key for the entity.
+     *
+     * @param id - the key.
+     */
     void setId(@NotNull T id);
 }
