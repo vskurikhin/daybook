@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 20:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDto.java
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
- * The DTO of Tag interface as a contract.
+ * The DTO of Tag is interface as a contract.
  *
  * @author Victor N. Skurikhin
  */

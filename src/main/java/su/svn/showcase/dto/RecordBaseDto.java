@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 20:07 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseDto.java
@@ -17,6 +17,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * The base DTO of Record.
+ *
+ * @author Victor N. Skurikhin
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
