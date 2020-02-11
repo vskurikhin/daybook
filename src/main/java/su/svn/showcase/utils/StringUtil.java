@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.05 22:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.10 21:38 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * StringUtil.java
@@ -38,3 +38,4 @@ public class StringUtil {
         return id.toString();
     }
 }
+//EOF
