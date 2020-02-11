@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.06 21:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -30,11 +30,13 @@ import static su.svn.showcase.domain.Record.*;
 @NamedQueries({
     @NamedQuery(
         name = FIND_ALL,
-        query = "SELECT DISTINCT e FROM Record e ORDER BY e.editDateTime DESC, e.index ASC"
+        query = "SELECT DISTINCT e FROM Record e" +
+                " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
     @NamedQuery(
         name = FIND_ALL_ORDER_BY_EDIT_DATE_TIME,
-        query = "SELECT DISTINCT e FROM Record e ORDER BY e.editDateTime DESC, e.index ASC"
+        query = "SELECT DISTINCT e FROM Record e" +
+                " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
     @NamedQuery(
         name = FIND_ALL_WITH_TAGS,
@@ -44,7 +46,9 @@ import static su.svn.showcase.domain.Record.*;
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Record e WHERE e.id IN (:ids) ORDER BY e.editDateTime"
+        query = "SELECT DISTINCT e FROM Record e" +
+                " WHERE e.id IN (:ids)" +
+                " ORDER BY e.editDateTime"
     ),
     @NamedQuery(
         name = FIND_ALL_BY_DAY,
@@ -76,8 +80,8 @@ public class Record extends UUIDEntity implements Serializable {
 
     public static final String FIND_FETCH_BY_ID = "RecordDao.findFetchById";
 
-    public static final String RANGE_BY_DAY
-            = "SELECT DISTINCT e FROM Record e"
+    public static final String RANGE_BY_DAY_FETCH_TAGS
+            = "SELECT DISTINCT e FROM Record e LEFT JOIN FETCH e.tags t"
             + " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
             + " ORDER BY e.editDateTime DESC, e.index ASC";
     public static final String RANGE_WITH_TAGS

@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
@@ -50,8 +51,8 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
     @NotNull
     private UserLoginDto userLogin;
 
-    @NotNull
     @Valid
+    @NotNull
     Set<TagDto> tags;
 
     @Builder

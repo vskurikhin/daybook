@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -83,8 +83,12 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
         return abstractDaoFindAll(Role.FIND_ALL);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public List<Role> findAllByIdIn(Iterable<UUID> ids) {
+        // TODO
         return null;
     }
 
