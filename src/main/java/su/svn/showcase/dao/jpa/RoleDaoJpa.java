@@ -84,6 +84,8 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
     }
 
     /**
+     * TODO
+     *
      * {@inheritDoc }
      */
     @Override

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.12 23:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -29,7 +29,7 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  * @author Victor N. Skurikhin
  */
 @Stateless
-public class RecordDaoJpa extends AbstractDaoJpa<UUID, Record> implements RecordDao {
+public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordDaoJpa.class);
 
     @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
@@ -67,13 +67,6 @@ public class RecordDaoJpa extends AbstractDaoJpa<UUID, Record> implements Record
         return abstractDaoFindById(id);
     }
 
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Optional<Record> findFetchById(UUID id) {
-        return abstractDaoFindWhereField(Record.FIND_FETCH_BY_ID, "id", id);
-    }
 
     /**
      * {@inheritDoc }
@@ -96,104 +89,8 @@ public class RecordDaoJpa extends AbstractDaoJpa<UUID, Record> implements Record
      * {@inheritDoc }
      */
     @Override
-    public List<Record> findAllOrderByEditDateTime() {
-        return abstractDaoFindAll(Record.FIND_ALL_ORDER_BY_EDIT_DATE_TIME);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Record> findRangeWithTags(int start, int size) {
-        TypedQuery<Record> query = entityManager.createQuery(Record.RANGE_WITH_TAGS, Record.class);
-        query.setFirstResult(start);
-        query.setMaxResults(size);
-
-        return query.getResultList();
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Record> findRangeByDayWithTags(LocalDate date, int start, int size) {
-        LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        try {
-            TypedQuery<Record> query = entityManager.createQuery(Record.RANGE_BY_DAY_FETCH_TAGS, Record.class);
-            query.setParameter("startDate", startDateTime);
-            query.setParameter("endDate", endDateTime);
-            query.setFirstResult(start);
-            query.setMaxResults(size);
-
-            return query.getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            LOGGER.error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
-        }
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Record> findAllByDay(LocalDate date) {
-        LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        try {
-            return entityManager.createNamedQuery(Record.FIND_ALL_BY_DAY, Record.class)
-                    .setParameter("startDate", startDateTime)
-                    .setParameter("endDate", endDateTime)
-                    .getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            LOGGER.debug("Can't search all by day {}", startDateTime);
-            LOGGER.error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
-        }
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Record> findAllWhereTagId(UUID id) {
-        return abstractDaoFindAllWhereField(Record.FIND_ALL_WHERE_TAG_ID, "id", id);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Record> findAllWithTags() {
-        return abstractDaoFindAll(Record.FIND_ALL_WITH_TAGS);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
     public long count() {
         return abstractCount();
-    }
-
-    /**
-     * TODO
-     *
-     * @param date
-     * @return
-     */
-    @Override
-    public Integer countByDay(LocalDate date) {
-        LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        Query query = entityManager.createQuery(Record.COUNT_BY_DAY);;
-        query.setParameter("startDate", startDateTime);
-        query.setParameter("endDate", endDateTime);
-        Long count = (Long) query.getSingleResult();
-        if (null == count || count > Integer.MAX_VALUE) {
-            LOGGER.error("Can't get count : {}", count);
-        }
-        return count != null ? count.intValue() : null;
     }
 
     /**
@@ -226,6 +123,164 @@ public class RecordDaoJpa extends AbstractDaoJpa<UUID, Record> implements Record
     @Override
     public boolean deleteAll(Iterable<Record> entities) {
         return abstractDaoDeleteAll(entities);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> findAllOrderByEditDateTimeDescIndex() {
+        return abstractDaoFindAll(Record.FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
+        List<UUID> list = CollectionUtil.iterableToList(ids);
+        return abstractDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, "ids", list);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> findAllByDay(LocalDate date) {
+        return jpaRecordQueryByDay(Record.FIND_ALL_BY_DAY, date);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> findAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
+        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Optional<Record> fetchById(UUID id) {
+        return abstractDaoFindWhereField(Record.FETCH_BY_ID, "id", id);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAll() {
+        return abstractDaoFindAll(Record.FETCH_ALL);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAllOrderByEditDateTimeDescIndex() {
+        return abstractDaoFindAll(Record.FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAllWhereIdIn(Iterable<UUID> ids) {
+        List<UUID> list = CollectionUtil.iterableToList(ids);
+        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN, "ids", list);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
+        List<UUID> list = CollectionUtil.iterableToList(ids);
+        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
+                "ids", list);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAllByDay(LocalDate date) {
+        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY, date);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> fetchAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
+        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> range(int start, int size) {
+        return jpaRecordRange(Record.RANGE, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size) {
+        return jpaRecordRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
+        return jpaRecordRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids) {
+        return jpaRecordRange(Record.RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeByDay(int start, int size, LocalDate date) {
+        return jpaRecordRange(Record.RANGE_ALL_BY_DAY, start, size, date);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeByDayOrderByEditDateTimeDescIndex(int start, int size, LocalDate date) {
+        return jpaRecordRange(Record.RANGE_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, date);
+    }
+
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Integer countByDay(LocalDate date) {
+        LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
+        Query query = entityManager.createQuery(Record.COUNT_BY_DAY);;
+        query.setParameter("startDate", startDateTime);
+        query.setParameter("endDate", endDateTime);
+        Long count = (Long) query.getSingleResult();
+        if (null == count || count > Integer.MAX_VALUE) {
+            LOGGER.error("Can't get count : {}", count);
+        }
+        return count != null ? count.intValue() : null;
     }
 }
 //EOF

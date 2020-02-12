@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.12 21:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTest.java
@@ -13,6 +13,8 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.showcase.domain.TestData.getNewsEntry0;
+import static su.svn.showcase.domain.TestData.getUserLogin0;
 import static su.svn.showcase.domain.UUIDEntity.ZERO;
 import static su.svn.utils.TestData.EMPTY_TAGS;
 import static su.svn.utils.TestData.NOW;
@@ -31,8 +33,15 @@ class RecordTest {
     @Nested
     @DisplayName("when new with empty constructor")
     class WhenNew {
+
+        UserLogin userLogin;
+
+        NewsEntry newsEntry;
+
         @BeforeEach
         void createNew() {
+            userLogin = getUserLogin0();
+            newsEntry = getNewsEntry0();
             record = new Record();
         }
 
@@ -45,6 +54,7 @@ class RecordTest {
             assertThat(record).hasFieldOrPropertyWithValue("index", 0);
             assertThat(record).hasFieldOrPropertyWithValue("userLogin", null);
             assertThat(record).hasFieldOrPropertyWithValue("type", null);
+            assertThat(record).hasFieldOrPropertyWithValue("newsEntry", null);
             assertThat(record).hasFieldOrPropertyWithValue("tags", null);
         }
 
@@ -83,6 +93,12 @@ class RecordTest {
         void codeIsNull() {
             assertFalse(ValidateUtil.isNull(4, record).hasNext());
         }
+
+        @Test
+        @DisplayName("The length of string from toString is great than zero")
+        void testToString() {
+            assertTrue(record.toString().length() > 0);
+        }
     }
 
     @Nested
@@ -91,35 +107,12 @@ class RecordTest {
 
         UserLogin userLogin;
 
+        NewsEntry newsEntry;
+
         @BeforeEach
-        void createNew() {
-            userLogin = UserLogin.builder().id(ZERO).login("testLogin").dateTime(NOW).build();
-            record = new Record(ZERO, NOW, NOW, 13, "testType", userLogin, EMPTY_TAGS);
-        }
-
-        @Test
-        @DisplayName("is instantiated partial constructor")
-        void isInstantiatedWithNew() {
-            record = new Record(NOW, NOW, 13, "testType", userLogin, EMPTY_TAGS);
-            assertNotNull(record.getId());
-            assertNotEquals(ZERO, record.getId());
-            assertThat(record).hasFieldOrPropertyWithValue("createDateTime", NOW);
-            assertThat(record).hasFieldOrPropertyWithValue("editDateTime", NOW);
-            assertThat(record).hasFieldOrPropertyWithValue("index", 13);
-            assertThat(record).hasFieldOrPropertyWithValue("type", "testType");
-            assertThat(record).hasFieldOrPropertyWithValue("userLogin", userLogin);
-            assertThat(record).hasFieldOrPropertyWithValue("tags", EMPTY_TAGS);
-        }
-
-        @Test
-        @DisplayName("is instantiated partial constructor")
-        void isInstantiatedWithNewUserLogin() {
-            record = new Record(ZERO, userLogin);
-            assertThat(record).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(record).hasFieldOrPropertyWithValue("index", 100);
-            assertThat(record).hasFieldOrPropertyWithValue("type", Record.class.getSimpleName());
-            assertThat(record).hasFieldOrPropertyWithValue("userLogin", userLogin);
-            assertThat(record).hasFieldOrPropertyWithValue("tags", EMPTY_TAGS);
+        void setUp() {
+            userLogin = getUserLogin0();
+            newsEntry = getNewsEntry0();
         }
 
         @Test
@@ -141,21 +134,6 @@ class RecordTest {
             assertThat(record).hasFieldOrPropertyWithValue("type", "testType");
             assertThat(record).hasFieldOrPropertyWithValue("userLogin", userLogin);
             assertThat(record).hasFieldOrPropertyWithValue("tags", EMPTY_TAGS);
-        }
-
-        @Test
-        @DisplayName("Equals and hashCode")
-        void testEqualsAndHashCode() {
-            assertNotEquals(new Record(), record);
-            Record expected = new Record(ZERO, NOW, NOW, 13, "testType", userLogin, EMPTY_TAGS);
-            assertEquals(expected.hashCode(), record.hashCode());
-            assertEquals(expected, record);
-        }
-
-        @Test
-        @DisplayName("The length of string from toString is great than zero")
-        void testToString() {
-            assertTrue(record.toString().length() > 0);
         }
     }
 }
