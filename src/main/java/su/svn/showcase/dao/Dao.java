@@ -47,7 +47,7 @@ public interface Dao<K, E extends DBEntity<K>> {
     /**
      * Returns the number of entities available.
      *
-     * @return the number of entities
+     * @return the number of entities.
      */
     long count();
 

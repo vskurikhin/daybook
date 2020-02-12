@@ -24,9 +24,10 @@ import java.util.*;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NewsEntryFullDto  extends UUIDDto implements NewsEntryDto, Serializable {
+public class NewsEntryFullDto extends UUIDDto implements NewsEntryDto, Serializable {
 
     private static final long serialVersionUID = 9241L;
 
