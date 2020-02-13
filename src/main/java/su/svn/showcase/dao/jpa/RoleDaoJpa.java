@@ -105,7 +105,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Role entity) {
+    public Role save(Role entity) {
         return abstractDaoSave(entity);
     }
 
@@ -113,7 +113,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<Role> entities) {
+    public Iterable<Role> saveAll(Iterable<Role> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -121,16 +121,16 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Role> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Role> entities) {
+        abstractDaoDeleteAll(entities);
     }
 }
 //EOF

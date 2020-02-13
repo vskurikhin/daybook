@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.12 23:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 20:38 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractRecordDaoJpa.java
@@ -9,12 +9,12 @@
 package su.svn.showcase.dao.jpa;
 
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.exceptions.ErrorCase;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,35 +34,35 @@ abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
                     .setParameter("endDate", endDateTime)
                     .getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
+            throw ErrorCase.open(getLogger(), "Can't search all by date because had the exception ", e);
         }
     }
 
     List<Record> jpaRecordRange(String query, int start, int size) {
         try {
-            TypedQuery<Record> typedQuery = getEntityManager().createQuery(query, Record.class);
+            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
             typedQuery.setFirstResult(start);
             typedQuery.setMaxResults(size);
 
             return typedQuery.getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
+            throw ErrorCase.open(getLogger(), "Can't search with the range because had the exception ", e);
         }
     }
 
     List<Record> jpaRecordRange(String query, int start, int size, Iterable<UUID> ids) {
+        if (ids == null) {
+            throw new IllegalArgumentException();
+        }
         try {
-            TypedQuery<Record> typedQuery = getEntityManager().createQuery(query, Record.class);
+            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
             typedQuery.setFirstResult(start);
             typedQuery.setMaxResults(size);
             typedQuery.setParameter("ids", toList(ids));
 
             return typedQuery.getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
+            throw ErrorCase.open(getLogger(), "Can't search by ids with the range because had the exception ", e);
         }
     }
 
@@ -70,7 +70,7 @@ abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
         try {
-            TypedQuery<Record> typedQuery = getEntityManager().createQuery(query, Record.class);
+            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
             typedQuery.setFirstResult(start);
             typedQuery.setMaxResults(size);
             typedQuery.setParameter("startDate", startDateTime);
@@ -78,8 +78,7 @@ abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
 
             return typedQuery.getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all by day because had the exception ", e);
-            return Collections.emptyList();
+            throw ErrorCase.open(getLogger(), "Can't search all by date with the range because had the exception ", e);
         }
     }
 }

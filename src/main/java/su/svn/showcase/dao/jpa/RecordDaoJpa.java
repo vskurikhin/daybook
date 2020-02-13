@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.12 23:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 20:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.utils.CollectionUtil;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -81,8 +80,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> findAllByIdIn(Iterable<UUID> ids) {
-        List<UUID> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN, "ids", list);
+        return abstractDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -97,7 +95,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Record entity) {
+    public Record save(Record entity) {
         return abstractDaoSave(entity);
     }
 
@@ -105,7 +103,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<Record> entities) {
+    public Iterable<Record> saveAll(Iterable<Record> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -113,16 +111,16 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Record> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Record> entities) {
+        abstractDaoDeleteAll(entities);
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpaTest.java
@@ -12,7 +12,6 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -123,7 +122,9 @@ class RoleDaoJpaTest {
     void whenRoleDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        assertTrue(dao.save(entity));
+        Optional<Role> test = dao.findById(UUID.randomUUID());
+        assertNotNull(test);
+        assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 
@@ -132,8 +133,10 @@ class RoleDaoJpaTest {
     void whenRoleDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        List<Role> tests = new ArrayList<Role>() {{ add(entity); }};
-        assertTrue(dao.saveAll(tests));
+        List<Role> testList = new ArrayList<Role>() {{ add(entity); }};
+        Iterable<Role> result = dao.saveAll(testList);
+        assertNotNull(result);
+        assertEquals(testList, result);
         userTransaction.rollback();
     }
 
@@ -142,7 +145,7 @@ class RoleDaoJpaTest {
     void whenRoleDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        Assertions.assertFalse(dao.delete(UUID.randomUUID()));
+        dao.delete(UUID.randomUUID());
         userTransaction.rollback();
     }
 }

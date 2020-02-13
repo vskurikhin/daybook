@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.13 10:42 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpaTest.java
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.jpa.RecordDaoJpa;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.TestData;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -29,15 +29,15 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
+import javax.transaction.*;
 import java.util.*;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static su.svn.showcase.domain.TestData.getCloneOfRecord1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
+import static su.svn.utils.TestData.RECORD_UUID0;
 
 @DisplayName("A RecordDaoJpaTest unit test cases")
 @AddPackages(value = {RecordDaoJpa.class})
@@ -83,10 +83,10 @@ class RecordDaoJpaTest {
 
     @BeforeEach
     void createNew() {
-        entity = TestData.getCloneOfRecord1();
+        entity = getCloneOfRecord1();
     }
 
-        @DisplayName("Can inject entity manager and user transaction")
+    @DisplayName("Can inject entity manager and user transaction")
     @Test
     void canInject_entityManager() {
         assertNotNull(entityManager);
@@ -104,6 +104,15 @@ class RecordDaoJpaTest {
         userTransaction.rollback();
     }
 
+    @DisplayName("Test when RecordDaoJpa findById return empty")
+    @Test
+    void whenRecordDao_findById_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Assertions.assertThrows(ErrorCase.class, () -> dao.findById(null));
+        userTransaction.rollback();
+    }
+
     @DisplayName("Test when RecordDaoJpa save success")
     @Test
     void whenRecordDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
@@ -115,12 +124,69 @@ class RecordDaoJpaTest {
         userTransaction.rollback();
     }
 
+    @DisplayName("Test when RecordDaoJpa save success")
+    @Test
+    void whenRecordDao_findAllByIdIn_shouldBeThrowErrorCase() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Assertions.assertThrows(ErrorCase.class, () -> dao.findAllByIdIn(null));
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa save success")
+    @Test
+    void whenRecordDao_findAllByIdIn_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        List<UUID> list = new ArrayList<>() {{ add(RECORD_UUID0); }};
+        List<Record> testList = dao.findAllByIdIn(list);
+        assertNotNull(testList);
+        assertTrue(testList.isEmpty());
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa findById return empty")
+    @Test
+    void whenRecordDao_fetchById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        final RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Optional<Record> test = dao.fetchById(UUID.randomUUID());
+        assertNotNull(test);
+        assertFalse(test.isPresent());
+        dao.fetchById(UUID.randomUUID());
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa save success")
+    @Test
+    void whenRecordDao_fetchAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        List<Record> testList = dao.fetchAll();
+        assertNotNull(testList);
+        assertTrue(testList.isEmpty());
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa save success")
+    @Test
+    void whenRecordDao_range_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        List<Record> testList = dao.range(0, Integer.MAX_VALUE);
+        assertNotNull(testList);
+        assertTrue(testList.isEmpty());
+        userTransaction.rollback();
+    }
+
     @DisplayName("Test when RecordDaoJpa save is success")
     @Test
     void whenRecordDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        assertTrue(dao.save(entity));
+        Record result = dao.save(entity);
+        assertNotNull(result);
+        assertEquals(entity, result);
         userTransaction.rollback();
     }
 
@@ -129,8 +195,10 @@ class RecordDaoJpaTest {
     void whenRecordDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        List<Record> testRecords = new ArrayList<Record>() {{ add(entity); }};
-        assertTrue(dao.saveAll(testRecords));
+        List<Record> testList = new ArrayList<Record>() {{ add(entity); }};
+        Iterable<Record> result = dao.saveAll(testList);
+        assertNotNull(result);
+        assertEquals(testList, result);
         userTransaction.rollback();
     }
 
@@ -139,20 +207,7 @@ class RecordDaoJpaTest {
     void whenRecordDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        Assertions.assertFalse(dao.delete(UUID.randomUUID()));
-        userTransaction.rollback();
-    }
-
-    @DisplayName("Test when RecordDaoJpa findById return empty")
-    @Test
-    @Disabled
-    void whenRecordDao_findById_shouldBeReturnRecord1() throws SystemException, NotSupportedException {
-        userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        assertTrue(dao.save(entity));
-        Optional<Record> test = dao.findById(su.svn.utils.TestData.RECORD_UUID1);
-        assertNotNull(test);
-        assertFalse(test.isPresent());
+        dao.delete(UUID.randomUUID());
         userTransaction.rollback();
     }
 }

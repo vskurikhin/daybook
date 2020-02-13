@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 14:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDaoJpaTest.java
@@ -83,11 +83,11 @@ class TagDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private Tag tag1;
+    private Tag entity;
 
     @BeforeEach
     void createNew() {
-        tag1 = TestData.getCloneOfTag1();
+        entity = TestData.getCloneOfTag1();
     }
 
         @DisplayName("Can inject entity manager and user transaction")
@@ -123,8 +123,10 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
-        assertTrue(tagDao.save(tag1));
+        TagDao dao = weld.select(TagDaoJpa.class).get();
+        Tag test = dao.save(entity);
+        Assertions.assertNotNull(test);
+        Assertions.assertEquals(entity, test);
         userTransaction.rollback();
     }
 
@@ -132,9 +134,11 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
-        List<Tag> testTags = new ArrayList<Tag>() {{ add(tag1); }};
-        assertTrue(tagDao.saveAll(testTags));
+        TagDao dao = weld.select(TagDaoJpa.class).get();
+        List<Tag> testList = new ArrayList<Tag>() {{ add(entity); }};
+        Iterable<Tag> result = dao.saveAll(testList);
+        assertNotNull(result);
+        assertEquals(testList, result);
         userTransaction.rollback();
     }
 
@@ -142,8 +146,8 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
-        Assertions.assertFalse(tagDao.delete(StringUtil.generateStringId()));
+        TagDao dao = weld.select(TagDaoJpa.class).get();
+        dao.delete(StringUtil.generateStringId());
         userTransaction.rollback();
     }
 
@@ -151,8 +155,8 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_outerSection() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
-        assertTrue(tagDao.save(tag1));
+        TagDao dao = weld.select(TagDaoJpa.class).get();
+        dao.save(entity);
         List<String> testTags = new ArrayList<String>() {{
             add("tag1");
             add("tagTest1");
@@ -162,7 +166,7 @@ class TagDaoJpaTest {
             add("tag1");
             add("tag2");
         }};
-        List<String> list = tagDao.outerSection(testTags);
+        List<String> list = dao.outerSection(testTags);
         Set<String> result = new HashSet<String>(list);
         assertEquals(expected, result);
         userTransaction.rollback();

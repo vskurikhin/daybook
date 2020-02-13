@@ -9,6 +9,7 @@
 package su.svn.showcase.dao;
 
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.exceptions.ErrorCase;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,6 +47,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param ids - set of possible key values.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
 
@@ -73,6 +75,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param id - key.
      * @return record of entity by key.
+     * @throws ErrorCase if {@code id} is {@literal null}.
      */
     Optional<Record> fetchById(UUID id);
 
@@ -98,6 +101,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param ids - set of possible key values.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> fetchAllWhereIdIn(Iterable<UUID> ids);
 
@@ -107,6 +111,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param ids - set of possible key values.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
 
@@ -159,6 +164,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param size - size.
      * @param ids - IDs.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids);
 
@@ -171,6 +177,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param size - size.
      * @param ids - set of possible key values.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids);
 
