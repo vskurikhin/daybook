@@ -138,7 +138,7 @@ class RecordDaoJpaTest {
     void whenRecordDao_findAllByIdIn_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        List<UUID> list = new ArrayList<>() {{ add(RECORD_UUID0); }};
+        List<UUID> list = new ArrayList<UUID>() {{ add(RECORD_UUID0); }};
         List<Record> testList = dao.findAllByIdIn(list);
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
