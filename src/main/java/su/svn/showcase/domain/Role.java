@@ -16,8 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
-import static su.svn.showcase.domain.Role.FIND_ALL;
-import static su.svn.showcase.domain.Role.FIND_WHERE_ROLE;
+import static su.svn.showcase.domain.Role.*;
 
 @Data
 @NoArgsConstructor
@@ -27,20 +26,28 @@ import static su.svn.showcase.domain.Role.FIND_WHERE_ROLE;
 @Table(schema = "db", name = "db_role")
 @NamedQueries({
     @NamedQuery(
-         name = FIND_ALL,
-         query = "SELECT DISTINCT e FROM Role e"
+        name = FIND_ALL,
+        query = "SELECT DISTINCT e FROM Role e"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM Record e" +
+                " WHERE e.id IN (:ids)"
     ),
     @NamedQuery(
         name = FIND_WHERE_ROLE,
-        query = "SELECT DISTINCT e FROM Role e WHERE e.roleName = :role"
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.roleName = :role"
     ),
 })
 public class Role extends UUIDEntity implements Serializable {
     private static final long serialVersionUID = 210L;
 
-    public static final String FIND_ALL = "Role.findAll";
+    public static final String FIND_ALL = "RoleDao.findAll";
 
-    public static final String FIND_WHERE_ROLE = "Role.findWhereRole";
+    public static final String FIND_ALL_WHERE_ID_IN = "RoleDao.findAllWhereIdIn";
+
+    public static final String FIND_WHERE_ROLE = "RoleDao.findWhereRole";
 
     @NotNull
     @Column(name = "role_name", length = 32, nullable = false, unique = true)

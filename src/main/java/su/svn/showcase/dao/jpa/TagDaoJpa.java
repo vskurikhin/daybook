@@ -116,12 +116,12 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Tag entity) {
+    public Tag save(Tag entity) {
         return abstractDaoSave(entity);
     }
 
     @Override
-    public boolean saveAll(Iterable<Tag> entities) {
+    public Iterable<Tag> saveAll(Iterable<Tag> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -129,16 +129,16 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(String id) {
-        return abstractDaoDelete(id);
+    public void delete(String id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Tag> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Tag> entities) {
+        abstractDaoDeleteAll(entities);
     }
 
     private boolean isValidListOfTags(Iterable<String> tags) {
