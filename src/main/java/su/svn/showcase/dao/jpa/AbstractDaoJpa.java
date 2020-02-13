@@ -52,12 +52,17 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
      */
     abstract Class<E> getEClass();
 
+    <T> List<T> toList(Iterable<T> iterable) {
+        return CollectionUtil.iterableToList(iterable);
+    }
+
     // Retrieves the meta-model for a certain entity.
     EntityType<E> getMetaModel() {
         return getEntityManager().getMetamodel().entity(getEClass());
     }
 
     // Retrieves the record of entity by key.
+    //
     // @param id - key.
     Optional<E> abstractDaoFindById(K id) {
         EntityManager em = getEntityManager();
@@ -71,6 +76,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Retrieves the record of entity by namedQuery by the parameter and his value.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param value - parameter value.
@@ -89,6 +95,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
 
 
     // Returns whether an entity with the given id exists.
+    //
     // @param id must not be {@literal null}.
     boolean abstractExistsById(K id) {
         EntityManager em = getEntityManager();
@@ -101,6 +108,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Retrieves all records of entity by namedQuery.
+    //
     // @param namedQuery - query.
     List<E> abstractDaoFindAll(String namedQuery) {
         EntityManager em = getEntityManager();
@@ -113,6 +121,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Retrieves all records of entity by namedQuery by the parameter and his value.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param value - parameter value.
@@ -130,6 +139,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Retrieves all records of entity by namedQuery by the parameter and his possible values.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param iterable - collection of parameter values.
@@ -142,6 +152,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Retrieves all records of entity by namedQuery by the native named query.
+    //
     // @param namedQuery - query.
     // @param tClass
     // @param <T>
@@ -164,6 +175,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Saves a given entity.
+    //
     // @param entity must not be {@literal null}.
     boolean abstractDaoSave(E entity) {
         EntityManager em = getEntityManager();
@@ -188,6 +200,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Saves all given entities.
+    //
     // @param entities must not be {@literal null}.
     boolean abstractDaoSaveAll(Iterable<? extends E> entities) {
         List<K> ids = new ArrayList<>();
@@ -215,6 +228,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Deletes the entity with the given id.
+    //
     // @param id must not be {@literal null}.
     boolean abstractDaoDelete(K id) {
         EntityManager em = getEntityManager();
@@ -231,6 +245,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Deletes the given entities.
+    //
     // @param entities
     boolean abstractDaoDeleteAll(Iterable<? extends E> entities) {
         List<K> ids = new ArrayList<>();

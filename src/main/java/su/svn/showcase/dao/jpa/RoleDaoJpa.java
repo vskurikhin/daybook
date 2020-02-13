@@ -90,8 +90,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      */
     @Override
     public List<Role> findAllByIdIn(Iterable<UUID> ids) {
-        // TODO
-        return null;
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.09 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 10:42 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RoleDaoJpaTest.java
+ * RecordDaoJpaTest.java
  * $Id$
  */
 
@@ -17,9 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.RoleDao;
-import su.svn.showcase.dao.jpa.RoleDaoJpa;
-import su.svn.showcase.domain.Role;
+import su.svn.showcase.dao.RecordDao;
+import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.TestData;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
@@ -42,10 +42,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A RoleDaoJpaTest unit test cases")
-@AddPackages(value = {RoleDaoJpa.class})
+@DisplayName("A RecordDaoJpaTest unit test cases")
+@AddPackages(value = {RecordDaoJpa.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class RoleDaoJpaTest {
+class RecordDaoJpaTest {
 
     @Inject
     private BeanManager beanManager;
@@ -55,7 +55,7 @@ class RoleDaoJpaTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RoleDaoJpa.class,
+            RecordDaoJpa.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -65,11 +65,11 @@ class RoleDaoJpaTest {
             .inject(this)
             .build();
 
-    private RoleDao mockRoleDao = mock(RoleDao.class);
+    private RecordDao mockRecordDao = mock(RecordDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                           mockRoleDao);
-        put(RoleDao.class.getName(),         mockRoleDao);
+        put(null,                           mockRecordDao);
+        put(RecordDao.class.getName(),         mockRecordDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -82,11 +82,11 @@ class RoleDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private Role entity;
+    private Record entity;
 
     @BeforeEach
     void createNew() {
-        entity = TestData.getCloneOfRole1();
+        entity = TestData.getCloneOfRecord1();
     }
 
         @DisplayName("Can inject entity manager and user transaction")
@@ -96,53 +96,53 @@ class RoleDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return empty")
+    @DisplayName("Test when RecordDaoJpa findById return empty")
     @Test
-    void whenRoleDao_findById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
+    void whenRecordDao_findById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        Optional<Role> test = dao.findById(UUID.randomUUID());
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Optional<Record> test = dao.findById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 
-    @DisplayName("Test when RoleDaoJpa save success")
+    @DisplayName("Test when RecordDaoJpa save success")
     @Test
-    void whenRoleDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
+    void whenRecordDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        List<Role> testList = dao.findAll();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        List<Record> testList = dao.findAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
         userTransaction.rollback();
     }
 
-    @DisplayName("Test when RoleDaoJpa save is success")
+    @DisplayName("Test when RecordDaoJpa save is success")
     @Test
-    void whenRoleDao_save_success() throws SystemException, NotSupportedException {
+    void whenRecordDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        assertTrue(dao.save(entity));
+        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
+        assertTrue(roleDao.save(entity));
         userTransaction.rollback();
     }
 
-    @DisplayName("Test when RoleDaoJpa save of set is success")
+    @DisplayName("Test when RecordDaoJpa save of set is success")
     @Test
-    void whenRoleDao_save_iterable_success() throws SystemException, NotSupportedException {
+    void whenRecordDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        List<Role> tests = new ArrayList<Role>() {{ add(entity); }};
-        assertTrue(dao.saveAll(tests));
+        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
+        List<Record> testRecords = new ArrayList<Record>() {{ add(entity); }};
+        assertTrue(roleDao.saveAll(testRecords));
         userTransaction.rollback();
     }
 
-    @DisplayName("Test when RoleDaoJpa delete failed")
+    @DisplayName("Test when RecordDaoJpa delete failed")
     @Test
-    void whenRoleDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
+    void whenRecordDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao dao = weld.select(RoleDaoJpa.class).get();
-        Assertions.assertFalse(dao.delete(UUID.randomUUID()));
+        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
+        Assertions.assertFalse(roleDao.delete(UUID.randomUUID()));
         userTransaction.rollback();
     }
 }

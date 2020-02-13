@@ -138,8 +138,8 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
-        List<UUID> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, "ids", list);
+        final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
+        return abstractDaoFindAllWhereIn(query, "ids", toList(ids));
     }
 
     /**
@@ -187,8 +187,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> fetchAllWhereIdIn(Iterable<UUID> ids) {
-        List<UUID> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN, "ids", list);
+        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN, "ids", toList(ids));
     }
 
     /**
@@ -196,9 +195,8 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
-        List<UUID> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-                "ids", list);
+        final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
+        return abstractDaoFindAllWhereIn(query, "ids", toList(ids));
     }
 
     /**

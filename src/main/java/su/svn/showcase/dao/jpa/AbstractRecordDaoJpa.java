@@ -9,7 +9,6 @@
 package su.svn.showcase.dao.jpa;
 
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.utils.CollectionUtil;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -58,8 +57,7 @@ abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
             TypedQuery<Record> typedQuery = getEntityManager().createQuery(query, Record.class);
             typedQuery.setFirstResult(start);
             typedQuery.setMaxResults(size);
-            List<UUID> list = CollectionUtil.iterableToList(ids);
-            typedQuery.setParameter("ids", list);
+            typedQuery.setParameter("ids", toList(ids));
 
             return typedQuery.getResultList();
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
