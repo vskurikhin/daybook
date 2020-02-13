@@ -218,7 +218,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> range(int start, int size) {
-        return jpaRecordRange(Record.RANGE, start, size);
+        return jpaRange(Record.RANGE, start, size);
     }
 
     /**
@@ -226,7 +226,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size) {
-        return jpaRecordRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size);
+        return jpaRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size);
     }
 
     /**
@@ -234,7 +234,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
-        return jpaRecordRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
+        return jpaRangeIdIn(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
     }
 
     /**
@@ -242,7 +242,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids) {
-        return jpaRecordRange(Record.RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
+        return jpaRangeIdIn(Record.RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
     }
 
     /**

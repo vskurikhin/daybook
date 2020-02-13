@@ -38,34 +38,6 @@ abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
         }
     }
 
-    List<Record> jpaRecordRange(String query, int start, int size) {
-        try {
-            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
-            typedQuery.setFirstResult(start);
-            typedQuery.setMaxResults(size);
-
-            return typedQuery.getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            throw ErrorCase.open(getLogger(), "Can't search with the range because had the exception ", e);
-        }
-    }
-
-    List<Record> jpaRecordRange(String query, int start, int size, Iterable<UUID> ids) {
-        if (ids == null) {
-            throw new IllegalArgumentException();
-        }
-        try {
-            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
-            typedQuery.setFirstResult(start);
-            typedQuery.setMaxResults(size);
-            typedQuery.setParameter("ids", toList(ids));
-
-            return typedQuery.getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            throw ErrorCase.open(getLogger(), "Can't search by ids with the range because had the exception ", e);
-        }
-    }
-
     List<Record> jpaRecordRange(String query, int start, int size, LocalDate date) {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);

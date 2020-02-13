@@ -90,6 +90,22 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
+    public List<Tag> findAllOrderByTagAsc() {
+        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> findAllOrderByTagDesc() {
+        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public List<Tag> findAllWhereTag(String tag) {
         return abstractDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
@@ -116,10 +132,37 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
+    public List<Tag> range(int start, int size) {
+        return jpaRange(Tag.FIND_ALL, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> rangeOrderByTagAsc(int start, int size) {
+        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_ASC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> rangeOrderByTagDesc(int start, int size) {
+        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_DESC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public Tag save(Tag entity) {
         return abstractDaoSave(entity);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public Iterable<Tag> saveAll(Iterable<Tag> entities) {
         return abstractDaoSaveAll(entities);

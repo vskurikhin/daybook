@@ -11,18 +11,21 @@ package su.svn.showcase.dao.jpa;
 import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.CollectionUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import static su.svn.showcase.utils.CollectionUtil.convertList;
@@ -166,6 +169,34 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             return convertList(em.createNativeQuery(namedQuery).getResultList(), tClass);
         } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
             throw ErrorCase.open(getLogger(), "Can't search native because had the exception", e);
+        }
+    }
+
+    List<E> jpaRange(String query, int start, int size) {
+        try {
+            TypedQuery<E> typedQuery = getEntityManager().createNamedQuery(query, getEClass());
+            typedQuery.setFirstResult(start);
+            typedQuery.setMaxResults(size);
+
+            return typedQuery.getResultList();
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            throw ErrorCase.open(getLogger(), "Can't search with the range because had the exception ", e);
+        }
+    }
+
+    List<E> jpaRangeIdIn(String query, int start, int size, Iterable<K> ids) {
+        if (ids == null) {
+            throw new IllegalArgumentException();
+        }
+        try {
+            TypedQuery<E> typedQuery = getEntityManager().createNamedQuery(query, getEClass());
+            typedQuery.setFirstResult(start);
+            typedQuery.setMaxResults(size);
+            typedQuery.setParameter("ids", toList(ids));
+
+            return typedQuery.getResultList();
+        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
+            throw ErrorCase.open(getLogger(), "Can't search by ids with the range because had the exception ", e);
         }
     }
 
