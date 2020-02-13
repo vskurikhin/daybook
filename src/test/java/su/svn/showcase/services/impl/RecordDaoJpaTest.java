@@ -12,10 +12,7 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.jpa.RecordDaoJpa;
@@ -122,8 +119,8 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
-        assertTrue(roleDao.save(entity));
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        assertTrue(dao.save(entity));
         userTransaction.rollback();
     }
 
@@ -131,9 +128,9 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
         List<Record> testRecords = new ArrayList<Record>() {{ add(entity); }};
-        assertTrue(roleDao.saveAll(testRecords));
+        assertTrue(dao.saveAll(testRecords));
         userTransaction.rollback();
     }
 
@@ -141,8 +138,21 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao roleDao = weld.select(RecordDaoJpa.class).get();
-        Assertions.assertFalse(roleDao.delete(UUID.randomUUID()));
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Assertions.assertFalse(dao.delete(UUID.randomUUID()));
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa findById return empty")
+    @Test
+    @Disabled
+    void whenRecordDao_findById_shouldBeReturnRecord1() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        assertTrue(dao.save(entity));
+        Optional<Record> test = dao.findById(su.svn.utils.TestData.RECORD_UUID1);
+        assertNotNull(test);
+        assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 }
