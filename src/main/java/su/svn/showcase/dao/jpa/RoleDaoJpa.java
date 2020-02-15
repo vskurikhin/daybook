@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -83,9 +83,14 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
         return abstractDaoFindAll(Role.FIND_ALL);
     }
 
+    /**
+     * TODO
+     *
+     * {@inheritDoc }
+     */
     @Override
     public List<Role> findAllByIdIn(Iterable<UUID> ids) {
-        return null;
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -100,7 +105,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Role entity) {
+    public Role save(Role entity) {
         return abstractDaoSave(entity);
     }
 
@@ -108,7 +113,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<Role> entities) {
+    public Iterable<Role> saveAll(Iterable<Role> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -116,16 +121,16 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Role> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Role> entities) {
+        abstractDaoDeleteAll(entities);
     }
 }
 //EOF

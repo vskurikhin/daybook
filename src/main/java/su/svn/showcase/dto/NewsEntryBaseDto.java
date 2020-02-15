@@ -24,13 +24,15 @@ import java.util.UUID;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializable {
+public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
 
-    private static final long serialVersionUID = 9240L;
+    private static final long serialVersionUID = 9250L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -42,20 +44,8 @@ public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializa
     @Size(min = 1, max = 1024)
     private String content;
 
-    @Builder
-    public NewsEntryBaseDto(
-            @NotNull UUID id,
-            @NotNull LocalDateTime dateTime,
-            @NotNull String title,
-            String content) {
-        super(id);
-        this.dateTime = dateTime;
-        this.title = title;
-        this.content = content;
-    }
-
     public NewsEntryBaseDto(@NotNull NewsEntry entity) {
-        super(Objects.requireNonNull(entity).getId());
+        this.id = Objects.requireNonNull(entity).getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.content = entity.getContent();
@@ -69,7 +59,7 @@ public class NewsEntryBaseDto extends UUIDDto implements NewsEntryDto, Serializa
     @Override
     public NewsEntry update(@NotNull NewsEntry entity) {
         Objects.requireNonNull(entity);
-        entity.setId(getId());
+        entity.setId(this.id);
         entity.setDateTime(this.dateTime);
         entity.setTitle(this.title);
         entity.setContent(this.content);

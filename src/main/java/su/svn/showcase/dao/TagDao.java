@@ -35,6 +35,20 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> findAll();
 
     /**
+     * Retrieves all records in ordered mode.
+     *
+     * @return records of entity type by condition.
+     */
+    List<Tag> findAllOrderByTagAsc();
+
+    /**
+     * Retrieves all records in ordered mode.
+     *
+     * @return records of entity type by condition.
+     */
+    List<Tag> findAllOrderByTagDesc();
+
+    /**
      * {@inheritDoc }
      */
     @Override
@@ -55,6 +69,34 @@ public interface TagDao extends Dao<String, Tag> {
      * @return records of entity by condition.
      */
     List<Tag> findAllByTagIn(Iterable<String> tags);
+
+    /**
+     * Returns all instances of Tag type and falling within
+     * the range specified in the records of the initial position and size.
+     *
+     * @param start - initial position.
+     * @param size - size.
+     * @return records of entity by condition.
+     */
+    List<Tag> range(int start, int size);
+
+    /**
+     * Returns all instances of Record type from ordered query and
+     * falling within the range specified in the arguments of the initial
+     * position and size.
+     *
+     * @return records of entity type by condition.
+     */
+    List<Tag> rangeOrderByTagAsc(int start, int size);
+
+    /**
+     * Returns all instances of Record type from ordered query and
+     * falling within the range specified in the arguments of the initial
+     * position and size.
+     *
+     * @return records of entity type by condition.
+     */
+    List<Tag> rangeOrderByTagDesc(int start, int size);
 
     /**
      * Retrieves all entity records where tags are not in the input set.

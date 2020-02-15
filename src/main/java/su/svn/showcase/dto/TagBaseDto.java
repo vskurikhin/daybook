@@ -25,11 +25,12 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class TagBaseDto extends StringDto implements TagDto, Serializable {
+public class TagBaseDto implements TagDto, Serializable {
 
     private static final long serialVersionUID = 9130L;
+
+    @NotNull
+    private String id;
 
     @NotNull
     @Size(min = 1, max = 128)
@@ -40,16 +41,8 @@ public class TagBaseDto extends StringDto implements TagDto, Serializable {
     @NotNull
     private LocalDateTime dateTime;
 
-    @Builder
-    public TagBaseDto(@NotNull String id, @NotNull String tag, Boolean visible, @NotNull LocalDateTime dateTime) {
-        super(id);
-        this.tag = tag;
-        this.visible = visible;
-        this.dateTime = dateTime;
-    }
-
     public TagBaseDto(@NotNull Tag tag) {
-        super(Objects.requireNonNull(tag).getId());
+        this.id = Objects.requireNonNull(tag).getId();
         this.tag = tag.getTag();
         this.visible = tag.getVisible();
         this.dateTime = tag.getDateTime();
@@ -63,7 +56,7 @@ public class TagBaseDto extends StringDto implements TagDto, Serializable {
     @Override
     public Tag update(@NotNull Tag entity) {
         Objects.requireNonNull(entity);
-        entity.setId(getId());
+        entity.setId(this.id);
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);

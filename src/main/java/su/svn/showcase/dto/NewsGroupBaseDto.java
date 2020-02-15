@@ -23,13 +23,15 @@ import java.util.*;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class NewsGroupBaseDto extends UUIDDto implements NewsGroupDto, Serializable {
+public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
 
     private static final long serialVersionUID = 9230L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -38,15 +40,8 @@ public class NewsGroupBaseDto extends UUIDDto implements NewsGroupDto, Serializa
     @Size(min = 1, max = 64)
     private String group;
 
-    @Builder
-    public NewsGroupBaseDto(@NotNull UUID id, @NotNull LocalDateTime dateTime, @NotNull String group) {
-        super(id);
-        this.dateTime = dateTime;
-        this.group = group;
-    }
-
     public NewsGroupBaseDto(@NotNull NewsGroup entity) {
-        super(Objects.requireNonNull(entity).getId());
+        this.id = Objects.requireNonNull(entity).getId();
         this.dateTime = entity.getDateTime();
         this.group = entity.getGroup();
     }
@@ -59,7 +54,7 @@ public class NewsGroupBaseDto extends UUIDDto implements NewsGroupDto, Serializa
     @Override
     public NewsGroup update(@NotNull NewsGroup entity) {
         Objects.requireNonNull(entity);
-        entity.setId(getId());
+        entity.setId(this.id);
         entity.setDateTime(this.dateTime);
         entity.setGroup(this.group);
 

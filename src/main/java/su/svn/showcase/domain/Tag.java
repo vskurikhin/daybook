@@ -31,40 +31,58 @@ import static su.svn.showcase.domain.Tag.*;
         query = "SELECT DISTINCT e FROM Tag e"
     ),
     @NamedQuery(
+        name = FIND_ALL_ORDER_BY_TAG_ASC,
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " ORDER BY e.tag ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_TAG_DESC,
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " ORDER BY e.tag DESC"
+    ),
+    @NamedQuery(
         name = FIND_WHERE_TAG,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag = :tag"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag = :tag"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_TAG,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag LIKE :tag"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag LIKE :tag"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.id IN (:ids)"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.id IN (:ids)"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_TAG_IN,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag IN (:tags)"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag IN (:tags)"
     ),
 })
 public class Tag extends StringEntity implements Serializable {
     private static final long serialVersionUID = 130L;
 
-    public static final String FIND_ALL = "Tag.findAll";
+    public static final String FIND_ALL = "TagDao.findAll";
 
-    public static final String FIND_WHERE_TAG = "Tag.findWhereTag";
+    public static final String FIND_ALL_ORDER_BY_TAG_ASC = "TagDao.findAllOrderByTagAsc";
 
-    public static final String FIND_ALL_WHERE_TAG = "Tag.findAllWhereTag";
+    public static final String FIND_ALL_ORDER_BY_TAG_DESC = "TagDao.findAllOrderByTagDesc";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "Tag.findAllByIdIn";
+    public static final String FIND_WHERE_TAG = "TagDao.findWhereTag";
 
-    public static final String FIND_ALL_WHERE_TAG_IN = "Tag.findAllByTagIn";
+    public static final String FIND_ALL_WHERE_TAG = "TagDao.findAllWhereTag";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "TagDao.findAllByIdIn";
+
+    public static final String FIND_ALL_WHERE_TAG_IN = "TagDao.findAllByTagIn";
 
     public static final String OUTER_SECTION = "SELECT new FROM dictionary.tag t1" +
             " RIGHT OUTER JOIN (VALUES %s) t2(new) ON t1.tag = t2.new WHERE t1.tag IS NULL";
 
     @NotNull
-    @Column(name = "tag", length = 128, nullable = false ,unique = true)
+    @Column(name = "tag", length = 128, nullable = false, unique = true)
     private String tag;
 
     @Column(name = "visible")

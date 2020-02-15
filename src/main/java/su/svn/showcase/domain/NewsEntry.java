@@ -39,7 +39,7 @@ import static su.svn.showcase.domain.NewsEntry.*;
     ),
 })
 public class NewsEntry extends UUIDEntity implements Serializable {
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 250L;
 
     public static final String FIND_ALL = "NewsEntry.findAll";
 

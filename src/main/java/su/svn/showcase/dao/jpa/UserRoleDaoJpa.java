@@ -99,7 +99,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public boolean save(UserRole entity) {
+    public UserRole save(UserRole entity) {
         return abstractDaoSave(entity);
     }
 
@@ -107,7 +107,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<UserRole> entities) {
+    public Iterable<UserRole> saveAll(Iterable<UserRole> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -115,16 +115,16 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<UserRole> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<UserRole> entities) {
+        abstractDaoDeleteAll(entities);
     }
 }
 //EOF

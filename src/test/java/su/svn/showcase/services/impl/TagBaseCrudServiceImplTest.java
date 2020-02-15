@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.14 10:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserLoginDaoJpaTest.java
+ * TagStorageServiceImplTest.java
  * $Id$
  */
 
@@ -12,15 +12,13 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.UserLoginDaoJpa;
-import su.svn.showcase.domain.TestData;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dao.TagDao;
+import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.domain.Tag;
+import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.services.TagCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -32,21 +30,26 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static su.svn.showcase.domain.TestData.getTag1;
+import static su.svn.showcase.dto.TestData.getTagBaseDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A UserLoginDaoTest unit test cases")
-@AddPackages(value = {UserLoginDao.class})
+@DisplayName("A TagStorageServiceImplTest unit test cases")
+@AddPackages(value = {TagDao.class, TagCrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class UserLoginDaoJpaTest {
+class TagBaseCrudServiceImplTest {
 
     @Inject
     private BeanManager beanManager;
@@ -56,7 +59,8 @@ class UserLoginDaoJpaTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            UserLoginDaoJpa.class,
+            TagDaoJpa.class,
+            TagBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -65,10 +69,12 @@ class UserLoginDaoJpaTest {
             .setPersistenceUnitFactory(injectionPoint -> emf)
             .inject(this)
             .build();
-    private UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
+
+    private TagDao mockTagDao = mock(TagDao.class);
+
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                      mockUserLoginDao);
-        put(UserLoginDao.class.getName(), mockUserLoginDao);
+        put(null,                   mockTagDao);
+        put(TagDao.class.getName(), mockTagDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -81,11 +87,17 @@ class UserLoginDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private UserLogin entity;
+    private Tag entity;
+    private TagBaseDto dto;
 
     @BeforeEach
-    void createNew() {
-        entity = TestData.getCloneOfUserLogin1();
+    void setUp() {
+        entity = getTag1();
+        dto = getTagBaseDto1();
+    }
+
+    @AfterEach
+    void tearDown() {
     }
 
     @DisplayName("Can inject entity manager and user transaction")
@@ -95,14 +107,40 @@ class UserLoginDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when newsEntryDao save success")
     @Test
-    void whenUserLoginDao_save_success() throws SystemException, NotSupportedException {
-        userTransaction.begin();
-        UserLoginDao dao = weld.select(UserLoginDaoJpa.class).get();
-        UserLogin test = dao.save(entity);
-        Assertions.assertNotNull(test);
-        Assertions.assertEquals(entity, test);
-        userTransaction.rollback();
+    void create(TagCrudService service) {
+        assertNotNull(service);
+        when(mockTagDao.save(any())).thenReturn(entity);
+        service.create(dto);
+    }
+
+    @Test
+    void readById(TagCrudService service) {
+        assertNotNull(service);
+        when(mockTagDao.findById(any())).thenReturn(Optional.of(entity));
+        Assertions.assertEquals(dto, service.readById(entity.getId()));
+    }
+
+    @Test
+    void readRange(TagCrudService service) {
+        assertNotNull(service);
+        when(mockTagDao.findById(any())).thenReturn(Optional.of(entity));
+        when(mockTagDao.save(any())).thenReturn(entity);
+        List<TagBaseDto> testList = (List<TagBaseDto>) service.readRange(0, Integer.MAX_VALUE);
+        System.out.println("testList = " + testList);
+    }
+
+    @Test
+    void update(TagCrudService service) {
+        assertNotNull(service);
+        when(mockTagDao.save(any())).thenReturn(entity);
+        service.create(dto);
+    }
+
+    @Test
+    void delete(TagCrudService service) {
+        assertNotNull(service);
+        when(mockTagDao.save(any())).thenReturn(entity);
+        service.create(dto);
     }
 }

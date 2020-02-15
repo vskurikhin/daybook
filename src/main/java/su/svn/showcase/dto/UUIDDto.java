@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import su.svn.showcase.domain.UUIDEntity;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -19,14 +20,14 @@ import java.util.UUID;
  *
  * @author Victor N. Skurikhin
  */
-abstract class UUIDDto implements Dto<UUID> {
+public class UUIDDto implements Dto<UUID>, Serializable {
+    private static final long serialVersionUID = 993L;
 
     @NotNull
     private UUID id;
 
     public UUIDDto() {
         this.id = UUIDEntity.ZERO;
-
     }
 
     public UUIDDto(UUID id) {
@@ -41,6 +42,11 @@ abstract class UUIDDto implements Dto<UUID> {
     @Override
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    @Override
+    public Class<? extends Dto> getDtoClass() {
+        return UUIDDto.class;
     }
 
     @Override
