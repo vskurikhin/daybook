@@ -24,6 +24,9 @@ public class CollectionUtil {
     }
 
     public static <T> List<T> convertList(List list, final Class<T> tClass) {
+        if (list == null) {
+            throw new IllegalArgumentException();
+        }
         List<T> result = new ArrayList<>(list.size());
         for (Object o : list) {
             result.add(tClass.cast(o));

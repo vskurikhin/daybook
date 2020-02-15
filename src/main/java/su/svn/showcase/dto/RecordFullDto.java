@@ -29,13 +29,15 @@ import java.util.stream.Collectors;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
+public class RecordFullDto implements RecordDto, Serializable {
 
     private static final long serialVersionUID = 9241L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime createDateTime;
@@ -55,26 +57,8 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
     @NotNull
     Set<TagDto> tags;
 
-    @Builder
-    public RecordFullDto(
-            @NotNull UUID id,
-            @NotNull LocalDateTime createDateTime,
-            @NotNull LocalDateTime editDateTime,
-            int index,
-            @NotNull String type,
-            @NotNull UserLoginBaseDto userLogin,
-            @NotNull @Valid Set<TagDto> tags) {
-        super(id);
-        this.createDateTime = createDateTime;
-        this.editDateTime = editDateTime;
-        this.index = index;
-        this.type = type;
-        this.userLogin = userLogin;
-        this.tags = tags;
-    }
-
     public RecordFullDto(@NotNull Record entity) {
-        super(Objects.requireNonNull(entity).getId());
+        this.id = Objects.requireNonNull(entity).getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();
         this.index = entity.getIndex();
@@ -102,7 +86,7 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
     @Override
     public Record update(@NotNull Record entity) {
         Objects.requireNonNull(entity);
-        entity.setId(getId());
+        entity.setId(this.id);
         entity.setCreateDateTime(this.createDateTime);
         entity.setEditDateTime(this.editDateTime);
         entity.setIndex(this.index);

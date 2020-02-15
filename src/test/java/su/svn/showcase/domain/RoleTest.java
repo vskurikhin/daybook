@@ -13,7 +13,7 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 
 @DisplayName("Class Role")
 class RoleTest {
@@ -37,8 +37,7 @@ class RoleTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(role.getId());
-            assertNotEquals(ZERO, role.getId());
+            assertThat(role).hasFieldOrPropertyWithValue("id", null);
             assertThat(role).hasFieldOrPropertyWithValue("roleName", null);
         }
 
@@ -53,7 +52,7 @@ class RoleTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(1, role).hasNext());
+            assertFalse(ValidateUtil.isNull(2, role).hasNext());
         }
     }
 
@@ -68,7 +67,8 @@ class RoleTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            role = new Role("testRole");
+            role = new Role(ZERO, "testRole");
+            assertThat(role).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(role).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
 

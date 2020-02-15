@@ -13,7 +13,7 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.EMPTY_NEWS_ENTRIES;
 import static su.svn.utils.TestData.NOW;
 
@@ -39,7 +39,7 @@ class NewsGroupTest {
                 @Test
                 @DisplayName("default values")
                 void defaults() {
-                        assertNotNull(newsGroup.getId());
+                        assertThat(newsGroup).hasFieldOrPropertyWithValue("id", null);
                         assertThat(newsGroup).hasFieldOrPropertyWithValue("dateTime", null);
                         assertThat(newsGroup).hasFieldOrPropertyWithValue("group", null);
                         assertThat(newsGroup).hasFieldOrPropertyWithValue("newsEntries", null);
@@ -64,7 +64,7 @@ class NewsGroupTest {
                 @Test
                 @DisplayName("violation on code is null")
                 void codeIsNull() {
-                        assertFalse(ValidateUtil.isNull(2, newsGroup).hasNext());
+                        assertFalse(ValidateUtil.isNull(3, newsGroup).hasNext());
                 }
         }
 
@@ -80,7 +80,7 @@ class NewsGroupTest {
                 @Test
                 @DisplayName("is instantiated partial constructor")
                 void isInstantiatedWithNew() {
-                        newsGroup = new NewsGroup(NOW, "testGroup", EMPTY_NEWS_ENTRIES);
+                        newsGroup = new NewsGroup(ZERO, NOW, "testGroup", EMPTY_NEWS_ENTRIES);
                         assertThat(newsGroup).hasFieldOrPropertyWithValue("group", "testGroup");
                 }
 

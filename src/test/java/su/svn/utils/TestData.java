@@ -8,8 +8,8 @@
 
 package su.svn.utils;
 
+import su.svn.shared.Constants;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.RecordBaseDto;
 import su.svn.showcase.dto.RecordDto;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.TagFullDto;
@@ -17,14 +17,13 @@ import su.svn.showcase.dto.TagFullDto;
 import java.time.LocalDateTime;
 import java.util.*;
 
-
 public class TestData {
     public static final LocalDateTime NOW = LocalDateTime.now();
 
-    public static final String ID0 = StringEntity.ZERO;
+    public static final String ID0 = Constants.String.ZERO;
     public static final String ID1 = "0000000000000001";
 
-    public static final UUID UUID0 = UUIDEntity.ZERO;
+    public static final UUID UUID0 = Constants.UUID.ZERO;
     public static final UUID UUID1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();

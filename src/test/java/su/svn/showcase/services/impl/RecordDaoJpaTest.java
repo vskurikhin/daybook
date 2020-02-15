@@ -17,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.jpa.RecordDaoJpa;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -109,7 +108,7 @@ class RecordDaoJpaTest {
     void whenRecordDao_findById_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        Assertions.assertThrows(ErrorCase.class, () -> dao.findById(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> dao.findById(null));
         userTransaction.rollback();
     }
 
@@ -126,10 +125,10 @@ class RecordDaoJpaTest {
 
     @DisplayName("Test when RecordDaoJpa save success")
     @Test
-    void whenRecordDao_findAllByIdIn_shouldBeThrowErrorCase() throws SystemException, NotSupportedException {
+    void whenRecordDao_findAllByIdIn_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
         userTransaction.begin();
         RecordDao dao = weld.select(RecordDaoJpa.class).get();
-        Assertions.assertThrows(ErrorCase.class, () -> dao.findAllByIdIn(null));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> dao.findAllByIdIn(null));
         userTransaction.rollback();
     }
 
@@ -165,6 +164,15 @@ class RecordDaoJpaTest {
         List<Record> testList = dao.fetchAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
+        userTransaction.rollback();
+    }
+
+    @DisplayName("Test when RecordDaoJpa save success")
+    @Test
+    void whenRecordDao_fetchAllWhereIdIn_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
+        userTransaction.begin();
+        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        Assertions.assertThrows(IllegalArgumentException.class, () -> dao.fetchAllWhereIdIn(null));
         userTransaction.rollback();
     }
 

@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * UserLoginBaseDtoTest.java$
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -12,7 +16,9 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
+import static su.svn.utils.TestData.USER_LOGIN_UUID0;
 
 @DisplayName("Class UserLoginBaseDto")
 class UserLoginBaseDtoTest {
@@ -37,7 +43,7 @@ class UserLoginBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(userLoginBaseDto.getId());
+            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", null);
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", null);
@@ -62,7 +68,7 @@ class UserLoginBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, userLoginBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(3, userLoginBaseDto).hasNext());
         }
     }
 
@@ -77,7 +83,7 @@ class UserLoginBaseDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userLoginBaseDto = new UserLoginBaseDto(NOW, "testLogin", "testPassword");
+            userLoginBaseDto = new UserLoginBaseDto(USER_LOGIN_UUID0, NOW, "testLogin", "testPassword");
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
             assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", "testPassword");
@@ -111,7 +117,7 @@ class UserLoginBaseDtoTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new UserLoginBaseDto(), userLoginBaseDto);
-            UserLoginBaseDto expected = new UserLoginBaseDto(NOW, "testLogin", "testPassword");
+            UserLoginBaseDto expected = new UserLoginBaseDto(NEWS_GROUP_UUID0, NOW, "testLogin", "testPassword");
             assertEquals(expected.hashCode(), userLoginBaseDto.hashCode());
             assertEquals(expected, userLoginBaseDto);
         }
@@ -130,7 +136,7 @@ class UserLoginBaseDtoTest {
             expected.setLogin("testLogin");
             expected.setPassword("testPassword");
             expected.setDateTime(NOW);
-            assertEquals(expected, userLoginBaseDto.update(new UserLogin()));
+            assertEquals(expected, userLoginBaseDto.update(new UserLogin(ZERO)));
         }
 
         @Test

@@ -30,5 +30,5 @@ public interface DBEntity<T> {
      *
      * @param id - the key.
      */
-    void setId(@NotNull T id);
+    // void setId(@NotNull T id);
 }

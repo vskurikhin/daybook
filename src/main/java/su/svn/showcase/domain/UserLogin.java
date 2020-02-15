@@ -20,11 +20,11 @@ import java.util.UUID;
 
 import static su.svn.showcase.domain.UserLogin.*;
 
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"roles"})
-@ToString(callSuper = true, exclude = {"roles"})
+@EqualsAndHashCode(exclude = {"roles"})
+@ToString(exclude = {"roles"})
 @Entity
 @Table(schema = "db", name = "db_user_login")
 @NamedQueries({
@@ -45,7 +45,8 @@ import static su.svn.showcase.domain.UserLogin.*;
         query = "SELECT DISTINCT e FROM UserLogin e WHERE e.id IN (:ids)"
     ),
 })
-public class UserLogin extends UUIDEntity implements Serializable {
+public class UserLogin implements DBEntity<UUID>, Serializable {
+
     private static final long serialVersionUID = 200L;
 
     public static final String FIND_ALL = "UserLogin.findAll";
@@ -56,34 +57,38 @@ public class UserLogin extends UUIDEntity implements Serializable {
 
     public static final String FIND_ALL_WHERE_ID_IN = "UserLogin.findAllByIdIn";
 
+    @Getter
+    @Setter // TODO remove
+    @Id
+    @NotNull
+    private UUID id;
+
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "login", nullable = false, unique = true, length = 64)
     private String login;
 
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "password", nullable = false, length = 256)
     private String password;
 
+    @Getter
+    @Setter
     @JsonIgnoreProperties("roles")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "userLogin")
     private List<UserRole> roles;
 
-    @Builder
-    public UserLogin(
-            @NotNull UUID id,
-            @NotNull LocalDateTime dateTime,
-            @NotNull String login,
-            @NotNull String password,
-            List<UserRole> roles) {
-        super(id);
-        this.dateTime = dateTime;
-        this.login = login;
-        this.password = password;
-        this.roles = roles;
+    public UserLogin(@NotNull UUID id) {
+        this.id = id;
     }
 }
 //EOF

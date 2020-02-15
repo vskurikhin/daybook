@@ -13,9 +13,9 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.showcase.domain.TestData.getNewsEntry0;
 import static su.svn.showcase.domain.TestData.getUserLogin0;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
 import static su.svn.utils.TestData.EMPTY_TAGS;
 import static su.svn.utils.TestData.NOW;
 
@@ -48,7 +48,7 @@ class RecordTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(record.getId());
+            assertThat(record).hasFieldOrPropertyWithValue("id", null);
             assertThat(record).hasFieldOrPropertyWithValue("createDateTime", null);
             assertThat(record).hasFieldOrPropertyWithValue("editDateTime", null);
             assertThat(record).hasFieldOrPropertyWithValue("index", 0);
@@ -91,7 +91,7 @@ class RecordTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(4, record).hasNext());
+            assertFalse(ValidateUtil.isNull(5, record).hasNext());
         }
 
         @Test
