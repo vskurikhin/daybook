@@ -172,9 +172,10 @@ public class TestData {
         return tag1;
     }
     public static Tag getCloneOfTag1() {
-        Tag tag = SerializeUtil.clone(tag1);
+        Tag tag = SerializeUtil.clone(getTag1());
         assert tag != null;
         tag.setRecords(Collections.emptySet());
+        System.out.println("tag = " + tag);
         return tag;
     }
 

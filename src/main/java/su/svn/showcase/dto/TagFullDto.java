@@ -27,13 +27,15 @@ import java.util.stream.Collectors;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class TagFullDto extends StringDto implements TagDto, Serializable {
+public class TagFullDto implements TagDto, Serializable {
 
     private static final long serialVersionUID = 9131L;
+
+    @NotNull
+    private String id;
 
     @NotNull
     @Size(min = 1, max = 128)
@@ -48,22 +50,8 @@ public class TagFullDto extends StringDto implements TagDto, Serializable {
     @NotNull
     Set<RecordDto> records;
 
-    @Builder
-    public TagFullDto(
-            @NotNull String id,
-            @NotNull String tag,
-            Boolean visible,
-            @NotNull LocalDateTime dateTime,
-            @NotNull @Valid Set<RecordDto> records) {
-        super(id);
-        this.tag = tag;
-        this.visible = visible;
-        this.dateTime = dateTime;
-        this.records = records;
-    }
-
     public TagFullDto(@NotNull Tag tag) {
-        super(Objects.requireNonNull(tag).getId());
+        Objects.requireNonNull(tag);
         this.tag = tag.getTag();
         this.visible = tag.getVisible();
         this.dateTime = tag.getDateTime();

@@ -13,6 +13,7 @@ import su.svn.showcase.utils.StringUtil;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * Base Entity with String key.

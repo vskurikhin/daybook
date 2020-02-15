@@ -25,33 +25,27 @@ import java.util.UUID;
  */
 abstract class AbstractRecordDaoJpa extends AbstractDaoJpa<UUID, Record> {
 
+    // TODO
     List<Record> jpaRecordQueryByDay(String query, LocalDate date) {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        try {
-            return getEntityManager().createNamedQuery(query, Record.class)
-                    .setParameter("startDate", startDateTime)
-                    .setParameter("endDate", endDateTime)
-                    .getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            throw ErrorCase.open(getLogger(), "Can't search all by date because had the exception ", e);
-        }
+        return getEntityManager().createNamedQuery(query, Record.class)
+                .setParameter("startDate", startDateTime)
+                .setParameter("endDate", endDateTime)
+                .getResultList();
     }
 
+    // TODO
     List<Record> jpaRecordRange(String query, int start, int size, LocalDate date) {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        try {
-            TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
-            typedQuery.setFirstResult(start);
-            typedQuery.setMaxResults(size);
-            typedQuery.setParameter("startDate", startDateTime);
-            typedQuery.setParameter("endDate", endDateTime);
+        TypedQuery<Record> typedQuery = getEntityManager().createNamedQuery(query, Record.class);
+        typedQuery.setFirstResult(start);
+        typedQuery.setMaxResults(size);
+        typedQuery.setParameter("startDate", startDateTime);
+        typedQuery.setParameter("endDate", endDateTime);
 
-            return typedQuery.getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            throw ErrorCase.open(getLogger(), "Can't search all by date with the range because had the exception ", e);
-        }
+        return typedQuery.getResultList();
     }
 }
 //EOF

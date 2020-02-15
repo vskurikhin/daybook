@@ -24,25 +24,22 @@ import java.util.UUID;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class RoleBaseDto extends UUIDDto implements RoleDto, Serializable {
+public class RoleBaseDto implements RoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     @Size(min = 1, max = 64)
     private String roleName;
 
-    @Builder
-    public RoleBaseDto(@NotNull UUID id, @NotNull String roleName) {
-        super(id);
-        this.roleName = roleName;
-    }
-
     public RoleBaseDto(@NotNull Role entity) {
-        super(Objects.requireNonNull(entity).getId());
+        this.id = Objects.requireNonNull(entity).getId();
         this.roleName = entity.getRoleName();
     }
 

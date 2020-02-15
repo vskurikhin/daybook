@@ -8,6 +8,8 @@
 
 package su.svn.showcase.dto;
 
+import su.svn.utils.SerializeUtil;
+
 import static su.svn.utils.TestData.*;
 
 
@@ -166,11 +168,17 @@ public class TestData {
     }
      */
 
+    public static TagBaseDto getTagBaseDto0() {
+        return tagBaseDto0;
+    }
     public static TagBaseDto getTagBaseDto1() {
         return tagBaseDto1;
     }
-    public static TagBaseDto getTagBaseDto0() {
-        return tagBaseDto0;
+
+    public static TagBaseDto getCloneOfTagBaseDto1() {
+        TagBaseDto tag = SerializeUtil.clone(tagBaseDto1);
+        assert tag != null;
+        return tag;
     }
 
     public static RecordBaseDto getRecordBaseDto0() {
