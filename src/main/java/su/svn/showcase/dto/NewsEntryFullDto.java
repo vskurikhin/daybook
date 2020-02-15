@@ -50,7 +50,8 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
     private NewsGroupDto newsGroup;
 
     public NewsEntryFullDto(@NotNull NewsEntry entity) {
-        this.id = Objects.requireNonNull(entity).getId();
+        assert entity != null;
+        this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.content = entity.getContent();
@@ -67,8 +68,7 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
 
     @Override
     public NewsEntry update(@NotNull NewsEntry entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(this.id);
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setTitle(this.title);
         entity.setContent(this.content);

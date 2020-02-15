@@ -13,7 +13,7 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.EMPTY_USER_ROLES;
 import static su.svn.utils.TestData.NOW;
 
@@ -39,8 +39,7 @@ class UserLoginTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(userLogin.getId());
-            assertNotEquals(ZERO, userLogin.getId());
+            assertThat(userLogin).hasFieldOrPropertyWithValue("id", null);
             assertThat(userLogin).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(userLogin).hasFieldOrPropertyWithValue("login", null);
             assertThat(userLogin).hasFieldOrPropertyWithValue("password", null);
@@ -70,7 +69,7 @@ class UserLoginTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(3, userLogin).hasNext());
+            assertFalse(ValidateUtil.isNull(4, userLogin).hasNext());
         }
     }
 
@@ -85,7 +84,7 @@ class UserLoginTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userLogin = new UserLogin(NOW, "testLogin", "testPassword", EMPTY_USER_ROLES);
+            userLogin = new UserLogin(ZERO, NOW, "testLogin", "testPassword", EMPTY_USER_ROLES);
             assertThat(userLogin).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(userLogin).hasFieldOrPropertyWithValue("login", "testLogin");
             assertThat(userLogin).hasFieldOrPropertyWithValue("password", "testPassword");

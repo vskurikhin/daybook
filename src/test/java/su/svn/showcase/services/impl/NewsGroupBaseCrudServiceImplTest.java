@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.14 10:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 20:44 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagStorageServiceImplTest.java
+ * NewsGroupBaseCrudServiceImplTest.java$
  * $Id$
  */
 
@@ -14,12 +14,12 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.TagDao;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
-import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.services.TagBaseCrudService;
+import su.svn.showcase.dao.NewsGroupDao;
+import su.svn.showcase.dao.jpa.NewsGroupDaoJpa;
+import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.services.CrudService;
+import su.svn.showcase.services.NewsGroupBaseCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -32,7 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,14 +41,14 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.getTag1;
-import static su.svn.showcase.dto.TestData.getTagBaseDto1;
+import static su.svn.showcase.domain.TestData.getNewsGroup1;
+import static su.svn.showcase.dto.TestData.getNewsGroupBaseDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A TagStorageServiceImplTest unit test cases")
-@AddPackages(value = {TagDao.class, CrudService.class})
+@DisplayName("A NewsGroupBaseCrudServiceImplTest unit test cases")
+@AddPackages(value = {NewsGroupDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class TagBaseCrudServiceImplTest {
+class NewsGroupBaseCrudServiceImplTest {
 
     @Inject
     private BeanManager beanManager;
@@ -59,8 +58,8 @@ class TagBaseCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            TagDaoJpa.class,
-            TagBaseCrudServiceImpl.class,
+            NewsGroupDaoJpa.class,
+            NewsGroupBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -70,11 +69,11 @@ class TagBaseCrudServiceImplTest {
             .inject(this)
             .build();
 
-    private TagDao mockDao = mock(TagDao.class);
+    private NewsGroupDao mockDao = mock(NewsGroupDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                   mockDao);
-        put(TagDao.class.getName(), mockDao);
+        put(null,                         mockDao);
+        put(NewsGroupDao.class.getName(), mockDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -87,13 +86,13 @@ class TagBaseCrudServiceImplTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private Tag entity;
-    private TagBaseDto dto;
+    private NewsGroup entity;
+    private NewsGroupBaseDto dto;
 
     @BeforeEach
     void setUp() {
-        entity = getTag1();
-        dto = getTagBaseDto1();
+        entity = getNewsGroup1();
+        dto = getNewsGroupBaseDto1();
     }
 
     @AfterEach
@@ -108,36 +107,36 @@ class TagBaseCrudServiceImplTest {
     }
 
     @Test
-    void create(TagBaseCrudService service) {
+    void create(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         service.create(dto);
     }
 
     @Test
-    void readById(TagBaseCrudService service) {
+    void readById(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
         Assertions.assertEquals(dto, service.readById(entity.getId()));
     }
 
     @Test
-    void readRange(TagBaseCrudService service) {
+    void readRange(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        List<TagBaseDto> testList = service.readRange(0, Integer.MAX_VALUE);
+        List<NewsGroupBaseDto> testList = service.readRange(0, Integer.MAX_VALUE);
         Assertions.assertTrue(testList.isEmpty());
     }
 
     @Test
-    void update(TagBaseCrudService service) {
+    void update(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         service.update(dto);
     }
 
     @Test
-    void delete(TagBaseCrudService service) {
+    void delete(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         service.delete(dto.getId());

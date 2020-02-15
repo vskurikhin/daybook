@@ -13,14 +13,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Role;
-import su.svn.utils.TestData;
 import su.svn.utils.ValidateUtil;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class RoleDto")
@@ -108,7 +107,7 @@ class RoleBaseDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Role expected = new Role(ZERO, "testRole");
-            assertEquals(expected, roleBaseDto.update(new Role()));
+            assertEquals(expected, roleBaseDto.update(new Role(ZERO)));
         }
 
         @Test

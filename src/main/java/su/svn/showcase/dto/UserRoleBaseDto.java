@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -27,7 +26,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleBaseDto implements Dto<UUID>, UserRoleDto, Serializable {
+public class UserRoleBaseDto implements UserRoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
 
@@ -41,12 +40,6 @@ public class UserRoleBaseDto implements Dto<UUID>, UserRoleDto, Serializable {
     @Size(min = 1, max = 64)
     private String roleName;
 
-    public UserRoleBaseDto(@NotNull UserRole userRole) {
-        this.id = Objects.requireNonNull(userRole).getId();
-        this.dateTime = userRole.getDateTime();
-        this.roleName = userRole.getRoleName();
-    }
-
     @Override
     public Class<? extends Dto> getDtoClass() {
         return UserRoleBaseDto.class;
@@ -54,8 +47,7 @@ public class UserRoleBaseDto implements Dto<UUID>, UserRoleDto, Serializable {
 
     @Override
     public UserRole update(@NotNull UserRole entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(this.id);
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setRoleName(this.roleName);
 

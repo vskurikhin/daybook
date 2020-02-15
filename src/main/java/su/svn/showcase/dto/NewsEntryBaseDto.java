@@ -45,7 +45,8 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
     private String content;
 
     public NewsEntryBaseDto(@NotNull NewsEntry entity) {
-        this.id = Objects.requireNonNull(entity).getId();
+        assert entity != null;
+        this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.content = entity.getContent();
@@ -58,8 +59,7 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
 
     @Override
     public NewsEntry update(@NotNull NewsEntry entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(this.id);
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setTitle(this.title);
         entity.setContent(this.content);

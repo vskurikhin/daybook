@@ -14,10 +14,14 @@ import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.TagDto;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.TagBaseCrudService;
 import su.svn.showcase.utils.StringUtil;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 import java.util.List;
@@ -25,6 +29,8 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
 public class TagBaseCrudServiceImpl extends AbstractUserTransactionService implements TagBaseCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagBaseCrudServiceImpl.class);
@@ -43,18 +49,16 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     }
 
     @Override
-    public void create(TagDto dto) {
+    public void create(TagBaseDto dto) {
         Objects.requireNonNull(dto);
-        if (dto.getId() == null) {
-            dto.setId(StringUtil.generateTagId(dto.getTag()));
-        }
-        consume(tagSavingConsumer(dto), new Tag());
+        String id = StringUtil.generateTagId(dto.getTag());
+        consume(tagSavingConsumer(dto), new Tag(id));
     }
 
     @Override
     public TagBaseDto readById(String id) {
         Objects.requireNonNull(id);
-        return new TagBaseDto(tagDao.findById(id).orElse(null));
+        return new TagBaseDto(tagDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -65,14 +69,9 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     }
 
     @Override
-    public void update(TagDto dto) {
+    public void update(TagBaseDto dto) {
         validateId(dto);
         consume(tagSavingConsumer(dto), new Tag(dto.getId()));
-    }
-
-    private void validateId(TagDto dto) {
-        Objects.requireNonNull(dto);
-        Objects.requireNonNull(dto.getId());
     }
 
     @Override

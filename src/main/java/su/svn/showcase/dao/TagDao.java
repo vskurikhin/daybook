@@ -55,7 +55,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> findAllByIdIn(Iterable<String> ids);
 
     /**
-     * Retrieves all records where tag equals the value
+     * Retrieves all records where Tag equals the value.
      *
      * @param tag - the value.
      * @return records of entity by condition.
@@ -63,7 +63,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> findAllWhereTag(String tag);
 
     /**
-     * Retrieves all records of an entity type by the set of possible tag values.
+     * Retrieves all records of an entity type by the set of possible Tag values.
      *
      * @param tags - possible values.
      * @return records of entity by condition.
@@ -81,7 +81,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> range(int start, int size);
 
     /**
-     * Returns all instances of Record type from ordered query and
+     * Returns all instances of Tag type from ordered query and
      * falling within the range specified in the arguments of the initial
      * position and size.
      *
@@ -90,7 +90,7 @@ public interface TagDao extends Dao<String, Tag> {
     List<Tag> rangeOrderByTagAsc(int start, int size);
 
     /**
-     * Returns all instances of Record type from ordered query and
+     * Returns all instances of Tag type from ordered query and
      * falling within the range specified in the arguments of the initial
      * position and size.
      *

@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -39,7 +38,8 @@ public class RoleBaseDto implements RoleDto, Serializable {
     private String roleName;
 
     public RoleBaseDto(@NotNull Role entity) {
-        this.id = Objects.requireNonNull(entity).getId();
+        assert entity != null;
+        this.id = entity.getId();
         this.roleName = entity.getRoleName();
     }
 
@@ -50,8 +50,7 @@ public class RoleBaseDto implements RoleDto, Serializable {
 
     @Override
     public Role update(@NotNull Role entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setRoleName(this.roleName);
 
         return entity;

@@ -10,7 +10,6 @@ package su.svn.showcase.dto;
 
 import org.junit.jupiter.api.*;
 import su.svn.showcase.domain.Record;
-import su.svn.utils.TestData;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
@@ -18,7 +17,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.*;
 

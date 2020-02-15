@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.14 12:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 18:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * AbstractUserTransactionService.java
+ * AbstractUserTransactionService.java$
  * $Id$
  */
 
@@ -17,6 +17,7 @@ import su.svn.showcase.utils.CollectionUtil;
 
 import javax.transaction.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -141,6 +142,11 @@ abstract class AbstractUserTransactionService {
             errorLoggin(uuids);
             throw ErrorCase.open(getLogger(),"Can't iterate because had the exception ", e);
         }
+    }
+
+    <D extends Dto> void validateId(D dto) {
+        Objects.requireNonNull(dto);
+        Objects.requireNonNull(dto.getId());
     }
 
     private <K> void errorLoggin(K e) {

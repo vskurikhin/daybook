@@ -50,12 +50,13 @@ public class TagFullDto implements TagDto, Serializable {
     @NotNull
     Set<RecordDto> records;
 
-    public TagFullDto(@NotNull Tag tag) {
-        this.id = Objects.requireNonNull(tag).getId();
-        this.tag = tag.getTag();
-        this.visible = tag.getVisible();
-        this.dateTime = tag.getDateTime();
-        this.records = tag.getRecords().stream()
+    public TagFullDto(@NotNull Tag entity) {
+        assert entity != null;
+        this.id = entity.getId();
+        this.tag = entity.getTag();
+        this.visible = entity.getVisible();
+        this.dateTime = entity.getDateTime();
+        this.records = entity.getRecords().stream()
                 .map(RecordBaseDto::new)
                 .collect(Collectors.toSet());
     }
@@ -72,7 +73,6 @@ public class TagFullDto implements TagDto, Serializable {
     @Override
     public Tag update(@NotNull Tag entity) {
         assert entity != null;
-        // entity.setId(this.id); TODO remove
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);

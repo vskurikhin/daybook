@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
 
 /**
  * The base DTO of Tag.
@@ -42,11 +41,12 @@ public class TagBaseDto implements TagDto, Serializable {
     @NotNull
     private LocalDateTime dateTime;
 
-    public TagBaseDto(@NotNull Tag tag) {
-        this.id = Objects.requireNonNull(tag).getId();
-        this.tag = tag.getTag();
-        this.visible = tag.getVisible();
-        this.dateTime = tag.getDateTime();
+    public TagBaseDto(@NotNull Tag entity) {
+        assert entity != null;
+        this.id = entity.getId();
+        this.tag = entity.getTag();
+        this.visible = entity.getVisible();
+        this.dateTime = entity.getDateTime();
     }
 
     @Override
@@ -57,7 +57,6 @@ public class TagBaseDto implements TagDto, Serializable {
     @Override
     public Tag update(@NotNull Tag entity) {
         assert entity != null;
-        // entity.setId(this.id); TODO remove
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);

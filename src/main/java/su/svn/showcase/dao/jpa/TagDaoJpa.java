@@ -115,8 +115,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      */
     @Override
     public List<Tag> findAllByIdIn(Iterable<String> ids) {
-        List<String> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", list);
+        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -124,8 +123,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      */
     @Override
     public List<Tag> findAllByTagIn(Iterable<String> tags) {
-        List<String> list = CollectionUtil.iterableToList(tags);
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", list);
+        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
     }
 
     /**

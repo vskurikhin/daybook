@@ -16,7 +16,6 @@ import su.svn.showcase.domain.Role;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -83,6 +82,16 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
         return abstractDaoFindAll(Role.FIND_ALL);
     }
 
+    @Override
+    public List<Role> findAllOrderByRoleAsc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_ASC);
+    }
+
+    @Override
+    public List<Role> findAllOrderByRoleDesc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_DESC);
+    }
+
     /**
      * TODO
      *
@@ -91,6 +100,31 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
     @Override
     public List<Role> findAllByIdIn(Iterable<UUID> ids) {
         return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
+    }
+
+    @Override
+    public List<Role> findAllWhereRole(String role) {
+        return abstractDaoFindAllWhereField(Role.FIND_WHERE_ROLE, "role", role);
+    }
+
+    @Override
+    public List<Role> findAllByRoleIn(Iterable<String> roles) {
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+    }
+
+    @Override
+    public List<Role> range(int start, int size) {
+        return jpaRange(Role.FIND_ALL, start, size);
+    }
+
+    @Override
+    public List<Role> rangeOrderByRoleAsc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_ASC, start, size);
+    }
+
+    @Override
+    public List<Role> rangeOrderByRoleDesc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_DESC, start, size);
     }
 
     /**

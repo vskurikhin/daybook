@@ -62,7 +62,7 @@ class TagFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(3, tagFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(4, tagFullDto).hasNext());
         }
     }
 
@@ -108,10 +108,10 @@ class TagFullDtoTest {
             Map<String, Object> values = new HashMap<String, Object>() {{
                 put("records", records);
             }};
-            assertEquals(expected1, tagFullDto.update(new Tag(), values));
+            assertEquals(expected1, tagFullDto.update(new Tag(ZERO), values));
 
             Tag expected2 = new Tag(ZERO, "testTag", true, NOW, records);
-            Tag updating2 = new Tag();
+            Tag updating2 = new Tag(ZERO);
             updating2.setRecords(Collections.singleton(getRecord0()));
             Tag test2 = tagFullDto.update(updating2);
             assertEquals(expected2, test2);

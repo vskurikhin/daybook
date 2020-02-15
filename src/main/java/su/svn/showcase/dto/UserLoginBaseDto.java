@@ -44,7 +44,8 @@ public class UserLoginBaseDto implements UserLoginDto, Serializable {
     private String password;
 
     public UserLoginBaseDto(@NotNull UserLogin entity) {
-        this.id = Objects.requireNonNull(entity).getId();
+        assert entity != null;
+        this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.login = entity.getLogin();
         this.password = entity.getPassword();
@@ -57,8 +58,7 @@ public class UserLoginBaseDto implements UserLoginDto, Serializable {
 
     @Override
     public UserLogin update(@NotNull UserLogin entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setLogin(this.login);
         entity.setPassword(this.password);

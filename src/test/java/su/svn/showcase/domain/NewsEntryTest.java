@@ -16,7 +16,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 
 @DisplayName("Class NewsEntry")
 class NewsEntryTest {
@@ -42,7 +42,7 @@ class NewsEntryTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(newsEntry.getId());
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("id", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("title", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("content", null);
@@ -74,7 +74,7 @@ class NewsEntryTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, newsEntry).hasNext());
+            assertFalse(ValidateUtil.isNull(3, newsEntry).hasNext());
         }
     }
 
@@ -106,14 +106,14 @@ class NewsEntryTest {
                     .type("testType")
                     .build();
             newsGroup = NewsGroup.builder().id(ZERO).group("testGroup").dateTime(NOW).build();
-            newsEntry = new NewsEntry(ZERO, NOW, "testTitle", "testContent", newsGroup);
+            newsEntry = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
             newsEntry.setRecord(record);
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            newsEntry = new NewsEntry(ZERO, NOW, "testTitle", "testContent", newsGroup);
+            newsEntry = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
             assertNotNull(newsEntry.getId());
             assertEquals(ZERO, newsEntry.getId());
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", NOW);
@@ -143,7 +143,7 @@ class NewsEntryTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new NewsEntry(), newsEntry);
-            NewsEntry expected = new NewsEntry(ZERO, NOW, "testTitle", "testContent", newsGroup);
+            NewsEntry expected = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
             expected.setRecord(record);
             assertEquals(expected.hashCode(), newsEntry.hashCode());
             assertEquals(expected, newsEntry);

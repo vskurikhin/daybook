@@ -26,4 +26,8 @@ public class ErrorCase extends RuntimeException {
         FormattingTuple formattingTuple = MessageFormatter.arrayFormat(format, arguments);
         return open(formattingTuple.getMessage(), formattingTuple.getThrowable());
     }
+
+    public static RuntimeException notFound() {
+        return open("Not Found!");
+    }
 }

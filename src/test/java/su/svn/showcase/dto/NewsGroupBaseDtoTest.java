@@ -18,7 +18,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
 
 @DisplayName("Class NewsGroupShortDto")
@@ -126,7 +126,7 @@ class NewsGroupBaseDtoTest {
             Map<String, Object> values = new HashMap<String, Object>() {{
                 put("newsEntries", EMPTY_NEWS_ENTRIES);
             }};
-            assertEquals(expected, newsGroupBaseDto.update(new NewsGroup(), values));
+            assertEquals(expected, newsGroupBaseDto.update(new NewsGroup(ZERO), values));
         }
 
         @Test

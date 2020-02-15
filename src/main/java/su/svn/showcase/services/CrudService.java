@@ -8,21 +8,21 @@
 
 package su.svn.showcase.services;
 
-import su.svn.showcase.dto.TagDto;
+import su.svn.showcase.dto.Dto;
 
 import java.util.List;
 
-public interface TagCrudService {
+public interface CrudService<K, D extends Dto<K>> {
 
-    void create(TagDto dto);
+    void create(D dto);
 
-    TagDto readById(String id);
+    D readById(K id);
 
-    List<? extends TagDto> readRange(int start, int size);
+    List<D> readRange(int start, int size);
 
-    void update(TagDto dto);
+    void update(D dto);
 
-    void delete(String id);
+    void delete(K id);
 
     int count();
 }

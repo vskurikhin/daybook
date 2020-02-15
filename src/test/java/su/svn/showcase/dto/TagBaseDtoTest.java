@@ -12,11 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import su.svn.shared.Constants;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 
 import java.util.*;
-import su.svn.showcase.domain.UUIDEntity;
 import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -130,7 +130,7 @@ class TagBaseDtoTest {
             assertEquals(expected1, tagBaseDto.update(new Tag(ZERO)));
 
             Record record = new Record();
-            record.setId(UUIDEntity.ZERO);
+            record.setId(Constants.UUID.ZERO);
             record.setCreateDateTime(NOW);
             record.setEditDateTime(NOW);
             Set<Record> records = Collections.singleton(record);

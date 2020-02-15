@@ -10,10 +10,5 @@ package su.svn.showcase.services;
 
 import su.svn.showcase.dto.TagBaseDto;
 
-import java.util.List;
-
-public interface TagBaseCrudService extends TagCrudService {
-
-    @Override
-    List<TagBaseDto> readRange(int start, int size);
+public interface TagBaseCrudService extends CrudService<String, TagBaseDto> {
 }

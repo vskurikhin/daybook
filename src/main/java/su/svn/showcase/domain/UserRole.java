@@ -19,10 +19,11 @@ import java.util.UUID;
 import static su.svn.showcase.domain.UserRole.*;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(schema = "db", name = "db_user_role")
 @NamedQueries({
@@ -39,7 +40,8 @@ import static su.svn.showcase.domain.UserRole.*;
         query = "SELECT DISTINCT e FROM UserRole e WHERE e.id IN (:ids)"
     ),
 })
-public class UserRole extends UUIDEntity implements Serializable {
+public class UserRole implements DBEntity<UUID>, Serializable {
+
     private static final long serialVersionUID = 210L;
 
     public static final String FIND_ALL = "UserRole.findAll";
@@ -48,26 +50,33 @@ public class UserRole extends UUIDEntity implements Serializable {
 
     public static final String FIND_ALL_WHERE_ID_IN = "UserRole.findAllByIdIn";
 
+    @Getter
+    @Setter // TODO remove
+    @Id
+    @NotNull
+    private UUID id;
+
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "role_name", length = 32, nullable = false)
     private String roleName;
 
+    @Getter
+    @Setter
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "db_user_login_id", nullable = false)
     private UserLogin userLogin;
 
-    @NotNull
-    @Builder
-    public UserRole(UUID id, LocalDateTime dateTime, String roleName, UserLogin userLogin) {
-        super(id);
-        this.dateTime = dateTime;
-        this.roleName = roleName;
-        this.userLogin = userLogin;
+    public UserRole(@NotNull UUID id) {
+        this.id = id;
     }
 }
 //EOF

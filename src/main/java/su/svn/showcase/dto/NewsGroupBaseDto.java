@@ -41,7 +41,8 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
     private String group;
 
     public NewsGroupBaseDto(@NotNull NewsGroup entity) {
-        this.id = Objects.requireNonNull(entity).getId();
+        assert entity != null;
+        this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.group = entity.getGroup();
     }
@@ -53,8 +54,7 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
 
     @Override
     public NewsGroup update(@NotNull NewsGroup entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(this.id);
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setGroup(this.group);
 

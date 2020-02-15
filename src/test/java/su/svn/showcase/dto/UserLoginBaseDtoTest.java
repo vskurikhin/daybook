@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
 import static su.svn.utils.TestData.USER_LOGIN_UUID0;
 
@@ -136,7 +136,7 @@ class UserLoginBaseDtoTest {
             expected.setLogin("testLogin");
             expected.setPassword("testPassword");
             expected.setDateTime(NOW);
-            assertEquals(expected, userLoginBaseDto.update(new UserLogin()));
+            assertEquals(expected, userLoginBaseDto.update(new UserLogin(ZERO)));
         }
 
         @Test

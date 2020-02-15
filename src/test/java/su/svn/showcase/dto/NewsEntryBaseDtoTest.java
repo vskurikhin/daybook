@@ -17,8 +17,8 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.showcase.domain.TestData.getRecord0;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.NOW;
 
@@ -135,8 +135,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            NewsEntry expected = new NewsEntry();
-            expected.setId(ZERO);
+            NewsEntry expected = new NewsEntry(ZERO);
             expected.setDateTime(NOW);
             expected.setRecord(record);
             expected.setTitle("titleTest0");
@@ -147,8 +146,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            NewsEntry entity = new NewsEntry();
-            entity.setId(ZERO);
+            NewsEntry entity = new NewsEntry(ZERO);
             entity.setDateTime(NOW);
             entity.setTitle("testTitle");
             entity.setContent("testContent");

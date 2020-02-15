@@ -24,7 +24,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class UserRoleShortDto")
@@ -144,7 +144,7 @@ class UserRoleBaseDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             UserRole expected1 = new UserRole(ZERO, NOW, "testRole", null);
-            assertEquals(expected1, userRoleBaseDto.update(new UserRole()));
+            assertEquals(expected1, userRoleBaseDto.update(new UserRole(ZERO)));
 
             UserLogin userLogin = UserLogin.builder().id(ZERO).login("testLogin").dateTime(NOW).build();
             Map<String, Object> values = new HashMap<String, Object>() {{
@@ -152,7 +152,7 @@ class UserRoleBaseDtoTest {
                 put("userLogin", userLogin);
             }};
             UserRole expected2 = new UserRole(ZERO, NOW, "testRole", userLogin);
-            assertEquals(expected2, userRoleBaseDto.update(new UserRole(), values));
+            assertEquals(expected2, userRoleBaseDto.update(new UserRole(ZERO), values));
         }
 
         @Test
