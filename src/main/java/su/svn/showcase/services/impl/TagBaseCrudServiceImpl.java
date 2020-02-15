@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.14 09:56 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagStorageServiceImpl.java
+ * TagBaseCrudServiceImpl.java$
  * $Id$
  */
 
@@ -66,8 +66,13 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
 
     @Override
     public void update(TagDto dto) {
+        validateId(dto);
+        consume(tagSavingConsumer(dto), new Tag(dto.getId()));
+    }
+
+    private void validateId(TagDto dto) {
         Objects.requireNonNull(dto);
-        consume(tagSavingConsumer(dto), new Tag());
+        Objects.requireNonNull(dto.getId());
     }
 
     @Override

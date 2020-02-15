@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagFullDto.java
+ * TagFullDto.java$
  * $Id$
  */
 
@@ -51,7 +51,7 @@ public class TagFullDto implements TagDto, Serializable {
     Set<RecordDto> records;
 
     public TagFullDto(@NotNull Tag tag) {
-        Objects.requireNonNull(tag);
+        this.id = Objects.requireNonNull(tag).getId();
         this.tag = tag.getTag();
         this.visible = tag.getVisible();
         this.dateTime = tag.getDateTime();
@@ -65,14 +65,14 @@ public class TagFullDto implements TagDto, Serializable {
         return TagFullDto.class;
     }
 
-    private Consumer<RecordDto> updatingConsumer(Map<UUID, Record> mapEntities) {
+    private Consumer<RecordDto> updatingConsumer(final Map<UUID, Record> mapEntities) {
         return dto -> dto.update(mapEntities.get(dto.getId()));
     }
 
     @Override
     public Tag update(@NotNull Tag entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
+        // entity.setId(this.id); TODO remove
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);

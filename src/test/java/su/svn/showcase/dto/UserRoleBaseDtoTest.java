@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * UserRoleBaseDtoTest.java$
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -21,6 +25,7 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class UserRoleShortDto")
 class UserRoleBaseDtoTest {
@@ -53,7 +58,7 @@ class UserRoleBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(userRoleBaseDto.getId());
+            assertThat(userRoleBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(userRoleBaseDto).hasFieldOrPropertyWithValue("roleName", null);
             assertThat(userRoleBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
         }
@@ -73,7 +78,7 @@ class UserRoleBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            final int constraintViolationsSize = 2;
+            final int constraintViolationsSize = 3;
             Set<ConstraintViolation<UserRoleBaseDto>> constraintViolations = validator.validate(userRoleBaseDto);
             assertEquals(constraintViolationsSize, constraintViolations.size());
 
@@ -98,7 +103,7 @@ class UserRoleBaseDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userRoleBaseDto = new UserRoleBaseDto(NOW, "testRole");
+            userRoleBaseDto = new UserRoleBaseDto(ROLE_UUID0, NOW, "testRole");
             assertThat(userRoleBaseDto).hasFieldOrPropertyWithValue("roleName", "testRole");
             assertThat(userRoleBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
         }

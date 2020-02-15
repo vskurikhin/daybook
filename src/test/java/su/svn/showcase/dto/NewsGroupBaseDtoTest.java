@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * NewsGroupBaseDtoTest.java$
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -15,6 +19,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
 
 @DisplayName("Class NewsGroupShortDto")
 class NewsGroupBaseDtoTest {
@@ -41,7 +46,7 @@ class NewsGroupBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(newsGroupBaseDto.getId());
+            assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("group", null);
         }
@@ -61,7 +66,7 @@ class NewsGroupBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, newsGroupBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(3, newsGroupBaseDto).hasNext());
         }
     }
 
@@ -76,7 +81,8 @@ class NewsGroupBaseDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            newsGroupBaseDto = new NewsGroupBaseDto(NOW, "testGroup");
+            newsGroupBaseDto = new NewsGroupBaseDto(NEWS_GROUP_UUID0, NOW, "testGroup");
+            assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(newsGroupBaseDto).hasFieldOrPropertyWithValue("group", "testGroup");
         }

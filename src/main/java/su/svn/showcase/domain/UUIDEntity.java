@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.05 22:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UUIDEntity.java
+ * UUIDEntity.java$
  * $Id$
  */
 
@@ -24,7 +24,7 @@ import java.util.UUID;
 @MappedSuperclass
 public class UUIDEntity implements DBEntity<UUID> {
 
-    public static final UUID ZERO = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    public static final UUID ZERO = new UUID(0L, 0L);
 
     @Id
     @NotNull

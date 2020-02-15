@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * NewsEntryBaseDtoTest.java$
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -40,7 +44,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(newsEntryBaseDto.getId());
+            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("content", null);
@@ -65,7 +69,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, newsEntryBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(3, newsEntryBaseDto).hasNext());
         }
     }
 

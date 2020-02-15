@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleBaseDto.java
+ * UserRoleBaseDto.java$
  * $Id$
  */
 
@@ -24,13 +24,15 @@ import java.util.UUID;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class UserRoleBaseDto extends UUIDDto implements UserRoleDto, Serializable {
+public class UserRoleBaseDto implements Dto<UUID>, UserRoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -39,15 +41,8 @@ public class UserRoleBaseDto extends UUIDDto implements UserRoleDto, Serializabl
     @Size(min = 1, max = 64)
     private String roleName;
 
-    @Builder
-    public UserRoleBaseDto(@NotNull UUID id, @NotNull LocalDateTime dateTime, @NotNull String roleName) {
-        super(id);
-        this.dateTime = dateTime;
-        this.roleName = roleName;
-    }
-
     public UserRoleBaseDto(@NotNull UserRole userRole) {
-        super(Objects.requireNonNull(userRole).getId());
+        this.id = Objects.requireNonNull(userRole).getId();
         this.dateTime = userRole.getDateTime();
         this.roleName = userRole.getRoleName();
     }
@@ -60,9 +55,9 @@ public class UserRoleBaseDto extends UUIDDto implements UserRoleDto, Serializabl
     @Override
     public UserRole update(@NotNull UserRole entity) {
         Objects.requireNonNull(entity);
-        entity.setId(getId());
-        entity.setDateTime(getDateTime());
-        entity.setRoleName(getRoleName());
+        entity.setId(this.id);
+        entity.setDateTime(this.dateTime);
+        entity.setRoleName(this.roleName);
 
         return entity;
     }
