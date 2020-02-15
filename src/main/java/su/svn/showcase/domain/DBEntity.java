@@ -1,14 +1,12 @@
 /*
- * This file was last modified at 2020.02.05 22:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * DBEntity.java
+ * DBEntity.java$
  * $Id$
  */
 
 package su.svn.showcase.domain;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * Base interface for entities
@@ -24,11 +22,4 @@ public interface DBEntity<T> {
      * @return - the key.
      */
     T getId();
-
-    /**
-     * Sets the key for the entity.
-     *
-     * @param id - the key.
-     */
-    // void setId(@NotNull T id);
 }

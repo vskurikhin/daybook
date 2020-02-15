@@ -129,8 +129,7 @@ class TagBaseDtoTest {
             Tag expected1 = new Tag(ZERO, "testTag", true, NOW, EMPTY_RECORDS);
             assertEquals(expected1, tagBaseDto.update(new Tag(ZERO)));
 
-            Record record = new Record();
-            record.setId(Constants.UUID.ZERO);
+            Record record = new Record(Constants.UUID.ZERO);
             record.setCreateDateTime(NOW);
             record.setEditDateTime(NOW);
             Set<Record> records = Collections.singleton(record);

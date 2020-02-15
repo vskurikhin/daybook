@@ -132,8 +132,7 @@ class NewsGroupBaseDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            NewsGroup entity = new NewsGroup();
-            entity.setId(ZERO);
+            NewsGroup entity = new NewsGroup(ZERO);
             entity.setDateTime(NOW);
             entity.setGroup("testGroup");
             NewsGroupBaseDto expected = new NewsGroupBaseDto(entity);

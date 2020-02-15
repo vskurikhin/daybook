@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 21:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntry.java
+ * NewsEntry.java$
  * $Id$
  */
 
@@ -30,29 +30,49 @@ import static su.svn.showcase.domain.NewsEntry.*;
         query = "SELECT DISTINCT e FROM NewsEntry e"
     ),
     @NamedQuery(
-        name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM NewsEntry e WHERE e.id IN :ids"
+        name = FIND_ALL_ORDER_BY_TITLE_ASC,
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " ORDER BY e.title ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_TITLE_DESC,
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " ORDER BY e.title DESC"
+    ),
+    @NamedQuery(
+        name = FIND_WHERE_TITLE,
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " WHERE e.title = :title"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_TITLE,
-        query = "SELECT DISTINCT e FROM NewsEntry e WHERE e.title LIKE :title ORDER BY e.id"
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " WHERE e.title LIKE :title"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " WHERE e.id IN :ids"
     ),
 })
 public class NewsEntry implements DBEntity<UUID>, Serializable {
     private static final long serialVersionUID = 250L;
 
-    public static final String FIND_ALL = "NewsEntry.findAll";
+    public static final String FIND_ALL = "NewsEntryDao.findAll";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "NewsEntry.findAllWhereIdIn";
+    public static final String FIND_ALL_WHERE_ID_IN = "NewsEntryDao.findAllWhereIdIn";
 
-    public static final String FIND_ALL_WHERE_TITLE = "NewsEntryDao.";
+    public static final String FIND_ALL_ORDER_BY_TITLE_ASC = "NewsEntryDao.findAllOrderByTitleAsc";
 
-    public static final String COUNT = "SELECT COUNT(e.id) FROM NewsEntry e";
+    public static final String FIND_ALL_ORDER_BY_TITLE_DESC = "NewsEntryDao.findAllOrderByTitleDesc";
+
+    public static final String FIND_WHERE_TITLE = "NewsEntryDao.findWhereTitle";
+
+    public static final String FIND_ALL_WHERE_TITLE = "NewsEntryDao.findAllWhereTitle";
 
     @Getter
-    @Setter // TODO remove
-    @Id
     @NotNull
+    @Id
     private UUID id;
 
     @Getter
