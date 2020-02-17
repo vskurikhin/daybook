@@ -67,14 +67,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType")
+            .type("testType0")
             .build();
     private static final Record record1 = Record.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType")
+            .type("testType1")
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()
@@ -102,19 +102,19 @@ public class TestData {
             .build();
 
     static {
-        userLogin0.setRoles(newList(getUserRole0()));
-        userLogin1.setRoles(newList(getUserRole1()));
+        userLogin0.setRoles(newList(cloneUserRole0()));
+        userLogin1.setRoles(newList(cloneUserRole1()));
 
-        userRole0.setUserLogin(getUserLogin0());
-        userRole1.setUserLogin(getUserLogin1());
+        userRole0.setUserLogin(cloneUserLogin0());
+        userRole1.setUserLogin(cloneUserLogin1());
 
         tag0.setRecords(newSet(getRecord0()));
         tag1.setRecords(newSet(getRecord1()));
 
-        record0.setUserLogin(getUserLogin0());
+        record0.setUserLogin(cloneUserLogin0());
         record0.setTags(newSet(getTag0()));
 
-        record1.setUserLogin(getUserLogin1());
+        record1.setUserLogin(cloneUserLogin1());
         record1.setTags(newSet(getTag1()));
 
         newsGroup0.setNewsEntries(newList(getNewsEntry0()));
@@ -127,42 +127,33 @@ public class TestData {
         newsEntry1.setNewsGroup(getNewsGroup1());
     }
 
-    public static Role getRole0() {
-        return role0;
+    public static Role cloneRole0() {
+        return assertClone(role0);
     }
-    public static Role getRole1() {
-        return role1;
+    public static Role cloneRole1() {
+        return assertClone(role1);
     }
     public static Role getCloneOfRole1() {
-        Role role = SerializeUtil.clone(getRole1());
-        assert role != null;
-        return role;
+        return assertClone(role1);
     }
 
-    public static UserLogin getUserLogin0() {
-        return userLogin0;
+    public static UserLogin cloneUserLogin0() {
+        return assertClone(userLogin0);
     }
-    public static UserLogin getUserLogin1() {
-        return userLogin1;
+    public static UserLogin cloneUserLogin1() {
+        return assertClone(userLogin1);
     }
     public static UserLogin getCloneOfUserLogin1() {
-        UserLogin userLogin = SerializeUtil.clone(getUserLogin1());
-        assert userLogin != null;
+        UserLogin userLogin = assertClone(userLogin1);
         userLogin.setRoles(Collections.emptyList());
         return userLogin;
     }
 
-    public static UserRole getUserRole0() {
-        return userRole0;
+    public static UserRole cloneUserRole0() {
+        return assertClone(userRole0);
     }
-    public static UserRole getUserRole1() {
-        return userRole1;
-    }
-    public static UserRole getCloneOfUserRole1() {
-        UserRole userRole = SerializeUtil.clone(getUserRole1());
-        assert userRole != null;
-        userRole.getUserLogin().setRoles(Collections.emptyList());
-        return userRole;
+    public static UserRole cloneUserRole1() {
+        return assertClone(userRole1);
     }
 
     public static Tag getTag0() {

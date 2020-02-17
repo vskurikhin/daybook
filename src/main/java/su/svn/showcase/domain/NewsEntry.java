@@ -56,7 +56,7 @@ import static su.svn.showcase.domain.NewsEntry.*;
     ),
 })
 public class NewsEntry implements DBEntity<UUID>, Serializable {
-    private static final long serialVersionUID = 250L;
+    private static final long serialVersionUID = 240L;
 
     public static final String FIND_ALL = "NewsEntryDao.findAll";
 

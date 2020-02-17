@@ -26,7 +26,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleBaseDto implements UserRoleDto, Serializable {
+public class UserRoleFullDto implements UserRoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
 
@@ -40,9 +40,19 @@ public class UserRoleBaseDto implements UserRoleDto, Serializable {
     @Size(min = 1, max = 64)
     private String roleName;
 
+    @NotNull
+    private UserLoginDto userLogin;
+
+    public UserRoleFullDto(@NotNull UserRole entity) {
+        assert entity != null;
+        this.id = entity.getId();
+        this.roleName = entity.getRoleName();
+        this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
+    }
+
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return UserRoleBaseDto.class;
+        return UserRoleFullDto.class;
     }
 
     @Override
@@ -50,6 +60,8 @@ public class UserRoleBaseDto implements UserRoleDto, Serializable {
         assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setRoleName(this.roleName);
+        assert this.userLogin != null;
+        entity.setUserLogin(this.userLogin.update(entity.getUserLogin()));
 
         return entity;
     }

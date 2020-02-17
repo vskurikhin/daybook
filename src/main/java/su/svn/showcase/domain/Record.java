@@ -121,7 +121,7 @@ import static su.svn.showcase.domain.Record.*;
 })
 public class Record implements DBEntity<UUID>, Serializable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 235L;
 
     public static final String FIND_ALL = "RecordDao.findAll";
 

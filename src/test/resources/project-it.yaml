@@ -1,0 +1,37 @@
+
+swarm:
+  datasources:
+    jdbc-drivers:
+      org.postgresql:
+        driver-class-name: org.postgresql.Driver
+        xa-datasource-class-name: org.postgresql.xa.PGXADataSource
+        driver-module-name: org.postgresql
+    data-sources:
+      PgDS:
+        driver-name: org.postgresql
+        connection-url: jdbc:postgresql://localhost:15432/db
+        user-name: dbuser
+        password: password
+  jpa:
+    default-datasource: PgDS
+
+  http:
+    host: localhost
+    port: 18080
+
+  security:
+    security-domains:
+      jdbc-realm:
+        classic-authentication:
+          login-modules:
+            Database:
+              code: Database
+              flag: required
+              module-options:
+                dsJndiName: java:jboss/datasources/PgDS
+                principalsQuery: SELECT password FROM db.db_access WHERE name=?
+                rolesQuery: SELECT role, 'Roles' FROM db.db_access WHERE name=?
+
+  smtp:
+    host: localhost
+    port: 25

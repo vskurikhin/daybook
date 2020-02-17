@@ -57,7 +57,7 @@ import static su.svn.showcase.domain.Role.*;
 })
 public class Role implements DBEntity<UUID>, Serializable {
 
-    private static final long serialVersionUID = 210L;
+    private static final long serialVersionUID = 220L;
 
     public static final String FIND_ALL = "RoleDao.findAll";
 

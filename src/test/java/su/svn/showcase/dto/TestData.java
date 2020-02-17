@@ -10,6 +10,8 @@ package su.svn.showcase.dto;
 
 import su.svn.utils.SerializeUtil;
 
+import java.io.Serializable;
+
 import static su.svn.utils.TestData.*;
 
 
@@ -24,12 +26,12 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
-    private static final UserRoleBaseDto userRoleBaseDto0 = UserRoleBaseDto.builder()
+    private static final UserRoleFullDto userRoleFullDto0 = UserRoleFullDto.builder()
             .id(USER_LOGIN_UUID0)
             .dateTime(NOW)
             .roleName("testRole0")
             .build();
-    private static final UserRoleBaseDto userRoleBaseDto1 = UserRoleBaseDto.builder()
+    private static final UserRoleFullDto userRoleFullDto1 = UserRoleFullDto.builder()
             .id(USER_LOGIN_UUID1)
             .dateTime(NOW)
             .roleName("testRole1")
@@ -128,25 +130,25 @@ public class TestData {
             .content("contentTest1")
             .build();
 
-    public static RoleBaseDto getRoleBaseDto0() {
-        return roleBaseDto0;
+    public static RoleBaseDto cloneRoleBaseDto0() {
+        return assertClone(roleBaseDto0);
     }
-    public static RoleBaseDto getRoleBaseDto1() {
-        return roleBaseDto1;
-    }
-
-    public static UserRoleBaseDto getUserRoleBaseDto0() {
-        return userRoleBaseDto0;
-    }
-    public static UserRoleBaseDto getUserRoleBaseDto1() {
-        return userRoleBaseDto1;
+    public static RoleBaseDto cloneRoleBaseDto1() {
+        return assertClone(roleBaseDto1);
     }
 
-    public static UserLoginBaseDto getUserLoginBaseDto0() {
-        return userLoginBaseDto0;
+    public static UserRoleFullDto cloneUserRoleFullDto0() {
+        return assertClone(userRoleFullDto0);
     }
-    public static UserLoginBaseDto getUserLoginBaseDto1() {
-        return userLoginBaseDto1;
+    public static UserRoleFullDto cloneUserRoleFullDto1() {
+        return assertClone(userRoleFullDto1);
+    }
+
+    public static UserLoginBaseDto cloneUserLoginBaseDto0() {
+        return assertClone(userLoginBaseDto0);
+    }
+    public static UserLoginBaseDto cloneUserLoginBaseDto1() {
+        return assertClone(userLoginBaseDto1);
     }
 
     /*
@@ -175,10 +177,11 @@ public class TestData {
         return tagBaseDto1;
     }
 
-    public static TagBaseDto getCloneOfTagBaseDto1() {
-        TagBaseDto tag = SerializeUtil.clone(tagBaseDto1);
-        assert tag != null;
-        return tag;
+    public static TagBaseDto cloneTagBaseDto0() {
+        return assertClone(tagBaseDto0);
+    }
+    public static TagBaseDto cloneTagBaseDto1() {
+        return assertClone(tagBaseDto1);
     }
 
     public static RecordBaseDto getRecordBaseDto0() {
@@ -269,8 +272,11 @@ public class TestData {
         tagFullDto0.setRecords(newSet(getRecordBaseDto0()));
         tagFullDto1.setRecords(newSet(getRecordBaseDto1()));
 
-        recordFullDto0.setUserLogin(getUserLoginBaseDto0());
-        recordFullDto1.setUserLogin(getUserLoginBaseDto1());
+        userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+
+        recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        recordFullDto1.setUserLogin(cloneUserLoginBaseDto1());
         recordFullDto0.setTags(newSet(getTagBaseDto0()));
         recordFullDto1.setTags(newSet(getTagBaseDto1()));
     }
