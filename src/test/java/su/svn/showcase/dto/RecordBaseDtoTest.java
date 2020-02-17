@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordBaseDtoTest.java$
+ * RecordBaseDtoTest.java
  * $Id$
  */
 
@@ -18,6 +18,8 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.clean;
+import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.*;
 
@@ -87,9 +89,9 @@ class RecordBaseDtoTest {
 
         @BeforeEach
         void createNew() {
-            newsGroupBaseDto = getNewsGroupBaseDto0();
-            recordBaseDto = getRecordBaseDto0();
-            tagBaseDtos = Collections.singleton(getTagBaseDto0());
+            newsGroupBaseDto = cloneNewsGroupBaseDto0();
+            recordBaseDto = cloneRecordBaseDto0();
+            tagBaseDtos = Collections.singleton(cloneTagBaseDto0());
         }
 
         @Test
@@ -121,20 +123,10 @@ class RecordBaseDtoTest {
         }
 
         @Test
-        @DisplayName("initialized values")
-        void defaults() {
-            assertThat(recordBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(recordBaseDto).hasFieldOrPropertyWithValue("createDateTime", NOW);
-            assertThat(recordBaseDto).hasFieldOrPropertyWithValue("editDateTime", NOW);
-            assertThat(recordBaseDto).hasFieldOrPropertyWithValue("index", 13);
-            assertThat(recordBaseDto).hasFieldOrPropertyWithValue("type", "testType");
-        }
-
-        @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new RecordBaseDto(), recordBaseDto);
-            RecordBaseDto expected = new RecordBaseDto(ZERO, NOW, NOW, 13, "testType");
+            RecordBaseDto expected = cloneRecordBaseDto0();
             assertEquals(expected.hashCode(), recordBaseDto.hashCode());
             assertEquals(expected, recordBaseDto);
         }
@@ -148,25 +140,16 @@ class RecordBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            Record expected = new Record(ZERO);
-            expected.setCreateDateTime(NOW);
-            expected.setEditDateTime(NOW);
-            expected.setIndex(13);
-            expected.setType("testType");
-            expected.setTags(EMPTY_TAGS);
+            Record expected = cloneRecord0();
+            expected.setUserLogin(null);
             assertEquals(expected, recordBaseDto.update(new Record(ZERO)));
         }
 
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            Record entity = new Record(ZERO);
-            entity.setCreateDateTime(NOW);
-            entity.setEditDateTime(NOW);
-            entity.setIndex(13);
-            entity.setType("testType");
-            entity.setTags(EMPTY_TAGS);
-            RecordBaseDto expected = new RecordBaseDto(ZERO, NOW, NOW, 13, "testType");
+            Record entity = clean(cloneRecord0());
+            RecordBaseDto expected = cloneRecordBaseDto0();
             RecordBaseDto test = new RecordBaseDto(entity);
             assertEquals(expected, test);
         }

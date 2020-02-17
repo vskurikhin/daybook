@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 22:14 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryBaseDtoTest.java$
+ * NewsEntryBaseDtoTest.java
  * $Id$
  */
 
@@ -18,7 +18,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.getRecord0;
+import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.NOW;
 
@@ -86,9 +86,9 @@ class NewsEntryBaseDtoTest {
 
         @BeforeEach
         void createNew() {
-            record = getRecord0();
-            recordFullDto = getRecordFullDto0();
-            newsGroupBaseDto = getNewsGroupBaseDto0();
+            record = cloneRecord0();
+            recordFullDto = cloneRecordFullDto0();
+            newsGroupBaseDto = cloneNewsGroupBaseDto0();
             tags = TestData.EMPTY_BASEDTO_TAGS;
             newsEntryBaseDto = getNewsEntryBaseDto0();
         }

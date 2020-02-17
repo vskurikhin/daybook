@@ -41,6 +41,8 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static su.svn.showcase.domain.TestData.clean;
+import static su.svn.showcase.domain.TestData.cloneUserLogin1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
 @DisplayName("A UserLoginDaoTest unit test cases")
@@ -85,7 +87,7 @@ class UserLoginDaoJpaTest {
 
     @BeforeEach
     void createNew() {
-        entity = TestData.getCloneOfUserLogin1();
+        entity = clean(cloneUserLogin1());
     }
 
     @DisplayName("Can inject entity manager and user transaction")

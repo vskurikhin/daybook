@@ -30,7 +30,7 @@ It correctly bundles DayBook in production mode and optimizes the build for the 
 ```
   ./gradlew generateChangelog -PrunList='gen_dictionary, gen_db'
 ```
-### integration test `gradlew integrationTest`
+### `gradlew integrationTest`
 
 In the project directory, you can integration test by:
 ```

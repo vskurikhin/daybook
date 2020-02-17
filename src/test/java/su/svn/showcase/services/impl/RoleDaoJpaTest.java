@@ -85,7 +85,7 @@ class RoleDaoJpaTest {
 
     @BeforeEach
     void createNew() {
-        entity = TestData.getCloneOfRole1();
+        entity = TestData.cloneRole1();
     }
 
         @DisplayName("Can inject entity manager and user transaction")
