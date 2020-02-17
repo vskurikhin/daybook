@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordBaseDtoTest.java$
+ * RecordBaseDtoTest.java
  * $Id$
  */
 
@@ -89,9 +89,9 @@ class RecordBaseDtoTest {
 
         @BeforeEach
         void createNew() {
-            newsGroupBaseDto = getNewsGroupBaseDto0();
+            newsGroupBaseDto = cloneNewsGroupBaseDto0();
             recordBaseDto = cloneRecordBaseDto0();
-            tagBaseDtos = Collections.singleton(getTagBaseDto0());
+            tagBaseDtos = Collections.singleton(cloneTagBaseDto0());
         }
 
         @Test
