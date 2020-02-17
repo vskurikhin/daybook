@@ -18,7 +18,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.getRecord0;
+import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.NOW;
 
@@ -86,7 +86,7 @@ class NewsEntryBaseDtoTest {
 
         @BeforeEach
         void createNew() {
-            record = getRecord0();
+            record = cloneRecord0();
             recordFullDto = getRecordFullDto0();
             newsGroupBaseDto = getNewsGroupBaseDto0();
             tags = TestData.EMPTY_BASEDTO_TAGS;

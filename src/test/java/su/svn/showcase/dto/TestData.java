@@ -8,10 +8,6 @@
 
 package su.svn.showcase.dto;
 
-import su.svn.utils.SerializeUtil;
-
-import java.io.Serializable;
-
 import static su.svn.utils.TestData.*;
 
 
@@ -81,14 +77,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType")
+            .type("testType0")
             .build();
     private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType")
+            .type("testType1")
             .build();
 
     private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()
@@ -184,11 +180,11 @@ public class TestData {
         return assertClone(tagBaseDto1);
     }
 
-    public static RecordBaseDto getRecordBaseDto0() {
-        return recordBaseDto0;
+    public static RecordBaseDto cloneRecordBaseDto0() {
+        return assertClone(recordBaseDto0);
     }
-    public static RecordBaseDto getRecordBaseDto1() {
-        return recordBaseDto1;
+    public static RecordBaseDto cloneRecordBaseDto1() {
+        return assertClone(recordBaseDto1);
     }
 
     public static RecordFullDto getRecordFullDto0() {
@@ -269,8 +265,8 @@ public class TestData {
     }
      */
     static {
-        tagFullDto0.setRecords(newSet(getRecordBaseDto0()));
-        tagFullDto1.setRecords(newSet(getRecordBaseDto1()));
+        tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
+        tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
 
         userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
         userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());

@@ -34,7 +34,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
-import static su.svn.showcase.domain.TestData.getCloneOfRecord1;
+import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 import static su.svn.utils.TestData.RECORD_UUID0;
 
@@ -82,7 +82,7 @@ class RecordDaoJpaTest {
 
     @BeforeEach
     void createNew() {
-        entity = getCloneOfRecord1();
+        entity = clean(cloneRecord1());
     }
 
     @DisplayName("Can inject entity manager and user transaction")

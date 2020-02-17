@@ -41,7 +41,7 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.getNewsEntry1;
+import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
 import static su.svn.showcase.dto.TestData.getNewsEntryBaseDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
@@ -91,7 +91,7 @@ class NewsEntryBaseCrudServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        entity = getNewsEntry1();
+        entity = cloneNewsEntry1();
         dto = getNewsEntryBaseDto1();
     }
 

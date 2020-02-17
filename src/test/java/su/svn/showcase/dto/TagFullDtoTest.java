@@ -22,8 +22,8 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.String.ZERO;
-import static su.svn.showcase.domain.TestData.getRecord0;
-import static su.svn.showcase.dto.TestData.getRecordBaseDto0;
+import static su.svn.showcase.domain.TestData.cloneRecord0;
+import static su.svn.showcase.dto.TestData.cloneRecordBaseDto0;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class TagFullDto")
@@ -75,8 +75,8 @@ class TagFullDtoTest {
 
         @BeforeEach
         void createNew() {
-            records = Collections.singleton(getRecord0());
-            recordDtos = Collections.singleton(getRecordBaseDto0());
+            records = Collections.singleton(cloneRecord0());
+            recordDtos = Collections.singleton(cloneRecordBaseDto0());
             tagFullDto = new TagFullDto(ZERO, "testTag", true, NOW, recordDtos);
         }
 
@@ -112,7 +112,7 @@ class TagFullDtoTest {
 
             Tag expected2 = new Tag(ZERO, "testTag", true, NOW, records);
             Tag updating2 = new Tag(ZERO);
-            updating2.setRecords(Collections.singleton(getRecord0()));
+            updating2.setRecords(Collections.singleton(cloneRecord0()));
             Tag test2 = tagFullDto.update(updating2);
             assertEquals(expected2, test2);
             assertEquals(expected2.getRecords(), test2.getRecords());
@@ -121,7 +121,7 @@ class TagFullDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            Tag entity = new Tag(ZERO, "testTag", true, NOW, Collections.singleton(getRecord0()));
+            Tag entity = new Tag(ZERO, "testTag", true, NOW, Collections.singleton(cloneRecord0()));
             TagFullDto expected = new TagFullDto(entity);
             assertEquals(expected, tagFullDto);
         }

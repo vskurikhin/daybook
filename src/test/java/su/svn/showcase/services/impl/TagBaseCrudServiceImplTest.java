@@ -42,7 +42,7 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.getTag1;
+import static su.svn.showcase.domain.TestData.cloneTag1;
 import static su.svn.showcase.dto.TestData.getTagBaseDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
@@ -92,7 +92,7 @@ class TagBaseCrudServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        entity = getTag1();
+        entity = cloneTag1();
         dto = getTagBaseDto1();
     }
 

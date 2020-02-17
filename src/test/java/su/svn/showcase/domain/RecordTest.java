@@ -14,7 +14,7 @@ import su.svn.utils.ValidateUtil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.getNewsEntry0;
+import static su.svn.showcase.domain.TestData.cloneNewsEntry0;
 import static su.svn.showcase.domain.TestData.cloneUserLogin0;
 import static su.svn.utils.TestData.EMPTY_TAGS;
 import static su.svn.utils.TestData.NOW;
@@ -41,7 +41,7 @@ class RecordTest {
         @BeforeEach
         void createNew() {
             userLogin = cloneUserLogin0();
-            newsEntry = getNewsEntry0();
+            newsEntry = cloneNewsEntry0();
             record = new Record();
         }
 
@@ -112,7 +112,7 @@ class RecordTest {
         @BeforeEach
         void setUp() {
             userLogin = cloneUserLogin0();
-            newsEntry = getNewsEntry0();
+            newsEntry = cloneNewsEntry0();
         }
 
         @Test

@@ -11,17 +11,17 @@ package su.svn.showcase.domain;
 import org.junit.jupiter.api.*;
 import su.svn.utils.ValidateUtil;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.cloneNewsEntry0;
+import static su.svn.showcase.domain.TestData.cloneNewsGroup0;
+import static su.svn.utils.TestData.NOW;
 
 @DisplayName("Class NewsEntry")
 class NewsEntryTest {
 
-    private final static LocalDateTime NOW = LocalDateTime.now();
+    private NewsGroup newsGroup;
 
     private NewsEntry newsEntry;
 
@@ -36,6 +36,7 @@ class NewsEntryTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
+            newsGroup = cloneNewsGroup0();
             newsEntry = new NewsEntry();
         }
 
@@ -64,7 +65,6 @@ class NewsEntryTest {
             assertThat(newsEntry).hasFieldOrPropertyWithValue("content", "testContent");
             assertEquals("testContent", newsEntry.getContent());
 
-            NewsGroup newsGroup = NewsGroup.builder().id(ZERO).group("testGroup").dateTime(NOW).build();
 
             newsEntry.setNewsGroup(newsGroup);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("newsGroup", newsGroup);
@@ -82,43 +82,23 @@ class NewsEntryTest {
     @DisplayName("when new with all args constructor")
     class WhenNewAllArgsConstructor {
 
-        UserLogin userLogin;
-
-        Record record;
-
         NewsGroup newsGroup;
 
         @BeforeEach
         void createNew() {
-            userLogin = UserLogin.builder()
-                    .id(ZERO)
-                    .dateTime(NOW)
-                    .login("testLogin")
-                    .password("testPassword")
-                    .roles(Collections.emptyList())
-                    .build();
-            record = Record.builder()
-                    .id(ZERO)
-                    .userLogin(userLogin)
-                    .createDateTime(NOW)
-                    .editDateTime(NOW)
-                    .index(13)
-                    .type("testType")
-                    .build();
-            newsGroup = NewsGroup.builder().id(ZERO).group("testGroup").dateTime(NOW).build();
-            newsEntry = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
-            newsEntry.setRecord(record);
+            newsGroup = cloneNewsGroup0();
+            newsEntry = cloneNewsEntry0();
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            newsEntry = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
+            newsEntry = cloneNewsEntry0();
             assertNotNull(newsEntry.getId());
             assertEquals(ZERO, newsEntry.getId());
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(newsEntry).hasFieldOrPropertyWithValue("title", "testTitle");
-            assertThat(newsEntry).hasFieldOrPropertyWithValue("content", "testContent");
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("title", "titleTest0");
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("content", "contentTest0");
             assertThat(newsEntry).hasFieldOrPropertyWithValue("newsGroup", newsGroup);
         }
 
@@ -143,8 +123,7 @@ class NewsEntryTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new NewsEntry(), newsEntry);
-            NewsEntry expected = new NewsEntry(ZERO, record, NOW, "testTitle", "testContent", newsGroup);
-            expected.setRecord(record);
+            NewsEntry expected = cloneNewsEntry0();
             assertEquals(expected.hashCode(), newsEntry.hashCode());
             assertEquals(expected, newsEntry);
         }
