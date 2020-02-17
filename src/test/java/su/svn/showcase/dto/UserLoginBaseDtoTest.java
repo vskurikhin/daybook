@@ -131,8 +131,7 @@ class UserLoginBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            UserLogin expected = new UserLogin();
-            expected.setId(ZERO);
+            UserLogin expected = new UserLogin(ZERO);
             expected.setLogin("testLogin");
             expected.setPassword("testPassword");
             expected.setDateTime(NOW);
@@ -142,8 +141,7 @@ class UserLoginBaseDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            UserLogin entity = new UserLogin();
-            entity.setId(ZERO);
+            UserLogin entity = new UserLogin(ZERO);
             entity.setLogin("testLogin");
             entity.setPassword("testPassword");
             entity.setDateTime(NOW);

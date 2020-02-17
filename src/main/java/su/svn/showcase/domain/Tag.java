@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Tag.java$
@@ -82,9 +82,8 @@ public class Tag implements DBEntity<String>, Serializable {
             " RIGHT OUTER JOIN (VALUES %s) t2(new) ON t1.tag = t2.new WHERE t1.tag IS NULL";
 
     @Getter
-    @Setter // TODO remove
-    @Id
     @NotNull
+    @Id
     private String id;
 
     @Getter

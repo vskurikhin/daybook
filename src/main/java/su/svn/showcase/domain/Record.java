@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.12 23:11 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * Record.java
+ * Record.java$
  * $Id$
  */
 
@@ -121,7 +121,7 @@ import static su.svn.showcase.domain.Record.*;
 })
 public class Record implements DBEntity<UUID>, Serializable {
 
-    private static final long serialVersionUID = 240L;
+    private static final long serialVersionUID = 235L;
 
     public static final String FIND_ALL = "RecordDao.findAll";
 
@@ -176,9 +176,8 @@ public class Record implements DBEntity<UUID>, Serializable {
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";
 
     @Getter
-    @Setter // TODO remove
-    @Id
     @NotNull
+    @Id
     private UUID id;
 
     @Getter

@@ -53,7 +53,7 @@ public class UserLoginBaseDto implements UserLoginDto, Serializable {
 
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return UserRoleBaseDto.class;
+        return UserRoleFullDto.class;
     }
 
     @Override

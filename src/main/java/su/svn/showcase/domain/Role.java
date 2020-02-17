@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.15 15:28 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Role.java$
@@ -57,7 +57,7 @@ import static su.svn.showcase.domain.Role.*;
 })
 public class Role implements DBEntity<UUID>, Serializable {
 
-    private static final long serialVersionUID = 210L;
+    private static final long serialVersionUID = 220L;
 
     public static final String FIND_ALL = "RoleDao.findAll";
 
@@ -72,9 +72,8 @@ public class Role implements DBEntity<UUID>, Serializable {
     public static final String FIND_ALL_WHERE_ROLE_IN = "RoleDao.findAllWhereRoleIn";
 
     @Getter
-    @Setter // TODO remove
-    @Id
     @NotNull
+    @Id
     private UUID id;
 
     @Getter

@@ -148,21 +148,19 @@ class RecordBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            Record expected = new Record();
-            expected.setId(ZERO);
+            Record expected = new Record(ZERO);
             expected.setCreateDateTime(NOW);
             expected.setEditDateTime(NOW);
             expected.setIndex(13);
             expected.setType("testType");
             expected.setTags(EMPTY_TAGS);
-            assertEquals(expected, recordBaseDto.update(new Record()));
+            assertEquals(expected, recordBaseDto.update(new Record(ZERO)));
         }
 
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            Record entity = new Record();
-            entity.setId(ZERO);
+            Record entity = new Record(ZERO);
             entity.setCreateDateTime(NOW);
             entity.setEditDateTime(NOW);
             entity.setIndex(13);

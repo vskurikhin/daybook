@@ -117,7 +117,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      */
     @Override
     public Iterable<UserLogin> saveAll(Iterable<UserLogin> entities) {
-        return null; // TODO
+        return abstractDaoSaveAll(entities);
     }
 
     /**
