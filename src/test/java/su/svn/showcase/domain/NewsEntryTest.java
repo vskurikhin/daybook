@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 21:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryTest.java
+ * NewsEntryTest.java$
  * $Id$
  */
 
@@ -14,12 +14,13 @@ import su.svn.utils.ValidateUtil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.cloneNewsEntry0;
-import static su.svn.showcase.domain.TestData.cloneNewsGroup0;
+import static su.svn.showcase.domain.TestData.*;
 import static su.svn.utils.TestData.NOW;
 
 @DisplayName("Class NewsEntry")
 class NewsEntryTest {
+
+    private Record record;
 
     private NewsGroup newsGroup;
 
@@ -44,6 +45,7 @@ class NewsEntryTest {
         @DisplayName("default values")
         void defaults() {
             assertThat(newsEntry).hasFieldOrPropertyWithValue("id", null);
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("record", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("title", null);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("content", null);
@@ -86,6 +88,7 @@ class NewsEntryTest {
 
         @BeforeEach
         void createNew() {
+            record = cloneRecord0();
             newsGroup = cloneNewsGroup0();
             newsEntry = cloneNewsEntry0();
         }
@@ -93,9 +96,10 @@ class NewsEntryTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            newsEntry = cloneNewsEntry0();
+            newsEntry = new NewsEntry(ZERO, record, NOW, "titleTest0", "contentTest0", newsGroup);
             assertNotNull(newsEntry.getId());
             assertEquals(ZERO, newsEntry.getId());
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("record", record);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("title", "titleTest0");
             assertThat(newsEntry).hasFieldOrPropertyWithValue("content", "contentTest0");
@@ -107,12 +111,14 @@ class NewsEntryTest {
         void isInstantiatedWithBuilder() {
             newsEntry = NewsEntry.builder()
                     .id(ZERO)
+                    .record(record)
                     .dateTime(NOW)
                     .title("testTitle")
                     .content("testContent")
                     .newsGroup(newsGroup)
                     .build();
             assertThat(newsEntry).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(newsEntry).hasFieldOrPropertyWithValue("record", record);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(newsEntry).hasFieldOrPropertyWithValue("title", "testTitle");
             assertThat(newsEntry).hasFieldOrPropertyWithValue("content", "testContent");

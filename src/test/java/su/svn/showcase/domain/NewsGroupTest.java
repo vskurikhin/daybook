@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 21:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupTest.java
+ * NewsGroupTest.java$
  * $Id$
  */
 
@@ -113,6 +113,5 @@ class NewsGroupTest {
                         assertTrue(newsGroup.toString().length() > 0);
                 }
         }
-
 }
 //EOF
