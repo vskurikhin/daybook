@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:53 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 10:54 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleDaoJpa.java
@@ -83,8 +83,64 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
+    public List<UserRole> findAllOrderByRoleAsc() {
+        return abstractDaoFindAll(UserRole.FIND_ALL_ORDER_BY_ROLE_ASC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> findAllOrderByRoleDesc() {
+        return abstractDaoFindAll(UserRole.FIND_ALL_ORDER_BY_ROLE_DESC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public List<UserRole> findAllByIdIn(Iterable<UUID> uuids) {
         return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ID_IN, "ids", uuids);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> findAllWhereRole(String role) {
+        return abstractDaoFindAllWhereField(UserRole.FIND_WHERE_ROLE, "role", role);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> findAllByRoleIn(Iterable<String> roles) {
+        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> range(int start, int size) {
+        return jpaRange(UserRole.FIND_ALL, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> rangeOrderByRoleAsc(int start, int size) {
+        return jpaRange(UserRole.FIND_ALL_ORDER_BY_ROLE_ASC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> rangeOrderByRoleDesc(int start, int size) {
+        return jpaRange(UserRole.FIND_ALL_ORDER_BY_ROLE_DESC, start, size);
     }
 
     /**

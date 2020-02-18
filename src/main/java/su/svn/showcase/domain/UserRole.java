@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 10:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRole.java$
+ * UserRole.java
  * $Id$
  */
 
@@ -32,23 +32,51 @@ import static su.svn.showcase.domain.UserRole.*;
         query = "SELECT DISTINCT e FROM UserRole e"
     ),
     @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM UserRole e WHERE e.id IN (:ids)"
+    ),
+
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_ROLE_ASC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " ORDER BY e.roleName ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_ROLE_DESC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " ORDER BY e.roleName DESC"
+    ),
+    @NamedQuery(
         name = FIND_WHERE_ROLE,
-        query = "SELECT DISTINCT e FROM UserRole e WHERE e.roleName = :role"
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " WHERE e.roleName = :role"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM UserRole e WHERE e.id IN (:ids)"
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.id IN (:ids)"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ROLE_IN,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.roleName IN (:roles)"
     ),
 })
 public class UserRole implements DBEntity<UUID>, Serializable {
 
     private static final long serialVersionUID = 210L;
 
-    public static final String FIND_ALL = "UserRole.findAll";
+    public static final String FIND_ALL = "UserRoleDao.findAll";
 
-    public static final String FIND_WHERE_ROLE = "UserRole.findWhereRole";
+    public static final String FIND_ALL_ORDER_BY_ROLE_ASC = "UserRoleDao.findAllOrderByRoleAsc";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "UserRole.findAllByIdIn";
+    public static final String FIND_ALL_ORDER_BY_ROLE_DESC = "UserRoleDao.findAllOrderByRoleDesc";
+
+    public static final String FIND_WHERE_ROLE = "UserRoleDao.findWhereRole";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "UserRoleDao.findAllByIdIn";
+
+    public static final String FIND_ALL_WHERE_ROLE_IN = "UserRoleDao.findAllWhereRoleIn";
 
     @Getter
     @NotNull

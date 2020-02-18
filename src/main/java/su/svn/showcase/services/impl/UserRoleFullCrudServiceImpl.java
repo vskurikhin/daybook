@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.17 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 10:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImpl.java
@@ -11,12 +11,9 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.UserRoleDao;
-import su.svn.showcase.dao.jpa.UserRoleDaoJpa;
-import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.RoleBaseCrudService;
 import su.svn.showcase.services.UserRoleFullCrudService;
 
 import javax.ejb.EJB;
@@ -64,10 +61,9 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
 
     @Override
     public List<UserRoleFullDto> readRange(int start, int size) {
-        return userRoleDao.findAll().stream().map(UserRoleFullDto::new).collect(Collectors.toList());
-        /* return userRoleDao.range(start, size).stream()
+        return userRoleDao.range(start, size).stream()
                 .map(UserRoleFullDto::new)
-                .collect(Collectors.toList()); */
+                .collect(Collectors.toList());
     }
 
     @Override
