@@ -66,10 +66,6 @@ public class TagFullDto implements TagDto, Serializable {
         return TagFullDto.class;
     }
 
-    private Consumer<RecordDto> updatingConsumer(final Map<UUID, Record> mapEntities) {
-        return dto -> dto.update(mapEntities.get(dto.getId()));
-    }
-
     @Override
     public Tag update(@NotNull Tag entity) {
         assert entity != null;
@@ -77,11 +73,9 @@ public class TagFullDto implements TagDto, Serializable {
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
 
-        if (records != null && entity.getRecords() != null) {
-            final Map<UUID, Record> mapEntities = toEntitiesMap(entity.getRecords());
-            this.records.forEach(updatingConsumer(mapEntities));
+        if (records != null) {
+            this.records.forEach(dto -> dto.update(new Record(dto.getId())));
         }
-
         return entity;
     }
 }
