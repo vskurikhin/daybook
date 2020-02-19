@@ -9,6 +9,7 @@
 package su.svn.showcase.dto;
 
 import lombok.*;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 
 import javax.validation.constraints.NotNull;
@@ -46,6 +47,7 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     public UserRoleFullDto(@NotNull UserRole entity) {
         assert entity != null;
         this.id = entity.getId();
+        this.dateTime = entity.getDateTime();
         this.roleName = entity.getRoleName();
         this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
     }
@@ -61,7 +63,7 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
         entity.setDateTime(this.dateTime);
         entity.setRoleName(this.roleName);
         assert this.userLogin != null;
-        entity.setUserLogin(this.userLogin.update(entity.getUserLogin()));
+        entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
 
         return entity;
     }

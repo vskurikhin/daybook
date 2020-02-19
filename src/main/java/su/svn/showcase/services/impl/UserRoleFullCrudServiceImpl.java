@@ -50,6 +50,7 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @Override
     public void create(UserRoleFullDto dto) {
         Objects.requireNonNull(dto);
+        UserRole userRole = new UserRole(UUID.randomUUID());
         consume(tagSavingConsumer(dto), new UserRole(UUID.randomUUID()));
     }
 

@@ -74,7 +74,7 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
         entity.setContent(this.content);
         this.record.update(entity.getRecord());
         if (entity.getNewsGroup() != null) {
-            this.newsGroup.update(entity.getNewsGroup());
+            this.newsGroup.update(new NewsGroup(this.newsGroup.getId()));
         }
         return entity;
     }

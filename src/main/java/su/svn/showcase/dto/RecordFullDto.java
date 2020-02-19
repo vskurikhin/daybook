@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
+import su.svn.showcase.domain.UserLogin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -75,15 +76,6 @@ public class RecordFullDto implements RecordDto, Serializable {
         return null;
     }
 
-    private Consumer<TagDto> updatingConsumer(Map<String, Tag> mapEntities) {
-        return dto -> {
-            Tag tag = mapEntities.get(dto.getId());
-            if (tag != null) {
-                dto.update(tag);
-            }
-        };
-    }
-
     @Override
     public Record update(@NotNull Record entity) {
         assert entity != null;
@@ -92,10 +84,9 @@ public class RecordFullDto implements RecordDto, Serializable {
         entity.setIndex(this.index);
         entity.setType(this.type);
 
-        this.userLogin.update(entity.getUserLogin());
-        if (tags != null && ! tags.isEmpty() && entity.getTags() != null) {
-            final Map<String, Tag> mapEntities = toEntitiesMap(entity.getTags());
-            tags.forEach(updatingConsumer(mapEntities));
+        this.userLogin.update(new UserLogin(this.userLogin.getId()));
+        if (tags != null) {
+            tags.forEach(dto -> dto.update(new Tag(dto.getId())));
         }
         return entity;
     }

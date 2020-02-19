@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 11:26 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpaTest.java
@@ -64,11 +64,11 @@ class RoleDaoJpaTest {
             .inject(this)
             .build();
 
-    private RoleDao mockRoleDao = mock(RoleDao.class);
+    private RoleDao mockDao = mock(RoleDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                           mockRoleDao);
-        put(RoleDao.class.getName(),         mockRoleDao);
+        put(null, mockDao);
+        put(RoleDao.class.getName(), mockDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -88,7 +88,7 @@ class RoleDaoJpaTest {
         entity = TestData.cloneRole1();
     }
 
-        @DisplayName("Can inject entity manager and user transaction")
+    @DisplayName("Can inject entity manager and user transaction")
     @Test
     void canInject_entityManager() {
         assertNotNull(entityManager);

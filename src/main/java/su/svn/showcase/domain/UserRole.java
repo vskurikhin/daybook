@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.18 10:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 11:22 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRole.java
@@ -32,21 +32,6 @@ import static su.svn.showcase.domain.UserRole.*;
         query = "SELECT DISTINCT e FROM UserRole e"
     ),
     @NamedQuery(
-        name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM UserRole e WHERE e.id IN (:ids)"
-    ),
-
-    @NamedQuery(
-        name = FIND_ALL_ORDER_BY_ROLE_ASC,
-        query = "SELECT DISTINCT e FROM UserRole e" +
-                " ORDER BY e.roleName ASC"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_ORDER_BY_ROLE_DESC,
-        query = "SELECT DISTINCT e FROM UserRole e" +
-                " ORDER BY e.roleName DESC"
-    ),
-    @NamedQuery(
         name = FIND_WHERE_ROLE,
         query = "SELECT DISTINCT e FROM UserRole e" +
                 " WHERE e.roleName = :role"
@@ -61,6 +46,23 @@ import static su.svn.showcase.domain.UserRole.*;
         query = "SELECT DISTINCT e FROM Role e" +
                 " WHERE e.roleName IN (:roles)"
     ),
+    @NamedQuery(
+        name = FETCH_ALL,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l"
+    ),
+    @NamedQuery(
+        name = FETCH_ALL_ORDER_BY_ROLE_ASC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l" +
+                " ORDER BY e.roleName ASC"
+    ),
+    @NamedQuery(
+        name = FETCH_ALL_ORDER_BY_ROLE_DESC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l" +
+                " ORDER BY e.roleName DESC"
+    ),
 })
 public class UserRole implements DBEntity<UUID>, Serializable {
 
@@ -68,15 +70,23 @@ public class UserRole implements DBEntity<UUID>, Serializable {
 
     public static final String FIND_ALL = "UserRoleDao.findAll";
 
-    public static final String FIND_ALL_ORDER_BY_ROLE_ASC = "UserRoleDao.findAllOrderByRoleAsc";
-
-    public static final String FIND_ALL_ORDER_BY_ROLE_DESC = "UserRoleDao.findAllOrderByRoleDesc";
-
     public static final String FIND_WHERE_ROLE = "UserRoleDao.findWhereRole";
 
     public static final String FIND_ALL_WHERE_ID_IN = "UserRoleDao.findAllByIdIn";
 
     public static final String FIND_ALL_WHERE_ROLE_IN = "UserRoleDao.findAllWhereRoleIn";
+
+    public static final String FETCH_ALL = "UserRoleDao.fetchAll";
+
+    public static final String FETCH_ALL_ORDER_BY_ROLE_ASC = "UserRoleDao.fetchAllOrderByRoleAsc";
+
+    public static final String FETCH_ALL_ORDER_BY_ROLE_DESC = "UserRoleDao.fetchAllOrderByRoleDesc";
+
+    public static final String RANGE = FETCH_ALL;
+
+    public static final String RANGE_ORDER_BY_ROLE_ASC = FETCH_ALL_ORDER_BY_ROLE_ASC;
+
+    public static final String RANGE_ORDER_BY_ROLE_DESC = FETCH_ALL_ORDER_BY_ROLE_DESC;
 
     @Getter
     @NotNull
