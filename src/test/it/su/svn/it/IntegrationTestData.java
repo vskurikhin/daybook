@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 14:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -221,6 +221,37 @@ public class IntegrationTestData extends TestData {
                     .build()
     };
 
+    private static final RecordFullDto[] recordFullDtos = {
+            RecordFullDto.builder()
+                    .id(RECORD_UUID0)
+                    .createDateTime(NOW)
+                    .editDateTime(NOW)
+                    .index(13)
+                    .type("testType0")
+                    .build(),
+            RecordFullDto.builder()
+                    .id(RECORD_UUID1)
+                    .createDateTime(NOW)
+                    .editDateTime(NOW)
+                    .index(1)
+                    .type("testType1")
+                    .build(),
+            RecordFullDto.builder()
+                    .id(RECORD_UUID2)
+                    .createDateTime(NOW)
+                    .editDateTime(NOW)
+                    .index(2)
+                    .type("testType2")
+                    .build(),
+            RecordFullDto.builder()
+                    .id(RECORD_UUID3)
+                    .createDateTime(NOW)
+                    .editDateTime(NOW)
+                    .index(3)
+                    .type("testType3")
+                    .build()
+    };
+
     private static final NewsEntry[] newsEntries = {
             NewsEntry.builder()
                     .id(NEWS_ENTRY_UUID0)
@@ -275,6 +306,33 @@ public class IntegrationTestData extends TestData {
                     .build()
     };
 
+    private static final NewsEntryFullDto[] newsEntryFullDtos = {
+            NewsEntryFullDto.builder()
+                    .id(NEWS_ENTRY_UUID0)
+                    .dateTime(NOW)
+                    .title("titleTest0")
+                    .content("contentTest0")
+                    .build(),
+            NewsEntryFullDto.builder()
+                    .id(NEWS_ENTRY_UUID1)
+                    .dateTime(NOW)
+                    .title("titleTest1")
+                    .content("contentTest1")
+                    .build(),
+            NewsEntryFullDto.builder()
+                    .id(NEWS_ENTRY_UUID2)
+                    .dateTime(NOW)
+                    .title("titleTest2")
+                    .content("contentTest2")
+                    .build(),
+            NewsEntryFullDto.builder()
+                    .id(NEWS_ENTRY_UUID3)
+                    .dateTime(NOW)
+                    .title("titleTest3")
+                    .content("contentTest3")
+                    .build()
+    };
+
     static {
         newsGroups[0].setNewsEntries(new ArrayList<>());
         for (int i = 0; i < UPPER_BOUND; ++i) {
@@ -285,10 +343,14 @@ public class IntegrationTestData extends TestData {
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
-            newsEntries[i].setNewsGroup(newsGroups[0]);
-            newsEntries[i].setRecord(records[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
+            recordFullDtos[i].setUserLogin(userLoginBaseDtos[i]);
+            recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
+            newsEntries[i].setNewsGroup(newsGroups[0]);
+            newsEntries[i].setRecord(records[i]);
+            newsEntryFullDtos[i].setRecord(recordFullDtos[i]);
+            newsEntryFullDtos[i].setNewsGroup(newsGroupBaseDtos[i]);
         }
     }
 
@@ -371,6 +433,31 @@ public class IntegrationTestData extends TestData {
         return dto;
     }
 
+    public static Record cloneRecord(int i) {
+        Record entity = clone(records[i]);
+        assert entity != null;
+        return entity;
+    }
+
+    public static Record clean(Record entity) {
+        entity.setUserLogin(null);
+        entity.setNewsEntry(null);
+        entity.setTags(Collections.emptySet());
+        return entity;
+    }
+
+    public static RecordBaseDto cloneRecordBaseDto(int i) {
+        RecordBaseDto dto = clone(recordBaseDtos[i]);
+        assert dto != null;
+        return dto;
+    }
+
+    public static RecordFullDto cloneRecordFullDto(int i) {
+        RecordFullDto dto = clone(recordFullDtos[i]);
+        assert dto != null;
+        return dto;
+    }
+
     public static NewsEntry cloneNewsEntry(int i) {
         NewsEntry entity = clone(newsEntries[i]);
         assert entity != null;
@@ -388,21 +475,8 @@ public class IntegrationTestData extends TestData {
         return dto;
     }
 
-    public static Record cloneRecord(int i) {
-        Record entity = clone(records[i]);
-        assert entity != null;
-        return entity;
-    }
-
-    public static Record clean(Record entity) {
-        entity.setUserLogin(null);
-        entity.setNewsEntry(null);
-        entity.setTags(Collections.emptySet());
-        return entity;
-    }
-
-    public static RecordBaseDto cloneRecordBaseDto(int i) {
-        RecordBaseDto dto = clone(recordBaseDtos[i]);
+    public static NewsEntryFullDto cloneNewsEntryFullDto(int i) {
+        NewsEntryFullDto dto = clone(newsEntryFullDtos[i]);
         assert dto != null;
         return dto;
     }

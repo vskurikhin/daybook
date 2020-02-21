@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.16 11:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -23,13 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import su.svn.showcase.dao.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.dto.RoleBaseDto;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.UserRoleFullDto;
-import su.svn.showcase.services.NewsEntryBaseCrudService;
-import su.svn.showcase.services.RoleBaseCrudService;
-import su.svn.showcase.services.TagBaseCrudService;
-import su.svn.showcase.services.UserRoleFullCrudService;
+import su.svn.showcase.services.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -68,7 +66,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     UserRoleFullCrudService userRoleFullCrudService;
 
     @Inject
-    NewsEntryBaseCrudService newsEntryBaseCrudService;
+    NewsEntryFullCrudService newsEntryFullCrudService;
 
     @Inject
     UserTransaction userTransaction;
@@ -175,13 +173,6 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    @InSequence(2203)
-    public void test_userRoleFullCrudService_create_withNewRole() throws Exception {
-        UserRoleFullDto dto = cloneUserRoleFullDto(3);
-        userRoleFullCrudService.create(dto);
-    }
-
-    @Test
     @InSequence(2300)
     public void test_newsGroupDao_save() throws Exception {
         NewsGroup entity = clean(cloneNewsGroup(0));
@@ -235,19 +226,17 @@ public class DBIntegrationTest extends BaseIntegrationTest {
         saveAll(newsEntryDao, entityList, expected);
     }
 
-    /*
     @Test
     @InSequence(2502)
-    public void test_newsEntryBaseCrudService_create() throws Exception {
-        NewsEntryBaseDto entity = cloneNewsEntryBaseDto(2);
-        newsEntryBaseCrudService.create(entity);
+    public void test__create() throws Exception {
+        NewsEntryFullDto dto = cloneNewsEntryFullDto(2);
+        newsEntryFullCrudService.create(dto);
     }
-     */
 
     @Test
     @InSequence(99999)
     public void tearDown() throws SystemException, InterruptedException {
-        Thread.sleep(99999);
+        // Thread.sleep(99999);
         if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION) {
             userTransaction.rollback();
         }

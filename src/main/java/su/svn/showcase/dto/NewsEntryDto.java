@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDto.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.interfaces.Updating;
 
 import javax.validation.constraints.NotNull;
@@ -39,6 +40,7 @@ public interface NewsEntryDto extends Dto<UUID>, Updating<NewsEntry> {
 
     default NewsEntry update(@NotNull NewsEntry entity, Map<String, Object> values) {
         Objects.requireNonNull(entity);
+        convertIfContainsKey(Record.class, values, "record").ifPresent(entity::setRecord);
         convertIfContainsKey(NewsGroup.class, values, "newsGroup").ifPresent(entity::setNewsGroup);
 
         return update(entity);

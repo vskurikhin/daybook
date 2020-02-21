@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagFullDto.java$
+ * TagFullDto.java
  * $Id$
  */
 
@@ -18,7 +18,6 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -48,7 +47,7 @@ public class TagFullDto implements TagDto, Serializable {
 
     @Valid
     @NotNull
-    Set<RecordDto> records;
+    private Set<RecordDto> records;
 
     public TagFullDto(@NotNull Tag entity) {
         assert entity != null;
@@ -72,9 +71,13 @@ public class TagFullDto implements TagDto, Serializable {
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
-
-        if (records != null) {
-            this.records.forEach(dto -> dto.update(new Record(dto.getId())));
+        if (this.records != null) {
+            Set<Record> records = this.records.stream()
+                    .map(dto -> dto.update(new Record(dto.getId())))
+                    .collect(Collectors.toSet());
+            entity.setRecords(records);
+        } else {
+            entity.setRecords(Collections.emptySet());
         }
         return entity;
     }
