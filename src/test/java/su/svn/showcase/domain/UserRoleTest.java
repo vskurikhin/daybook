@@ -11,15 +11,17 @@ package su.svn.showcase.domain;
 import org.junit.jupiter.api.*;
 import su.svn.utils.ValidateUtil;
 
-import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.cloneRole0;
+import static su.svn.showcase.domain.TestData.cloneRole1;
+import static su.svn.utils.TestData.NOW;
 
 @DisplayName("Class UserRole")
 class UserRoleTest {
-    private final static LocalDateTime NOW = LocalDateTime.now();
+
+    private Role role;
 
     private UserRole userRole;
 
@@ -34,6 +36,7 @@ class UserRoleTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
+            role = cloneRole0();
             userRole = new UserRole();
         }
 
@@ -41,6 +44,7 @@ class UserRoleTest {
         @DisplayName("default values")
         void defaults() {
             assertThat(userRole).hasFieldOrPropertyWithValue("id", null);
+            assertThat(userRole).hasFieldOrPropertyWithValue("role", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("roleName", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("userLogin", null);
@@ -49,6 +53,10 @@ class UserRoleTest {
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
+            userRole.setRole(role);
+            assertThat(userRole).hasFieldOrPropertyWithValue("role", role);
+            assertEquals(role, userRole.getRole());
+
             userRole.setDateTime(NOW);
             assertThat(userRole).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertEquals(NOW, userRole.getDateTime());
@@ -79,22 +87,29 @@ class UserRoleTest {
 
         @BeforeEach
         void createNew() {
+            role = cloneRole1();
             userLogin = UserLogin.builder().id(ZERO).login("testLogin").dateTime(NOW).build();
-            userRole = new UserRole(ZERO, NOW, "testRole", userLogin);
+            userRole = new UserRole(ZERO, role, NOW, "testRole", userLogin);
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userRole = new UserRole(ZERO, NOW, "testRole", userLogin);
+            userRole = new UserRole(ZERO, role, NOW, "testRole", userLogin);
             assertThat(userRole).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            userRole = UserRole.builder().id(ZERO).dateTime(NOW).roleName("testRole").userLogin(userLogin).build();
+            userRole = UserRole.builder()
+                    .id(ZERO)
+                    .role(role)
+                    .dateTime(NOW)
+                    .roleName("testRole")
+                    .userLogin(userLogin).build();
             assertThat(userRole).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userRole).hasFieldOrPropertyWithValue("role", role);
             assertThat(userRole).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(userRole).hasFieldOrPropertyWithValue("roleName", "testRole");
             assertThat(userRole).hasFieldOrPropertyWithValue("userLogin", userLogin);
@@ -104,7 +119,7 @@ class UserRoleTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new UserRole(), userRole);
-            UserRole expected = new UserRole(ZERO, NOW, "testRole", userLogin);
+            UserRole expected = new UserRole(ZERO, role, NOW, "testRole", userLogin);
             assertEquals(expected.hashCode(), userRole.hashCode());
             assertEquals(expected, userRole);
         }

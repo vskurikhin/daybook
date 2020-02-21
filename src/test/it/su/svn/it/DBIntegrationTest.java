@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.16 11:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -23,17 +23,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import su.svn.showcase.dao.*;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.dto.RoleBaseDto;
 import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.services.NewsEntryBaseCrudService;
-import su.svn.showcase.services.RoleBaseCrudService;
-import su.svn.showcase.services.TagBaseCrudService;
+import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.services.*;
 
 import java.util.Collection;
 import java.util.List;
-
-import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 public class DBIntegrationTest extends BaseIntegrationTest {
@@ -66,7 +63,10 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     RoleBaseCrudService roleBaseCrudService;
 
     @Inject
-    NewsEntryBaseCrudService newsEntryBaseCrudService;
+    UserRoleFullCrudService userRoleFullCrudService;
+
+    @Inject
+    NewsEntryFullCrudService newsEntryFullCrudService;
 
     @Inject
     UserTransaction userTransaction;
@@ -160,9 +160,16 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @Test
     @InSequence(2201)
     public void test_userRoleDao_saveAll() throws Exception {
-        List<UserRole> entity = newList(cloneUserRole(1));
+        List<UserRole> entityList = newList(cloneUserRole(1));
         List<UserRole> expected = newList(cloneUserRole(1));
-        saveAll(userRoleDao, entity, expected);
+        saveAll(userRoleDao, entityList, expected);
+    }
+
+    @Test
+    @InSequence(2202)
+    public void test_userRoleFullCrudService_create() throws Exception {
+        UserRoleFullDto dto = cloneUserRoleFullDto(2);
+        userRoleFullCrudService.create(dto);
     }
 
     @Test
@@ -174,26 +181,32 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @InSequence(2301)
+    public void test_newsGroupDao_saveAll() throws Exception {
+        List<NewsGroup> entityList = newList(clean(cloneNewsGroup(1)));
+        List<NewsGroup> expected = newList(clean(cloneNewsGroup(1)));
+        saveAll(newsGroupDao, entityList, expected);
+    }
+
+    @Test
     @InSequence(2450)
     public void test_recordDao_save() throws Exception {
         Record entity = clean(cloneRecord(0));
         Record expected = clean(cloneRecord(0));
         entity.setUserLogin(cloneUserLogin(0));
         expected.setUserLogin(cloneUserLogin(0));
-        System.out.println("entity = " + entity);
         save(recordDao, entity, expected);
     }
 
     @Test
     @InSequence(2451)
     public void test_recordDao_saveAll() throws Exception {
-        Record entity = clean(cloneRecord(1));
+        Record entityList = clean(cloneRecord(1));
         Record expected = clean(cloneRecord(1));
-        entity.setUserLogin(cloneUserLogin(1));
+        entityList.setUserLogin(cloneUserLogin(1));
         expected.setUserLogin(cloneUserLogin(1));
-        List<Record> records = newList(entity);
+        List<Record> records = newList(entityList);
         List<Record> expectedList = newList(expected);
-        System.out.println("entity = " + entity);
         saveAll(recordDao, records, expectedList);
     }
 
@@ -202,32 +215,28 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     public void test_newsEntryDao_save() throws Exception {
         NewsEntry entity = clean(cloneNewsEntry(0));
         NewsEntry expected = clean(cloneNewsEntry(0));
-        System.out.println("entity = " + entity);
         save(newsEntryDao, entity, expected);
     }
 
     @Test
     @InSequence(2501)
     public void test_newsEntryDao_saveAll() throws Exception {
-        List<NewsEntry> entity = newList(clean(cloneNewsEntry(1)));
+        List<NewsEntry> entityList = newList(clean(cloneNewsEntry(1)));
         List<NewsEntry> expected = newList(clean(cloneNewsEntry(1)));
-        System.out.println("entity = " + entity);
-        saveAll(newsEntryDao, entity, expected);
+        saveAll(newsEntryDao, entityList, expected);
     }
 
-    /*
     @Test
     @InSequence(2502)
-    public void test_newsEntryBaseCrudService_create() throws Exception {
-        NewsEntryBaseDto entity = cloneNewsEntryBaseDto(2);
-        newsEntryBaseCrudService.create(entity);
+    public void test__create() throws Exception {
+        NewsEntryFullDto dto = cloneNewsEntryFullDto(2);
+        newsEntryFullCrudService.create(dto);
     }
-     */
 
     @Test
     @InSequence(99999)
     public void tearDown() throws SystemException, InterruptedException {
-        Thread.sleep(99999);
+        // Thread.sleep(99999);
         if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION) {
             userTransaction.rollback();
         }

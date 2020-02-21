@@ -104,7 +104,9 @@ public class TestData {
         userLogin1.setRoles(newList(cloneUserRole1()));
 
         userRole0.setUserLogin(cloneUserLogin0());
+        userRole0.setRole(cloneRole0());
         userRole1.setUserLogin(cloneUserLogin1());
+        userRole1.setRole(cloneRole1());
 
         tag0.setRecords(newSet(cloneRecord0()));
         tag1.setRecords(newSet(cloneRecord1()));

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:14 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryBaseCrudServiceImplTest.java$
+ * NewsEntryFullCrudServiceImplTest.java
  * $Id$
  */
 
@@ -17,9 +17,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.NewsEntryDao;
 import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
 import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.NewsEntryBaseCrudService;
+import su.svn.showcase.services.NewsEntryFullCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -42,13 +42,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
-import static su.svn.showcase.dto.TestData.getNewsEntryBaseDto1;
+import static su.svn.showcase.dto.TestData.cloneNewsEntryFullDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A NewsEntryBaseCrudServiceImplTest unit test cases")
+@DisplayName("A NewsEntryFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {NewsEntryDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class NewsEntryBaseCrudServiceImplTest {
+class NewsEntryFullCrudServiceImplTest {
 
     @Inject
     private BeanManager beanManager;
@@ -59,7 +59,7 @@ class NewsEntryBaseCrudServiceImplTest {
     private
     WeldInitiator weld = WeldInitiator.from(
             NewsEntryDaoJpa.class,
-            NewsEntryBaseCrudServiceImpl.class,
+            NewsEntryFullCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -70,10 +70,12 @@ class NewsEntryBaseCrudServiceImplTest {
             .build();
 
     private NewsEntryDao mockDao = mock(NewsEntryDao.class);
+    private NewsEntryFullCrudService mockService = mock(NewsEntryFullCrudService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                         mockDao);
-        put(NewsEntryDao.class.getName(), mockDao);
+        put(null,                                     mockDao);
+        put(NewsEntryDao.class.getName(),             mockDao);
+        put(NewsEntryFullCrudService.class.getName(), mockService);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -87,12 +89,12 @@ class NewsEntryBaseCrudServiceImplTest {
     private UserTransaction userTransaction;
 
     private NewsEntry entity;
-    private NewsEntryBaseDto dto;
+    private NewsEntryFullDto dto;
 
     @BeforeEach
     void setUp() {
         entity = cloneNewsEntry1();
-        dto = getNewsEntryBaseDto1();
+        dto = cloneNewsEntryFullDto1();
     }
 
     @AfterEach
@@ -107,38 +109,37 @@ class NewsEntryBaseCrudServiceImplTest {
     }
 
     @Test
-    void create(NewsEntryBaseCrudService service) {
+    void create(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         service.create(dto);
     }
 
     @Test
-    void readById(NewsEntryBaseCrudService service) {
+    void readById(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
         Assertions.assertEquals(dto, service.readById(entity.getId()));
     }
 
     @Test
-    void readRange(NewsEntryBaseCrudService service) {
+    void readRange(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        List<NewsEntryBaseDto> testList = service.readRange(0, Integer.MAX_VALUE);
+        List<NewsEntryFullDto> testList = service.readRange(0, Integer.MAX_VALUE);
         Assertions.assertTrue(testList.isEmpty());
     }
 
     @Test
-    void update(NewsEntryBaseCrudService service) {
+    void update(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         service.update(dto);
     }
 
     @Test
-    void delete(NewsEntryBaseCrudService service) {
+    void delete(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
         service.delete(dto.getId());
     }
 }

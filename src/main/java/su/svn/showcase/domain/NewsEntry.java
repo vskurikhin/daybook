@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntry.java$
+ * NewsEntry.java
  * $Id$
  */
 
@@ -91,7 +91,7 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "title", length = 128, nullable = false, unique = true)
+    @Column(name = "title", length = 128, nullable = false)
     private String title;
 
     @Getter

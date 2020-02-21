@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.19 21:28 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImplTest.java
@@ -45,7 +45,7 @@ import static su.svn.showcase.domain.TestData.cloneUserRole1;
 import static su.svn.showcase.dto.TestData.cloneUserRoleFullDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A TagStorageServiceImplTest unit test cases")
+@DisplayName("A UserRoleFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {UserRoleDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class UserRoleFullCrudServiceImplTest {
@@ -140,7 +140,6 @@ class UserRoleFullCrudServiceImplTest {
     @Test
     void delete(UserRoleFullCrudService service) {
         Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
         service.delete(dto.getId());
     }
 }

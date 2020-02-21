@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * Tag.java$
+ * Tag.java
  * $Id$
  */
 
@@ -110,7 +110,7 @@ public class Tag implements DBEntity<String>, Serializable {
             name = "db_record_tag",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "db_record_id"))
-    Set<Record> records;
+    private Set<Record> records;
 
     public Tag(@NotNull String id) {
         this.id = id;

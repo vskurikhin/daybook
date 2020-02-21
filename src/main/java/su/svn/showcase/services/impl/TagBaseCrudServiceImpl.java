@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 16:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagBaseCrudServiceImpl.java$
+ * TagBaseCrudServiceImpl.java
  * $Id$
  */
 
@@ -16,7 +16,6 @@ import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.TagBaseCrudService;
-import su.svn.showcase.utils.StringUtil;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -51,8 +50,7 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     @Override
     public void create(TagBaseDto dto) {
         Objects.requireNonNull(dto);
-        String id = StringUtil.generateTagId(dto.getTag());
-        consume(tagSavingConsumer(dto), new Tag(id));
+        consume(tagSavingConsumer(dto), new Tag(getOrGenerateStringKey(dto)));
     }
 
     @Override
