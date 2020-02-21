@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.14 10:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagStorageServiceImplTest.java
+ * TagBaseCrudServiceImplTest.java
  * $Id$
  */
 
@@ -43,7 +43,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.cloneTag1;
-import static su.svn.showcase.dto.TestData.getTagBaseDto1;
+import static su.svn.showcase.dto.TestData.cloneTagBaseDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
 @DisplayName("A TagStorageServiceImplTest unit test cases")
@@ -93,7 +93,7 @@ class TagBaseCrudServiceImplTest {
     @BeforeEach
     void setUp() {
         entity = cloneTag1();
-        dto = getTagBaseDto1();
+        dto = cloneTagBaseDto1();
     }
 
     @AfterEach

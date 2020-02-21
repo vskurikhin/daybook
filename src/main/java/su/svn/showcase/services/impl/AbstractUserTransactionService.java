@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 18:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 15:32 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * AbstractUserTransactionService.java$
+ * AbstractUserTransactionService.java
  * $Id$
  */
 
@@ -14,10 +14,12 @@ import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.dto.Dto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.CollectionUtil;
+import su.svn.showcase.utils.StringUtil;
 
 import javax.transaction.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -147,6 +149,14 @@ abstract class AbstractUserTransactionService {
     <D extends Dto> void validateId(D dto) {
         Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getId());
+    }
+
+    <T extends Dto<String>> String getOrGenerateStringKey(T entity) {
+        return entity.getId() != null ? entity.getId() : StringUtil.generateStringId();
+    }
+
+    <T extends Dto<UUID>> UUID getOrGenerateUuidKey(T entity) {
+        return entity.getId() != null ? entity.getId() : UUID.randomUUID();
     }
 
     private <K> void errorLoggin(K e) {

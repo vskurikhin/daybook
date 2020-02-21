@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 18:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 15:32 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RoleBaseCrudServiceImpl.java$
+ * RoleBaseCrudServiceImpl.java
  * $Id$
  */
 
@@ -50,7 +50,7 @@ public class RoleBaseCrudServiceImpl extends AbstractUserTransactionService impl
     @Override
     public void create(RoleBaseDto dto) {
         Objects.requireNonNull(dto);
-        consume(tagSavingConsumer(dto), new Role(UUID.randomUUID()));
+        consume(tagSavingConsumer(dto), new Role(getOrGenerateUuidKey(dto)));
     }
 
     @Override

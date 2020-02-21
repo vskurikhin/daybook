@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullDto.java$
+ * RecordFullDto.java
  * $Id$
  */
 
@@ -17,11 +17,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -56,7 +54,7 @@ public class RecordFullDto implements RecordDto, Serializable {
 
     @Valid
     @NotNull
-    Set<TagDto> tags;
+    private Set<TagDto> tags;
 
     public RecordFullDto(@NotNull Record entity) {
         assert entity != null;
@@ -83,10 +81,15 @@ public class RecordFullDto implements RecordDto, Serializable {
         entity.setEditDateTime(this.editDateTime);
         entity.setIndex(this.index);
         entity.setType(this.type);
-
-        this.userLogin.update(new UserLogin(this.userLogin.getId()));
-        if (tags != null) {
-            tags.forEach(dto -> dto.update(new Tag(dto.getId())));
+        assert this.userLogin != null;
+        entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
+        if (this.tags != null) {
+            Set<Tag> tags = this.tags.stream()
+                    .map(dto -> dto.update(new Tag(dto.getId())))
+                    .collect(Collectors.toSet());
+            entity.setTags(tags);
+        } else {
+            entity.setTags(Collections.emptySet());
         }
         return entity;
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.17 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -9,7 +9,6 @@
 package su.svn.showcase.dto;
 
 import static su.svn.utils.TestData.*;
-
 
 public class TestData {
 
@@ -92,14 +91,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType")
+            .type("testType0")
             .build();
     private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType")
+            .type("testType1")
             .build();
 
     private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()
@@ -126,6 +125,45 @@ public class TestData {
             .content("contentTest1")
             .build();
 
+    private static final NewsEntryFullDto newsEntryFullDto0 = NewsEntryFullDto.builder()
+            .id(NEWS_ENTRY_UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .content("contentTest0")
+            .build();
+    private static final NewsEntryFullDto newsEntryFullDto1 = NewsEntryFullDto.builder()
+            .id(NEWS_ENTRY_UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .content("contentTest1")
+            .build();
+
+    static {
+        tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
+        tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
+
+        userRoleFullDto0.setRole(cloneRoleBaseDto0());
+        userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        userRoleFullDto1.setRole(cloneRoleBaseDto1());
+        userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+
+        recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        recordFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+        recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
+        recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
+
+        newsEntryFullDto0.setRecord(cloneRecordFullDto0());
+        newsEntryFullDto0.setNewsGroup(cloneNewsGroupBaseDto0());
+        newsEntryFullDto1.setRecord(cloneRecordFullDto1());
+        newsEntryFullDto1.setNewsGroup(cloneNewsGroupBaseDto1());
+    }
+
+    public static RoleBaseDto cloneRoleBaseDto0() {
+        return assertClone(roleBaseDto0);
+    }
+    public static RoleBaseDto cloneRoleBaseDto1() {
+        return assertClone(roleBaseDto1);
+    }
 
     public static UserRoleFullDto cloneUserRoleFullDto0() {
         return assertClone(userRoleFullDto0);
@@ -139,14 +177,6 @@ public class TestData {
     }
     public static UserLoginBaseDto cloneUserLoginBaseDto1() {
         return assertClone(userLoginBaseDto1);
-    }
-
-
-    public static TagBaseDto getTagBaseDto0() {
-        return assertClone(tagBaseDto0);
-    }
-    public static TagBaseDto getTagBaseDto1() {
-        return assertClone(tagBaseDto1);
     }
 
     public static TagBaseDto cloneTagBaseDto0() {
@@ -177,26 +207,18 @@ public class TestData {
         return assertClone(newsGroupBaseDto1);
     }
 
-
-    public static NewsEntryBaseDto getNewsEntryBaseDto0() {
+    public static NewsEntryBaseDto cloneNewsEntryBaseDto0() {
         return assertClone(newsEntryBaseDto0);
     }
-    public static NewsEntryBaseDto getNewsEntryBaseDto1() {
+    public static NewsEntryBaseDto cloneNewsEntryBaseDto1() {
         return assertClone(newsEntryBaseDto1);
     }
 
-
-    static {
-        tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
-        tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
-
-        userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
-        userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());
-
-        recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());
-        recordFullDto1.setUserLogin(cloneUserLoginBaseDto1());
-        recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
-        recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
+    public static NewsEntryFullDto cloneNewsEntryFullDto0() {
+        return assertClone(newsEntryFullDto0);
+    }
+    public static NewsEntryFullDto cloneNewsEntryFullDto1() {
+        return assertClone(newsEntryFullDto1);
     }
 }
 //EOF
