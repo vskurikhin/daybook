@@ -1,14 +1,15 @@
 /*
- * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 14:53 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleBaseDto.java$
+ * UserRoleFullDto.java
  * $Id$
  */
 
 package su.svn.showcase.dto;
 
 import lombok.*;
+import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 
@@ -35,6 +36,9 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     private UUID id;
 
     @NotNull
+    private RoleBaseDto role;
+
+    @NotNull
     private LocalDateTime dateTime;
 
     @NotNull
@@ -47,6 +51,7 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     public UserRoleFullDto(@NotNull UserRole entity) {
         assert entity != null;
         this.id = entity.getId();
+        this.role = new RoleBaseDto(entity.getRole());
         this.dateTime = entity.getDateTime();
         this.roleName = entity.getRoleName();
         this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
@@ -60,6 +65,8 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     @Override
     public UserRole update(@NotNull UserRole entity) {
         assert entity != null;
+        assert this.role != null;
+        entity.setRole(this.role.update(new Role(this.role.getId())));
         entity.setDateTime(this.dateTime);
         entity.setRoleName(this.roleName);
         assert this.userLogin != null;

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.18 11:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.21 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRole.java
@@ -92,6 +92,13 @@ public class UserRole implements DBEntity<UUID>, Serializable {
     @NotNull
     @Id
     private UUID id;
+
+    @Getter
+    @Setter
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "id")
+    private Role role;
 
     @Getter
     @Setter

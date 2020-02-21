@@ -126,6 +126,12 @@ public class TestData {
             .content("contentTest1")
             .build();
 
+    public static RoleBaseDto cloneRoleBaseDto0() {
+        return assertClone(roleBaseDto0);
+    }
+    public static RoleBaseDto cloneRoleBaseDto1() {
+        return assertClone(roleBaseDto1);
+    }
 
     public static UserRoleFullDto cloneUserRoleFullDto0() {
         return assertClone(userRoleFullDto0);
@@ -190,7 +196,9 @@ public class TestData {
         tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
         tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
 
+        userRoleFullDto0.setRole(cloneRoleBaseDto0());
         userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        userRoleFullDto1.setRole(cloneRoleBaseDto1());
         userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());
 
         recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());

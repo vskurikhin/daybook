@@ -14,6 +14,7 @@ import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
+import su.svn.showcase.services.RoleBaseCrudService;
 import su.svn.showcase.services.UserRoleFullCrudService;
 
 import javax.ejb.EJB;
@@ -37,6 +38,9 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @EJB(beanName = "UserRoleDaoJpa")
     UserRoleDao userRoleDao;
 
+    @EJB
+    RoleBaseCrudService roleBaseCrudService;
+
     @Inject
     UserTransaction userTransaction;
 
@@ -49,9 +53,8 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
 
     @Override
     public void create(UserRoleFullDto dto) {
-        Objects.requireNonNull(dto);
-        UserRole userRole = new UserRole(UUID.randomUUID());
-        consume(tagSavingConsumer(dto), new UserRole(UUID.randomUUID()));
+        validateUserRoleId(dto);
+        consume(tagSavingConsumer(dto), new UserRole(getOrGenerateUuidKey(dto)));
     }
 
     @Override
@@ -70,6 +73,7 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @Override
     public void update(UserRoleFullDto dto) {
         validateId(dto);
+        validateUserRoleId(dto);
         consume(tagSavingConsumer(dto), new UserRole(dto.getId()));
     }
 
@@ -92,5 +96,17 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @Override
     Logger getLogger() {
         return LOGGER;
+    }
+
+    private void validateUserRoleId(UserRoleFullDto dto) {
+        Objects.requireNonNull(dto);
+        Objects.requireNonNull(dto.getRole());
+        if (dto.getId() == null) {
+            UUID id = UUID.randomUUID();
+            dto.setId(id);
+            dto.getRole().setId(id);
+        }
+        if ( ! dto.getId().equals(dto.getRole().getId()))
+            throw new IllegalArgumentException("Ids of UserRole and Role must be equals!");
     }
 }
