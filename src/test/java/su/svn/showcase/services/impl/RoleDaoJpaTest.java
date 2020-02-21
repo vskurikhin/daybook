@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 11:26 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpaTest.java
@@ -12,7 +12,6 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -65,11 +64,11 @@ class RoleDaoJpaTest {
             .inject(this)
             .build();
 
-    private RoleDao mockRoleDao = mock(RoleDao.class);
+    private RoleDao mockDao = mock(RoleDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                           mockRoleDao);
-        put(RoleDao.class.getName(),         mockRoleDao);
+        put(null, mockDao);
+        put(RoleDao.class.getName(), mockDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -82,14 +81,14 @@ class RoleDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private Role role1;
+    private Role entity;
 
     @BeforeEach
     void createNew() {
-        role1 = TestData.getCloneOfRole1();
+        entity = TestData.cloneRole1();
     }
 
-        @DisplayName("Can inject entity manager and user transaction")
+    @DisplayName("Can inject entity manager and user transaction")
     @Test
     void canInject_entityManager() {
         assertNotNull(entityManager);
@@ -100,8 +99,8 @@ class RoleDaoJpaTest {
     @Test
     void whenRoleDao_findById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        Optional<Role> test = roleDao.findById(UUID.randomUUID());
+        RoleDao dao = weld.select(RoleDaoJpa.class).get();
+        Optional<Role> test = dao.findById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
         userTransaction.rollback();
@@ -111,8 +110,8 @@ class RoleDaoJpaTest {
     @Test
     void whenRoleDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        List<Role> testList = roleDao.findAll();
+        RoleDao dao = weld.select(RoleDaoJpa.class).get();
+        List<Role> testList = dao.findAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
         userTransaction.rollback();
@@ -122,8 +121,10 @@ class RoleDaoJpaTest {
     @Test
     void whenRoleDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        assertTrue(roleDao.save(role1));
+        RoleDao dao = weld.select(RoleDaoJpa.class).get();
+        Optional<Role> test = dao.findById(UUID.randomUUID());
+        assertNotNull(test);
+        assertFalse(test.isPresent());
         userTransaction.rollback();
     }
 
@@ -131,9 +132,11 @@ class RoleDaoJpaTest {
     @Test
     void whenRoleDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        List<Role> testRoles = new ArrayList<Role>() {{ add(role1); }};
-        assertTrue(roleDao.saveAll(testRoles));
+        RoleDao dao = weld.select(RoleDaoJpa.class).get();
+        List<Role> testList = new ArrayList<Role>() {{ add(entity); }};
+        Iterable<Role> result = dao.saveAll(testList);
+        assertNotNull(result);
+        assertEquals(testList, result);
         userTransaction.rollback();
     }
 
@@ -141,8 +144,8 @@ class RoleDaoJpaTest {
     @Test
     void whenRoleDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RoleDao roleDao = weld.select(RoleDaoJpa.class).get();
-        Assertions.assertFalse(roleDao.delete(UUID.randomUUID()));
+        RoleDao dao = weld.select(RoleDaoJpa.class).get();
+        dao.delete(UUID.randomUUID());
         userTransaction.rollback();
     }
 }

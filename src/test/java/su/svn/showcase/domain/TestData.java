@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 22:14 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -7,8 +7,6 @@
  */
 
 package su.svn.showcase.domain;
-
-import su.svn.utils.SerializeUtil;
 
 import java.util.*;
 
@@ -67,14 +65,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType")
+            .type("testType0")
             .build();
     private static final Record record1 = Record.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType")
+            .type("testType1")
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()
@@ -102,122 +100,111 @@ public class TestData {
             .build();
 
     static {
-        userLogin0.setRoles(newList(getUserRole0()));
-        userLogin1.setRoles(newList(getUserRole1()));
+        userLogin0.setRoles(newList(cloneUserRole0()));
+        userLogin1.setRoles(newList(cloneUserRole1()));
 
-        userRole0.setUserLogin(getUserLogin0());
-        userRole1.setUserLogin(getUserLogin1());
+        userRole0.setUserLogin(cloneUserLogin0());
+        userRole1.setUserLogin(cloneUserLogin1());
 
-        tag0.setRecords(newSet(getRecord0()));
-        tag1.setRecords(newSet(getRecord1()));
+        tag0.setRecords(newSet(cloneRecord0()));
+        tag1.setRecords(newSet(cloneRecord1()));
 
-        record0.setUserLogin(getUserLogin0());
-        record0.setTags(newSet(getTag0()));
+        record0.setUserLogin(cloneUserLogin0());
+        record0.setTags(newSet(cloneTag0()));
 
-        record1.setUserLogin(getUserLogin1());
-        record1.setTags(newSet(getTag1()));
+        record1.setUserLogin(cloneUserLogin1());
+        record1.setTags(newSet(cloneTag1()));
 
-        newsGroup0.setNewsEntries(newList(getNewsEntry0()));
-        newsGroup1.setNewsEntries(newList(getNewsEntry1()));
+        newsGroup0.setNewsEntries(newList(cloneNewsEntry0()));
+        newsGroup1.setNewsEntries(newList(cloneNewsEntry1()));
 
-        newsEntry0.setRecord(getRecord0());
-        newsEntry0.setNewsGroup(getNewsGroup0());
+        newsEntry0.setRecord(cloneRecord0());
+        newsEntry0.setNewsGroup(cloneNewsGroup0());
 
-        newsEntry1.setRecord(getRecord1());
-        newsEntry1.setNewsGroup(getNewsGroup1());
+        newsEntry1.setRecord(cloneRecord1());
+        newsEntry1.setNewsGroup(cloneNewsGroup1());
     }
 
-    public static Role getRole0() {
-        return role0;
+    public static Role cloneRole0() {
+        return assertClone(role0);
     }
-    public static Role getRole1() {
-        return role1;
+    public static Role cloneRole1() {
+        return assertClone(role1);
     }
-    public static Role getCloneOfRole1() {
-        Role role = SerializeUtil.clone(getRole1());
-        assert role != null;
+
+    public static UserLogin cloneUserLogin0() {
+        return assertClone(userLogin0);
+    }
+    public static UserLogin cloneUserLogin1() {
+        return assertClone(userLogin1);
+    }
+
+    public static UserLogin clean(UserLogin login) {
+        login.setRoles(Collections.emptyList());
+        return login;
+    }
+
+    public static UserRole cloneUserRole0() {
+        return assertClone(userRole0);
+    }
+    public static UserRole cloneUserRole1() {
+        return assertClone(userRole1);
+    }
+
+    public static UserRole clean(UserRole role) {
+        role.getUserLogin().setRoles(Collections.emptyList());
         return role;
     }
 
-    public static UserLogin getUserLogin0() {
-        return userLogin0;
+    public static Tag cloneTag0() {
+        return assertClone(tag0);
     }
-    public static UserLogin getUserLogin1() {
-        return userLogin1;
-    }
-    public static UserLogin getCloneOfUserLogin1() {
-        UserLogin userLogin = SerializeUtil.clone(getUserLogin1());
-        assert userLogin != null;
-        userLogin.setRoles(Collections.emptyList());
-        return userLogin;
+    public static Tag cloneTag1() {
+        return assertClone(tag1);
     }
 
-    public static UserRole getUserRole0() {
-        return userRole0;
-    }
-    public static UserRole getUserRole1() {
-        return userRole1;
-    }
-    public static UserRole getCloneOfUserRole1() {
-        UserRole userRole = SerializeUtil.clone(getUserRole1());
-        assert userRole != null;
-        userRole.getUserLogin().setRoles(Collections.emptyList());
-        return userRole;
-    }
-
-    public static Tag getTag0() {
-        return tag0;
-    }
-    public static Tag getTag1() {
-        return tag1;
-    }
-    public static Tag getCloneOfTag1() {
-        Tag tag = SerializeUtil.clone(tag1);
-        assert tag != null;
+    public static Tag clean(Tag tag) {
         tag.setRecords(Collections.emptySet());
         return tag;
     }
 
-    public static Record getRecord0() {
-        return record0;
+    public static Record cloneRecord0() {
+        return assertClone(record0);
     }
-    public static Record getRecord1() {
-        return record1;
-    }
-    public static Record getCloneOfRecord1() {
-        Record record = SerializeUtil.clone(record1);
-        assert record != null;
-        record.setTags(Collections.emptySet());
-        record.getUserLogin().setRoles(Collections.emptyList());
-        return record;
+    public static Record cloneRecord1() {
+        return assertClone(record1);
     }
 
-
-    public static NewsGroup getNewsGroup0() {
-        return newsGroup0;
-    }
-    public static NewsGroup getNewsGroup1() {
-        return newsGroup1;
-    }
-    public static NewsGroup getCloneOfNewsGroup1() {
-        NewsGroup newsGroup = SerializeUtil.clone(newsGroup1);
-        assert newsGroup != null;
-        newsGroup.setNewsEntries(Collections.emptyList());
-        return newsGroup;
+    public static Record clean(Record entity) {
+        entity.setNewsEntry(null);
+        entity.setTags(Collections.emptySet());
+        entity.getUserLogin().setRoles(Collections.emptyList());
+        return entity;
     }
 
-    public static NewsEntry getNewsEntry0() {
-        return newsEntry0;
+    public static NewsGroup cloneNewsGroup0() {
+        return assertClone(newsGroup0);
     }
-    public static NewsEntry getNewsEntry1() {
-        return newsEntry1;
+    public static NewsGroup cloneNewsGroup1() {
+        return assertClone(newsGroup1);
     }
-    public static NewsEntry getCloneOfNewsEntry() {
-        NewsEntry newsEntry = SerializeUtil.clone(newsEntry1);
-        assert newsEntry != null;
-        newsEntry.getNewsGroup().setNewsEntries(Collections.emptyList());
-        newsEntry.getRecord().getUserLogin().setRoles(Collections.emptyList());
-        newsEntry.getRecord().setTags(Collections.emptySet());
-        return newsEntry;
+
+    public static NewsGroup clean(NewsGroup entity) {
+        entity.setNewsEntries(Collections.emptyList());
+        return entity;
+    }
+
+    public static NewsEntry cloneNewsEntry0() {
+        return assertClone(newsEntry0);
+    }
+    public static NewsEntry cloneNewsEntry1() {
+        return assertClone(newsEntry1);
+    }
+
+    public static NewsEntry clean(NewsEntry entity) {
+        entity.getNewsGroup().setNewsEntries(Collections.emptyList());
+        entity.getRecord().getUserLogin().setRoles(Collections.emptyList());
+        entity.getRecord().setTags(Collections.emptySet());
+        return entity;
     }
 }

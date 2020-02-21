@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.06 21:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.18 11:22 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRole.java
@@ -19,10 +19,11 @@ import java.util.UUID;
 import static su.svn.showcase.domain.UserRole.*;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
+@EqualsAndHashCode
+@ToString
 @Entity
 @Table(schema = "db", name = "db_user_role")
 @NamedQueries({
@@ -32,42 +33,87 @@ import static su.svn.showcase.domain.UserRole.*;
     ),
     @NamedQuery(
         name = FIND_WHERE_ROLE,
-        query = "SELECT DISTINCT e FROM UserRole e WHERE e.roleName = :role"
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " WHERE e.roleName = :role"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM UserRole e WHERE e.id IN (:ids)"
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.id IN (:ids)"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ROLE_IN,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.roleName IN (:roles)"
+    ),
+    @NamedQuery(
+        name = FETCH_ALL,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l"
+    ),
+    @NamedQuery(
+        name = FETCH_ALL_ORDER_BY_ROLE_ASC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l" +
+                " ORDER BY e.roleName ASC"
+    ),
+    @NamedQuery(
+        name = FETCH_ALL_ORDER_BY_ROLE_DESC,
+        query = "SELECT DISTINCT e FROM UserRole e" +
+                " LEFT JOIN FETCH e.userLogin l" +
+                " ORDER BY e.roleName DESC"
     ),
 })
-public class UserRole extends UUIDEntity implements Serializable {
+public class UserRole implements DBEntity<UUID>, Serializable {
+
     private static final long serialVersionUID = 210L;
 
-    public static final String FIND_ALL = "UserRole.findAll";
+    public static final String FIND_ALL = "UserRoleDao.findAll";
 
-    public static final String FIND_WHERE_ROLE = "UserRole.findWhereRole";
+    public static final String FIND_WHERE_ROLE = "UserRoleDao.findWhereRole";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "UserRole.findAllByIdIn";
+    public static final String FIND_ALL_WHERE_ID_IN = "UserRoleDao.findAllByIdIn";
 
+    public static final String FIND_ALL_WHERE_ROLE_IN = "UserRoleDao.findAllWhereRoleIn";
+
+    public static final String FETCH_ALL = "UserRoleDao.fetchAll";
+
+    public static final String FETCH_ALL_ORDER_BY_ROLE_ASC = "UserRoleDao.fetchAllOrderByRoleAsc";
+
+    public static final String FETCH_ALL_ORDER_BY_ROLE_DESC = "UserRoleDao.fetchAllOrderByRoleDesc";
+
+    public static final String RANGE = FETCH_ALL;
+
+    public static final String RANGE_ORDER_BY_ROLE_ASC = FETCH_ALL_ORDER_BY_ROLE_ASC;
+
+    public static final String RANGE_ORDER_BY_ROLE_DESC = FETCH_ALL_ORDER_BY_ROLE_DESC;
+
+    @Getter
+    @NotNull
+    @Id
+    private UUID id;
+
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "role_name", length = 32, nullable = false)
     private String roleName;
 
+    @Getter
+    @Setter
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "db_user_login_id", nullable = false)
     private UserLogin userLogin;
 
-    @NotNull
-    @Builder
-    public UserRole(UUID id, LocalDateTime dateTime, String roleName, UserLogin userLogin) {
-        super(id);
-        this.dateTime = dateTime;
-        this.roleName = roleName;
-        this.userLogin = userLogin;
+    public UserRole(@NotNull UUID id) {
+        this.id = id;
     }
 }
 //EOF

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 21:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * Role.java
+ * Role.java$
  * $Id$
  */
 
@@ -16,40 +16,74 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.UUID;
 
-import static su.svn.showcase.domain.Role.FIND_ALL;
-import static su.svn.showcase.domain.Role.FIND_WHERE_ROLE;
+import static su.svn.showcase.domain.Role.*;
 
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @Entity
 @Table(schema = "db", name = "db_role")
 @NamedQueries({
     @NamedQuery(
-         name = FIND_ALL,
-         query = "SELECT DISTINCT e FROM Role e"
+        name = FIND_ALL,
+        query = "SELECT DISTINCT e FROM Role e"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_ROLE_ASC,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " ORDER BY e.roleName ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_ROLE_DESC,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " ORDER BY e.roleName DESC"
     ),
     @NamedQuery(
         name = FIND_WHERE_ROLE,
-        query = "SELECT DISTINCT e FROM Role e WHERE e.roleName = :role"
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.roleName = :role"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.id IN (:ids)"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ROLE_IN,
+        query = "SELECT DISTINCT e FROM Role e" +
+                " WHERE e.roleName IN (:roles)"
     ),
 })
-public class Role extends UUIDEntity implements Serializable {
-    private static final long serialVersionUID = 210L;
+public class Role implements DBEntity<UUID>, Serializable {
 
-    public static final String FIND_ALL = "Role.findAll";
+    private static final long serialVersionUID = 220L;
 
-    public static final String FIND_WHERE_ROLE = "Role.findWhereRole";
+    public static final String FIND_ALL = "RoleDao.findAll";
 
+    public static final String FIND_ALL_ORDER_BY_ROLE_ASC = "RoleDao.findAllOrderByRoleAsc";
+
+    public static final String FIND_ALL_ORDER_BY_ROLE_DESC = "RoleDao.findAllOrderByRoleDesc";
+
+    public static final String FIND_WHERE_ROLE = "RoleDao.findWhereRole";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "RoleDao.findAllByIdIn";
+
+    public static final String FIND_ALL_WHERE_ROLE_IN = "RoleDao.findAllWhereRoleIn";
+
+    @Getter
+    @NotNull
+    @Id
+    private UUID id;
+
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "role_name", length = 32, nullable = false, unique = true)
     private String roleName;
 
-    @Builder
-    public Role(@NotNull UUID id, @NotNull String roleName) {
-        super(id);
-        this.roleName = roleName;
+    public Role(@NotNull UUID id) {
+        this.id = id;
     }
 }
 //EOF

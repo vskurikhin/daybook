@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagFullDto.java
+ * TagFullDto.java$
  * $Id$
  */
 
@@ -27,13 +27,15 @@ import java.util.stream.Collectors;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class TagFullDto extends StringDto implements TagDto, Serializable {
+public class TagFullDto implements TagDto, Serializable {
 
     private static final long serialVersionUID = 9131L;
+
+    @NotNull
+    private String id;
 
     @NotNull
     @Size(min = 1, max = 128)
@@ -48,26 +50,13 @@ public class TagFullDto extends StringDto implements TagDto, Serializable {
     @NotNull
     Set<RecordDto> records;
 
-    @Builder
-    public TagFullDto(
-            @NotNull String id,
-            @NotNull String tag,
-            Boolean visible,
-            @NotNull LocalDateTime dateTime,
-            @NotNull @Valid Set<RecordDto> records) {
-        super(id);
-        this.tag = tag;
-        this.visible = visible;
-        this.dateTime = dateTime;
-        this.records = records;
-    }
-
-    public TagFullDto(@NotNull Tag tag) {
-        super(Objects.requireNonNull(tag).getId());
-        this.tag = tag.getTag();
-        this.visible = tag.getVisible();
-        this.dateTime = tag.getDateTime();
-        this.records = tag.getRecords().stream()
+    public TagFullDto(@NotNull Tag entity) {
+        assert entity != null;
+        this.id = entity.getId();
+        this.tag = entity.getTag();
+        this.visible = entity.getVisible();
+        this.dateTime = entity.getDateTime();
+        this.records = entity.getRecords().stream()
                 .map(RecordBaseDto::new)
                 .collect(Collectors.toSet());
     }
@@ -77,23 +66,16 @@ public class TagFullDto extends StringDto implements TagDto, Serializable {
         return TagFullDto.class;
     }
 
-    private Consumer<RecordDto> updatingConsumer(Map<UUID, Record> mapEntities) {
-        return dto -> dto.update(mapEntities.get(dto.getId()));
-    }
-
     @Override
     public Tag update(@NotNull Tag entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setTag(this.tag);
         entity.setDateTime(this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
 
-        if (records != null && entity.getRecords() != null) {
-            final Map<UUID, Record> mapEntities = toEntitiesMap(entity.getRecords());
-            this.records.forEach(updatingConsumer(mapEntities));
+        if (records != null) {
+            this.records.forEach(dto -> dto.update(new Record(dto.getId())));
         }
-
         return entity;
     }
 }

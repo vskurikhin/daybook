@@ -32,6 +32,7 @@ public interface NewsGroupDto extends Dto<UUID>, Updating<NewsGroup> {
     void setGroup(String group);
 
     default NewsGroup update(@NotNull NewsGroup entity, Map<String, Object> values) {
+        assert entity != null;
         convertListIfContainsKey(NewsEntry.class, values, "newsEntries").ifPresent(entity::setNewsEntries);
         return update(entity);
     }

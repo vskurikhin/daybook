@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * RoleBaseDtoTest.java$
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -15,7 +19,8 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class RoleDto")
 class RoleBaseDtoTest {
@@ -41,7 +46,7 @@ class RoleBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(roleBaseDto.getId());
+            assertThat(roleBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(roleBaseDto).hasFieldOrPropertyWithValue("roleName", null);
         }
 
@@ -56,7 +61,7 @@ class RoleBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(1, roleBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(2, roleBaseDto).hasNext());
         }
     }
 
@@ -71,7 +76,7 @@ class RoleBaseDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            roleBaseDto = new RoleBaseDto("testRole");
+            roleBaseDto = new RoleBaseDto(ROLE_UUID0, "testRole");
             assertThat(roleBaseDto).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
 
@@ -102,7 +107,7 @@ class RoleBaseDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Role expected = new Role(ZERO, "testRole");
-            assertEquals(expected, roleBaseDto.update(new Role()));
+            assertEquals(expected, roleBaseDto.update(new Role(ZERO)));
         }
 
         @Test

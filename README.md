@@ -9,6 +9,7 @@ Day Book written on JavaEE/ThornTail with PrimeFaces.
   - [gradlew clean build ](#gradlew)
   - [gradlew update](#gradlew-update)
   - [gradlew generateChangelog](#gradlew-generateChangelog)
+  - [gradlew integrationTest](#gradlew-integrationTest)
 - [Something Missing?](#something-missing)
 
 ## New Releases
@@ -28,6 +29,12 @@ It correctly bundles DayBook in production mode and optimizes the build for the 
 ### `gradlew generateChangelog`
 ```
   ./gradlew generateChangelog -PrunList='gen_dictionary, gen_db'
+```
+### `gradlew integrationTest`
+
+In the project directory, you can integration test by:
+```
+  VERSION_THORNTAIL=2.5.0.Final ./gradlew clean integrationTest -Plocal=true
 ```
 
 ## Something Missing?

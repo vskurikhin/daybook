@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullDto.java
+ * RecordFullDto.java$
  * $Id$
  */
 
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
+import su.svn.showcase.domain.UserLogin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -29,12 +30,15 @@ import java.util.stream.Collectors;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
+@AllArgsConstructor
+public class RecordFullDto implements RecordDto, Serializable {
 
     private static final long serialVersionUID = 9241L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime createDateTime;
@@ -50,30 +54,13 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
     @NotNull
     private UserLoginDto userLogin;
 
-    @NotNull
     @Valid
+    @NotNull
     Set<TagDto> tags;
 
-    @Builder
-    public RecordFullDto(
-            @NotNull UUID id,
-            @NotNull LocalDateTime createDateTime,
-            @NotNull LocalDateTime editDateTime,
-            int index,
-            @NotNull String type,
-            @NotNull UserLoginBaseDto userLogin,
-            @NotNull @Valid Set<TagDto> tags) {
-        super(id);
-        this.createDateTime = createDateTime;
-        this.editDateTime = editDateTime;
-        this.index = index;
-        this.type = type;
-        this.userLogin = userLogin;
-        this.tags = tags;
-    }
-
     public RecordFullDto(@NotNull Record entity) {
-        super(Objects.requireNonNull(entity).getId());
+        assert entity != null;
+        this.id = entity.getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();
         this.index = entity.getIndex();
@@ -89,28 +76,17 @@ public class RecordFullDto extends UUIDDto implements RecordDto, Serializable {
         return null;
     }
 
-    private Consumer<TagDto> updatingConsumer(Map<String, Tag> mapEntities) {
-        return dto -> {
-            Tag tag = mapEntities.get(dto.getId());
-            if (tag != null) {
-                dto.update(tag);
-            }
-        };
-    }
-
     @Override
     public Record update(@NotNull Record entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setCreateDateTime(this.createDateTime);
         entity.setEditDateTime(this.editDateTime);
         entity.setIndex(this.index);
         entity.setType(this.type);
 
-        this.userLogin.update(entity.getUserLogin());
-        if (tags != null && ! tags.isEmpty() && entity.getTags() != null) {
-            final Map<String, Tag> mapEntities = toEntitiesMap(entity.getTags());
-            tags.forEach(updatingConsumer(mapEntities));
+        this.userLogin.update(new UserLogin(this.userLogin.getId()));
+        if (tags != null) {
+            tags.forEach(dto -> dto.update(new Tag(dto.getId())));
         }
         return entity;
     }

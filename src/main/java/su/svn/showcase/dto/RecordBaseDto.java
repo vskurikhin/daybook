@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordBaseDto.java
+ * RecordBaseDto.java$
  * $Id$
  */
 
@@ -23,13 +23,15 @@ import java.util.UUID;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class RecordBaseDto extends UUIDDto implements RecordDto, Serializable {
+public class RecordBaseDto implements RecordDto, Serializable {
 
     private static final long serialVersionUID = 9240L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime createDateTime;
@@ -42,22 +44,9 @@ public class RecordBaseDto extends UUIDDto implements RecordDto, Serializable {
     @NotNull
     private String type;
 
-    @Builder
-    public RecordBaseDto(
-            @NotNull UUID id,
-            @NotNull LocalDateTime createDateTime,
-            @NotNull LocalDateTime editDateTime,
-            int index,
-            @NotNull String type) {
-        super(id);
-        this.createDateTime = createDateTime;
-        this.editDateTime = editDateTime;
-        this.index = index;
-        this.type = type;
-    }
-
     public RecordBaseDto(@NotNull Record entity) {
-        super(Objects.requireNonNull(entity).getId());
+        assert entity != null;
+        this.id = entity.getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();
         this.index = entity.getIndex();
@@ -71,8 +60,7 @@ public class RecordBaseDto extends UUIDDto implements RecordDto, Serializable {
 
     @Override
     public Record update(@NotNull Record entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setCreateDateTime(this.createDateTime);
         entity.setEditDateTime(this.editDateTime);
         entity.setIndex(this.index);

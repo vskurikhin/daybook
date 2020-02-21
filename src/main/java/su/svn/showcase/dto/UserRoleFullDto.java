@@ -1,21 +1,21 @@
 /*
- * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleBaseDto.java
+ * UserRoleBaseDto.java$
  * $Id$
  */
 
 package su.svn.showcase.dto;
 
 import lombok.*;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -24,13 +24,15 @@ import java.util.UUID;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class UserRoleBaseDto extends UUIDDto implements UserRoleDto, Serializable {
+public class UserRoleFullDto implements UserRoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -39,30 +41,29 @@ public class UserRoleBaseDto extends UUIDDto implements UserRoleDto, Serializabl
     @Size(min = 1, max = 64)
     private String roleName;
 
-    @Builder
-    public UserRoleBaseDto(@NotNull UUID id, @NotNull LocalDateTime dateTime, @NotNull String roleName) {
-        super(id);
-        this.dateTime = dateTime;
-        this.roleName = roleName;
-    }
+    @NotNull
+    private UserLoginDto userLogin;
 
-    public UserRoleBaseDto(@NotNull UserRole userRole) {
-        super(Objects.requireNonNull(userRole).getId());
-        this.dateTime = userRole.getDateTime();
-        this.roleName = userRole.getRoleName();
+    public UserRoleFullDto(@NotNull UserRole entity) {
+        assert entity != null;
+        this.id = entity.getId();
+        this.dateTime = entity.getDateTime();
+        this.roleName = entity.getRoleName();
+        this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
     }
 
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return UserRoleBaseDto.class;
+        return UserRoleFullDto.class;
     }
 
     @Override
     public UserRole update(@NotNull UserRole entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
-        entity.setDateTime(getDateTime());
-        entity.setRoleName(getRoleName());
+        assert entity != null;
+        entity.setDateTime(this.dateTime);
+        entity.setRoleName(this.roleName);
+        assert this.userLogin != null;
+        entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
 
         return entity;
     }

@@ -90,6 +90,22 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
+    public List<Tag> findAllOrderByTagAsc() {
+        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> findAllOrderByTagDesc() {
+        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public List<Tag> findAllWhereTag(String tag) {
         return abstractDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
@@ -99,8 +115,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      */
     @Override
     public List<Tag> findAllByIdIn(Iterable<String> ids) {
-        List<String> list = CollectionUtil.iterableToList(ids);
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", list);
+        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -108,20 +123,46 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      */
     @Override
     public List<Tag> findAllByTagIn(Iterable<String> tags) {
-        List<String> list = CollectionUtil.iterableToList(tags);
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", list);
+        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Tag entity) {
+    public List<Tag> range(int start, int size) {
+        return jpaRange(Tag.FIND_ALL, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> rangeOrderByTagAsc(int start, int size) {
+        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_ASC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Tag> rangeOrderByTagDesc(int start, int size) {
+        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_DESC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Tag save(Tag entity) {
         return abstractDaoSave(entity);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public boolean saveAll(Iterable<Tag> entities) {
+    public Iterable<Tag> saveAll(Iterable<Tag> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -129,16 +170,16 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(String id) {
-        return abstractDaoDelete(id);
+    public void delete(String id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Tag> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Tag> entities) {
+        abstractDaoDeleteAll(entities);
     }
 
     private boolean isValidListOfTags(Iterable<String> tags) {

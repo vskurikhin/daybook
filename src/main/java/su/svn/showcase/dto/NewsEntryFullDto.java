@@ -23,12 +23,15 @@ import java.util.*;
  * @author Victor N. Skurikhin
  */
 @Data
+@Builder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class NewsEntryFullDto  extends UUIDDto implements NewsEntryDto, Serializable {
+@AllArgsConstructor
+public class NewsEntryFullDto implements NewsEntryDto, Serializable {
 
-    private static final long serialVersionUID = 9241L;
+    private static final long serialVersionUID = 9251L;
+
+    @NotNull
+    private UUID id;
 
     @NotNull
     private LocalDateTime dateTime;
@@ -46,24 +49,9 @@ public class NewsEntryFullDto  extends UUIDDto implements NewsEntryDto, Serializ
     @NotNull
     private NewsGroupDto newsGroup;
 
-    @Builder
-    public NewsEntryFullDto(
-            @NotNull UUID id,
-            @NotNull LocalDateTime dateTime,
-            @NotNull RecordDto record,
-            @NotNull String title,
-            String content,
-            @NotNull NewsGroupDto newsGroup) {
-        super(id);
-        this.dateTime = dateTime;
-        this.title = title;
-        this.content = content;
-        this.record = record;
-        this.newsGroup = newsGroup;
-    }
-
     public NewsEntryFullDto(@NotNull NewsEntry entity) {
-        super(Objects.requireNonNull(entity).getId());
+        assert entity != null;
+        this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.content = entity.getContent();
@@ -80,14 +68,13 @@ public class NewsEntryFullDto  extends UUIDDto implements NewsEntryDto, Serializ
 
     @Override
     public NewsEntry update(@NotNull NewsEntry entity) {
-        Objects.requireNonNull(entity);
-        entity.setId(getId());
+        assert entity != null;
         entity.setDateTime(this.dateTime);
         entity.setTitle(this.title);
         entity.setContent(this.content);
         this.record.update(entity.getRecord());
         if (entity.getNewsGroup() != null) {
-            this.newsGroup.update(entity.getNewsGroup());
+            this.newsGroup.update(new NewsGroup(this.newsGroup.getId()));
         }
         return entity;
     }

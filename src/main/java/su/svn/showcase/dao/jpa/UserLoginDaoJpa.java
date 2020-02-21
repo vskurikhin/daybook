@@ -108,7 +108,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * {@inheritDoc }
      */
     @Override
-    public boolean save(UserLogin entity) {
+    public UserLogin save(UserLogin entity) {
         return abstractDaoSave(entity);
     }
 
@@ -116,24 +116,24 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<UserLogin> entities) {
-        return false;
+    public Iterable<UserLogin> saveAll(Iterable<UserLogin> entities) {
+        return abstractDaoSaveAll(entities);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<UserLogin> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void  deleteAll(Iterable<UserLogin> entities) {
+        abstractDaoDeleteAll(entities);
     }
 }
 //EOF

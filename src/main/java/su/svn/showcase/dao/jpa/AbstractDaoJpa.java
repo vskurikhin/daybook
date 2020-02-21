@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 21:28 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -13,14 +13,11 @@ import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.utils.CollectionUtil;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -52,110 +49,255 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
      */
     abstract Class<E> getEClass();
 
+    <T> List<T> toList(Iterable<T> iterable) {
+        if (iterable == null) {
+            throw new IllegalArgumentException();
+        }
+        List<T> list = CollectionUtil.iterableToList(iterable);
+        if (list.isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return list;
+    }
+
     // Retrieves the meta-model for a certain entity.
+    //
+    // @throws IllegalStateException if the entity manager has
+    //         been closed
     EntityType<E> getMetaModel() {
         return getEntityManager().getMetamodel().entity(getEClass());
     }
 
     // Retrieves the record of entity by key.
+    //
     // @param id - key.
+    // @throws IllegalArgumentException if the first argument does
+    //         not denote an entity type or the second argument is
+    //         is not a valid type for that entitys primary key or
+    //         is null
     Optional<E> abstractDaoFindById(K id) {
-        EntityManager em = getEntityManager();
-        try {
-            E entry = em.find(getEClass(), id);
-            return Optional.ofNullable(entry);
-        } catch (IllegalArgumentException | IllegalStateException e) {
-            getLogger().error("Can't search because had the exception", e);
-        }
-        return Optional.empty();
+        return Optional.ofNullable(getEntityManager().find(getEClass(), id));
     }
 
     // Retrieves the record of entity by namedQuery by the parameter and his value.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param value - parameter value.
     // @param <T> - type of parameter value.
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type
+	// @throws IllegalStateException if called for a Java
+	//         Persistence query language UPDATE or DELETE statement
+	// @throws QueryTimeoutException if the query execution exceeds
+	//         the query timeout value set and only the statement is
+	//         rolled back
+	// @throws TransactionRequiredException if a lock mode has
+	//         been set and there is no transaction
+	// @throws PessimisticLockException if pessimistic locking
+	//         fails and the transaction is rolled back
+	// @throws LockTimeoutException if pessimistic locking
+	//         fails and only the statement is rolled back
+	// @throws PersistenceException if the query execution exceeds
+	//         the query timeout value set and the transaction
+	//         is rolled back
     <T> Optional<E> abstractDaoFindWhereField(String namedQuery, String parameter, T value) {
         EntityManager em = getEntityManager();
         try {
             return Optional.of(em.createNamedQuery(namedQuery, getEClass())
                     .setParameter(parameter, value)
                     .getSingleResult());
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all because had the exception", e);
+        } catch (NoResultException | NonUniqueResultException e) {
+            return Optional.empty();
         }
-        return Optional.empty();
     }
 
-
     // Returns whether an entity with the given id exists.
+    //
     // @param id must not be {@literal null}.
+    // @throws IllegalArgumentException if the first argument does
+    //         not denote an entity type or the second argument is
+    //         is not a valid type for that entitys primary key or
+    //         is null
     boolean abstractExistsById(K id) {
-        EntityManager em = getEntityManager();
         try {
-            return em.find(getEClass(), id) != null;
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all because had the exception", e);
+            return getEntityManager().find(getEClass(), id) != null;
+        } catch (NoResultException e) {
+            return false;
         }
-        return false;
     }
 
     // Retrieves all records of entity by namedQuery.
+    //
     // @param namedQuery - query.
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type
+	// @throws QueryTimeoutException if the query execution exceeds
+	//         the query timeout value set and only the statement is
+	//         rolled back
+	// @throws TransactionRequiredException if a lock mode has
+	//         been set and there is no transaction
+	// @throws PessimisticLockException if pessimistic locking
+	//         fails and the transaction is rolled back
+	// @throws LockTimeoutException if pessimistic locking
+	//         fails and only the statement is rolled back
+	// @throws PersistenceException if the query execution exceeds
+	//         the query timeout value set and the transaction
+	//         is rolled back
     List<E> abstractDaoFindAll(String namedQuery) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createNamedQuery(namedQuery, getEClass()).getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all because had the exception", e);
-        }
-        return Collections.emptyList();
+        return getEntityManager().createNamedQuery(namedQuery, getEClass()).getResultList();
     }
 
     // Retrieves all records of entity by namedQuery by the parameter and his value.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param value - parameter value.
     // @param <T> - type of parameter value.
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type
+    // @throws QueryTimeoutException if the query execution exceeds
+    //         the query timeout value set and only the statement is
+    //         rolled back
+    // @throws TransactionRequiredException if a lock mode has
+    //         been set and there is no transaction
+    // @throws PessimisticLockException if pessimistic locking
+    //         fails and the transaction is rolled back
+    // @throws LockTimeoutException if pessimistic locking
+    //         fails and only the statement is rolled back
+    // @throws PersistenceException if the query execution exceeds
+    //         the query timeout value set and the transaction
+    //         is rolled back
     <T> List<E> abstractDaoFindAllWhereField(String namedQuery, String parameter, T value) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createNamedQuery(namedQuery, getEClass())
-                    .setParameter(parameter, value)
-                    .getResultList();
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search all because had the exception", e);
-        }
-        return Collections.emptyList();
+        return getEntityManager().createNamedQuery(namedQuery, getEClass())
+                .setParameter(parameter, value)
+                .getResultList();
     }
 
     // Retrieves all records of entity by namedQuery by the parameter and his possible values.
+    //
     // @param namedQuery - query.
     // @param parameter - name of parameter.
     // @param iterable - collection of parameter values.
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type TODO
+    // @throws QueryTimeoutException if the query execution exceeds
+    //         the query timeout value set and only the statement is
+    //         rolled back
+    // @throws TransactionRequiredException if a lock mode has
+    //         been set and there is no transaction
+    // @throws PessimisticLockException if pessimistic locking
+    //         fails and the transaction is rolled back
+    // @throws LockTimeoutException if pessimistic locking
+    //         fails and only the statement is rolled back
+    // @throws PersistenceException if the query execution exceeds
+    //         the query timeout value set and the transaction
+    //         is rolled back
     <T> List<E> abstractDaoFindAllWhereIn(String namedQuery, String parameter, Iterable<T> iterable) {
-        List<T> list = CollectionUtil.iterableToList(iterable);
-        if (list.isEmpty()) {
-            return Collections.emptyList();
+        if (iterable == null) {
+            throw new IllegalArgumentException();
         }
-        return abstractDaoFindAllWhereField(namedQuery, parameter, list);
+        return abstractDaoFindAllWhereField(namedQuery, parameter, toList(iterable));
     }
 
     // Retrieves all records of entity by namedQuery by the native named query.
+    //
     // @param namedQuery - query.
     // @param tClass
     // @param <T>
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type TODO
+	// @throws QueryTimeoutException if the query execution exceeds
+	//         the query timeout value set and only the statement is
+	//         rolled back
+	// @throws TransactionRequiredException if a lock mode has
+	//         been set and there is no transaction
+	// @throws PessimisticLockException if pessimistic locking
+	//         fails and the transaction is rolled back
+	// @throws LockTimeoutException if pessimistic locking
+	//         fails and only the statement is rolled back
+	// @throws PersistenceException if the query execution exceeds
+	//         the query timeout value set and the transaction
+	//         is rolled back
     <T> List<T> abstractDaoNativeResultList(String namedQuery, Class<T> tClass) {
-        EntityManager em = getEntityManager();
-        try {
-            return convertList(em.createNativeQuery(namedQuery).getResultList(), tClass);
-        } catch (IllegalArgumentException | IllegalStateException | PersistenceException e) {
-            getLogger().error("Can't search native because had the exception", e);
-            return Collections.emptyList();
+        return convertList(getEntityManager().createNativeQuery(namedQuery).getResultList(), tClass);
+    }
+
+    // TODO
+    //
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type
+	// @throws IllegalArgumentException if the argument is negative TODO merge IllegalArgumentException
+	// @throws IllegalStateException if called for a Java           TODO merge IllegalArgumentException
+	//         Persistence query language UPDATE or DELETE statement
+	// @throws QueryTimeoutException if the query execution exceeds
+	//         the query timeout value set and only the statement is
+	//         rolled back
+	// @throws TransactionRequiredException if a lock mode has
+	//         been set and there is no transaction
+	// @throws PessimisticLockException if pessimistic locking
+	//         fails and the transaction is rolled back
+	// @throws LockTimeoutException if pessimistic locking
+	//         fails and only the statement is rolled back
+	// @throws PersistenceException if the query execution exceeds
+	//         the query timeout value set and the transaction
+	//         is rolled back
+    List<E> jpaRange(String query, int start, int size) {
+        TypedQuery<E> typedQuery = getEntityManager().createNamedQuery(query, getEClass());
+        typedQuery.setFirstResult(start);
+        typedQuery.setMaxResults(size);
+
+        return typedQuery.getResultList();
+    }
+
+    // TODO
+    //
+    // @throws IllegalArgumentException if a query has not been
+    //         defined with the given name or if the query string is
+    //         found to be invalid or if the query result is found to
+    //         not be assignable to the specified type
+    // @throws IllegalArgumentException if the argument is negative TODO merge IllegalArgumentException
+    // @throws IllegalStateException if called for a Java           TODO merge IllegalArgumentException
+    //         Persistence query language UPDATE or DELETE statement
+    // @throws QueryTimeoutException if the query execution exceeds
+    //         the query timeout value set and only the statement is
+    //         rolled back
+    // @throws TransactionRequiredException if a lock mode has
+    //         been set and there is no transaction
+    // @throws PessimisticLockException if pessimistic locking
+    //         fails and the transaction is rolled back
+    // @throws LockTimeoutException if pessimistic locking
+    //         fails and only the statement is rolled back
+    // @throws PersistenceException if the query execution exceeds
+    //         the query timeout value set and the transaction
+    //         is rolled back
+    List<E> jpaRangeIdIn(String query, int start, int size, Iterable<K> ids) {
+        if (ids == null) {
+            throw new IllegalArgumentException();
         }
+        TypedQuery<E> typedQuery = getEntityManager().createNamedQuery(query, getEClass());
+        typedQuery.setFirstResult(start);
+        typedQuery.setMaxResults(size);
+        typedQuery.setParameter("ids", toList(ids));
+
+        return typedQuery.getResultList();
     }
 
     // Returns the number of entities available.
+    //
+    // TODO
     long abstractCount() {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
@@ -164,93 +306,112 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     }
 
     // Saves a given entity.
+    //
     // @param entity must not be {@literal null}.
-    boolean abstractDaoSave(E entity) {
+    // @throws IllegalArgumentException if the instance is not an
+    //         entity
+    // @throws TransactionRequiredException if invoked on a
+    //         container-managed entity manager of type
+    //         <code>PersistenceContextType.TRANSACTION</code> and there is
+    //         no transaction
+    // @throws PersistenceException if the flush fails
+    E abstractDaoSave(E entity) {
         EntityManager em = getEntityManager();
-        try {
-            if (null == entity.getId()) {
-                em.persist(entity);
-                em.flush();
-            } else {
-                em.merge(entity);
-                em.flush();
-            }
-        } catch (RuntimeException e) {
-            getLogger().error("Can't save because had the exception", e);
-            return false;
+        if (null == entity.getId()) {
+            em.persist(entity);
+            em.flush();
+        } else {
+            em.merge(entity);
+            em.flush();
         }
         getLogger().info("Save {} with id: {}", getEClass().getSimpleName(), entity.getId());
-        return true;
+        return entity;
     }
 
-    boolean abstractDaoSave(Supplier<E> supplier) {
+    E abstractDaoSave(Supplier<E> supplier) {
         return abstractDaoSave(supplier.get());
     }
 
     // Saves all given entities.
+    //
     // @param entities must not be {@literal null}.
-    boolean abstractDaoSaveAll(Iterable<? extends E> entities) {
+    Iterable<E> abstractDaoSaveAll(Iterable<E> entities) {
+        if (entities == null) {
+            throw new IllegalArgumentException();
+        }
         List<K> ids = new ArrayList<>();
         EntityManager em = getEntityManager();
-        try {
-            if (entities == null) {
-                return false;
+        for (E entity : entities) {
+            if (null == entity.getId()) {
+                em.persist(entity);
+            } else {
+                em.merge(entity);
             }
-
-            for (E entity : entities) {
-                if (null == entity.getId()) {
-                    em.persist(entity);
-                } else {
-                    em.merge(entity);
-                }
-                ids.add(entity.getId());
-            }
-            em.flush();
-        } catch (RuntimeException e) {
-            getLogger().error("Can't save because had the exception", e);
-            return false;
+            ids.add(entity.getId());
         }
+        em.flush();
         getLogger().info("Save {} with ids: {}", getEClass().getSimpleName(), ids);
-        return true;
+        return entities;
     }
 
     // Deletes the entity with the given id.
+    //
     // @param id must not be {@literal null}.
-    boolean abstractDaoDelete(K id) {
+    // @throws IllegalArgumentException if instance is not an
+    //         entity or is a removed entity
+    // @throws TransactionRequiredException if invoked on a
+    //         container-managed entity manager of type
+    //         <code>PersistenceContextType.TRANSACTION</code> and there is
+    //         no transaction
+    // @throws IllegalArgumentException if the instance is not an TODO merge IllegalArgumentException
+    //         entity or is a detached entity
+    // @throws TransactionRequiredException if invoked on a TODO merge IllegalArgumentException
+    //         container-managed entity manager of type
+    //         <code>PersistenceContextType.TRANSACTION</code> and there is
+    //         no transaction
+    // @throws TransactionRequiredException if there is TODO merge IllegalArgumentException
+    //         no transaction
+    // @throws PersistenceException if the flush fails
+    void abstractDaoDelete(K id) {
         EntityManager em = getEntityManager();
-        try {
-            E merged = em.merge(abstractDaoFindById(id).orElseThrow(NoResultException::new));
-            em.remove(merged);
+        abstractDaoFindById(id).ifPresent(e -> {
+            e = em.merge(e);
+            em.remove(e);
             em.flush();
-        } catch (RuntimeException e) {
-            getLogger().error("Can't delete because had the exception", e);
-            return false;
-        }
+        });
         getLogger().info("Delete {} with id: {}", getEClass().getSimpleName(), id);
-        return true;
     }
 
     // Deletes the given entities.
+    //
     // @param entities
-    boolean abstractDaoDeleteAll(Iterable<? extends E> entities) {
+    // @throws IllegalArgumentException if instance is not an TODO
+    //         entity or is a removed entity
+    // @throws TransactionRequiredException if invoked on a
+    //         container-managed entity manager of type
+    //         <code>PersistenceContextType.TRANSACTION</code> and there is
+    //         no transaction
+    // @throws IllegalArgumentException if the instance is not an TODO merge IllegalArgumentException
+    //         entity or is a detached entity
+    // @throws TransactionRequiredException if invoked on a TODO merge IllegalArgumentException
+    //         container-managed entity manager of type
+    //         <code>PersistenceContextType.TRANSACTION</code> and there is
+    //         no transaction
+    // @throws TransactionRequiredException if there is TODO merge IllegalArgumentException
+    //         no transaction
+    // @throws PersistenceException if the flush fails
+    void abstractDaoDeleteAll(Iterable<E> entities) {
+        if (entities == null) {
+            throw new IllegalArgumentException();
+        }
         List<K> ids = new ArrayList<>();
         EntityManager em = getEntityManager();
-        try {
-            if (entities == null) {
-                return false;
-            }
-
-            for (E entity : entities) {
-                em.remove(entity);
-                ids.add(entity.getId());
-            }
-            em.flush();
-        } catch (RuntimeException e) {
-            getLogger().error("Can't save because had the exception", e);
-            return false;
+        for (E entity : entities) {
+            em.remove(entity);
+            ids.add(entity.getId());
         }
+        em.flush();
         getLogger().info("Save {} with ids: {}", getEClass().getSimpleName(), ids);
-        return true;
     }
 
     void close() {

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 17:53 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.13 21:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginDaoJpaTest.java
@@ -12,11 +12,14 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.UserLoginDaoJpa;
+import su.svn.showcase.domain.TestData;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
@@ -37,9 +40,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static su.svn.showcase.domain.TestData.getCloneOfUserLogin1;
+import static su.svn.showcase.domain.TestData.clean;
+import static su.svn.showcase.domain.TestData.cloneUserLogin1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
 @DisplayName("A UserLoginDaoTest unit test cases")
@@ -80,6 +83,13 @@ class UserLoginDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
+    private UserLogin entity;
+
+    @BeforeEach
+    void createNew() {
+        entity = clean(cloneUserLogin1());
+    }
+
     @DisplayName("Can inject entity manager and user transaction")
     @Test
     void canInject_entityManager() {
@@ -91,9 +101,10 @@ class UserLoginDaoJpaTest {
     @Test
     void whenUserLoginDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        UserLoginDao newsEntryDao = weld.select(UserLoginDaoJpa.class).get();
-        UserLogin userLogin = getCloneOfUserLogin1();
-        assertTrue(newsEntryDao.save(userLogin));
+        UserLoginDao dao = weld.select(UserLoginDaoJpa.class).get();
+        UserLogin test = dao.save(entity);
+        Assertions.assertNotNull(test);
+        Assertions.assertEquals(entity, test);
         userTransaction.rollback();
     }
 }

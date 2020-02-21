@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 21:51 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * Tag.java
+ * Tag.java$
  * $Id$
  */
 
@@ -18,11 +18,11 @@ import java.util.Set;
 
 import static su.svn.showcase.domain.Tag.*;
 
-@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = {"records"})
-@ToString(callSuper = true, exclude = {"records"})
+@EqualsAndHashCode(exclude = {"records"})
+@ToString(exclude = {"records"})
 @Entity
 @Table(schema = "dictionary", name = "tag")
 @NamedQueries({
@@ -31,49 +31,79 @@ import static su.svn.showcase.domain.Tag.*;
         query = "SELECT DISTINCT e FROM Tag e"
     ),
     @NamedQuery(
+        name = FIND_ALL_ORDER_BY_TAG_ASC,
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " ORDER BY e.tag ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_TAG_DESC,
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " ORDER BY e.tag DESC"
+    ),
+    @NamedQuery(
         name = FIND_WHERE_TAG,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag = :tag"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag = :tag"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_TAG,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag LIKE :tag"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag LIKE :tag"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.id IN (:ids)"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.id IN (:ids)"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_TAG_IN,
-        query = "SELECT DISTINCT e FROM Tag e WHERE e.tag IN (:tags)"
+        query = "SELECT DISTINCT e FROM Tag e" +
+                " WHERE e.tag IN (:tags)"
     ),
 })
-public class Tag extends StringEntity implements Serializable {
+public class Tag implements DBEntity<String>, Serializable {
     private static final long serialVersionUID = 130L;
 
-    public static final String FIND_ALL = "Tag.findAll";
+    public static final String FIND_ALL = "TagDao.findAll";
 
-    public static final String FIND_WHERE_TAG = "Tag.findWhereTag";
+    public static final String FIND_ALL_ORDER_BY_TAG_ASC = "TagDao.findAllOrderByTagAsc";
 
-    public static final String FIND_ALL_WHERE_TAG = "Tag.findAllWhereTag";
+    public static final String FIND_ALL_ORDER_BY_TAG_DESC = "TagDao.findAllOrderByTagDesc";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "Tag.findAllByIdIn";
+    public static final String FIND_WHERE_TAG = "TagDao.findWhereTag";
 
-    public static final String FIND_ALL_WHERE_TAG_IN = "Tag.findAllByTagIn";
+    public static final String FIND_ALL_WHERE_TAG = "TagDao.findAllWhereTag";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "TagDao.findAllByIdIn";
+
+    public static final String FIND_ALL_WHERE_TAG_IN = "TagDao.findAllByTagIn";
 
     public static final String OUTER_SECTION = "SELECT new FROM dictionary.tag t1" +
             " RIGHT OUTER JOIN (VALUES %s) t2(new) ON t1.tag = t2.new WHERE t1.tag IS NULL";
 
+    @Getter
     @NotNull
-    @Column(name = "tag", length = 128, nullable = false ,unique = true)
+    @Id
+    private String id;
+
+    @Getter
+    @Setter
+    @NotNull
+    @Column(name = "tag", length = 128, nullable = false, unique = true)
     private String tag;
 
-    @Column(name = "visible")
+    @Getter
+    @Setter
     private Boolean visible;
 
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "date_time", nullable = false)
     private LocalDateTime dateTime;
 
+    @Getter
+    @Setter
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             schema = "db",
@@ -82,17 +112,8 @@ public class Tag extends StringEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "db_record_id"))
     Set<Record> records;
 
-    @Builder
-    public Tag(@NotNull String id,
-               @NotNull String tag,
-               boolean visible,
-               @NotNull LocalDateTime dateTime,
-               Set<Record> records) {
-        super(id);
-        this.tag = tag;
-        this.visible = visible;
-        this.dateTime = dateTime;
-        this.records = records;
+    public Tag(@NotNull String id) {
+        this.id = id;
     }
 }
 //EOF

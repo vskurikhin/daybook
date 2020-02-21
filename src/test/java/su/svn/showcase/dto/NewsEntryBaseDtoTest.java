@@ -1,5 +1,9 @@
 /*
- * This file was last modified at  by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.17 22:14 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * NewsEntryBaseDtoTest.java
+ * $Id$
  */
 
 package su.svn.showcase.dto;
@@ -13,8 +17,8 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.TestData.getRecord0;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.NOW;
 
@@ -40,7 +44,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(newsEntryBaseDto.getId());
+            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("id", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", null);
             assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("content", null);
@@ -65,7 +69,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, newsEntryBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(3, newsEntryBaseDto).hasNext());
         }
     }
 
@@ -82,9 +86,9 @@ class NewsEntryBaseDtoTest {
 
         @BeforeEach
         void createNew() {
-            record = getRecord0();
-            recordFullDto = getRecordFullDto0();
-            newsGroupBaseDto = getNewsGroupBaseDto0();
+            record = cloneRecord0();
+            recordFullDto = cloneRecordFullDto0();
+            newsGroupBaseDto = cloneNewsGroupBaseDto0();
             tags = TestData.EMPTY_BASEDTO_TAGS;
             newsEntryBaseDto = getNewsEntryBaseDto0();
         }
@@ -131,8 +135,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            NewsEntry expected = new NewsEntry();
-            expected.setId(ZERO);
+            NewsEntry expected = new NewsEntry(ZERO);
             expected.setDateTime(NOW);
             expected.setRecord(record);
             expected.setTitle("titleTest0");
@@ -143,8 +146,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            NewsEntry entity = new NewsEntry();
-            entity.setId(ZERO);
+            NewsEntry entity = new NewsEntry(ZERO);
             entity.setDateTime(NOW);
             entity.setTitle("testTitle");
             entity.setContent("testContent");

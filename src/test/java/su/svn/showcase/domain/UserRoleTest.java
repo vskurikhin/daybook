@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.showcase.domain.UUIDEntity.ZERO;
+import static su.svn.shared.Constants.UUID.ZERO;
 
 @DisplayName("Class UserRole")
 class UserRoleTest {
@@ -40,8 +40,7 @@ class UserRoleTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(userRole.getId());
-            assertNotEquals(ZERO, userRole.getId());
+            assertThat(userRole).hasFieldOrPropertyWithValue("id", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("roleName", null);
             assertThat(userRole).hasFieldOrPropertyWithValue("userLogin", null);
@@ -68,7 +67,7 @@ class UserRoleTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(3, userRole).hasNext());
+            assertFalse(ValidateUtil.isNull(4, userRole).hasNext());
         }
     }
 
@@ -87,7 +86,7 @@ class UserRoleTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userRole = new UserRole(NOW, "testRole", userLogin);
+            userRole = new UserRole(ZERO, NOW, "testRole", userLogin);
             assertThat(userRole).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
 

@@ -9,8 +9,8 @@
 package su.svn.showcase.dao;
 
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.exceptions.ErrorCase;
 
-import javax.persistence.NoResultException;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -26,6 +26,7 @@ public interface Dao<K, E extends DBEntity<K>> {
      *
      * @param id - key.
      * @return record of entity by key.
+     * @throws ErrorCase if {@code id} is {@literal null}.
      */
     Optional<E> findById(K id);
 
@@ -41,49 +42,51 @@ public interface Dao<K, E extends DBEntity<K>> {
      *
      * @param ids - possible values.
      * @return records of entity by condition.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     Collection<E> findAllByIdIn(Iterable<K> ids);
 
     /**
      * Returns the number of entities available.
      *
-     * @return the number of entities
+     * @return the number of entities.
      */
     long count();
 
+    // @return {@literal true} if all entities saved, {@literal false} otherwise.
     /**
      * Saves a given entity.
      *
      * @param entity must not be {@literal null}.
-     * @return {@literal true} if all entities saved, {@literal false} otherwise.
+     * @return the saved entity will never be {@literal null}.
+     * @throws ErrorCase in case the given {@code id} is {@literal null}
      */
-    boolean save(E entity);
+    E save(E entity);
 
     /**
      * Saves all given entities.
      *
      * @param entities must not be {@literal null}.
-     * @return {@literal true} if all entities saved, {@literal false} otherwise.
+     * @return the saved entities will never be {@literal null}.
+     * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
      */
-    boolean saveAll(Iterable<E> entities);
+    Iterable<E> saveAll(Iterable<E> entities);
 
     /**
      * Deletes the entity with the given id.
      *
      * @param id must not be {@literal null}.
-     * @return {@literal true} if the entity delete, {@literal false} otherwise.
-     * @throws NoResultException in case the given {@code id} is {@literal null}
+     * @throws ErrorCase in case the given {@code id} is {@literal null}
      */
-    boolean delete(K id);
-
+    void delete(K id);
 
     /**
      * Deletes the given entities.
      *
      * @param entities
      * @return {@literal true} if all entities deleted, {@literal false} otherwise.
-     * @throws IllegalArgumentException in case the given {@link Iterable} is {@literal null}.
+     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
-    boolean deleteAll(Iterable<E> entities);
+    void deleteAll(Iterable<E> entities);
 }
 //EOF

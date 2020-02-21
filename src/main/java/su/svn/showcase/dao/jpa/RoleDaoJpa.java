@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 15:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -16,7 +16,6 @@ import su.svn.showcase.domain.Role;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -84,8 +83,48 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
     }
 
     @Override
+    public List<Role> findAllOrderByRoleAsc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_ASC);
+    }
+
+    @Override
+    public List<Role> findAllOrderByRoleDesc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_DESC);
+    }
+
+    /**
+     * TODO
+     *
+     * {@inheritDoc }
+     */
+    @Override
     public List<Role> findAllByIdIn(Iterable<UUID> ids) {
-        return null;
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
+    }
+
+    @Override
+    public List<Role> findAllWhereRole(String role) {
+        return abstractDaoFindAllWhereField(Role.FIND_WHERE_ROLE, "role", role);
+    }
+
+    @Override
+    public List<Role> findAllByRoleIn(Iterable<String> roles) {
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+    }
+
+    @Override
+    public List<Role> range(int start, int size) {
+        return jpaRange(Role.FIND_ALL, start, size);
+    }
+
+    @Override
+    public List<Role> rangeOrderByRoleAsc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_ASC, start, size);
+    }
+
+    @Override
+    public List<Role> rangeOrderByRoleDesc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_DESC, start, size);
     }
 
     /**
@@ -100,7 +139,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean save(Role entity) {
+    public Role save(Role entity) {
         return abstractDaoSave(entity);
     }
 
@@ -108,7 +147,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean saveAll(Iterable<Role> entities) {
+    public Iterable<Role> saveAll(Iterable<Role> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -116,16 +155,16 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      * {@inheritDoc }
      */
     @Override
-    public boolean delete(UUID id) {
-        return abstractDaoDelete(id);
+    public void delete(UUID id) {
+        abstractDaoDelete(id);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public boolean deleteAll(Iterable<Role> entities) {
-        return abstractDaoDeleteAll(entities);
+    public void deleteAll(Iterable<Role> entities) {
+        abstractDaoDeleteAll(entities);
     }
 }
 //EOF

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagTest.java
+ * TagTest.java$
  * $Id$
  */
 
@@ -13,8 +13,8 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.utils.TestData.EMPTY_RECORDS;
-import static su.svn.utils.TestData.NOW;
+import static su.svn.shared.Constants.String.ZERO;
+import static su.svn.utils.TestData.*;
 
 @DisplayName("Class Tag")
 class TagTest {
@@ -38,8 +38,7 @@ class TagTest {
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertNotNull(tag.getId());
-            assertNotEquals(StringEntity.ZERO, tag.getId());
+            assertThat(tag).hasFieldOrPropertyWithValue("id", null);
             assertThat(tag).hasFieldOrPropertyWithValue("tag", null);
             assertThat(tag).hasFieldOrPropertyWithValue("visible", null);
             assertThat(tag).hasFieldOrPropertyWithValue("dateTime", null);
@@ -65,7 +64,7 @@ class TagTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, tag).hasNext());
+            assertFalse(ValidateUtil.isNull(3, tag).hasNext());
         }
     }
 
@@ -74,13 +73,14 @@ class TagTest {
     class WhenNewAllArgsConstructor {
         @BeforeEach
         void createNew() {
-            tag = new Tag(StringEntity.ZERO, "testTag", true, NOW, EMPTY_RECORDS);
+            tag = new Tag(ZERO, "testTag", true, NOW, EMPTY_RECORDS);
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            tag = new Tag("testTag", true, NOW, EMPTY_RECORDS);
+            tag = new Tag(TAG_ID0, "testTag", true, NOW, EMPTY_RECORDS);
+            assertThat(tag).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(tag).hasFieldOrPropertyWithValue("tag", "testTag");
             assertThat(tag).hasFieldOrPropertyWithValue("visible", true);
             assertThat(tag).hasFieldOrPropertyWithValue("dateTime", NOW);
@@ -91,13 +91,13 @@ class TagTest {
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
             tag = Tag.builder()
-                    .id(StringEntity.ZERO)
+                    .id(ZERO)
                     .tag("testTag")
                     .visible(true)
                     .dateTime(NOW)
                     .records(EMPTY_RECORDS)
                     .build();
-            assertThat(tag).hasFieldOrPropertyWithValue("id", StringEntity.ZERO);
+            assertThat(tag).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(tag).hasFieldOrPropertyWithValue("tag", "testTag");
             assertThat(tag).hasFieldOrPropertyWithValue("visible", true);
             assertThat(tag).hasFieldOrPropertyWithValue("dateTime", NOW);
@@ -108,7 +108,7 @@ class TagTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new Tag(), tag);
-            Tag expected = new Tag(StringEntity.ZERO, "testTag", true, NOW, EMPTY_RECORDS);
+            Tag expected = new Tag(ZERO, "testTag", true, NOW, EMPTY_RECORDS);
             assertEquals(expected.hashCode(), tag.hashCode());
             assertEquals(expected, tag);
         }
