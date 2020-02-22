@@ -35,15 +35,14 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullCrudServiceImpl.class);
 
     @EJB(beanName = "NewsEntryDaoJpa")
-    NewsEntryDao newsEntryDao;
+    private NewsEntryDao newsEntryDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto tdo) {
         return entity -> {
             entity = tdo.update(entity);
-            System.out.println("entity = " + entity);
             newsEntryDao.save(entity);
         };
     }

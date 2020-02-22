@@ -29,34 +29,11 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  */
 @Stateless
 public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Class<Record> getEClass() {
-        return Record.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     /**
      * {@inheritDoc }
@@ -269,7 +246,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     public Integer countByDay(LocalDate date) {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        Query query = entityManager.createQuery(Record.COUNT_BY_DAY);;
+        Query query = getEntityManager().createQuery(Record.COUNT_BY_DAY);;
         query.setParameter("startDate", startDateTime);
         query.setParameter("endDate", endDateTime);
         Long count = (Long) query.getSingleResult();
@@ -277,6 +254,30 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
             LOGGER.error("Can't get count : {}", count);
         }
         return count != null ? count.intValue() : null;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Class<Record> getEClass() {
+        return Record.class;
     }
 }
 //EOF

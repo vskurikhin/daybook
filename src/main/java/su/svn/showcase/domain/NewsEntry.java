@@ -40,11 +40,6 @@ import static su.svn.showcase.domain.NewsEntry.*;
                 " ORDER BY e.title DESC"
     ),
     @NamedQuery(
-        name = FIND_WHERE_TITLE,
-        query = "SELECT DISTINCT e FROM NewsEntry e" +
-                " WHERE e.title = :title"
-    ),
-    @NamedQuery(
         name = FIND_ALL_WHERE_TITLE,
         query = "SELECT DISTINCT e FROM NewsEntry e" +
                 " WHERE e.title LIKE :title"
@@ -53,6 +48,11 @@ import static su.svn.showcase.domain.NewsEntry.*;
         name = FIND_ALL_WHERE_ID_IN,
         query = "SELECT DISTINCT e FROM NewsEntry e" +
                 " WHERE e.id IN :ids"
+    ),
+    @NamedQuery(
+        name = FIND_WHERE_TITLE,
+        query = "SELECT DISTINCT e FROM NewsEntry e" +
+                " WHERE e.title = :title"
     ),
 })
 public class NewsEntry implements DBEntity<UUID>, Serializable {
@@ -66,9 +66,9 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
 
     public static final String FIND_ALL_ORDER_BY_TITLE_DESC = "NewsEntryDao.findAllOrderByTitleDesc";
 
-    public static final String FIND_WHERE_TITLE = "NewsEntryDao.findWhereTitle";
-
     public static final String FIND_ALL_WHERE_TITLE = "NewsEntryDao.findAllWhereTitle";
+
+    public static final String FIND_WHERE_TITLE = "NewsEntryDao.findWhereTitle";
 
     @Getter
     @NotNull

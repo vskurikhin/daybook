@@ -15,7 +15,8 @@ import su.svn.showcase.domain.NewsEntry;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,10 +25,11 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 @Stateless
 public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements NewsEntryDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     @Override
     public Optional<NewsEntry> findById(UUID id) {
@@ -106,11 +108,11 @@ public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements 
 
     @Override
     EntityManager getEntityManager() {
-        return this.entityManager;
+        return this.emf.createEntityManager();
     }
 
     @Override
-    public Logger getLogger() {
+    Logger getLogger() {
         return LOGGER;
     }
 

@@ -14,7 +14,6 @@ import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.RoleBaseCrudService;
 import su.svn.showcase.services.UserRoleFullCrudService;
 
 import javax.ejb.EJB;
