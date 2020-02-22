@@ -83,6 +83,7 @@ class RecordDaoJpaTest {
     @BeforeEach
     void createNew() {
         entity = clean(cloneRecord1());
+        entity.setNewsEntry(null);
     }
 
     @DisplayName("Can inject entity manager and user transaction")
