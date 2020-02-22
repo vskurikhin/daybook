@@ -8,6 +8,7 @@
 
 package su.svn.showcase.dto;
 
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.domain.UserLogin;
@@ -46,6 +47,7 @@ public interface RecordDto extends Dto<UUID>, Updating<Record> {
     default Record update(@NotNull Record entity, Map<String, Object> values) {
         Objects.requireNonNull(entity);
         convertIfContainsKey(UserLogin.class, values, "userLogin").ifPresent(entity::setUserLogin);
+        convertIfContainsKey(NewsEntry.class, values, "newsEntry").ifPresent(entity::setNewsEntry);
         convertSetIfContainsKey(Tag.class, values, "tags").ifPresent(entity::setTags);
 
         return update(entity);

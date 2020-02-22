@@ -13,13 +13,14 @@ import su.svn.showcase.domain.Record;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.clean;
-import static su.svn.showcase.domain.TestData.cloneRecord0;
+import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.*;
 
@@ -41,7 +42,7 @@ class RecordBaseDtoTest {
         void createNew() {
             recordBaseDto = new RecordBaseDto();
         }
-
+;
         @Test
         @DisplayName("default values")
         void defaults() {
@@ -141,8 +142,11 @@ class RecordBaseDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Record expected = cloneRecord0();
-            expected.setUserLogin(null);
-            assertEquals(expected, recordBaseDto.update(new Record(ZERO)));
+            Map<String, Object> values = new HashMap<String, Object>() {{
+                put("userLogin", cloneUserLogin0());
+                put("newsEntry", clean(cloneNewsEntry0()));
+            }};
+            assertEquals(expected, recordBaseDto.update(new Record(ZERO), values));
         }
 
         @Test
@@ -156,3 +160,17 @@ class RecordBaseDtoTest {
     }
 }
 //EOF
+/*
+expected: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:19:55.711634, editDateTime=2020-02-22T23:19:55.711634, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:19:55.711634, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:19:55.711634, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:19:55.711634, editDateTime=2020-02-22T23:19:55.711634, index=13, type=NewsEntry, userLogin=null, newsEntry=null)>
+
+expected: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:27:23.595365, editDateTime=2020-02-22T23:27:23.595365, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:27:23.595365, editDateTime=2020-02-22T23:27:23.595365, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, group=groupTest0)))>
+
+expected: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:29:17.369114, editDateTime=2020-02-22T23:29:17.369114, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:29:17.369114, editDateTime=2020-02-22T23:29:17.369114, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, group=groupTest0)))>
+
+ */

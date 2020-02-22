@@ -15,7 +15,8 @@ import su.svn.showcase.domain.Role;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,34 +30,11 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  */
 @Stateless
 public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Class<Role> getEClass() {
-        return Role.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     /**
      * {@inheritDoc }
@@ -165,6 +143,30 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
     @Override
     public void deleteAll(Iterable<Role> entities) {
         abstractDaoDeleteAll(entities);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Class<Role> getEClass() {
+        return Role.class;
     }
 }
 //EOF

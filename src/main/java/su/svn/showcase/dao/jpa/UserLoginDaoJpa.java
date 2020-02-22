@@ -15,7 +15,9 @@ import su.svn.showcase.domain.UserLogin;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import java.util.*;
 
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
@@ -27,34 +29,11 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  */
 @Stateless
 public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements UserLoginDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Class<UserLogin> getEClass() {
-        return UserLogin.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     /**
      * {@inheritDoc }
@@ -134,6 +113,30 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
     @Override
     public void  deleteAll(Iterable<UserLogin> entities) {
         abstractDaoDeleteAll(entities);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Class<UserLogin> getEClass() {
+        return UserLogin.class;
     }
 }
 //EOF

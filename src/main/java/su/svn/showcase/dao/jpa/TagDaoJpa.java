@@ -16,7 +16,8 @@ import su.svn.showcase.utils.CollectionUtil;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -30,32 +31,13 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  */
 @Stateless
 public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TagDaoJpa.class);
+
     private static final Pattern validating = Pattern.compile("[\\w\\sа-яА-Я]+");
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Class<Tag> getEClass() {
-        return Tag.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     /**
      * {@inheritDoc }
@@ -204,6 +186,27 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
                 .collect(Collectors.joining(","));
         String sql = String.format(Tag.OUTER_SECTION, values);
         return abstractDaoNativeResultList(sql, String.class);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Class<Tag> getEClass() {
+        return Tag.class;
     }
 }
 //EOF

@@ -158,7 +158,7 @@ public class Record implements DBEntity<UUID>, Serializable {
             = "RecordDao.fetchAllByDayOrderByEditDateTimeDescIndex";
 
 
-    public static final String RANGE = FETCH_ALL;
+    public static final String RANGE = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
     public static final String RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
