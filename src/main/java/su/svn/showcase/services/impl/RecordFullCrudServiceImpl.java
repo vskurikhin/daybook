@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.dto.NewsEntryDtoEnum;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.RecordTypesEnum;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -99,7 +100,8 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         Objects.requireNonNull(dto);
         RecordTypesEnum type = RecordTypesEnum.valueOf(dto.getType());
         switch (type) {
-            case NEWS_ENTRY:
+            case NEWS_ENTRY_BASE:
+            case NEWS_ENTRY_FULL:
                 validateRecordNewsEntry(dto);
                 break;
             default:
@@ -112,7 +114,7 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         if ( ! dto.getId().equals(dto.getNewsEntry().getId())) {
             throw new IllegalArgumentException("Ids of Record and NewsEntry must be equals!");
         }
-        if ( ! RecordTypesEnum.NEWS_ENTRY.getValue().equals(dto.getType())) {
+        if ( ! NewsEntryDtoEnum.isValid(dto.getType())) {
             throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
         }
     }

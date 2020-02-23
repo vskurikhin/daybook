@@ -32,6 +32,8 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"tags"})
+@ToString(exclude = {"tags"})
 public class RecordFullDto implements RecordDto, Serializable {
 
     private static final long serialVersionUID = 9241L;

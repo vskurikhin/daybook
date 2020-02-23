@@ -146,6 +146,7 @@ class RecordBaseDtoTest {
                 put("userLogin", cloneUserLogin0());
                 put("newsEntry", clean(cloneNewsEntry0()));
             }};
+            expected.setType(null);
             assertEquals(expected, recordBaseDto.update(new Record(ZERO), values));
         }
 
@@ -155,22 +156,9 @@ class RecordBaseDtoTest {
             Record entity = clean(cloneRecord0());
             RecordBaseDto expected = cloneRecordBaseDto0();
             RecordBaseDto test = new RecordBaseDto(entity);
+            test.setType(null);
             assertEquals(expected, test);
         }
     }
 }
 //EOF
-/*
-expected: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:19:55.711634, editDateTime=2020-02-22T23:19:55.711634, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:19:55.711634, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:19:55.711634, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:19:55.711634, editDateTime=2020-02-22T23:19:55.711634, index=13, type=NewsEntry, userLogin=null, newsEntry=null)>
-
-expected: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:27:23.595365, editDateTime=2020-02-22T23:27:23.595365, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:27:23.595365, editDateTime=2020-02-22T23:27:23.595365, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:27:23.595365, group=groupTest0)))>
-
-expected: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:29:17.369114, editDateTime=2020-02-22T23:29:17.369114, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, title=titleTest0, content=contentTest0, newsGroup=null))> but was: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:29:17.369114, editDateTime=2020-02-22T23:29:17.369114, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:29:17.369114, group=groupTest0)))>
-
- */

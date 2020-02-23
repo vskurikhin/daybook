@@ -78,14 +78,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntry.class.getSimpleName())
+            .type(null)
             .build();
     private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(NewsEntry.class.getSimpleName())
+            .type(null)
             .build();
 
     private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()
@@ -93,14 +93,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntry.class.getSimpleName())
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(NewsEntry.class.getSimpleName())
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
 
     private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()

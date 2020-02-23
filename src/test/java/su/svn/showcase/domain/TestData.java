@@ -8,6 +8,9 @@
 
 package su.svn.showcase.domain;
 
+import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
+
 import java.util.*;
 
 import static su.svn.utils.TestData.*;
@@ -65,14 +68,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntry.class.getSimpleName())
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final Record record1 = Record.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(NewsEntry.class.getSimpleName())
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()

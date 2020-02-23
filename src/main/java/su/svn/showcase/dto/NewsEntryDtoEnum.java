@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.22 19:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.23 16:26 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordTypesEnum.java
+ * NewsEntryDtoEnum.java
  * $Id$
  */
 
@@ -15,12 +15,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public enum RecordTypesEnum {
+public enum NewsEntryDtoEnum {
 
     NEWS_ENTRY_BASE(NewsEntryBaseDto.class.getSimpleName()),
     NEWS_ENTRY_FULL(NewsEntryFullDto.class.getSimpleName());
 
-    private static final Map<Class<?>, RecordTypesEnum> map = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
+    private static final Map<Class<?>, NewsEntryDtoEnum> map = new MapUtil.Builder<Class<?>, NewsEntryDtoEnum>()
             .add(NEWS_ENTRY_BASE, NewsEntryBaseDto.class)
             .add(NEWS_ENTRY_FULL, NewsEntryFullDto.class)
             .build();
@@ -28,14 +28,14 @@ public enum RecordTypesEnum {
     private static final Set<String> stringValues;
 
     static {
-        stringValues = Arrays.stream(RecordTypesEnum.values())
+        stringValues = Arrays.stream(NewsEntryDtoEnum.values())
                 .map(recordTypesEnum -> recordTypesEnum.value)
                 .collect(Collectors.toSet());
     }
 
     private String value;
 
-    RecordTypesEnum(String value) {
+    NewsEntryDtoEnum(String value) {
         this.value = value;
     }
 
@@ -47,7 +47,7 @@ public enum RecordTypesEnum {
         return stringValues.contains(name);
     }
 
-    public static RecordTypesEnum getRecordType(Class<?> tClass) {
+    public static NewsEntryDtoEnum getRecordType(Class<?> tClass) {
         return map.get(tClass);
     }
 }

@@ -76,6 +76,7 @@ ext.libVers = [
     arq_trn_jta             : '1.0.5',
     arquillian              : '1.5.0.Final',
     assertj_core            : '3.15.0',
+    commons_collects        : '3.2.2',
     h2_database             : '1.4.197',
     jboss_logging           : '3.4.1.Final',
     jboss_weld_se           : '3.1.2.Final',
@@ -85,7 +86,6 @@ ext.libVers = [
     mockito_core            : '3.2.4',
     narayana_jta            : '5.10.3.Final',
     weld_junit5             : '2.0.1.Final',
-    apache_commons_collects : '4.0',
 ]
 
 dependencyManagement {
@@ -96,8 +96,9 @@ dependencyManagement {
 }
 
 dependencies {
+  compile group: 'commons-collections', name: 'commons-collections', version: libVers.commons_collects
   compile group: 'io.thorntail', name: 'thorntail-runner', version: libVers.thorntail
-  compile group: 'org.apache.commons', name: 'commons-collections4', version: libVers.apache_commons_collects
+  compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
   compile group: 'org.postgresql', name: 'postgresql', version: libVers.drv_org_postgresql
   compile group: 'org.slf4j', name: 'slf4j-api', version: libVers.slf4j
   compile group: 'org.slf4j', name: 'slf4j-simple', version: libVers.slf4j
