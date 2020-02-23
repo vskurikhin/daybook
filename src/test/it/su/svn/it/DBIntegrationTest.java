@@ -230,6 +230,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @InSequence(2502)
     public void test__create() throws Exception {
         NewsEntryFullDto dto = cloneNewsEntryFullDto(2);
+        System.out.println("dto = " + dto);
         newsEntryFullCrudService.create(dto);
     }
 

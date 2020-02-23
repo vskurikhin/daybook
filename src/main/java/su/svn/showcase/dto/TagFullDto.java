@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"records"})
+@ToString(exclude = {"records"})
 public class TagFullDto implements TagDto, Serializable {
 
     private static final long serialVersionUID = 9131L;

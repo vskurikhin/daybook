@@ -165,28 +165,28 @@ public class IntegrationTestData extends TestData {
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(13)
-                    .type("testType0")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             Record.builder()
                     .id(RECORD_UUID1)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(1)
-                    .type("testType1")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             Record.builder()
                     .id(RECORD_UUID2)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(2)
-                    .type("testType2")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             Record.builder()
                     .id(RECORD_UUID3)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(3)
-                    .type("testType3")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build()
     };
 
@@ -196,28 +196,28 @@ public class IntegrationTestData extends TestData {
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(13)
-                    .type("testType0")
+                    .type(null)
                     .build(),
             RecordBaseDto.builder()
                     .id(RECORD_UUID1)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(1)
-                    .type("testType1")
+                    .type(null)
                     .build(),
             RecordBaseDto.builder()
                     .id(RECORD_UUID2)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(2)
-                    .type("testType2")
+                    .type(null)
                     .build(),
             RecordBaseDto.builder()
                     .id(RECORD_UUID3)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(3)
-                    .type("testType3")
+                    .type(null)
                     .build()
     };
 
@@ -227,28 +227,28 @@ public class IntegrationTestData extends TestData {
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(13)
-                    .type("testType0")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             RecordFullDto.builder()
                     .id(RECORD_UUID1)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(1)
-                    .type("testType1")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             RecordFullDto.builder()
                     .id(RECORD_UUID2)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(2)
-                    .type("testType2")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build(),
             RecordFullDto.builder()
                     .id(RECORD_UUID3)
                     .createDateTime(NOW)
                     .editDateTime(NOW)
                     .index(3)
-                    .type("testType3")
+                    .type(NewsEntryFullDto.class.getSimpleName())
                     .build()
     };
 
@@ -346,6 +346,7 @@ public class IntegrationTestData extends TestData {
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
             recordFullDtos[i].setUserLogin(userLoginBaseDtos[i]);
+            recordFullDtos[i].setNewsEntry(newsEntryFullDtos[i]);
             recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);

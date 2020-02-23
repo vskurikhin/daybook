@@ -194,10 +194,3 @@ class RecordFullDtoTest {
     }
 }
 //EOF
-/*
-expected: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:36:17.879863, editDateTime=2020-02-22T23:36:17.879863, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:36:17.879863, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:36:17.879863, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:36:17.879863, group=groupTest0)))> but was: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-22T23:36:17.879863, editDateTime=2020-02-22T23:36:17.879863, index=13, type=NewsEntry, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:36:17.879863, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-22T23:36:17.879863, title=titleTest0, content=contentTest0, newsGroup=null))>
-
-
- */
