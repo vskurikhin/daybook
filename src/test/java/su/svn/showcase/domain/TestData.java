@@ -8,6 +8,9 @@
 
 package su.svn.showcase.domain;
 
+import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
+
 import java.util.*;
 
 import static su.svn.utils.TestData.*;
@@ -65,14 +68,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType0")
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final Record record1 = Record.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType1")
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()
@@ -100,31 +103,33 @@ public class TestData {
             .build();
 
     static {
-        userLogin0.setRoles(newList(cloneUserRole0()));
-        userLogin1.setRoles(newList(cloneUserRole1()));
+        userLogin0.setRoles(newList(userRole0));
+        userLogin1.setRoles(newList(userRole1));
 
-        userRole0.setUserLogin(cloneUserLogin0());
-        userRole0.setRole(cloneRole0());
-        userRole1.setUserLogin(cloneUserLogin1());
-        userRole1.setRole(cloneRole1());
+        userRole0.setUserLogin(userLogin0);
+        userRole0.setRole(role0);
+        userRole1.setUserLogin(userLogin1);
+        userRole1.setRole(role1);
 
-        tag0.setRecords(newSet(cloneRecord0()));
-        tag1.setRecords(newSet(cloneRecord1()));
+        tag0.setRecords(newSet(record0));
+        tag1.setRecords(newSet(record1));
 
-        record0.setUserLogin(cloneUserLogin0());
-        record0.setTags(newSet(cloneTag0()));
+        newsGroup0.setNewsEntries(newList(newsEntry0));
+        newsGroup1.setNewsEntries(newList(newsEntry1));
 
-        record1.setUserLogin(cloneUserLogin1());
-        record1.setTags(newSet(cloneTag1()));
+        newsEntry0.setRecord(record0);
+        newsEntry0.setNewsGroup(newsGroup0);
 
-        newsGroup0.setNewsEntries(newList(cloneNewsEntry0()));
-        newsGroup1.setNewsEntries(newList(cloneNewsEntry1()));
+        newsEntry1.setRecord(record1);
+        newsEntry1.setNewsGroup(newsGroup1);
 
-        newsEntry0.setRecord(cloneRecord0());
-        newsEntry0.setNewsGroup(cloneNewsGroup0());
+        record0.setUserLogin(userLogin0);
+        record0.setNewsEntry(newsEntry0);
+        record0.setTags(newSet(tag0));
 
-        newsEntry1.setRecord(cloneRecord1());
-        newsEntry1.setNewsGroup(cloneNewsGroup1());
+        record1.setUserLogin(userLogin1);
+        record1.setNewsEntry(newsEntry1);
+        record1.setTags(newSet(tag1));
     }
 
     public static Role cloneRole0() {
@@ -178,7 +183,8 @@ public class TestData {
     }
 
     public static Record clean(Record entity) {
-        entity.setNewsEntry(null);
+        entity.getNewsEntry().setNewsGroup(null);
+        entity.getNewsEntry().setRecord(null);
         entity.setTags(Collections.emptySet());
         entity.getUserLogin().setRoles(Collections.emptyList());
         return entity;

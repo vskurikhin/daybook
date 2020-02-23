@@ -13,13 +13,14 @@ import su.svn.showcase.domain.Record;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.clean;
-import static su.svn.showcase.domain.TestData.cloneRecord0;
+import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.*;
 
@@ -41,7 +42,7 @@ class RecordBaseDtoTest {
         void createNew() {
             recordBaseDto = new RecordBaseDto();
         }
-
+;
         @Test
         @DisplayName("default values")
         void defaults() {
@@ -141,8 +142,12 @@ class RecordBaseDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Record expected = cloneRecord0();
-            expected.setUserLogin(null);
-            assertEquals(expected, recordBaseDto.update(new Record(ZERO)));
+            Map<String, Object> values = new HashMap<String, Object>() {{
+                put("userLogin", cloneUserLogin0());
+                put("newsEntry", clean(cloneNewsEntry0()));
+            }};
+            expected.setType(null);
+            assertEquals(expected, recordBaseDto.update(new Record(ZERO), values));
         }
 
         @Test
@@ -151,6 +156,7 @@ class RecordBaseDtoTest {
             Record entity = clean(cloneRecord0());
             RecordBaseDto expected = cloneRecordBaseDto0();
             RecordBaseDto test = new RecordBaseDto(entity);
+            test.setType(null);
             assertEquals(expected, test);
         }
     }

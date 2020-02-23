@@ -9,6 +9,7 @@
 package su.svn.showcase.dto;
 
 import lombok.*;
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.domain.UserLogin;
@@ -31,6 +32,8 @@ import java.util.stream.Collectors;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"tags"})
+@ToString(exclude = {"tags"})
 public class RecordFullDto implements RecordDto, Serializable {
 
     private static final long serialVersionUID = 9241L;
@@ -52,6 +55,9 @@ public class RecordFullDto implements RecordDto, Serializable {
     @NotNull
     private UserLoginDto userLogin;
 
+    @NotNull
+    private NewsEntryDto newsEntry;
+
     @Valid
     @NotNull
     private Set<TagDto> tags;
@@ -64,6 +70,7 @@ public class RecordFullDto implements RecordDto, Serializable {
         this.index = entity.getIndex();
         this.type = entity.getType();
         this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
+        this.newsEntry = new NewsEntryBaseDto(entity.getNewsEntry());
         this.tags = entity.getTags().stream()
                 .map(TagBaseDto::new)
                 .collect(Collectors.toSet());
@@ -83,6 +90,8 @@ public class RecordFullDto implements RecordDto, Serializable {
         entity.setType(this.type);
         assert this.userLogin != null;
         entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
+        assert this.newsEntry != null;
+        entity.setNewsEntry(this.newsEntry.update(new NewsEntry(this.newsEntry.getId())));
         if (this.tags != null) {
             Set<Tag> tags = this.tags.stream()
                     .map(dto -> dto.update(new Tag(dto.getId())))

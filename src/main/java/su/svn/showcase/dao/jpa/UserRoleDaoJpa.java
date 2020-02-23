@@ -29,32 +29,8 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public Class<UserRole> getEClass() {
-        return UserRole.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     /**
      * {@inheritDoc }
@@ -182,6 +158,30 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
     @Override
     public void deleteAll(Iterable<UserRole> entities) {
         abstractDaoDeleteAll(entities);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Class<UserRole> getEClass() {
+        return UserRole.class;
     }
 }
 //EOF

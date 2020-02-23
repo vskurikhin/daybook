@@ -15,7 +15,8 @@ import su.svn.showcase.domain.NewsGroup;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,25 +25,11 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 @Stateless
 public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements NewsGroupDao {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManager entityManager;
-
-    @Override
-    EntityManager getEntityManager() {
-        return this.entityManager;
-    }
-
-    @Override
-    public Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
-    public Class<NewsGroup> getEClass() {
-        return NewsGroup.class;
-    }
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     @Override
     public Optional<NewsGroup> findById(UUID id) {
@@ -117,6 +104,21 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
     @Override
     public List<NewsGroup> rangeOrderByGroupDesc(int start, int size) {
         return jpaRange(NewsGroup.FIND_ALL_ORDER_BY_GROUP_DESC, start, size);
+    }
+
+    @Override
+    EntityManager getEntityManager() {
+        return this.emf.createEntityManager();
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    @Override
+    public Class<NewsGroup> getEClass() {
+        return NewsGroup.class;
     }
 }
 //EOF

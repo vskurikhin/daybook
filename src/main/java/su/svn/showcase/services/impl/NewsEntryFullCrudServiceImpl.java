@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.NewsEntryDao;
 import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.NewsEntryFullCrudService;
 
@@ -35,22 +35,27 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullCrudServiceImpl.class);
 
     @EJB(beanName = "NewsEntryDaoJpa")
-    NewsEntryDao newsEntryDao;
+    private NewsEntryDao newsEntryDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
-    private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto tdo) {
+    private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto dto) {
         return entity -> {
-            entity = tdo.update(entity);
-            System.out.println("entity = " + entity);
+            System.out.println("tagSavingConsumer tdo = " + dto);
+            System.out.println("tagSavingConsumer entity = " + entity);
+            UserLoginDto userLoginDto = dto.getRecord() == null ? null :
+                    (dto.getRecord() instanceof RecordFullDto ?
+                            ((RecordFullDto) dto.getRecord()).getUserLogin() : null);
+            System.out.println("tagSavingConsumer userLoginDto = " + userLoginDto);
+            entity = dto.update(entity);
             newsEntryDao.save(entity);
         };
     }
 
     @Override
     public void create(NewsEntryFullDto dto) {
-        validateNewsEntryId(dto);
+        validateOrFillRecordNewsEntryId(dto);
         consume(tagSavingConsumer(dto), new NewsEntry(getOrGenerateUuidKey(dto)));
     }
 
@@ -70,7 +75,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     @Override
     public void update(NewsEntryFullDto dto) {
         validateId(dto);
-        validateNewsEntryId(dto);
+        validateRecordNewsEntryId(dto);
         consume(tagSavingConsumer(dto), new NewsEntry(dto.getId()));
     }
 
@@ -95,15 +100,31 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
         return LOGGER;
     }
 
-    private void validateNewsEntryId(NewsEntryFullDto dto) {
+    private void validateRecordNewsEntryId(NewsEntryFullDto dto) {
+        Objects.requireNonNull(dto);
+        Objects.requireNonNull(dto.getRecord());
+        if ( ! dto.getId().equals(dto.getRecord().getId())) {
+            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        }
+        if ( ! NewsEntryDtoEnum.isValid(dto.getRecord().getType())) {
+            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        }
+    }
+
+    private void validateOrFillRecordNewsEntryId(NewsEntryFullDto dto) {
         Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getRecord());
         if (dto.getId() == null) {
             UUID id = UUID.randomUUID();
             dto.setId(id);
             dto.getRecord().setId(id);
-        }
-        if ( ! dto.getId().equals(dto.getRecord().getId()))
+        } else if ( ! dto.getId().equals(dto.getRecord().getId())) {
             throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        }
+        if (dto.getRecord().getType() == null) {
+            dto.getRecord().setType(dto.getDtoClass().getSimpleName());
+        } else if ( ! NewsEntryDtoEnum.isValid(dto.getRecord().getType())) {
+            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        }
     }
 }

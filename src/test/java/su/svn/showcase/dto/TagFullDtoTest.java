@@ -127,3 +127,10 @@ class TagFullDtoTest {
     }
 }
 //EOF
+/*
+expected: <
+TagFullDto(id=0000000000000000, tag=testTag, visible=true, dateTime=2020-02-23T17:27:31.862241, records=[RecordBaseDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-23T17:27:31.862241, editDateTime=2020-02-23T17:27:31.862241, index=13, type=NewsEntryFullDto)])> but was: <
+TagFullDto(id=0000000000000000, tag=testTag, visible=true, dateTime=2020-02-23T17:27:31.862241, records=[RecordBaseDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-23T17:27:31.862241, editDateTime=2020-02-23T17:27:31.862241, index=13, type=null)])>
+
+
+ */

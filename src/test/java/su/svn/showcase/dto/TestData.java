@@ -8,6 +8,8 @@
 
 package su.svn.showcase.dto;
 
+import su.svn.showcase.domain.NewsEntry;
+
 import static su.svn.utils.TestData.*;
 
 public class TestData {
@@ -76,14 +78,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType0")
+            .type(null)
             .build();
     private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType1")
+            .type(null)
             .build();
 
     private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()
@@ -91,14 +93,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type("testType0")
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type("testType1")
+            .type(NewsEntryFullDto.class.getSimpleName())
             .build();
 
     private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()
@@ -149,6 +151,8 @@ public class TestData {
 
         recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+        recordFullDto0.setNewsEntry(cloneNewsEntryBaseDto0());
+        recordFullDto1.setNewsEntry(cloneNewsEntryBaseDto1());
         recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
         recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
 
