@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -42,12 +42,6 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
 
     private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto dto) {
         return entity -> {
-            System.out.println("tagSavingConsumer tdo = " + dto);
-            System.out.println("tagSavingConsumer entity = " + entity);
-            UserLoginDto userLoginDto = dto.getRecord() == null ? null :
-                    (dto.getRecord() instanceof RecordFullDto ?
-                            ((RecordFullDto) dto.getRecord()).getUserLogin() : null);
-            System.out.println("tagSavingConsumer userLoginDto = " + userLoginDto);
             entity = dto.update(entity);
             newsEntryDao.save(entity);
         };
@@ -104,10 +98,10 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
         Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getRecord());
         if ( ! dto.getId().equals(dto.getRecord().getId())) {
-            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+            throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getRecord().getId(), dto.getId());
         }
-        if ( ! NewsEntryDtoEnum.isValid(dto.getRecord().getType())) {
-            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        if ( ! NewsEntryDtoEnum.containsValue(dto.getRecord().getType())) {
+            throw ErrorCase.unknownType(dto.getRecord().getType());
         }
     }
 
@@ -119,12 +113,12 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
             dto.setId(id);
             dto.getRecord().setId(id);
         } else if ( ! dto.getId().equals(dto.getRecord().getId())) {
-            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+            throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getRecord().getId(), dto.getId());
         }
         if (dto.getRecord().getType() == null) {
             dto.getRecord().setType(dto.getDtoClass().getSimpleName());
-        } else if ( ! NewsEntryDtoEnum.isValid(dto.getRecord().getType())) {
-            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+        } else if ( ! NewsEntryDtoEnum.containsValue(dto.getRecord().getType())) {
+            throw ErrorCase.unknownType(dto.getRecord().getType());
         }
     }
 }

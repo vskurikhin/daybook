@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.22 19:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
@@ -10,28 +10,17 @@ package su.svn.showcase.dto;
 
 import su.svn.showcase.utils.MapUtil;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public enum RecordTypesEnum {
 
-    NEWS_ENTRY_BASE(NewsEntryBaseDto.class.getSimpleName()),
-    NEWS_ENTRY_FULL(NewsEntryFullDto.class.getSimpleName());
+    NewsEntryBaseDto(NewsEntryBaseDto.class.getSimpleName()),
+    NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName());
 
     private static final Map<Class<?>, RecordTypesEnum> map = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
-            .add(NEWS_ENTRY_BASE, NewsEntryBaseDto.class)
-            .add(NEWS_ENTRY_FULL, NewsEntryFullDto.class)
-            .build();
-
-    private static final Set<String> stringValues;
-
-    static {
-        stringValues = Arrays.stream(RecordTypesEnum.values())
-                .map(recordTypesEnum -> recordTypesEnum.value)
-                .collect(Collectors.toSet());
-    }
+            .key(NewsEntryBaseDto.class).value(NewsEntryBaseDto)
+            .key(NewsEntryFullDto.class).value(NewsEntryFullDto)
+            .unmodifiableMap();
 
     private String value;
 
@@ -43,11 +32,15 @@ public enum RecordTypesEnum {
         return value;
     }
 
-    public static boolean isValid(String name) {
-        return stringValues.contains(name);
-    }
-
     public static RecordTypesEnum getRecordType(Class<?> tClass) {
         return map.get(tClass);
+    }
+
+    public static boolean containsValue(String name) {
+        try {
+            return map.containsValue(valueOf(name));
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 }

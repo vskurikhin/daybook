@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.22 17:46 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -11,10 +11,10 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
+import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.NewsEntryDtoEnum;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.RecordTypesEnum;
+import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordFullCrudService;
 
@@ -23,10 +23,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.lang.model.element.UnknownElementException;
 import javax.transaction.UserTransaction;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -39,12 +38,19 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     @EJB(beanName = "RecordDaoJpa")
     private RecordDao recordDao;
 
+    @EJB(beanName = "UserLoginDaoJpa")
+    private UserLoginDao userLoginDao;
+
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<Record> tagSavingConsumer(RecordFullDto tdo) {
+    private Consumer<Record> tagSavingConsumer(RecordFullDto dto) {
         return entity -> {
-            entity = tdo.update(entity);
+            UserLogin userLogin = userLoginDao.findById(dto.getUserLogin().getId())
+                    .orElseThrow(IllegalArgumentException::new);
+            validateUserLoginDto(userLogin, dto.getUserLogin());
+            entity.setUserLogin(userLogin);
+            entity = dto.update(entity);
             recordDao.save(entity);
         };
     }
@@ -96,25 +102,32 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         return LOGGER;
     }
 
+    private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
+        if ( ! userLogin.getLogin().equals(dto.getLogin())) {
+            throw ErrorCase.bad("UserLogin DTO", dto.toString());
+        }
+    }
+
     private void validateRecordId(RecordFullDto dto) {
         Objects.requireNonNull(dto);
+        Objects.requireNonNull(dto.getUserLogin());
         RecordTypesEnum type = RecordTypesEnum.valueOf(dto.getType());
         switch (type) {
-            case NEWS_ENTRY_BASE:
-            case NEWS_ENTRY_FULL:
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
                 validateRecordNewsEntry(dto);
                 break;
             default:
-                throw new IllegalArgumentException("Ids of Record and NewsEntry must be equals!");
+                throw ErrorCase.unknownType(type.toString());
         }
     }
 
     private void validateRecordNewsEntry(RecordFullDto dto) {
         Objects.requireNonNull(dto.getNewsEntry());
         if ( ! dto.getId().equals(dto.getNewsEntry().getId())) {
-            throw new IllegalArgumentException("Ids of Record and NewsEntry must be equals!");
+            throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getId(), dto.getNewsEntry().getId());
         }
-        if ( ! NewsEntryDtoEnum.isValid(dto.getType())) {
+        if ( ! NewsEntryDtoEnum.containsValue(dto.getType())) {
             throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
         }
     }
