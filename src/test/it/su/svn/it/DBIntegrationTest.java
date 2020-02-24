@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -23,13 +23,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import su.svn.showcase.dao.*;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.NewsEntryFullDto;
-import su.svn.showcase.dto.RoleBaseDto;
-import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.*;
 import su.svn.showcase.services.*;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(Arquillian.class)
@@ -67,6 +65,9 @@ public class DBIntegrationTest extends BaseIntegrationTest {
 
     @Inject
     NewsEntryFullCrudService newsEntryFullCrudService;
+
+    @Inject
+    RecordFullCrudService recordFullCrudService;
 
     @Inject
     UserTransaction userTransaction;
@@ -211,6 +212,19 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @InSequence(2452)
+    public void test_recordFullCrudService_create() throws Exception {
+        RecordFullDto dto = cloneRecordFullDto(2);
+        dto.setTags(Collections.emptySet());
+//        if ( dto.getNewsEntry() instanceof NewsEntryFullDto) {
+//            NewsEntryFullDto newsEntryFullDto = (NewsEntryFullDto) dto.getNewsEntry();
+//            newsEntryFullDto.setRecord(null);
+//        }
+//        dto.setUserLogin(null);
+        recordFullCrudService.create(dto);
+    }
+
+    @Test
     @InSequence(2500)
     public void test_newsEntryDao_save() throws Exception {
         NewsEntry entity = clean(cloneNewsEntry(0));
@@ -228,9 +242,8 @@ public class DBIntegrationTest extends BaseIntegrationTest {
 
     @Test
     @InSequence(2502)
-    public void test__create() throws Exception {
-        NewsEntryFullDto dto = cloneNewsEntryFullDto(2);
-        System.out.println("dto = " + dto);
+    public void test_newsEntryFullCrudService_create() throws Exception {
+        NewsEntryFullDto dto = cloneNewsEntryFullDto(3);
         newsEntryFullCrudService.create(dto);
     }
 

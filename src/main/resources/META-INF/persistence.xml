@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+  ~ This is free and unencumbered software released into the public domain.
+  ~ For more information, please refer to <http://unlicense.org>
+  ~ persistence.xml
+  ~ $Id$
+  -->
+
 <persistence
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     version="2.1"
@@ -18,6 +26,7 @@
       <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
       <property name="javax.persistence.schema-generation.drop-source" value="none"/>
       <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/load.sql"/>
+      <property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
     </properties>
   </persistence-unit>
 </persistence>

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -456,6 +456,14 @@ public class IntegrationTestData extends TestData {
     public static RecordFullDto cloneRecordFullDto(int i) {
         RecordFullDto dto = clone(recordFullDtos[i]);
         assert dto != null;
+        return dto;
+    }
+
+    public static RecordFullDto clean(RecordFullDto dto) {
+        if ( dto.getNewsEntry() instanceof NewsEntryFullDto) {
+            ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(null);
+        }
+        dto.setTags(Collections.emptySet());
         return dto;
     }
 
