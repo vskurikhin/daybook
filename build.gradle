@@ -69,6 +69,7 @@ ext.libVers = [
     liquibase               : getEnv('VERSION_ORG_LIQUIBASE', VERSION_ORG_LIQUIBASE),
     liquibase_gradle_plugin : getEnv('VERSION_LIQUIBASE_GRADLE_PLUGIN', VERSION_LIQUIBASE_GRADLE_PLUGIN),
     liquibase_groovy_dsl    : getEnv('VERSION_LIQUIBASE_GROOVY_DSL', VERSION_LIQUIBASE_GROOVY_DSL),
+    primefaces              : getEnv('VERSION_PRIMEFACES', VERSION_PRIMEFACES),
     projectlombok           : getEnv('VERSION_PROJECTLOMBOK', VERSION_PROJECTLOMBOK),
     slf4j                   : getEnv('VERSION_ORG_SLF4J_VERSION', VERSION_ORG_SLF4J_VERSION),
     thorntail               : getEnv('VERSION_THORNTAIL', VERSION_THORNTAIL),
@@ -100,6 +101,7 @@ dependencies {
   compile group: 'io.thorntail', name: 'thorntail-runner', version: libVers.thorntail
   compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
   compile group: 'org.postgresql', name: 'postgresql', version: libVers.drv_org_postgresql
+  compile group: 'org.primefaces', name: 'primefaces', version: libVers.primefaces
   compile group: 'org.slf4j', name: 'slf4j-api', version: libVers.slf4j
   compile group: 'org.slf4j', name: 'slf4j-simple', version: libVers.slf4j
 
