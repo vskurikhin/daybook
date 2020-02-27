@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginDto.java
@@ -36,7 +36,8 @@ public interface UserLoginDto extends Dto<UUID>, Updating<UserLogin> {
     void setPassword(String password);
 
     default UserLogin update(@NotNull UserLogin entity, Map<String, Object> values) {
-        Objects.requireNonNull(entity);
+        assert entity != null;
+        assert values != null;
         convertListIfContainsKey(UserRole.class, values, "roles").ifPresent(entity::setRoles);
 
         return update(entity);

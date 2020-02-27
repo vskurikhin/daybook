@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 14:54 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleDto.java
@@ -35,7 +35,8 @@ public interface UserRoleDto extends Dto<UUID>, Updating<UserRole> {
     void setRoleName(String roleName);
 
     default UserRole update(@NotNull UserRole entity, Map<String, Object> values) {
-        Objects.requireNonNull(entity);
+        assert entity != null;
+        assert values != null;
         convertIfContainsKey(Role.class, values, "role").ifPresent(entity::setRole);
         convertIfContainsKey(UserLogin.class, values, "userLogin").ifPresent(entity::setUserLogin);
 

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.12 23:11 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDao.java
@@ -75,7 +75,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param id - key.
      * @return record of entity by key.
-     * @throws ErrorCase if {@code id} is {@literal null}.
      */
     Optional<Record> fetchById(UUID id);
 
@@ -101,7 +100,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param ids - set of possible key values.
      * @return records of entity by condition.
-     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> fetchAllWhereIdIn(Iterable<UUID> ids);
 
@@ -111,7 +109,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @param ids - set of possible key values.
      * @return records of entity by condition.
-     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
 
@@ -177,7 +174,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param size - size.
      * @param ids - set of possible key values.
      * @return records of entity by condition.
-     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
     List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids);
 

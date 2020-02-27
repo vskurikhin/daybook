@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -23,7 +23,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.lang.model.element.UnknownElementException;
 import javax.transaction.UserTransaction;
 import java.util.*;
 import java.util.function.Consumer;
@@ -128,7 +127,7 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
             throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getId(), dto.getNewsEntry().getId());
         }
         if ( ! NewsEntryDtoEnum.containsValue(dto.getType())) {
-            throw new IllegalArgumentException("Ids of NewsEntry and Record must be equals!");
+            throw ErrorCase.unknownType(dto.getType());
         }
     }
 }
