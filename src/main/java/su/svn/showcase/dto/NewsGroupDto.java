@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupDto.java
@@ -33,6 +33,7 @@ public interface NewsGroupDto extends Dto<UUID>, Updating<NewsGroup> {
 
     default NewsGroup update(@NotNull NewsGroup entity, Map<String, Object> values) {
         assert entity != null;
+        assert values != null;
         convertListIfContainsKey(NewsEntry.class, values, "newsEntries").ifPresent(entity::setNewsEntries);
         return update(entity);
     }

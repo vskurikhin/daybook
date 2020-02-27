@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 13:36 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDaoJpa.java
@@ -15,9 +15,7 @@ import su.svn.showcase.domain.Tag;
 import su.svn.showcase.utils.CollectionUtil;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -41,18 +39,39 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if the first argument does
+     *         not denote an entity type or the second argument is
+     *         is not a valid type for that entitys primary key or
+     *         is null
      */
     @Override
     public Optional<Tag> findById(String id) {
-        return abstractDaoFindById(id);
+        return jpaFindById(id);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type or if called for a Java
+     *         Persistence query language UPDATE or DELETE statement
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public Optional<Tag> findWhereTag(String tag) {
-        return abstractDaoFindWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
+        return jpaFindWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
 
     @Override

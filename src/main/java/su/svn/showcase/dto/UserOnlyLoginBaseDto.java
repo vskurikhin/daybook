@@ -2,20 +2,24 @@
  * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserLoginBaseDto.java
+ * UserOnlyLoginBaseDto.java
  * $Id$
  */
 
 package su.svn.showcase.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import su.svn.showcase.domain.UserLogin;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The base DTO of UserLogin.
@@ -26,29 +30,21 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserLoginBaseDto implements UserLoginDto, Serializable {
+public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
 
-    private static final long serialVersionUID = 9200L;
+    private static final long serialVersionUID = 9209L;
 
     @NotNull
     private UUID id;
 
     @NotNull
-    private LocalDateTime dateTime;
-
-    @NotNull
     @Size(min = 1, max = 64, message = "Size of code cannot be greater than {max} Characters")
     private String login;
 
-    @Size(max = 256, message = "Size of code cannot be greater than {max} Characters")
-    private String password;
-
-    public UserLoginBaseDto(@NotNull UserLogin entity) {
+    public UserOnlyLoginBaseDto(@NotNull UserLogin entity) {
         assert entity != null;
         this.id = entity.getId();
-        this.dateTime = entity.getDateTime();
         this.login = entity.getLogin();
-        this.password = entity.getPassword();
     }
 
     @Override
@@ -59,11 +55,34 @@ public class UserLoginBaseDto implements UserLoginDto, Serializable {
     @Override
     public UserLogin update(@NotNull UserLogin entity) {
         assert entity != null;
-        entity.setDateTime(this.dateTime);
         entity.setLogin(this.login);
-        entity.setPassword(this.password);
 
         return entity;
+    }
+
+    @Override
+    public LocalDateTime getDateTime() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setDateTime(LocalDateTime dateTime) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String getPassword() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void setPassword(String password) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public UserLogin update(@NotNull UserLogin entity, Map<String, Object> values) {
+        return update(entity);
     }
 }
 //EOF

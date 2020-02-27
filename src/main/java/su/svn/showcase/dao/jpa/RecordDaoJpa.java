@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.13 20:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -37,10 +37,14 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if the first argument does
+     *         not denote an entity type or the second argument is
+     *         is not a valid type for that entitys primary key or
+     *         is null
      */
     @Override
     public Optional<Record> findById(UUID id) {
-        return abstractDaoFindById(id);
+        return jpaFindById(id);
     }
 
 
@@ -138,7 +142,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public Optional<Record> fetchById(UUID id) {
-        return abstractDaoFindWhereField(Record.FETCH_BY_ID, "id", id);
+        return jpaFindWhereField(Record.FETCH_BY_ID, "id", id);
     }
 
     /**

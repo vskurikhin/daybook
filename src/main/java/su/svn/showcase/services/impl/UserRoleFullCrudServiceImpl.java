@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImpl.java
@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserRoleFullCrudService;
@@ -40,11 +41,14 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @Inject
     UserTransaction userTransaction;
 
-    private Consumer<UserRole> tagSavingConsumer(UserRoleFullDto tdo) {
-        return entity -> {
-            tdo.update(entity);
-            userRoleDao.save(entity);
-        };
+    private Consumer<UserRole> tagSavingConsumer(UserRoleFullDto dto) {
+        if (dto.getUserLogin() instanceof UserOnlyLoginBaseDto) {
+            return entity -> {
+                dto.update(entity);
+                userRoleDao.save(entity);
+            };
+        }
+        throw ErrorCase.unsupportedOperation(dto.getUserLogin().getClass());
     }
 
     @Override
@@ -103,6 +107,6 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
             dto.getRole().setId(id);
         }
         if ( ! dto.getId().equals(dto.getRole().getId()))
-            throw new IllegalArgumentException("Ids of UserRole and Role must be equals!");
+            throw ErrorCase.doesntEquals("Ids of UserRole and Role DTO", dto.getId(), dto.getRole().getId());
     }
 }

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.16 00:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserLogin.java$
+ * UserLogin.java
  * $Id$
  */
 
@@ -30,7 +30,11 @@ import static su.svn.showcase.domain.UserLogin.*;
 @NamedQueries({
     @NamedQuery(
         name = FIND_ALL,
-        query = "SELECT DISTINCT e FROM UserLogin e"
+        query = "SELECT DISTINCT e FROM UserLogin e ORDER BY e.login"
+    ),
+    @NamedQuery(
+        name = FETCH_BY_ID,
+        query = "SELECT DISTINCT e FROM UserLogin e LEFT JOIN FETCH e.roles r WHERE e.id = :id"
     ),
     @NamedQuery(
         name = FIND_WHERE_LOGIN,
@@ -38,24 +42,32 @@ import static su.svn.showcase.domain.UserLogin.*;
     ),
     @NamedQuery(
         name = FIND_ALL_IN_USER_ROLE,
-        query = "SELECT DISTINCT e FROM UserLogin e LEFT JOIN FETCH e.roles r WHERE r.roleName = :name"
+        query = "SELECT DISTINCT e" +
+                " FROM UserLogin e" +
+                " LEFT JOIN FETCH e.roles r" +
+                " WHERE r.roleName = :name" +
+                " ORDER BY r.roleName"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM UserLogin e WHERE e.id IN (:ids)"
+        query = "SELECT DISTINCT e FROM UserLogin e WHERE e.id IN (:ids) ORDER BY e.login"
     ),
 })
 public class UserLogin implements DBEntity<UUID>, Serializable {
 
     private static final long serialVersionUID = 200L;
 
-    public static final String FIND_ALL = "UserLogin.findAll";
+    public static final String FETCH_BY_ID = "UserLoginDao.fetchById";
 
-    public static final String FIND_WHERE_LOGIN = "UserLogin.findWhereLogin";
+    public static final String FIND_WHERE_LOGIN = "UserLoginDao.findWhereLogin";
 
-    public static final String FIND_ALL_IN_USER_ROLE = "UserLogin.findAllInUserRole";
+    public static final String FIND_ALL = "UserLoginDao.findAll";
 
-    public static final String FIND_ALL_WHERE_ID_IN = "UserLogin.findAllByIdIn";
+    public static final String FIND_ALL_IN_USER_ROLE = "UserLoginDao.findAllInUserRole";
+
+    public static final String FIND_ALL_WHERE_ID_IN = "UserLoginDao.findAllByIdIn";
+
+    public static final String RANGE = FIND_ALL;
 
     @Getter
     @NotNull

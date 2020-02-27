@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.13 21:28 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -75,7 +75,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     //         not denote an entity type or the second argument is
     //         is not a valid type for that entitys primary key or
     //         is null
-    Optional<E> abstractDaoFindById(K id) {
+    Optional<E> jpaFindById(K id) {
         return Optional.ofNullable(getEntityManager().find(getEClass(), id));
     }
 
@@ -88,8 +88,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws IllegalArgumentException if a query has not been
     //         defined with the given name or if the query string is
     //         found to be invalid or if the query result is found to
-    //         not be assignable to the specified type
-	// @throws IllegalStateException if called for a Java
+    //         not be assignable to the specified type or if called for a Java
 	//         Persistence query language UPDATE or DELETE statement
 	// @throws QueryTimeoutException if the query execution exceeds
 	//         the query timeout value set and only the statement is
@@ -103,7 +102,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
 	// @throws PersistenceException if the query execution exceeds
 	//         the query timeout value set and the transaction
 	//         is rolled back
-    <T> Optional<E> abstractDaoFindWhereField(String namedQuery, String parameter, T value) {
+    <T> Optional<E> jpaFindWhereField(String namedQuery, String parameter, T value) {
         EntityManager em = getEntityManager();
         try {
             return Optional.of(em.createNamedQuery(namedQuery, getEClass())
@@ -121,7 +120,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     //         not denote an entity type or the second argument is
     //         is not a valid type for that entitys primary key or
     //         is null
-    boolean abstractExistsById(K id) {
+    boolean jpaExistsById(K id) {
         try {
             return getEntityManager().find(getEClass(), id) != null;
         } catch (NoResultException e) {
@@ -374,7 +373,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws PersistenceException if the flush fails
     void abstractDaoDelete(K id) {
         EntityManager em = getEntityManager();
-        abstractDaoFindById(id).ifPresent(e -> {
+        jpaFindById(id).ifPresent(e -> {
             e = em.merge(e);
             em.remove(e);
             em.flush();
