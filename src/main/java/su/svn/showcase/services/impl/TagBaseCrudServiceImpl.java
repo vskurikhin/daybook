@@ -35,10 +35,10 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     private static final Logger LOGGER = LoggerFactory.getLogger(TagBaseCrudServiceImpl.class);
 
     @EJB(beanName = "TagDaoJpa")
-    TagDao tagDao;
+    private TagDao tagDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     private Consumer<Tag> tagSavingConsumer(TagDto tdo) {
         return entity -> {

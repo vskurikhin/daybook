@@ -35,10 +35,10 @@ public class RoleBaseCrudServiceImpl extends AbstractUserTransactionService impl
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleBaseCrudServiceImpl.class);
 
     @EJB(beanName = "RoleDaoJpa")
-    RoleDao roleDao;
+    private RoleDao roleDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     private Consumer<Role> tagSavingConsumer(RoleBaseDto tdo) {
         return entity -> {

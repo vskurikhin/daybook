@@ -22,6 +22,7 @@ import java.util.*;
  *
  * @author Victor N. Skurikhin
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

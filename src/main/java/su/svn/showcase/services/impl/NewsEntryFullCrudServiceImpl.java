@@ -11,7 +11,9 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.NewsEntryDao;
+import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.NewsEntryFullCrudService;
@@ -37,13 +39,21 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     @EJB(beanName = "NewsEntryDaoJpa")
     private NewsEntryDao newsEntryDao;
 
+    @EJB(beanName = "UserLoginDaoJpa")
+    private UserLoginDao userLoginDao;
+
     @Inject
     private UserTransaction userTransaction;
 
     private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto dto) {
         return entity -> {
-            entity = dto.update(entity);
-            newsEntryDao.save(entity);
+
+            if (dto.getRecord() instanceof RecordFullDto) {
+                UUID userLoginId = ((RecordFullDto) dto.getRecord()).getUserLogin().getId();
+                UserLogin userLogin = userLoginDao.findById(userLoginId).orElseThrow();
+                entity = dto.update(entity, userLogin);
+                newsEntryDao.save(entity);
+            }
         };
     }
 

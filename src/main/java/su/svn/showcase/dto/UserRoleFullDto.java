@@ -70,9 +70,18 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
         entity.setDateTime(this.dateTime);
         entity.setRoleName(this.roleName);
         assert this.userLogin != null;
-        entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
+        assert entity.getUserLogin() != null;
+        UserLogin userLogin = new UserLogin(this.userLogin.getId());
+        if ( ! (this.userLogin instanceof UserOnlyLoginBaseDto)) {
+            entity.setUserLogin(this.userLogin.update(userLogin));
+        }
 
         return entity;
+    }
+
+    @Override
+    public UserRole update(@NotNull UserRole entity, UserLogin userLogin) {
+        return update(entity);
     }
 }
 //EOF

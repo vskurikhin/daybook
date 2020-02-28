@@ -11,12 +11,12 @@ package su.svn.showcase.dto;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.interfaces.Updating;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -37,6 +37,8 @@ public interface NewsEntryDto extends Dto<UUID>, Updating<NewsEntry> {
     String getContent();
 
     void setContent(String content);
+
+    NewsEntry update(@NotNull NewsEntry entity, UserLogin userLogin);
 
     default NewsEntry update(@NotNull NewsEntry entity, Map<String, Object> values) {
         assert entity != null;

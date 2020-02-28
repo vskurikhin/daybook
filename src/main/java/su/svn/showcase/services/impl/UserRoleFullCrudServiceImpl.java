@@ -10,8 +10,11 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.UserRoleDao;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dto.UserLoginDto;
 import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -36,14 +39,20 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleFullCrudServiceImpl.class);
 
     @EJB(beanName = "UserRoleDaoJpa")
-    UserRoleDao userRoleDao;
+    private UserRoleDao userRoleDao;
+
+    @EJB(beanName = "UserLoginDaoJpa")
+    private UserLoginDao userLoginDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     private Consumer<UserRole> tagSavingConsumer(UserRoleFullDto dto) {
         if (dto.getUserLogin() instanceof UserOnlyLoginBaseDto) {
             return entity -> {
+                UserLogin userLogin = getUserLogin(dto);
+                validateUserLoginDto(userLogin, dto.getUserLogin());
+                entity.setUserLogin(userLogin);
                 dto.update(entity);
                 userRoleDao.save(entity);
             };
@@ -88,14 +97,14 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
         return (int) userRoleDao.count();
     }
 
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
+    private UserLogin getUserLogin(UserRoleFullDto dto) {
+        return userLoginDao.findById(dto.getUserLogin().getId()).orElseThrow();
     }
 
-    @Override
-    Logger getLogger() {
-        return LOGGER;
+    private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
+        if ( ! userLogin.getLogin().equals(dto.getLogin())) {
+            throw ErrorCase.bad("UserLogin DTO", dto.toString());
+        }
     }
 
     private void validateUserRoleId(UserRoleFullDto dto) {
@@ -106,7 +115,18 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
             dto.setId(id);
             dto.getRole().setId(id);
         }
-        if ( ! dto.getId().equals(dto.getRole().getId()))
+        if ( ! dto.getId().equals(dto.getRole().getId())) {
             throw ErrorCase.doesntEquals("Ids of UserRole and Role DTO", dto.getId(), dto.getRole().getId());
+        }
+    }
+
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
     }
 }

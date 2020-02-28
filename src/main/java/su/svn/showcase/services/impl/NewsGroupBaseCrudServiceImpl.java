@@ -35,10 +35,10 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupBaseCrudServiceImpl.class);
 
     @EJB(beanName = "NewsGroupDaoJpa")
-    NewsGroupDao newsGroupDao;
+    private NewsGroupDao newsGroupDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     private Consumer<NewsGroup> tagSavingConsumer(NewsGroupBaseDto tdo) {
         return entity -> {
