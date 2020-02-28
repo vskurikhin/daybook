@@ -50,8 +50,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
 
             if (dto.getRecord() instanceof RecordFullDto) {
                 UUID userLoginId = ((RecordFullDto) dto.getRecord()).getUserLogin().getId();
-                UserLogin userLogin = userLoginDao.findById(userLoginId).orElseThrow();
-                entity = dto.update(entity, userLogin);
+                entity = dto.update(entity, getUserLogin(userLoginId));
                 newsEntryDao.save(entity);
             }
         };
@@ -102,6 +101,10 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     @Override
     Logger getLogger() {
         return LOGGER;
+    }
+
+    private UserLogin getUserLogin(UUID id) {
+        return userLoginDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
     private void validateRecordNewsEntryId(NewsEntryFullDto dto) {

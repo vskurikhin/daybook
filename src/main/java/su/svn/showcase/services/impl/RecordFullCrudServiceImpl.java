@@ -111,7 +111,8 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     }
 
     private UserLogin getUserLogin(RecordFullDto dto) {
-        return userLoginDao.findById(dto.getUserLogin().getId()).orElseThrow();
+        return userLoginDao.findById(dto.getUserLogin().getId())
+                .orElseThrow(ErrorCase::notFound);
     }
 
     private void validateRecordNewsEntry(RecordFullDto dto) {

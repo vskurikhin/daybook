@@ -98,7 +98,8 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     }
 
     private UserLogin getUserLogin(UserRoleFullDto dto) {
-        return userLoginDao.findById(dto.getUserLogin().getId()).orElseThrow();
+        return userLoginDao.findById(dto.getUserLogin().getId())
+                .orElseThrow(ErrorCase::notFound);
     }
 
     private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
