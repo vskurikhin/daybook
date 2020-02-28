@@ -34,7 +34,7 @@ class UserRoleFullDtoTest {
 
     private UserRoleFullDto userRoleFullDto;
 
-    private UserLoginBaseDto userLoginDto;
+    private UserOnlyLoginBaseDto userLoginDto;
 
     @Test
     @DisplayName("is instantiated")
@@ -48,7 +48,7 @@ class UserRoleFullDtoTest {
         @BeforeEach
         void createNew() {
             roleBaseDto = cloneRoleBaseDto0();
-            userLoginDto = new UserLoginBaseDto();
+            userLoginDto = new UserOnlyLoginBaseDto();
             userRoleFullDto = new UserRoleFullDto();
         }
 
@@ -96,7 +96,7 @@ class UserRoleFullDtoTest {
         void createNew() {
             role = cloneRole0();
             roleBaseDto = cloneRoleBaseDto0();
-            userLoginDto = cloneUserLoginBaseDto0();
+            userLoginDto = cloneUserOnlyLoginBaseDto0();
             userRoleFullDto = cloneUserRoleFullDto0();
         }
 

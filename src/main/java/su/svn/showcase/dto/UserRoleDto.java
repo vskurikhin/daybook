@@ -34,6 +34,8 @@ public interface UserRoleDto extends Dto<UUID>, Updating<UserRole> {
 
     void setRoleName(String roleName);
 
+    UserRole update(@NotNull UserRole entity, UserLogin userLogin);
+
     default UserRole update(@NotNull UserRole entity, Map<String, Object> values) {
         assert entity != null;
         assert values != null;

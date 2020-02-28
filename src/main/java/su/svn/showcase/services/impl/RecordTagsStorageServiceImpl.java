@@ -48,16 +48,6 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
     private UserTransaction userTransaction;
 
     @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
-    Logger getLogger() {
-        return LOGGER;
-    }
-
-    @Override
     public void addTagsToRecord(RecordFullDto record, Iterable<TagBaseDto> tags) {
         execute(acceptTagsToRecord(record, tags));
     }
@@ -99,5 +89,15 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
                 .tag(tag)
                 .dateTime(LocalDateTime.now())
                 .build();
+    }
+
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
     }
 }

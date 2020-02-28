@@ -33,10 +33,10 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     private static final Logger LOGGER = LoggerFactory.getLogger(UserOnlyLoginRoServiceImpl.class);
 
     @EJB(beanName = "UserLoginDaoJpa")
-    UserLoginDao userLoginDao;
+    private UserLoginDao userLoginDao;
 
     @Inject
-    UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     @Override
     public void create(UserOnlyLoginBaseDto dto) {

@@ -72,30 +72,22 @@ public class IntegrationTestData extends TestData {
                     .build(),
     };
 
-    private static final UserLoginBaseDto[] userLoginBaseDtos = {
-            UserLoginBaseDto.builder()
+    private static final UserOnlyLoginBaseDto[] userOnlyLoginBaseDtos = {
+            UserOnlyLoginBaseDto.builder()
                     .id(USER_LOGIN_UUID0)
                     .login("loginTest0")
-                    .password("passwordTest0")
-                    .dateTime(NOW)
                     .build(),
-            UserLoginBaseDto.builder()
+            UserOnlyLoginBaseDto.builder()
                     .id(USER_LOGIN_UUID1)
                     .login("loginTest1")
-                    .password("passwordTest1")
-                    .dateTime(NOW)
                     .build(),
-            UserLoginBaseDto.builder()
+            UserOnlyLoginBaseDto.builder()
                     .id(USER_LOGIN_UUID2)
                     .login("loginTest2")
-                    .password("passwordTest2")
-                    .dateTime(NOW)
                     .build(),
-            UserLoginBaseDto.builder()
+            UserOnlyLoginBaseDto.builder()
                     .id(USER_LOGIN_UUID3)
                     .login("loginTest3")
-                    .password("passwordTest3")
-                    .dateTime(NOW)
                     .build(),
     };
 
@@ -339,13 +331,13 @@ public class IntegrationTestData extends TestData {
             userRoles[i].setRole(roles[i]);
             userRoles[i].setUserLogin(userLogins[i]);
             userRoleFullDtos[i].setRole(roleBaseDtos[i]);
-            userRoleFullDtos[i].setUserLogin(userLoginBaseDtos[i]);
+            userRoleFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
-            recordFullDtos[i].setUserLogin(userLoginBaseDtos[i]);
+            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
             recordFullDtos[i].setNewsEntry(newsEntryFullDtos[i]);
             recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);

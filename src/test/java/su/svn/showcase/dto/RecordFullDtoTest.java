@@ -31,7 +31,7 @@ import static su.svn.utils.TestData.ROLE_UUID0;
 @DisplayName("Class RecordFullDto")
 class RecordFullDtoTest {
 
-    private UserLoginBaseDto userLoginDto;
+    private UserOnlyLoginBaseDto userLoginDto;
 
     private NewsEntryBaseDto newsEntryDto;
 
@@ -48,7 +48,7 @@ class RecordFullDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            userLoginDto = cloneUserLoginBaseDto0();
+            userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
             recordFullDto = new RecordFullDto();
         }
@@ -117,7 +117,7 @@ class RecordFullDtoTest {
 
         @BeforeEach
         void createNew() {
-            userLoginDto = cloneUserLoginBaseDto0();
+            userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
             newsGroupDto = cloneNewsGroupBaseDto0();
             recordFullDto = cloneRecordFullDto0();
@@ -180,7 +180,7 @@ class RecordFullDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Record expected = clean(cloneRecord0());
-            assertEquals(expected, recordFullDto.update(new Record(ZERO)));
+            assertEquals(expected, recordFullDto.update(new Record(ZERO, expected.getUserLogin())));
         }
 
         @Test
@@ -194,3 +194,8 @@ class RecordFullDtoTest {
     }
 }
 //EOF
+/*
+expected: <
+RecordFullDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-28T16:09:13.268987, editDateTime=2020-02-28T16:09:13.268987, index=13, type=NewsEntryFullDto, userLogin=UserLoginBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, login=loginTest0, password=passwordTest0), newsEntry=NewsEntryBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, title=titleTest0, content=contentTest0))> but was: <
+RecordFullDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-28T16:09:13.268987, editDateTime=2020-02-28T16:09:13.268987, index=13, type=NewsEntryFullDto, userLogin=UserOnlyLoginBaseDto(id=00000000-0000-0000-0000-000000000000, login=loginTest0), newsEntry=NewsEntryBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, title=titleTest0, content=contentTest0))>
+ */

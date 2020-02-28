@@ -32,17 +32,13 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
-    private static final UserLoginBaseDto userLoginBaseDto0 = UserLoginBaseDto.builder()
+    private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto0 = UserOnlyLoginBaseDto.builder()
             .id(USER_LOGIN_UUID0)
             .login("loginTest0")
-            .password("passwordTest0")
-            .dateTime(NOW)
             .build();
-    private static final UserLoginBaseDto userLoginBaseDto1 = UserLoginBaseDto.builder()
+    private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto1 = UserOnlyLoginBaseDto.builder()
             .id(USER_LOGIN_UUID1)
             .login("loginTest1")
-            .password("passwordTest1")
-            .dateTime(NOW)
             .build();
 
     private static final TagBaseDto tagBaseDto0 = TagBaseDto.builder()
@@ -143,12 +139,12 @@ public class TestData {
         tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
 
         userRoleFullDto0.setRole(cloneRoleBaseDto0());
-        userRoleFullDto0.setUserLogin(cloneUserLoginBaseDto0());
+        userRoleFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         userRoleFullDto1.setRole(cloneRoleBaseDto1());
-        userRoleFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+        userRoleFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
 
-        recordFullDto0.setUserLogin(cloneUserLoginBaseDto0());
-        recordFullDto1.setUserLogin(cloneUserLoginBaseDto1());
+        recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
+        recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
         recordFullDto0.setNewsEntry(cloneNewsEntryBaseDto0());
         recordFullDto1.setNewsEntry(cloneNewsEntryBaseDto1());
         recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
@@ -174,11 +170,11 @@ public class TestData {
         return assertClone(userRoleFullDto1);
     }
 
-    public static UserLoginBaseDto cloneUserLoginBaseDto0() {
-        return assertClone(userLoginBaseDto0);
+    public static UserOnlyLoginBaseDto cloneUserOnlyLoginBaseDto0() {
+        return assertClone(userOnlyLoginBaseDto0);
     }
-    public static UserLoginBaseDto cloneUserLoginBaseDto1() {
-        return assertClone(userLoginBaseDto1);
+    public static UserOnlyLoginBaseDto cloneUserOnlyLoginBaseDto1() {
+        return assertClone(userOnlyLoginBaseDto1);
     }
 
     public static TagBaseDto cloneTagBaseDto0() {

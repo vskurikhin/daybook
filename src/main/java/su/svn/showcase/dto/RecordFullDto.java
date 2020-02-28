@@ -69,7 +69,7 @@ public class RecordFullDto implements RecordDto, Serializable {
         this.editDateTime = entity.getEditDateTime();
         this.index = entity.getIndex();
         this.type = entity.getType();
-        this.userLogin = new UserLoginBaseDto(entity.getUserLogin());
+        this.userLogin = new UserOnlyLoginBaseDto(entity.getUserLogin());
         this.newsEntry = new NewsEntryBaseDto(entity.getNewsEntry());
         this.tags = entity.getTags().stream()
                 .map(TagBaseDto::new)
@@ -89,7 +89,8 @@ public class RecordFullDto implements RecordDto, Serializable {
         entity.setIndex(this.index);
         entity.setType(this.type);
         assert this.userLogin != null;
-        entity.setUserLogin(this.userLogin.update(new UserLogin(this.userLogin.getId())));
+        assert entity.getUserLogin() != null;
+        entity.setUserLogin(this.userLogin.update(entity.getUserLogin()));
         assert this.newsEntry != null;
         entity.setNewsEntry(this.newsEntry.update(new NewsEntry(this.newsEntry.getId())));
         if (this.tags != null) {

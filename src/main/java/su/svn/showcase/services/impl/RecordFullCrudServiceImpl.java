@@ -45,8 +45,7 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
 
     private Consumer<Record> tagSavingConsumer(RecordFullDto dto) {
         return entity -> {
-            UserLogin userLogin = userLoginDao.findById(dto.getUserLogin().getId())
-                    .orElseThrow(IllegalArgumentException::new);
+            UserLogin userLogin = getUserLogin(dto);
             validateUserLoginDto(userLogin, dto.getUserLogin());
             entity.setUserLogin(userLogin);
             entity = dto.update(entity);
@@ -91,16 +90,6 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         return (int) recordDao.count();
     }
 
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
-    Logger getLogger() {
-        return LOGGER;
-    }
-
     private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
         if ( ! userLogin.getLogin().equals(dto.getLogin())) {
             throw ErrorCase.bad("UserLogin DTO", dto.toString());
@@ -121,6 +110,11 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         }
     }
 
+    private UserLogin getUserLogin(RecordFullDto dto) {
+        return userLoginDao.findById(dto.getUserLogin().getId())
+                .orElseThrow(ErrorCase::notFound);
+    }
+
     private void validateRecordNewsEntry(RecordFullDto dto) {
         Objects.requireNonNull(dto.getNewsEntry());
         if ( ! dto.getId().equals(dto.getNewsEntry().getId())) {
@@ -129,5 +123,15 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         if ( ! NewsEntryDtoEnum.containsValue(dto.getType())) {
             throw ErrorCase.unknownType(dto.getType());
         }
+    }
+
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
     }
 }

@@ -55,9 +55,13 @@ public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
     @Override
     public UserLogin update(@NotNull UserLogin entity) {
         assert entity != null;
-        entity.setLogin(this.login);
-
-        return entity;
+        if (entity.getLogin().equals(this.login)) {
+            return entity;
+        }
+        throw new IllegalArgumentException("The login isn't equals in DTO "
+                + this.login
+                + " and entity "
+                + entity.getLogin());
     }
 
     @Override
