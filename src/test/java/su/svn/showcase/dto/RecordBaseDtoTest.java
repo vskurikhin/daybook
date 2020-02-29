@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.17 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseDtoTest.java
@@ -24,6 +24,7 @@ import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.*;
 
+@SuppressWarnings("Convert2Diamond")
 @DisplayName("Class RecordBaseDto")
 class RecordBaseDtoTest {
 
@@ -42,7 +43,7 @@ class RecordBaseDtoTest {
         void createNew() {
             recordBaseDto = new RecordBaseDto();
         }
-;
+
         @Test
         @DisplayName("default values")
         void defaults() {
@@ -146,7 +147,7 @@ class RecordBaseDtoTest {
                 put("userLogin", cloneUserLogin0());
                 put("newsEntry", clean(cloneNewsEntry0()));
             }};
-            expected.setType(null);
+            expected.setType(RecordBaseDto.class.getSimpleName());
             assertEquals(expected, recordBaseDto.update(new Record(ZERO), values));
         }
 
@@ -156,9 +157,15 @@ class RecordBaseDtoTest {
             Record entity = clean(cloneRecord0());
             RecordBaseDto expected = cloneRecordBaseDto0();
             RecordBaseDto test = new RecordBaseDto(entity);
-            test.setType(null);
+            test.setType(RecordBaseDto.class.getSimpleName());
             assertEquals(expected, test);
         }
     }
 }
 //EOF
+/*
+expected: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-29T20:43:59.145826, editDateTime=2020-02-29T20:43:59.145826, index=13, type=null, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, group=groupTest0)))> but was: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-29T20:43:59.145826, editDateTime=2020-02-29T20:43:59.145826, index=13, type=Record, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, group=groupTest0)))>
+
+ */

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 19:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupBaseCrudServiceImpl.java$
+ * NewsGroupBaseCrudServiceImpl.java
  * $Id$
  */
 
@@ -13,9 +13,11 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.NewsGroupDao;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.dto.NewsGroupBaseDto;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.exceptions.NotFound;
 import su.svn.showcase.services.NewsGroupBaseCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -40,23 +42,15 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<NewsGroup> tagSavingConsumer(NewsGroupBaseDto tdo) {
-        return entity -> {
-            tdo.update(entity);
-            newsGroupDao.save(entity);
-        };
+    @Override
+    public void create(@Nonnull NewsGroupBaseDto dto) {
+        consume(storageConsumer(dto), new NewsGroup(UUID.randomUUID()));
     }
 
     @Override
-    public void create(NewsGroupBaseDto dto) {
-        Objects.requireNonNull(dto);
-        consume(tagSavingConsumer(dto), new NewsGroup(UUID.randomUUID()));
-    }
-
-    @Override
-    public NewsGroupBaseDto readById(UUID id) {
-        Objects.requireNonNull(id);
-        return new NewsGroupBaseDto(newsGroupDao.findById(id).orElseThrow(NotFound::is));
+    public NewsGroupBaseDto readById(@Nonnull UUID id) {
+        return new NewsGroupBaseDto(newsGroupDao.findById(id)
+                .orElseThrow(NotFound::is));
     }
 
     @Override
@@ -67,13 +61,13 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
-    public void update(NewsGroupBaseDto dto) {
+    public void update(@Nonnull NewsGroupBaseDto dto) {
         validateId(dto);
-        consume(tagSavingConsumer(dto), new NewsGroup(dto.getId()));
+        consume(storageConsumer(dto), new NewsGroup(dto.getId()));
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(@Nonnull UUID id) {
         Objects.requireNonNull(id);
         newsGroupDao.delete(id);
     }
@@ -92,4 +86,16 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     Logger getLogger() {
         return LOGGER;
     }
+
+    private Consumer<NewsGroup> storageConsumer(NewsGroupBaseDto dto) {
+        return entity -> {
+            if (entity == null) {
+                entity = newsGroupDao.findById(dto.getId())
+                        .orElseThrow(ErrorCase::notFound);
+            }
+            dto.update(entity);
+            newsGroupDao.save(entity);
+        };
+    }
 }
+//EOF

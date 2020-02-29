@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupDto.java
@@ -12,7 +12,7 @@ import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.interfaces.Updating;
 
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -31,9 +31,7 @@ public interface NewsGroupDto extends Dto<UUID>, Updating<NewsGroup> {
 
     void setGroup(String group);
 
-    default NewsGroup update(@NotNull NewsGroup entity, Map<String, Object> values) {
-        assert entity != null;
-        assert values != null;
+    default NewsGroup update(@Nonnull NewsGroup entity, @Nonnull Map<String, Object> values) {
         convertListIfContainsKey(NewsEntry.class, values, "newsEntries").ifPresent(entity::setNewsEntries);
         return update(entity);
     }

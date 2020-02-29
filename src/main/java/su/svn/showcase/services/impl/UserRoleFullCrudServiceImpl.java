@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImpl.java
@@ -20,6 +20,7 @@ import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserRoleFullCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -47,29 +48,16 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<UserRole> tagSavingConsumer(UserRoleFullDto dto) {
-        if (dto.getUserLogin() instanceof UserOnlyLoginBaseDto) {
-            return entity -> {
-                UserLogin userLogin = getUserLogin(dto);
-                validateUserLoginDto(userLogin, dto.getUserLogin());
-                entity.setUserLogin(userLogin);
-                dto.update(entity);
-                userRoleDao.save(entity);
-            };
-        }
-        throw ErrorCase.unsupportedOperation(dto.getUserLogin().getClass());
-    }
-
     @Override
-    public void create(UserRoleFullDto dto) {
+    public void create(@Nonnull UserRoleFullDto dto) {
         validateUserRoleId(dto);
-        consume(tagSavingConsumer(dto), new UserRole(getOrGenerateUuidKey(dto)));
+        consume(storageConsumer(dto), new UserRole(getOrGenerateUuidKey(dto)));
     }
 
     @Override
-    public UserRoleFullDto readById(UUID id) {
-        Objects.requireNonNull(id);
-        return new UserRoleFullDto(userRoleDao.findById(id).orElseThrow(ErrorCase::notFound));
+    public UserRoleFullDto readById(@Nonnull UUID id) {
+        return new UserRoleFullDto(userRoleDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -80,21 +68,47 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     }
 
     @Override
-    public void update(UserRoleFullDto dto) {
+    public void update(@Nonnull UserRoleFullDto dto) {
         validateId(dto);
         validateUserRoleId(dto);
-        consume(tagSavingConsumer(dto), new UserRole(dto.getId()));
+        consume(storageConsumer(dto), new UserRole(dto.getId()));
     }
 
     @Override
-    public void delete(UUID id) {
-        Objects.requireNonNull(id);
+    public void delete(@Nonnull UUID id) {
         userRoleDao.delete(id);
     }
 
     @Override
     public int count() {
         return (int) userRoleDao.count();
+    }
+
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    private Consumer<UserRole> storageConsumer(UserRoleFullDto dto) {
+        if (dto.getUserLogin() instanceof UserOnlyLoginBaseDto) {
+            return entity -> {
+                if (entity == null) {
+                    entity = userRoleDao.findById(dto.getId())
+                            .orElseThrow(ErrorCase::notFound);
+                }
+                UserLogin userLogin = getUserLogin(dto);
+                validateUserLoginDto(userLogin, dto.getUserLogin());
+                entity.setUserLogin(userLogin);
+                dto.update(entity);
+                userRoleDao.save(entity);
+            };
+        }
+        throw ErrorCase.unsupportedOperation(dto.getUserLogin().getClass());
     }
 
     private UserLogin getUserLogin(UserRoleFullDto dto) {
@@ -109,7 +123,6 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     }
 
     private void validateUserRoleId(UserRoleFullDto dto) {
-        Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getRole());
         if (dto.getId() == null) {
             UUID id = UUID.randomUUID();
@@ -120,14 +133,5 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
             throw ErrorCase.doesntEquals("Ids of UserRole and Role DTO", dto.getId(), dto.getRole().getId());
         }
     }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
-    Logger getLogger() {
-        return LOGGER;
-    }
 }
+//EOF

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullDto.java
@@ -13,6 +13,7 @@ import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -63,12 +64,11 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     }
 
     @Override
-    public UserRole update(@NotNull UserRole entity) {
-        assert entity != null;
+    public UserRole update(@Nonnull UserRole entity) {
         assert this.role != null;
         entity.setRole(this.role.update(new Role(this.role.getId())));
-        entity.setDateTime(this.dateTime);
-        entity.setRoleName(this.roleName);
+        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
+        updateIfNotNull(() -> entity.setRoleName(this.roleName), this.roleName);
         assert this.userLogin != null;
         assert entity.getUserLogin() != null;
         UserLogin userLogin = new UserLogin(this.userLogin.getId());

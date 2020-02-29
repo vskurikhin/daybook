@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.22 17:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImplTest.java
@@ -48,6 +48,7 @@ import static su.svn.showcase.domain.TestData.cloneUserLogin1;
 import static su.svn.showcase.dto.TestData.cloneNewsEntryFullDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
+@SuppressWarnings("Convert2Diamond")
 @DisplayName("A NewsEntryFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {NewsEntryDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
@@ -120,6 +121,7 @@ class RecordFullCrudServiceImplTest {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
         service.create(dto);
     }
 
@@ -142,7 +144,9 @@ class RecordFullCrudServiceImplTest {
     void update(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
+        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
         when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
         service.update(dto);
     }
 

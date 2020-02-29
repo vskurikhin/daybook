@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullDto.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.*;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -69,15 +70,14 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
     }
 
     @Override
-    public NewsEntry update(@NotNull NewsEntry entity) {
-        assert entity != null;
+    public NewsEntry update(@Nonnull NewsEntry entity) {
         assert this.record != null;
         if (this.record instanceof RecordBaseDto) {
             entity.setRecord(updateRecord(this.record));
         }
         entity.getRecord().setNewsEntry(entity);
-        entity.setDateTime(this.dateTime);
-        entity.setTitle(this.title);
+        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
+        updateIfNotNull(() -> entity.setTitle(this.title), this.title);
         entity.setContent(this.content);
         assert this.newsGroup != null;
         entity.setNewsGroup(this.newsGroup.update(new NewsGroup(this.newsGroup.getId())));
@@ -86,8 +86,7 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
     }
 
     @Override
-    public NewsEntry update(@NotNull NewsEntry entity, UserLogin userLogin) {
-        assert entity != null;
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull UserLogin userLogin) {
         assert this.record != null;
         if (this.record instanceof RecordFullDto) {
             entity.setRecord(updateRecord((RecordFullDto)this.record, userLogin));

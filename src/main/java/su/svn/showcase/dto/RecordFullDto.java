@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -13,6 +13,7 @@ import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 
+import javax.annotation.Nonnull;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -77,21 +78,20 @@ public class RecordFullDto implements RecordDto, Serializable {
 
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return null;
+        return RecordFullDto.class;
     }
 
     @Override
-    public Record update(@NotNull Record entity) {
-        assert entity != null;
-        entity.setCreateDateTime(this.createDateTime);
-        entity.setEditDateTime(this.editDateTime);
-        entity.setIndex(this.index);
-        entity.setType(this.type);
+    public Record update(@Nonnull Record entity) {
+        updateIfNotNull(() -> entity.setCreateDateTime(this.createDateTime), this.createDateTime);
+        updateIfNotNull(() -> entity.setEditDateTime(this.editDateTime), this.editDateTime);
+        updateIfNotNull(() -> entity.setIndex(this.index), this.index);
+        updateIfNotNull(() -> entity.setType(this.type), this.type);
+
         assert this.userLogin != null;
         assert entity.getUserLogin() != null;
         entity.setUserLogin(this.userLogin.update(entity.getUserLogin()));
-        assert this.newsEntry != null;
-        entity.setNewsEntry(this.newsEntry.update(new NewsEntry(this.newsEntry.getId())));
+
         if (this.tags != null) {
             Set<Tag> tags = this.tags.stream()
                     .map(dto -> dto.update(new Tag(dto.getId())))
@@ -100,6 +100,24 @@ public class RecordFullDto implements RecordDto, Serializable {
         } else {
             entity.setTags(Collections.emptySet());
         }
+        return updateByType(entity);
+    }
+
+    private Record updateByType(@Nonnull Record entity) {
+        RecordTypesEnum type = RecordTypesEnum.valueOf(entity.getType());
+        switch (type) {
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
+                return updateByNewsEntryBaseDto(entity);
+        }
+        return entity;
+    }
+
+    private Record updateByNewsEntryBaseDto(@Nonnull Record entity) {
+        assert this.newsEntry != null;
+        entity.setNewsEntry(this.newsEntry.update(new NewsEntry(this.newsEntry.getId())));
+        entity.getNewsEntry().setRecord(entity);
+
         return entity;
     }
 }
