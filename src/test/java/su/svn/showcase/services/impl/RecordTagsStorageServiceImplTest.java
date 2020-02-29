@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.22 11:36 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.24 22:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryTagsStorageServiceImplTest.java
+ * RecordTagsStorageServiceImplTest.java
  * $Id$
  */
 
@@ -18,13 +18,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.NewsEntryDao;
-import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
-import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.dao.RecordDao;
+import su.svn.showcase.dao.TagDao;
+import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.services.NewsEntryTagsStorageService;
+import su.svn.showcase.services.RecordTagsStorageService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -38,7 +40,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -46,16 +47,15 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
-import static su.svn.showcase.domain.TestData.cloneTag1;
-import static su.svn.showcase.dto.TestData.cloneNewsEntryFullDto1;
-import static su.svn.showcase.dto.TestData.cloneTagBaseDto1;
+import static su.svn.showcase.domain.TestData.*;
+import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
+import static su.svn.utils.TestData.newList;
 
 @DisplayName("A NewsEntryTagsStorageServiceImplTest unit test cases")
-@AddPackages(value = {NewsEntryDao.class, NewsEntryTagsStorageService.class})
+@AddPackages(value = {RecordDao.class, RecordTagsStorageService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class NewsEntryTagsStorageServiceImplTest {
+class RecordTagsStorageServiceImplTest {
 
     @Inject
     private BeanManager beanManager;
@@ -65,8 +65,9 @@ class NewsEntryTagsStorageServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsEntryDaoJpa.class,
-            NewsEntryTagsStorageServiceImpl.class,
+            RecordDaoJpa.class,
+            TagDaoJpa.class,
+            RecordTagsStorageServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -76,13 +77,15 @@ class NewsEntryTagsStorageServiceImplTest {
             .inject(this)
             .build();
 
-    private NewsEntryDao mockDao = mock(NewsEntryDao.class);
-    private NewsEntryTagsStorageService mockService = mock(NewsEntryTagsStorageService.class);
+    private TagDao tagDao = mock(TagDao.class);
+    private RecordDao mockDao = mock(RecordDao.class);
+    private RecordTagsStorageService mockService = mock(RecordTagsStorageService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                                        mockDao);
-        put(NewsEntryDao.class.getName(),                mockDao);
-        put(NewsEntryTagsStorageService.class.getName(), mockService);
+        put(null,                                     mockDao);
+        put(RecordDao.class.getName(),                mockDao);
+        put(TagDao.class.getName(),                   tagDao);
+        put(RecordTagsStorageService.class.getName(), mockService);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -95,15 +98,15 @@ class NewsEntryTagsStorageServiceImplTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private NewsEntry entity;
-    private NewsEntryFullDto dto;
+    private Record entity;
+    private RecordFullDto dto;
     private Tag tag;
     private TagBaseDto tagDto;
 
     @BeforeEach
     void setUp() {
-        entity = cloneNewsEntry1();
-        dto = cloneNewsEntryFullDto1();
+        entity = cloneRecord0();
+        dto = cloneRecordFullDto0();
         tag = cloneTag1();
         tagDto = cloneTagBaseDto1();
     }
@@ -117,5 +120,15 @@ class NewsEntryTagsStorageServiceImplTest {
     void canInject_entityManager() {
         Assertions.assertNotNull(entityManager);
         Assertions.assertNotNull(userTransaction);
+    }
+
+
+    @Test
+    void create(RecordTagsStorageService service) {
+        Assertions.assertNotNull(service);
+        when(mockDao.fetchById(any())).thenReturn(Optional.of(entity));
+        when(tagDao.outerSection(any())).thenReturn(newList(tag.getTag()));
+        when(tagDao.findAllByTagIn(any())).thenReturn(newList(tag));
+        service.addTagsToRecord(dto, newList(tagDto) );
     }
 }

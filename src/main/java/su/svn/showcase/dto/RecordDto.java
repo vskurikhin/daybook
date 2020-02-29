@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDto.java
@@ -18,7 +18,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -45,7 +44,8 @@ public interface RecordDto extends Dto<UUID>, Updating<Record> {
     void setType(String type);
 
     default Record update(@NotNull Record entity, Map<String, Object> values) {
-        Objects.requireNonNull(entity);
+        assert entity != null;
+        assert values != null;
         convertIfContainsKey(UserLogin.class, values, "userLogin").ifPresent(entity::setUserLogin);
         convertIfContainsKey(NewsEntry.class, values, "newsEntry").ifPresent(entity::setNewsEntry);
         convertSetIfContainsKey(Tag.class, values, "tags").ifPresent(entity::setTags);

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 19:27 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupDaoJpa.java$
+ * NewsGroupDaoJpa.java
  * $Id$
  */
 
@@ -14,9 +14,7 @@ import su.svn.showcase.dao.NewsGroupDao;
 import su.svn.showcase.domain.NewsGroup;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -31,14 +29,41 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
     @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
+    /**
+     * {@inheritDoc }
+     * @throws IllegalArgumentException if the first argument does
+     *         not denote an entity type or the second argument is
+     *         is not a valid type for that entitys primary key or
+     *         is null
+     */
     @Override
     public Optional<NewsGroup> findById(UUID id) {
-        return abstractDaoFindById(id);
+        return jpaFindById(id);
     }
 
+    /**
+     * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type or if called for a Java
+     *         Persistence query language UPDATE or DELETE statement
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     */
     @Override
     public Optional<NewsGroup> findWhereGroup(String group) {
-        return abstractDaoFindWhereField(NewsGroup.FIND_WHERE_GROUP, "group", group);
+        return jpaFindWhereField(NewsGroup.FIND_WHERE_GROUP, "group", group);
     }
 
     @Override

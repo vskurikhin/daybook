@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 23:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Dao.java
@@ -26,7 +26,6 @@ public interface Dao<K, E extends DBEntity<K>> {
      *
      * @param id - key.
      * @return record of entity by key.
-     * @throws ErrorCase if {@code id} is {@literal null}.
      */
     Optional<E> findById(K id);
 

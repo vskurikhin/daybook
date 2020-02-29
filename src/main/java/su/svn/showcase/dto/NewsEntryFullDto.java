@@ -10,14 +10,12 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.utils.MapUtil;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * The extended DTO of NewsEntry.
@@ -67,56 +65,43 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
 
     @Override
     public Class<? extends Dto> getDtoClass() {
-        return null;
+        return NewsEntryFullDto.class;
     }
 
     @Override
     public NewsEntry update(@NotNull NewsEntry entity) {
         assert entity != null;
-        entity.setDateTime(this.dateTime);
-        entity.setTitle(this.title);
-        entity.setContent(this.content);
         assert this.record != null;
         if (this.record instanceof RecordBaseDto) {
             entity.setRecord(updateRecord(this.record));
-        } else if (this.record instanceof RecordFullDto) {
-            UserLoginDto userLoginDto = ((RecordFullDto) this.record).getUserLogin();
-            UserLogin userLogin = updateUserLogin(userLoginDto);
-            Set<Tag> tags = getTags((RecordFullDto) this.record);
-            Record record = Record.builder()
-                    .id(this.record.getId())
-                    .index(this.record.getIndex())
-                    .type(this.record.getType())
-                    .userLogin(userLogin)
-                    .createDateTime(this.record.getCreateDateTime())
-                    .editDateTime(this.record.getEditDateTime())
-                    .tags(tags)
-                    .build();
-            entity.setRecord(record);
         }
         entity.getRecord().setNewsEntry(entity);
+        entity.setDateTime(this.dateTime);
+        entity.setTitle(this.title);
+        entity.setContent(this.content);
         assert this.newsGroup != null;
         entity.setNewsGroup(this.newsGroup.update(new NewsGroup(this.newsGroup.getId())));
 
         return entity;
     }
 
-    private Set<Tag> getTags(@NotNull RecordFullDto record) {
-        return record.getTags().stream()
-                        .map(this::updateTag)
-                        .collect(Collectors.toSet());
-    }
+    @Override
+    public NewsEntry update(@NotNull NewsEntry entity, UserLogin userLogin) {
+        assert entity != null;
+        assert this.record != null;
+        if (this.record instanceof RecordFullDto) {
+            entity.setRecord(updateRecord((RecordFullDto)this.record, userLogin));
+        }
 
-    private Tag updateTag(TagDto dto) {
-        return dto.update(new Tag(dto.getId()));
+        return update(entity);
     }
 
     private Record updateRecord(RecordDto dto) {
         return dto.update(new Record(dto.getId()));
     }
 
-    private UserLogin updateUserLogin(UserLoginDto dto) {
-        return dto.update(new UserLogin(dto.getId()));
+    private Record updateRecord(RecordFullDto dto, UserLogin userLogin) {
+        return dto.update(new Record(dto.getId(), userLogin));
     }
 }
 //EOF

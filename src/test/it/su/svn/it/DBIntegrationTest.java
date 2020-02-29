@@ -215,12 +215,8 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @InSequence(2452)
     public void test_recordFullCrudService_create() throws Exception {
         RecordFullDto dto = cloneRecordFullDto(2);
+        System.out.println("dto = " + dto);
         dto.setTags(Collections.emptySet());
-//        if ( dto.getNewsEntry() instanceof NewsEntryFullDto) {
-//            NewsEntryFullDto newsEntryFullDto = (NewsEntryFullDto) dto.getNewsEntry();
-//            newsEntryFullDto.setRecord(null);
-//        }
-//        dto.setUserLogin(null);
         recordFullCrudService.create(dto);
     }
 

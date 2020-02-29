@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginBaseDto.java
@@ -10,7 +10,6 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.exceptions.ErrorCase;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,6 +22,7 @@ import java.util.*;
  *
  * @author Victor N. Skurikhin
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

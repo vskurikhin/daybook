@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.UserLogin;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -64,6 +65,11 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
         entity.setContent(this.content);
 
         return entity;
+    }
+
+    @Override
+    public NewsEntry update(@NotNull NewsEntry entity, UserLogin userLogin) {
+        return update(entity);
     }
 }
 //EOF

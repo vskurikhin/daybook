@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.11 22:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -14,9 +14,7 @@ import su.svn.showcase.dao.RoleDao;
 import su.svn.showcase.domain.Role;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,18 +36,39 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if the first argument does
+     *         not denote an entity type or the second argument is
+     *         is not a valid type for that entitys primary key or
+     *         is null
      */
     @Override
     public Optional<Role> findById(UUID id) {
-        return abstractDaoFindById(id);
+        return jpaFindById(id);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type or if called for a Java
+     *         Persistence query language UPDATE or DELETE statement
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public Optional<Role> findWhereRole(String role) {
-        return abstractDaoFindWhereField(Role.FIND_WHERE_ROLE, "role", role);
+        return jpaFindWhereField(Role.FIND_WHERE_ROLE, "role", role);
     }
 
     /**
