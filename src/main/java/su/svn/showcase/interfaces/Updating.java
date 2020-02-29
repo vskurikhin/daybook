@@ -1,15 +1,28 @@
+/*
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This is free and unencumbered software released into the public domain.
+ * For more information, please refer to <http://unlicense.org>
+ * Updating.java
+ * $Id$
+ */
+
 package su.svn.showcase.interfaces;
 
 import su.svn.showcase.domain.DBEntity;
 
-import javax.validation.constraints.NotNull;
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public interface Updating<E extends DBEntity> {
-    E update(@NotNull E entity);
 
-    E update(@NotNull E entity, Map<String, Object> values);
+    E update(@Nonnull E entity);
+
+    E update(@Nonnull E entity, @Nonnull Map<String, Object> values);
+
+    default void updateIfNotNull(Runnable runnable, Object o) {
+        if (o != null) runnable.run();
+    }
 
     default <T> Optional<T> convertIfContainsKey(Class<T> c, Map<String, Object> map, String key) {
 
@@ -62,3 +75,4 @@ public interface Updating<E extends DBEntity> {
         return entities.stream().filter(Objects::nonNull).collect(Collectors.toMap(DBEntity::getId, e -> e));
     }
 }
+//EOF

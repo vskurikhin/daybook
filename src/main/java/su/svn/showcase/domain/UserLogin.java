@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLogin.java
@@ -99,6 +99,7 @@ public class UserLogin implements DBEntity<UUID>, Serializable {
     private List<UserRole> roles;
 
     public UserLogin(@NotNull UUID id) {
+        assert id != null;
         this.id = id;
     }
 }

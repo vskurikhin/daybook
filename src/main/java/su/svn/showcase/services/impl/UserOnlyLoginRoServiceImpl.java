@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImpl.java
@@ -15,6 +15,7 @@ import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserOnlyLoginRoService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -39,14 +40,15 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     private UserTransaction userTransaction;
 
     @Override
-    public void create(UserOnlyLoginBaseDto dto) {
+    public void create(@Nonnull UserOnlyLoginBaseDto dto) {
         throw ErrorCase.unsupportedOperation(dto.getClass());
     }
 
     @Override
-    public UserOnlyLoginBaseDto readById(UUID id) {
+    public UserOnlyLoginBaseDto readById(@Nonnull UUID id) {
         Objects.requireNonNull(id);
-        return new UserOnlyLoginBaseDto(userLoginDao.findById(id).orElseThrow(ErrorCase::notFound));
+        return new UserOnlyLoginBaseDto(userLoginDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -57,12 +59,12 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     }
 
     @Override
-    public void update(UserOnlyLoginBaseDto dto) {
+    public void update(@Nonnull UserOnlyLoginBaseDto dto) {
         throw ErrorCase.unsupportedOperation(dto.getClass());
     }
 
     @Override
-    public void delete(UUID id) {
+    public void delete(@Nonnull UUID id) {
         throw ErrorCase.unsupportedOperation(UserOnlyLoginBaseDto.class);
     }
 
@@ -81,3 +83,4 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
         return LOGGER;
     }
 }
+//EOF

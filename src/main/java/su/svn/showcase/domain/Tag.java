@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Tag.java
@@ -113,6 +113,7 @@ public class Tag implements DBEntity<String>, Serializable {
     private Set<Record> records;
 
     public Tag(@NotNull String id) {
+        assert id != null;
         this.id = id;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseDto.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.NewsGroup;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -53,10 +54,9 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
     }
 
     @Override
-    public NewsGroup update(@NotNull NewsGroup entity) {
-        assert entity != null;
-        entity.setDateTime(this.dateTime);
-        entity.setGroup(this.group);
+    public NewsGroup update(@Nonnull NewsGroup entity) {
+        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
+        updateIfNotNull(() -> entity.setGroup(this.group), this.group);
 
         return entity;
     }

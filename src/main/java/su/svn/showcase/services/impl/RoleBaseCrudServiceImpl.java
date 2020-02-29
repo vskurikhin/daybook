@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 15:32 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleBaseCrudServiceImpl.java
@@ -16,6 +16,7 @@ import su.svn.showcase.dto.RoleBaseDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RoleBaseCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -23,7 +24,6 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -40,22 +40,13 @@ public class RoleBaseCrudServiceImpl extends AbstractUserTransactionService impl
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<Role> tagSavingConsumer(RoleBaseDto tdo) {
-        return entity -> {
-            tdo.update(entity);
-            roleDao.save(entity);
-        };
+    @Override
+    public void create(@Nonnull RoleBaseDto dto) {
+        consume(storageConsumer(dto), new Role(getOrGenerateUuidKey(dto)));
     }
 
     @Override
-    public void create(RoleBaseDto dto) {
-        Objects.requireNonNull(dto);
-        consume(tagSavingConsumer(dto), new Role(getOrGenerateUuidKey(dto)));
-    }
-
-    @Override
-    public RoleBaseDto readById(UUID id) {
-        Objects.requireNonNull(id);
+    public RoleBaseDto readById(@Nonnull UUID id) {
         return new RoleBaseDto(roleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
@@ -67,14 +58,13 @@ public class RoleBaseCrudServiceImpl extends AbstractUserTransactionService impl
     }
 
     @Override
-    public void update(RoleBaseDto dto) {
+    public void update(@Nonnull RoleBaseDto dto) {
         validateId(dto);
-        consume(tagSavingConsumer(dto), new Role(dto.getId()));
+        consume(storageConsumer(dto), new Role(dto.getId()));
     }
 
     @Override
-    public void delete(UUID id) {
-        Objects.requireNonNull(id);
+    public void delete(@Nonnull UUID id) {
         roleDao.delete(id);
     }
 
@@ -92,4 +82,16 @@ public class RoleBaseCrudServiceImpl extends AbstractUserTransactionService impl
     Logger getLogger() {
         return LOGGER;
     }
+
+    private Consumer<Role> storageConsumer(RoleBaseDto dto) {
+        return entity -> {
+            if (entity == null) {
+                entity = roleDao.findById(dto.getId())
+                        .orElseThrow(ErrorCase::notFound);
+            }
+            dto.update(entity);
+            roleDao.save(entity);
+        };
+    }
 }
+//EOF

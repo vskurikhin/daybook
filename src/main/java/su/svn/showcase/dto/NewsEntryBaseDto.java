@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryBaseDto.java
@@ -12,6 +12,7 @@ import lombok.*;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.UserLogin;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -58,17 +59,16 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
     }
 
     @Override
-    public NewsEntry update(@NotNull NewsEntry entity) {
-        assert entity != null;
-        entity.setDateTime(this.dateTime);
-        entity.setTitle(this.title);
+    public NewsEntry update(@Nonnull NewsEntry entity) {
+        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
+        updateIfNotNull(() -> entity.setTitle(this.title), this.title);
         entity.setContent(this.content);
 
         return entity;
     }
 
     @Override
-    public NewsEntry update(@NotNull NewsEntry entity, UserLogin userLogin) {
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull UserLogin userLogin) {
         return update(entity);
     }
 }

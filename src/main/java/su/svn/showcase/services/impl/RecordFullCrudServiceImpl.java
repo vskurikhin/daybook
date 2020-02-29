@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -18,6 +18,7 @@ import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordFullCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -43,26 +44,16 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<Record> tagSavingConsumer(RecordFullDto dto) {
-        return entity -> {
-            UserLogin userLogin = getUserLogin(dto);
-            validateUserLoginDto(userLogin, dto.getUserLogin());
-            entity.setUserLogin(userLogin);
-            entity = dto.update(entity);
-            recordDao.save(entity);
-        };
-    }
-
     @Override
-    public void create(RecordFullDto dto) {
+    public void create(@Nonnull RecordFullDto dto) {
         validateRecordId(dto);
-        consume(tagSavingConsumer(dto), new Record(getOrGenerateUuidKey(dto)));
+        consume(storageConsumer(dto), new Record(getOrGenerateUuidKey(dto)));
     }
 
     @Override
-    public RecordFullDto readById(UUID id) {
-        Objects.requireNonNull(id);
-        return new RecordFullDto(recordDao.findById(id).orElseThrow(ErrorCase::notFound));
+    public RecordFullDto readById(@Nonnull UUID id) {
+        return new RecordFullDto(recordDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -73,15 +64,14 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     }
 
     @Override
-    public void update(RecordFullDto dto) {
+    public void update(@Nonnull RecordFullDto dto) {
         validateId(dto);
-        validateRecordId(dto);
-        consume(tagSavingConsumer(dto), new Record(dto.getId()));
+        validateRecordUserLogin(dto.getUserLogin());
+        consume(storageConsumer(dto), new Record(dto.getId()));
     }
 
     @Override
-    public void delete(UUID id) {
-        Objects.requireNonNull(id);
+    public void delete(@Nonnull UUID id) {
         recordDao.delete(id);
     }
 
@@ -90,14 +80,50 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         return (int) recordDao.count();
     }
 
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
+    }
+
+    private Consumer<Record> storageConsumer(RecordFullDto dto) {
+        return entity -> {
+            if (entity == null) {
+                entity = recordDao.findById(dto.getId())
+                        .orElseThrow(ErrorCase::notFound);
+            }
+            UserLogin userLogin = getUserLogin(dto.getUserLogin());
+            validateUserLoginDto(userLogin, dto.getUserLogin());
+            entity.setUserLogin(userLogin);
+            entity = dto.update(entity);
+            recordDao.save(entity);
+        };
+    }
+
     private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
         if ( ! userLogin.getLogin().equals(dto.getLogin())) {
             throw ErrorCase.bad("UserLogin DTO", dto.toString());
         }
     }
 
+    private UserLogin getUserLogin(UserLoginDto userLogin) {
+        if (userLogin.getLogin() == null) {
+            return userLoginDao.findById(userLogin.getId()).orElseThrow(ErrorCase::notFound);
+        }
+        return userLoginDao.findWhereLogin(userLogin.getLogin()).orElseThrow(ErrorCase::notFound);
+    }
+
+    private void validateRecordUserLogin(UserLoginDto dto) {
+        if ( ! (dto instanceof UserOnlyLoginBaseDto)) {
+            throw ErrorCase.bad("user login DTO", String.valueOf(dto));
+        }
+    }
+
     private void validateRecordId(RecordFullDto dto) {
-        Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getUserLogin());
         RecordTypesEnum type = RecordTypesEnum.valueOf(dto.getType());
         switch (type) {
@@ -110,11 +136,6 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
         }
     }
 
-    private UserLogin getUserLogin(RecordFullDto dto) {
-        return userLoginDao.findById(dto.getUserLogin().getId())
-                .orElseThrow(ErrorCase::notFound);
-    }
-
     private void validateRecordNewsEntry(RecordFullDto dto) {
         Objects.requireNonNull(dto.getNewsEntry());
         if ( ! dto.getId().equals(dto.getNewsEntry().getId())) {
@@ -124,14 +145,5 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
             throw ErrorCase.unknownType(dto.getType());
         }
     }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
-    Logger getLogger() {
-        return LOGGER;
-    }
 }
+//EOF

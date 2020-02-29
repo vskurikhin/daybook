@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginBaseDto.java
@@ -14,11 +14,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import su.svn.showcase.domain.UserLogin;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -53,8 +53,7 @@ public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
     }
 
     @Override
-    public UserLogin update(@NotNull UserLogin entity) {
-        assert entity != null;
+    public UserLogin update(@Nonnull UserLogin entity) {
         if (entity.getLogin().equals(this.login)) {
             return entity;
         }
@@ -82,11 +81,6 @@ public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
     @Override
     public void setPassword(String password) {
         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public UserLogin update(@NotNull UserLogin entity, Map<String, Object> values) {
-        return update(entity);
     }
 }
 //EOF

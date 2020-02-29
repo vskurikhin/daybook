@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 22:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTagsStorageServiceImpl.java
@@ -21,6 +21,7 @@ import su.svn.showcase.services.RecordTagsStorageService;
 import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.StringUtil;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -48,13 +49,24 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
     private UserTransaction userTransaction;
 
     @Override
-    public void addTagsToRecord(RecordFullDto record, Iterable<TagBaseDto> tags) {
+    public void addTagsToRecord(@Nonnull RecordFullDto record, @Nonnull Iterable<TagBaseDto> tags) {
         execute(acceptTagsToRecord(record, tags));
+    }
+
+    @Override
+    UserTransaction getUserTransaction() {
+        return this.userTransaction;
+    }
+
+    @Override
+    Logger getLogger() {
+        return LOGGER;
     }
 
     private Runnable acceptTagsToRecord(RecordFullDto dto, Iterable<TagBaseDto> tags) {
         getLogger().info("acceptTagsToRecord dto: {}", dto);
         Optional<Record> recordOptional = recordDao.fetchById(dto.getId());
+        //noinspection SimplifyOptionalCallChains
         if ( ! recordOptional.isPresent()) {
             throw ErrorCase.open(getLogger(), "Don't accept a tags: {} to NewsEntryFullDto {}", tags, dto);
         }
@@ -90,14 +102,5 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
                 .dateTime(LocalDateTime.now())
                 .build();
     }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
-    Logger getLogger() {
-        return LOGGER;
-    }
 }
+//EOF
