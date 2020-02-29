@@ -78,7 +78,7 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+            cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id")
     private Record record;
 

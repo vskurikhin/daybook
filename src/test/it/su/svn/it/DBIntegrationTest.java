@@ -128,6 +128,22 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
+    @InSequence(2002)
+    public void test_userLoginDao_save_2() throws Exception {
+        UserLogin entity = clean(cloneUserLogin(2)); // TODO no roles yet
+        UserLogin expected = clean(cloneUserLogin(2)); // TODO no roles yet
+        save(userLoginDao, entity, expected);
+    }
+
+    @Test
+    @InSequence(2003)
+    public void test_userLoginDao_save_3() throws Exception {
+        UserLogin entity = clean(cloneUserLogin(3)); // TODO no roles yet
+        UserLogin expected = clean(cloneUserLogin(3)); // TODO no roles yet
+        save(userLoginDao, entity, expected);
+    }
+
+    @Test
     @InSequence(2100)
     public void test_roleDao_save() throws Exception {
         Role entity = cloneRole(0);
@@ -215,7 +231,6 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @InSequence(2452)
     public void test_recordFullCrudService_create() throws Exception {
         RecordFullDto dto = cloneRecordFullDto(2);
-        System.out.println("dto = " + dto);
         dto.setTags(Collections.emptySet());
         recordFullCrudService.create(dto);
     }

@@ -49,8 +49,24 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
             validateUserLoginDto(userLogin, dto.getUserLogin());
             entity.setUserLogin(userLogin);
             entity = dto.update(entity);
+            entity = updateByType(entity);
             recordDao.save(entity);
         };
+    }
+
+    private Record updateByType(Record entity) {
+        RecordTypesEnum type = RecordTypesEnum.valueOf(entity.getType());
+        switch (type) {
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
+                return updateByNewsEntryBaseDto(entity);
+        }
+        return entity;
+    }
+
+    private Record updateByNewsEntryBaseDto(Record entity) {
+        entity.getNewsEntry().setRecord(entity);
+        return entity;
     }
 
     @Override
