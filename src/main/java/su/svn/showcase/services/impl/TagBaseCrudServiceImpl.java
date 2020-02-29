@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 16:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagBaseCrudServiceImpl.java
@@ -17,6 +17,7 @@ import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.TagBaseCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -24,7 +25,6 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -40,23 +40,15 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<Tag> tagSavingConsumer(TagDto tdo) {
-        return entity -> {
-            tdo.update(entity);
-            tagDao.save(entity);
-        };
+    @Override
+    public void create(@Nonnull TagBaseDto dto) {
+        consume(storageConsumer(dto), new Tag(getOrGenerateStringKey(dto)));
     }
 
     @Override
-    public void create(TagBaseDto dto) {
-        Objects.requireNonNull(dto);
-        consume(tagSavingConsumer(dto), new Tag(getOrGenerateStringKey(dto)));
-    }
-
-    @Override
-    public TagBaseDto readById(String id) {
-        Objects.requireNonNull(id);
-        return new TagBaseDto(tagDao.findById(id).orElseThrow(ErrorCase::notFound));
+    public TagBaseDto readById(@Nonnull String id) {
+        return new TagBaseDto(tagDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -67,14 +59,13 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     }
 
     @Override
-    public void update(TagBaseDto dto) {
+    public void update(@Nonnull TagBaseDto dto) {
         validateId(dto);
-        consume(tagSavingConsumer(dto), new Tag(dto.getId()));
+        consume(storageConsumer(dto), new Tag(dto.getId()));
     }
 
     @Override
-    public void delete(String id) {
-        Objects.requireNonNull(id);
+    public void delete(@Nonnull String id) {
         tagDao.delete(id);
     }
 
@@ -92,4 +83,16 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     Logger getLogger() {
         return LOGGER;
     }
+
+    private Consumer<Tag> storageConsumer(TagDto dto) {
+        return entity -> {
+            if (entity == null) {
+                entity = tagDao.findById(dto.getId())
+                        .orElseThrow(ErrorCase::notFound);
+            }
+            dto.update(entity);
+            tagDao.save(entity);
+        };
+    }
 }
+//EOF

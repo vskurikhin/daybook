@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -28,6 +28,7 @@ import static su.svn.showcase.domain.Record.*;
 @ToString(exclude = {"tags"})
 @Entity
 @Table(schema = "db", name = "db_record")
+@SuppressWarnings({"SingleElementAnnotation", "JpaQlInspection"})
 @NamedQueries({
     @NamedQuery(
         name = FIND_ALL,
@@ -228,6 +229,7 @@ public class Record implements DBEntity<UUID>, Serializable {
     private Set<Tag> tags;
 
     public Record(@NotNull UUID id) {
+        assert id != null;
         this.id = id;
         this.createDateTime = LocalDateTime.now();
         this.editDateTime = LocalDateTime.now();
@@ -237,6 +239,8 @@ public class Record implements DBEntity<UUID>, Serializable {
     }
 
     public Record(@NotNull UUID id, @NotNull UserLogin userLogin) {
+        assert id != null;
+        assert userLogin != null;
         this.id = id;
         this.createDateTime = LocalDateTime.now();
         this.editDateTime = LocalDateTime.now();

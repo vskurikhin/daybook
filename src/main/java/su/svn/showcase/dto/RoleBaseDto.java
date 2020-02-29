@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.10 21:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleBaseDto.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.Role;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -49,10 +50,8 @@ public class RoleBaseDto implements RoleDto, Serializable {
     }
 
     @Override
-    public Role update(@NotNull Role entity) {
-        assert entity != null;
-        entity.setRoleName(this.roleName);
-
+    public Role update(@Nonnull Role entity) {
+        updateIfNotNull(() -> entity.setRoleName(this.roleName), this.roleName);
         return entity;
     }
 }

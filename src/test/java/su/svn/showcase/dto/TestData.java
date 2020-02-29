@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import static su.svn.utils.TestData.*;
 
+@SuppressWarnings("WeakerAccess")
 public class TestData {
 
     private static final RoleBaseDto roleBaseDto0 = RoleBaseDto.builder()
@@ -72,14 +73,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(null)
+            .type(RecordBaseDto.class.getSimpleName())
             .build();
     private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
             .id(RECORD_UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(null)
+            .type(RecordBaseDto.class.getSimpleName())
             .build();
 
     private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()

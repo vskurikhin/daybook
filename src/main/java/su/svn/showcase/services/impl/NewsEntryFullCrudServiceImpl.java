@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -18,6 +18,7 @@ import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.NewsEntryFullCrudService;
 
+import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -45,27 +46,16 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     @Inject
     private UserTransaction userTransaction;
 
-    private Consumer<NewsEntry> tagSavingConsumer(NewsEntryFullDto dto) {
-        return entity -> {
-
-            if (dto.getRecord() instanceof RecordFullDto) {
-                UUID userLoginId = ((RecordFullDto) dto.getRecord()).getUserLogin().getId();
-                entity = dto.update(entity, getUserLogin(userLoginId));
-                newsEntryDao.save(entity);
-            }
-        };
-    }
-
     @Override
-    public void create(NewsEntryFullDto dto) {
+    public void create(@Nonnull NewsEntryFullDto dto) {
         validateOrFillRecordNewsEntryId(dto);
-        consume(tagSavingConsumer(dto), new NewsEntry(getOrGenerateUuidKey(dto)));
+        consume(storageConsumer(dto), new NewsEntry(getOrGenerateUuidKey(dto)));
     }
 
     @Override
-    public NewsEntryFullDto readById(UUID id) {
-        Objects.requireNonNull(id);
-        return new NewsEntryFullDto(newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound));
+    public NewsEntryFullDto readById(@Nonnull UUID id) {
+        return new NewsEntryFullDto(newsEntryDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -76,15 +66,13 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
-    public void update(NewsEntryFullDto dto) {
-        validateId(dto);
-        validateRecordNewsEntryId(dto);
-        consume(tagSavingConsumer(dto), new NewsEntry(dto.getId()));
+    public void update(@Nonnull NewsEntryFullDto dto) {
+        validateRecordNewsEntryAndUserOnlyLogin(dto);
+        consume(storageConsumer(dto), null);
     }
 
     @Override
-    public void delete(UUID id) {
-        Objects.requireNonNull(id);
+    public void delete(@Nonnull UUID id) {
         newsEntryDao.delete(id);
     }
 
@@ -103,13 +91,34 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
         return LOGGER;
     }
 
-    private UserLogin getUserLogin(UUID id) {
-        System.out.println("id = " + id); // TODO remove
-        return userLoginDao.findById(id).orElseThrow(ErrorCase::notFound);
+    private Consumer<NewsEntry> storageConsumer(NewsEntryFullDto dto) {
+        return entity -> {
+            if (entity == null) {
+                entity = newsEntryDao.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
+                entity = dto.update(entity, entity.getRecord().getUserLogin());
+                newsEntryDao.save(entity);
+            } else if (dto.getRecord() instanceof RecordFullDto) {
+                UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
+                entity = dto.update(entity, getUserLogin(userLogin));
+                newsEntryDao.save(entity);
+            }
+        };
+    }
+
+    private UserLogin getUserLogin(UserLoginDto userLogin) {
+        if (userLogin.getLogin() == null) {
+            return userLoginDao.findById(userLogin.getId()).orElseThrow(ErrorCase::notFound);
+        }
+        return userLoginDao.findWhereLogin(userLogin.getLogin()).orElseThrow(ErrorCase::notFound);
+    }
+
+    private void validateRecordNewsEntryAndUserOnlyLogin(NewsEntryFullDto dto) {
+        validateId(dto);
+        validateRecordNewsEntryId(dto);
+        validateRecordUserLogin(dto.getRecord());
     }
 
     private void validateRecordNewsEntryId(NewsEntryFullDto dto) {
-        Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getRecord());
         if ( ! dto.getId().equals(dto.getRecord().getId())) {
             throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getRecord().getId(), dto.getId());
@@ -120,8 +129,9 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     private void validateOrFillRecordNewsEntryId(NewsEntryFullDto dto) {
-        Objects.requireNonNull(dto);
         Objects.requireNonNull(dto.getRecord());
+        Objects.requireNonNull(dto.getNewsGroup());
+        validateRecordUserLogin(dto.getRecord());
         if (dto.getId() == null) {
             UUID id = UUID.randomUUID();
             dto.setId(id);
@@ -135,4 +145,14 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
             throw ErrorCase.unknownType(dto.getRecord().getType());
         }
     }
+
+    private void validateRecordUserLogin(RecordDto dto) {
+        if (dto instanceof RecordFullDto) {
+            RecordFullDto recordFullDto = (RecordFullDto) dto;
+            if ( ! (recordFullDto.getUserLogin() instanceof UserOnlyLoginBaseDto)) {
+                throw ErrorCase.bad("user login DTO", String.valueOf(recordFullDto.getUserLogin()));
+            }
+        }
+    }
 }
+//EOF

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagBaseDto.java$
+ * TagBaseDto.java
  * $Id$
  */
 
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.Tag;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -55,10 +56,9 @@ public class TagBaseDto implements TagDto, Serializable {
     }
 
     @Override
-    public Tag update(@NotNull Tag entity) {
-        assert entity != null;
-        entity.setTag(this.tag);
-        entity.setDateTime(this.dateTime);
+    public Tag update(@Nonnull Tag entity) {
+        updateIfNotNull(() -> entity.setTag(this.tag), this.tag);
+        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
 
         return entity;

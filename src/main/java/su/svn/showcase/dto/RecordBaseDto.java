@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseDto.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import lombok.*;
 import su.svn.showcase.domain.Record;
 
+import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -58,12 +59,11 @@ public class RecordBaseDto implements RecordDto, Serializable {
     }
 
     @Override
-    public Record update(@NotNull Record entity) {
-        assert entity != null;
-        entity.setCreateDateTime(this.createDateTime);
-        entity.setEditDateTime(this.editDateTime);
-        entity.setIndex(this.index);
-        entity.setType(this.type);
+    public Record update(@Nonnull Record entity) {
+        updateIfNotNull(() -> entity.setCreateDateTime(this.createDateTime), this.createDateTime);
+        updateIfNotNull(() -> entity.setEditDateTime(this.editDateTime), this.editDateTime);
+        updateIfNotNull(() -> entity.setIndex(this.index), this.index);
+        updateIfNotNull(() -> entity.setType(this.type), this.type);
 
         return entity;
     }

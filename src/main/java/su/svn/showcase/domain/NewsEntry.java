@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntry.java
@@ -111,13 +111,15 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
     }
 
     public NewsEntry(@NotNull Record record) {
+        assert record != null;
         this.id = record.getId();
         this.record = record;
     }
 
     public NewsEntry(@NotNull UUID id) {
+        assert id != null;
         this.id = id;
-        this.record = new Record(id, null);
+        this.record = new Record(id);
     }
 }
 //EOF

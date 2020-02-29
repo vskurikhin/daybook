@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImplTest.java
@@ -19,7 +19,7 @@ import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.*;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.NewsEntryFullCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -34,10 +34,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -45,9 +43,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
 import static su.svn.showcase.domain.TestData.cloneUserLogin1;
-import static su.svn.showcase.dto.TestData.cloneNewsEntryFullDto1;
+import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
+@SuppressWarnings("Convert2Diamond")
 @DisplayName("A NewsEntryFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {NewsEntryDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
@@ -95,13 +94,17 @@ class NewsEntryFullCrudServiceImplTest {
 
     private NewsEntry entity;
     private NewsEntryFullDto dto;
+    private NewsGroupBaseDto newsGroupDto;
     private UserLogin userLogin;
+    private UserLoginDto userLoginDto;
 
     @BeforeEach
     void setUp() {
         entity = cloneNewsEntry1();
         dto = cloneNewsEntryFullDto1();
+        newsGroupDto = cloneNewsGroupBaseDto1();
         userLogin = cloneUserLogin1();
+        userLoginDto = cloneUserOnlyLoginBaseDto1();
     }
 
     @AfterEach
@@ -120,7 +123,39 @@ class NewsEntryFullCrudServiceImplTest {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
         when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
         service.create(dto);
+    }
+
+    private static final UUID UUID1 = UUID.randomUUID();
+    private static final LocalDateTime NOW1 = LocalDateTime.now();
+
+    @Test
+    void create_new_random(NewsEntryFullCrudService service) {
+
+        RecordFullDto recordDto = RecordFullDto.builder()
+                .id(UUID1)
+                .createDateTime(NOW1)
+                .editDateTime(NOW1)
+                .index(13)
+                .type(NewsEntryFullDto.class.getSimpleName())
+                .userLogin(userLoginDto)
+                .build();
+        NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
+                .id(UUID1)
+                .record(recordDto)
+                .dateTime(NOW1)
+                .title("titleTest1")
+                .content("contentTest1")
+                .newsGroup(newsGroupDto)
+                .build();
+        recordDto.setNewsEntry(newsEntryDto);
+
+        Assertions.assertNotNull(service);
+        when(mockDao.save(any())).thenReturn(entity);
+        when(mockUserLoginDao.findById(userLoginDto.getId())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(userLoginDto.getLogin())).thenReturn(Optional.of(userLogin));
+        service.create(newsEntryDto);
     }
 
     @Test
@@ -142,8 +177,37 @@ class NewsEntryFullCrudServiceImplTest {
     void update(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
+        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
         when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
         service.update(dto);
+    }
+
+    @Test
+    void update2(NewsEntryFullCrudService service) {
+
+        RecordFullDto recordDto = RecordFullDto.builder()
+                .id(UUID1)
+                .editDateTime(NOW1)
+                .type(NewsEntryFullDto.class.getSimpleName())
+                .userLogin(userLoginDto)
+                .build();
+        NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
+                .id(UUID1)
+                .dateTime(NOW1)
+                .title("titleTest1")
+                .content("contentTest1")
+                .record(recordDto)
+                .newsGroup(newsGroupDto)
+                .build();
+        recordDto.setNewsEntry(newsEntryDto);
+
+        Assertions.assertNotNull(service);
+        when(mockDao.save(any())).thenReturn(entity);
+        when(mockDao.findById(newsEntryDto.getId())).thenReturn(Optional.of(entity));
+        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
+        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
+        service.update(newsEntryDto);
     }
 
     @Test
