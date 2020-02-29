@@ -26,7 +26,7 @@
       <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
       <property name="javax.persistence.schema-generation.drop-source" value="none"/>
       <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/load.sql"/>
-      <property name="hibernate.event.merge.entity_copy_observer" value="allow"/>
+      <!-- property name="hibernate.event.merge.entity_copy_observer" value="allow"/ -->
     </properties>
   </persistence-unit>
 </persistence>

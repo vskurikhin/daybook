@@ -12,7 +12,6 @@ import lombok.*;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.domain.UserLogin;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

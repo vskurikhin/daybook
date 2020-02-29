@@ -104,6 +104,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     private UserLogin getUserLogin(UUID id) {
+        System.out.println("id = " + id); // TODO remove
         return userLoginDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
