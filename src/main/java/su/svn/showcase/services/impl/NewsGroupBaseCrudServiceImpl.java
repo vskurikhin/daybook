@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseCrudServiceImpl.java
@@ -50,6 +50,12 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     @Override
     public NewsGroupBaseDto readById(@Nonnull UUID id) {
         return new NewsGroupBaseDto(newsGroupDao.findById(id)
+                .orElseThrow(NotFound::is));
+    }
+
+    @Override
+    public NewsGroupBaseDto readByGroup(@Nonnull String group) {
+        return new NewsGroupBaseDto(newsGroupDao.findWhereGroup(group)
                 .orElseThrow(NotFound::is));
     }
 

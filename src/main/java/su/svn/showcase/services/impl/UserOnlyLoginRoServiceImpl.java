@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImpl.java
@@ -23,7 +23,6 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.transaction.UserTransaction;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,8 +45,13 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
 
     @Override
     public UserOnlyLoginBaseDto readById(@Nonnull UUID id) {
-        Objects.requireNonNull(id);
         return new UserOnlyLoginBaseDto(userLoginDao.findById(id)
+                .orElseThrow(ErrorCase::notFound));
+    }
+
+    @Override
+    public UserOnlyLoginBaseDto readByLogin(@Nonnull String login) {
+        return new UserOnlyLoginBaseDto(userLoginDao.findWhereLogin(login)
                 .orElseThrow(ErrorCase::notFound));
     }
 

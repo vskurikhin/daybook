@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -46,7 +46,7 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
 
     @Override
     public void create(@Nonnull RecordFullDto dto) {
-        validateRecordId(dto);
+        validateId(dto);
         consume(storageConsumer(dto), new Record(getOrGenerateUuidKey(dto)));
     }
 
