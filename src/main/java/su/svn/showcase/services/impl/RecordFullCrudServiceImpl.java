@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -24,6 +24,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.*;
 import java.util.function.Consumer;
@@ -51,12 +52,14 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     }
 
     @Override
+    @Transactional
     public RecordFullDto readById(@Nonnull UUID id) {
         return new RecordFullDto(recordDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
     public List<RecordFullDto> readRange(int start, int size) {
         return recordDao.range(start, size).stream()
                 .map(RecordFullDto::new)
@@ -64,18 +67,22 @@ public class RecordFullCrudServiceImpl extends AbstractUserTransactionService im
     }
 
     @Override
+    @Transactional
     public void update(@Nonnull RecordFullDto dto) {
         validateId(dto);
         validateRecordUserLogin(dto.getUserLogin());
-        consume(storageConsumer(dto), new Record(dto.getId()));
+        Consumer<Record> consumer = storageConsumer(dto);
+        consumer.accept(null);
     }
 
     @Override
+    @Transactional
     public void delete(@Nonnull UUID id) {
         recordDao.delete(id);
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) recordDao.count();
     }

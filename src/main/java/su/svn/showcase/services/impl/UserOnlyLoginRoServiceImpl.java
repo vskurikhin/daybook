@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImpl.java
@@ -21,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.UUID;
@@ -44,18 +45,21 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     }
 
     @Override
+    @Transactional
     public UserOnlyLoginBaseDto readById(@Nonnull UUID id) {
         return new UserOnlyLoginBaseDto(userLoginDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
     public UserOnlyLoginBaseDto readByLogin(@Nonnull String login) {
         return new UserOnlyLoginBaseDto(userLoginDao.findWhereLogin(login)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
     public List<UserOnlyLoginBaseDto> readRange(int start, int size) {
         return userLoginDao.range(start, size).stream()
                 .map(UserOnlyLoginBaseDto::new)
@@ -73,6 +77,7 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) userLoginDao.count();
     }

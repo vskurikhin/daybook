@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 19:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateView.java
@@ -43,13 +43,7 @@ public class NewsEntryCreateView extends AbstractView {
     private NewsGroupBaseCrudService newsGroupService;
 
     @EJB
-    private RecordFullCrudService recordCrudService;
-
-    @EJB
     private RecordTagsStorageService recordTagsStorageService;
-
-    @EJB
-    private UserOnlyLoginRoService userLoginService;
 
     private NewsEntryCreateModel.Builder newsEntryModelBuilder;
 
@@ -61,9 +55,7 @@ public class NewsEntryCreateView extends AbstractView {
         newsEntryModelBuilder = NewsEntryCreateModel.builder()
                 .newsEntryCrudService(newsEntryService)
                 .newsGroupCrudService(newsGroupService)
-                .recordCrudService(recordCrudService)
-                .recordTagsStorageService(recordTagsStorageService)
-                .userOnlyLoginRoService(userLoginService);
+                .recordTagsStorageService(recordTagsStorageService);
     }
 
     public void onload() {

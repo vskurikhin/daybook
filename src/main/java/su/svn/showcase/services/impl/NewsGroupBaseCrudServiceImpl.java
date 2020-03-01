@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseCrudServiceImpl.java
@@ -23,6 +23,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Objects;
@@ -48,12 +49,14 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
+    @Transactional
     public NewsGroupBaseDto readById(@Nonnull UUID id) {
         return new NewsGroupBaseDto(newsGroupDao.findById(id)
                 .orElseThrow(NotFound::is));
     }
 
     @Override
+    @Transactional
     public NewsGroupBaseDto readByGroup(@Nonnull String group) {
         return new NewsGroupBaseDto(newsGroupDao.findWhereGroup(group)
                 .orElseThrow(NotFound::is));
@@ -73,12 +76,14 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
+    @Transactional
     public void delete(@Nonnull UUID id) {
         Objects.requireNonNull(id);
         newsGroupDao.delete(id);
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) newsGroupDao.count();
     }

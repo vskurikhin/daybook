@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -26,6 +26,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Objects;
@@ -58,12 +59,14 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
+    @Transactional
     public NewsEntryFullDto readById(@Nonnull UUID id) {
         return new NewsEntryFullDto(newsEntryDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
     public List<NewsEntryFullDto> readRange(int start, int size) {
         return newsEntryDao.range(start, size).stream()
                 .map(NewsEntryFullDto::new)
@@ -72,16 +75,18 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
 
     @Override
     public void update(@Nonnull NewsEntryFullDto dto) {
-        validateRecordNewsEntryAndUserOnlyLogin(dto);
+        validateId(dto);
         consume(storageConsumer(dto), null);
     }
 
     @Override
+    @Transactional
     public void delete(@Nonnull UUID id) {
         newsEntryDao.delete(id);
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) newsEntryDao.count();
     }
@@ -100,7 +105,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
         return entity -> {
             if (entity == null) { // update
                 entity = newsEntryDao.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
-                entity = dto.update(entity, entity.getRecord().getUserLogin());
+                entity = dto.update(entity);
                 newsEntryDao.save(entity);
             } else if (dto.getRecord() instanceof RecordFullDto) { // create
                 UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
@@ -117,22 +122,6 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
             return userLoginDao.findById(userLogin.getId()).orElseThrow(ErrorCase::notFound);
         }
         return userLoginDao.findWhereLogin(userLogin.getLogin()).orElseThrow(ErrorCase::notFound);
-    }
-
-    private void validateRecordNewsEntryAndUserOnlyLogin(NewsEntryFullDto dto) {
-        validateId(dto);
-        validateRecordNewsEntryId(dto);
-        validateRecordUserLogin(dto.getRecord());
-    }
-
-    private void validateRecordNewsEntryId(NewsEntryFullDto dto) {
-        Objects.requireNonNull(dto.getRecord());
-        if ( ! dto.getId().equals(dto.getRecord().getId())) {
-            throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getRecord().getId(), dto.getId());
-        }
-        if ( ! NewsEntryDtoEnum.containsValue(dto.getRecord().getType())) {
-            throw ErrorCase.unknownType(dto.getRecord().getType());
-        }
     }
 
     private void validateOrFillRecordNewsEntryId(NewsEntryFullDto dto) {

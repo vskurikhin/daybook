@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryCreateModel.java
+ * NewsEntryEditModel.java
  * $Id$
  */
 
@@ -21,8 +21,9 @@ import java.util.UUID;
 
 @Data
 @Builder(builderClassName = "Builder")
-class NewsEntryCreateModel {
+class NewsEntryEditModel {
 
+    private UUID uuid;
     private String title;
     private String tags;
     private String date;
@@ -37,6 +38,7 @@ class NewsEntryCreateModel {
     private final RecordTagsStorageService recordTagsStorageService;
 
     public void save() {
+        Objects.requireNonNull(uuid);
         Objects.requireNonNull(newsEntryCrudService);
         Objects.requireNonNull(newsGroupCrudService);
         Objects.requireNonNull(recordTagsStorageService);
@@ -47,11 +49,9 @@ class NewsEntryCreateModel {
         UserOnlyLoginBaseDto userLoginDto = UserOnlyLoginBaseDto.builder()
                 .login(this.login)
                 .build();
-        UUID uuid = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
         RecordFullDto recordDto = RecordFullDto.builder()
                 .id(uuid)
-                .createDateTime(now)
                 .editDateTime(now)
                 .index(13)
                 .type(NewsEntryFullDto.class.getSimpleName())
@@ -60,14 +60,15 @@ class NewsEntryCreateModel {
         NewsGroupBaseDto newsGroupBaseDto = newsGroupCrudService.readByGroup(group);
         NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
                 .id(uuid)
-                .record(recordDto)
                 .dateTime(now)
                 .title(title)
                 .content(content)
-                .newsGroup(newsGroupBaseDto)
+                //.newsGroup(newsGroupBaseDto)
                 .build();
-        recordDto.setNewsEntry(newsEntryDto);
-        newsEntryCrudService.create(newsEntryDto);
+        // recordDto.setNewsEntry(newsEntryDto);
+        System.out.println("newsEntryDto = " + newsEntryDto);
+        System.out.println("recordDto = " + recordDto);
+        newsEntryCrudService.update(newsEntryDto);
         if (tags != null) {
             Set<TagBaseDto> tagSet = StringTagSetConverter.map(tags);
             recordTagsStorageService.addTagsToRecord(recordDto, tagSet);

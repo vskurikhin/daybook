@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullDto.java
@@ -71,16 +71,17 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
 
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity) {
-        assert this.record != null;
         if (this.record instanceof RecordBaseDto) {
             entity.setRecord(updateRecord(this.record));
+            entity.getRecord().setNewsEntry(entity);
         }
-        entity.getRecord().setNewsEntry(entity);
         updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
         updateIfNotNull(() -> entity.setTitle(this.title), this.title);
         entity.setContent(this.content);
-        assert this.newsGroup != null;
-        entity.setNewsGroup(this.newsGroup.update(new NewsGroup(this.newsGroup.getId())));
+        if (this.newsGroup != null) {
+            NewsGroup newsGroup = new NewsGroup(this.newsGroup.getId());
+            entity.setNewsGroup(this.newsGroup.update(newsGroup));
+        }
 
         return entity;
     }

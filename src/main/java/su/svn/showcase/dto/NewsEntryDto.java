@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDto.java
@@ -17,6 +17,7 @@ import su.svn.showcase.interfaces.Updating;
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.UUID;
 
@@ -46,6 +47,12 @@ public interface NewsEntryDto extends Dto<UUID>, Updating<NewsEntry> {
         convertIfContainsKey(NewsGroup.class, values, "newsGroup").ifPresent(entity::setNewsGroup);
 
         return update(entity);
+    }
+
+    default String toDateDDMMYYYY() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        return getDateTime().format(formatter);
     }
 }
 //EOF
