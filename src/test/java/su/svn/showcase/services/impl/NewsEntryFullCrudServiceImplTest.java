@@ -15,9 +15,11 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.NewsEntryDao;
+import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
 import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.services.CrudService;
@@ -41,8 +43,7 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
-import static su.svn.showcase.domain.TestData.cloneUserLogin1;
+import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
@@ -72,12 +73,14 @@ class NewsEntryFullCrudServiceImplTest {
             .build();
 
     private NewsEntryDao mockDao = mock(NewsEntryDao.class);
+    private RecordDao mockRecordDao = mock(RecordDao.class);
     private UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
     private NewsEntryFullCrudService mockService = mock(NewsEntryFullCrudService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put(null,                                     mockDao);
         put(NewsEntryDao.class.getName(),             mockDao);
+        put(RecordDao.class.getName(),                mockRecordDao);
         put(NewsEntryFullCrudService.class.getName(), mockService);
         put(UserLoginDao.class.getName(),             mockUserLoginDao);
     }};
@@ -95,6 +98,7 @@ class NewsEntryFullCrudServiceImplTest {
     private NewsEntry entity;
     private NewsEntryFullDto dto;
     private NewsGroupBaseDto newsGroupDto;
+    private Record record;
     private UserLogin userLogin;
     private UserLoginDto userLoginDto;
 
@@ -103,6 +107,7 @@ class NewsEntryFullCrudServiceImplTest {
         entity = cloneNewsEntry1();
         dto = cloneNewsEntryFullDto1();
         newsGroupDto = cloneNewsGroupBaseDto1();
+        record = cloneRecord1();
         userLogin = cloneUserLogin1();
         userLoginDto = cloneUserOnlyLoginBaseDto1();
     }
@@ -122,6 +127,7 @@ class NewsEntryFullCrudServiceImplTest {
     void create(NewsEntryFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
+        when(mockRecordDao.save(any())).thenReturn(record);
         when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
         when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
         service.create(dto);
@@ -153,6 +159,7 @@ class NewsEntryFullCrudServiceImplTest {
 
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
+        when(mockRecordDao.save(any())).thenReturn(record);
         when(mockUserLoginDao.findById(userLoginDto.getId())).thenReturn(Optional.of(userLogin));
         when(mockUserLoginDao.findWhereLogin(userLoginDto.getLogin())).thenReturn(Optional.of(userLogin));
         service.create(newsEntryDto);

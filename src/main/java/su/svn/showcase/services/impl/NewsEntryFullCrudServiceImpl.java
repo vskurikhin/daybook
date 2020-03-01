@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -11,8 +11,10 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.NewsEntryDao;
+import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -39,6 +41,9 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
 
     @EJB(beanName = "NewsEntryDaoJpa")
     private NewsEntryDao newsEntryDao;
+
+    @EJB(beanName = "RecordDaoJpa")
+    private RecordDao recordDao;
 
     @EJB(beanName = "UserLoginDaoJpa")
     private UserLoginDao userLoginDao;
@@ -93,15 +98,17 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
 
     private Consumer<NewsEntry> storageConsumer(NewsEntryFullDto dto) {
         return entity -> {
-            if (entity == null) {
+            if (entity == null) { // update
                 entity = newsEntryDao.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
                 entity = dto.update(entity, entity.getRecord().getUserLogin());
                 newsEntryDao.save(entity);
-            } else if (dto.getRecord() instanceof RecordFullDto) {
+            } else if (dto.getRecord() instanceof RecordFullDto) { // create
                 UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
                 entity = dto.update(entity, getUserLogin(userLogin));
-                newsEntryDao.save(entity);
-            }
+                Record record = entity.getRecord();
+                recordDao.save(record);
+            } else
+                throw ErrorCase.open(LOGGER, "Can't save DTO {} and {}", dto, entity);
         };
     }
 
