@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 18:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDto.java
@@ -49,6 +49,10 @@ public interface RecordDto extends Dto<UUID>, Updating<Record> {
         convertSetIfContainsKey(Tag.class, values, "tags").ifPresent(entity::setTags);
 
         return update(entity);
+    }
+
+    default boolean isTypeOfNewsEntry() {
+        return NewsEntryDtoEnum.containsValue(getType());
     }
 
     default String toDateHourMinute() {
