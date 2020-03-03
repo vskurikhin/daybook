@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 20:44 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupBaseCrudServiceImplTest.java$
+ * NewsGroupBaseCrudServiceImplTest.java
  * $Id$
  */
 
@@ -132,7 +132,7 @@ class NewsGroupBaseCrudServiceImplTest {
     void update(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
-        service.update(dto);
+        Assertions.assertThrows(su.svn.showcase.exceptions.ErrorCase.class, () -> service.update(dto));
     }
 
     @Test

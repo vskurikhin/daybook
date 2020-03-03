@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -27,7 +27,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -105,18 +104,6 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
 
     private NewsEntry getNewsEntry(UUID id) {
         return newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound);
-    }
-
-    private Consumer<NewsEntry> storageConsumer(NewsEntryFullDto dto) {
-        return entity -> {
-            if (entity == null) { // update
-                entity = newsEntryDao.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
-                entity = dto.update(entity);
-                newsEntryDao.save(entity);
-            } else if (dto.getRecord() instanceof RecordFullDto) { // create
-            } else
-                throw ErrorCase.open(LOGGER, "Can't save DTO {} and {}", dto, entity);
-        };
     }
 
     private UserLogin getUserLogin(UserLoginDto userLogin) {

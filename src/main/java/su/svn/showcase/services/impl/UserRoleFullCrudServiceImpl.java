@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImpl.java
@@ -15,7 +15,6 @@ import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserLoginDto;
-import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserRoleFullCrudService;
@@ -23,13 +22,10 @@ import su.svn.showcase.services.UserRoleFullCrudService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -42,9 +38,6 @@ public class UserRoleFullCrudServiceImpl extends AbstractCrudService implements 
 
     @EJB(beanName = "UserLoginDaoJpa")
     private UserLoginDao userLoginDao;
-
-    @Inject
-    private UserTransaction userTransaction;
 
     @Override
     @Transactional

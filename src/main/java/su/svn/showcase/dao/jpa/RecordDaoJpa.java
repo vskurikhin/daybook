@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -74,10 +74,18 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException if the instance is not an
+     *          entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
      */
     @Override
     public Record save(Record entity) {
-        return abstractDaoSave(entity);
+        return jpaDaoSave(entity);
     }
 
     /**

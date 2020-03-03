@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -21,9 +21,7 @@ import su.svn.showcase.services.RecordFullCrudService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -113,29 +111,6 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     private void validateRecordUserLogin(UserLoginDto dto) {
         if ( ! (dto instanceof UserOnlyLoginBaseDto)) {
             throw ErrorCase.bad("user login DTO", String.valueOf(dto));
-        }
-    }
-
-    private void validateRecordId(RecordFullDto dto) {
-        Objects.requireNonNull(dto.getUserLogin());
-        RecordTypesEnum type = RecordTypesEnum.valueOf(dto.getType());
-        switch (type) {
-            case NewsEntryBaseDto:
-            case NewsEntryFullDto:
-                validateRecordNewsEntry(dto);
-                break;
-            default:
-                throw ErrorCase.unknownType(type.toString());
-        }
-    }
-
-    private void validateRecordNewsEntry(RecordFullDto dto) {
-        Objects.requireNonNull(dto.getNewsEntry());
-        if ( ! dto.getId().equals(dto.getNewsEntry().getId())) {
-            throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getId(), dto.getNewsEntry().getId());
-        }
-        if ( ! NewsEntryDtoEnum.containsValue(dto.getType())) {
-            throw ErrorCase.unknownType(dto.getType());
         }
     }
 }

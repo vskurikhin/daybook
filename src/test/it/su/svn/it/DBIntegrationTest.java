@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -203,6 +203,22 @@ public class DBIntegrationTest extends BaseIntegrationTest {
         List<NewsGroup> entityList = newList(clean(cloneNewsGroup(1)));
         List<NewsGroup> expected = newList(clean(cloneNewsGroup(1)));
         saveAll(newsGroupDao, entityList, expected);
+    }
+
+    @Test
+    @InSequence(2302)
+    public void test_newsGroupDao_save_2() throws Exception {
+        NewsGroup entity = clean(cloneNewsGroup(2));
+        NewsGroup expected = clean(cloneNewsGroup(2));
+        save(newsGroupDao, entity, expected);
+    }
+
+    @Test
+    @InSequence(2303)
+    public void test_newsGroupDao_save_3() throws Exception {
+        NewsGroup entity = clean(cloneNewsGroup(3));
+        NewsGroup expected = clean(cloneNewsGroup(3));
+        save(newsGroupDao, entity, expected);
     }
 
     @Test

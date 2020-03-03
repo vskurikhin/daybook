@@ -1,17 +1,20 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractUserTransactionService.java
  * $Id$
  */
 
-package su.svn.showcase.dao.utx;
+package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
+import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.Dto;
+import su.svn.showcase.dto.UserLoginDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.StringUtil;
@@ -167,30 +170,6 @@ abstract class AbstractUserTransactionService {
             }
         } catch (SystemException e) {
             getLogger().error("Can't rollback because had the exception ", exception);
-        }
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    <K, T extends DBEntity<K>> void utxExecuteBySupplier(Runnable runnable) {
-        try {
-            getUserTransaction().begin();
-            runnable.run();
-            getUserTransaction().commit();
-        } catch ( NotSupportedException
-                | HeuristicMixedException
-                | HeuristicRollbackException
-                | RollbackException
-                | RuntimeException
-                | SystemException e) {
-            try {
-                if (getUserTransaction().getStatus() != Status.STATUS_NO_TRANSACTION) {
-                    getUserTransaction().rollback();
-                }
-            } catch (SystemException ex) {
-                getLogger().error("Can't rollback because had the exception ", ex);
-            }
-            throw ErrorCase.open(getLogger(), "Can't execute because had the exception ", e);
         }
     }
 
