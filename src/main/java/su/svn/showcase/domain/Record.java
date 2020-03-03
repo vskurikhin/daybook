@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -213,7 +213,8 @@ public class Record implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @Nullable
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id")
     private NewsEntry newsEntry;
 

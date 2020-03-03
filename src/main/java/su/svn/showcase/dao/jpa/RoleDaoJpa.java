@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -31,8 +31,8 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleDaoJpa.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -169,7 +169,7 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     /**

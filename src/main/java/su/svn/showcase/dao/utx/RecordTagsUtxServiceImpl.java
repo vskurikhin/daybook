@@ -1,12 +1,12 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordTagsStorageServiceImpl.java
+ * RecordTagsUtxServiceImpl.java
  * $Id$
  */
 
-package su.svn.showcase.services.impl;
+package su.svn.showcase.dao.utx;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,17 +27,22 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
+public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
        implements RecordTagsStorageService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecordTagsStorageServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecordTagsUtxServiceImpl.class);
 
     @EJB(beanName = "TagDaoJpa")
     private TagDao tagDao;
@@ -45,12 +50,16 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
     @EJB(beanName = "RecordDaoJpa")
     private RecordDao recordDao;
 
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
+
     @Inject
     private UserTransaction userTransaction;
 
     @Override
+    @Transactional
     public void addTagsToRecord(@Nonnull RecordFullDto record, @Nonnull Iterable<TagBaseDto> tags) {
-        execute(acceptTagsToRecord(record, tags));
+        utxExecuteBySupplier(acceptTagsToRecord(record, tags));
     }
 
     @Override

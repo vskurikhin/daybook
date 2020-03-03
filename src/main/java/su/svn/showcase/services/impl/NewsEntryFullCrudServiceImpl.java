@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -23,11 +23,7 @@ import su.svn.showcase.services.NewsEntryFullCrudService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -35,8 +31,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService implements NewsEntryFullCrudService {
+public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements NewsEntryFullCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullCrudServiceImpl.class);
 
@@ -49,13 +44,11 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     @EJB(beanName = "UserLoginDaoJpa")
     private UserLoginDao userLoginDao;
 
-    @Inject
-    private UserTransaction userTransaction;
-
     @Override
+    @Transactional
     public void create(@Nonnull NewsEntryFullDto dto) {
         validateOrFillRecordNewsEntryId(dto);
-        consume(storageConsumer(dto), new NewsEntry(getOrGenerateUuidKey(dto)));
+        create(new NewsEntry(getOrGenerateUuidKey(dto)), dto);
     }
 
     @Override
@@ -74,9 +67,10 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
+    @Transactional
     public void update(@Nonnull NewsEntryFullDto dto) {
         validateId(dto);
-        consume(storageConsumer(dto), null);
+        update(getNewsEntry(dto.getId()), dto);
     }
 
     @Override
@@ -92,13 +86,25 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
     Logger getLogger() {
         return LOGGER;
+    }
+
+    private void create(NewsEntry entity, NewsEntryFullDto dto) {
+        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
+        entity = dto.update(entity, getUserLogin(userLogin));
+        Record record = entity.getRecord();
+        recordDao.save(record);
+    }
+
+    private void update(NewsEntry entity, NewsEntryFullDto dto) {
+        entity = dto.update(entity);
+        Record record = entity.getRecord();
+        recordDao.save(record);
+    }
+
+    private NewsEntry getNewsEntry(UUID id) {
+        return newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
     private Consumer<NewsEntry> storageConsumer(NewsEntryFullDto dto) {
@@ -108,10 +114,6 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
                 entity = dto.update(entity);
                 newsEntryDao.save(entity);
             } else if (dto.getRecord() instanceof RecordFullDto) { // create
-                UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
-                entity = dto.update(entity, getUserLogin(userLogin));
-                Record record = entity.getRecord();
-                recordDao.save(record);
             } else
                 throw ErrorCase.open(LOGGER, "Can't save DTO {} and {}", dto, entity);
         };
@@ -132,7 +134,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
             UUID id = UUID.randomUUID();
             dto.setId(id);
             dto.getRecord().setId(id);
-        } else if ( ! dto.getId().equals(dto.getRecord().getId())) {
+        } else if (notEquals(dto.getId(), dto.getRecord().getId())) {
             throw ErrorCase.doesntEquals("Ids of Record and NewsEntry DTO", dto.getRecord().getId(), dto.getId());
         }
         if (dto.getRecord().getType() == null) {
@@ -149,6 +151,10 @@ public class NewsEntryFullCrudServiceImpl extends AbstractUserTransactionService
                 throw ErrorCase.bad("user login DTO", String.valueOf(recordFullDto.getUserLogin()));
             }
         }
+    }
+
+    private boolean notEquals(UUID id1, UUID id2) {
+        return ! id1.equals(id2);
     }
 }
 //EOF

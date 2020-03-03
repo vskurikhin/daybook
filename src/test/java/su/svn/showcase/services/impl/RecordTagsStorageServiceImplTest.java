@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 22:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTagsStorageServiceImplTest.java
@@ -22,6 +22,7 @@ import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.dao.jpa.RecordDaoJpa;
 import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.dao.utx.RecordTagsUtxServiceImpl;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordFullDto;
@@ -67,7 +68,7 @@ class RecordTagsStorageServiceImplTest {
     WeldInitiator weld = WeldInitiator.from(
             RecordDaoJpa.class,
             TagDaoJpa.class,
-            RecordTagsStorageServiceImpl.class,
+            RecordTagsUtxServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDaoJpa.java
@@ -26,8 +26,8 @@ public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryDaoJpa.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -142,7 +142,7 @@ public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements 
 
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return entityManager;
     }
 
     @Override

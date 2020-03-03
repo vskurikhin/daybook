@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagBaseCrudServiceImpl.java
@@ -13,37 +13,27 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.TagBaseCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.transaction.UserTransaction;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class TagBaseCrudServiceImpl extends AbstractUserTransactionService implements TagBaseCrudService {
+public class TagBaseCrudServiceImpl extends AbstractCrudService implements TagBaseCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagBaseCrudServiceImpl.class);
 
     @EJB(beanName = "TagDaoJpa")
     private TagDao tagDao;
 
-    @Inject
-    private UserTransaction userTransaction;
-
     @Override
     public void create(@Nonnull TagBaseDto dto) {
-        consume(storageConsumer(dto), new Tag(getOrGenerateStringKey(dto)));
+        saveUpdatedEntity(new Tag(getOrGenerateStringKey(dto)), dto);
     }
 
     @Override
@@ -62,9 +52,10 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     }
 
     @Override
+    @Transactional
     public void update(@Nonnull TagBaseDto dto) {
         validateId(dto);
-        consume(storageConsumer(dto), new Tag(dto.getId()));
+        saveUpdatedEntity(getTag(dto.getId()), dto);
     }
 
     @Override
@@ -80,24 +71,17 @@ public class TagBaseCrudServiceImpl extends AbstractUserTransactionService imple
     }
 
     @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
-    }
-
-    @Override
     Logger getLogger() {
         return LOGGER;
     }
 
-    private Consumer<Tag> storageConsumer(TagDto dto) {
-        return entity -> {
-            if (entity == null) {
-                entity = tagDao.findById(dto.getId())
-                        .orElseThrow(ErrorCase::notFound);
-            }
-            dto.update(entity);
-            tagDao.save(entity);
-        };
+    private void saveUpdatedEntity(Tag entity, TagBaseDto dto) {
+        entity = dto.update(entity);
+        tagDao.save(entity);
+    }
+
+    private Tag getTag(String id) {
+        return tagDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 }
 //EOF
