@@ -50,13 +50,6 @@ class NewsEntryEditModel {
                 .login(this.login)
                 .build();
         LocalDateTime now = LocalDateTime.now();
-        RecordFullDto recordDto = RecordFullDto.builder()
-                .id(uuid)
-                .editDateTime(now)
-                .index(13)
-                .type(NewsEntryFullDto.class.getSimpleName())
-                .userLogin(userLoginDto)
-                .build();
         NewsGroupBaseDto newsGroupBaseDto = newsGroupCrudService.readByGroup(group);
         NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
                 .id(uuid)
@@ -67,10 +60,17 @@ class NewsEntryEditModel {
                 .build();
         // recordDto.setNewsEntry(newsEntryDto);
         System.out.println("newsEntryDto = " + newsEntryDto);
-        System.out.println("recordDto = " + recordDto);
         newsEntryCrudService.update(newsEntryDto);
         if (tags != null) {
+            RecordFullDto recordDto = RecordFullDto.builder()
+                    .id(uuid)
+                    .editDateTime(now)
+                    .index(13)
+                    .type(NewsEntryFullDto.class.getSimpleName())
+                    .userLogin(userLoginDto)
+                    .build();
             Set<TagBaseDto> tagSet = StringTagSetConverter.map(tags);
+            System.out.println("recordDto = " + recordDto);
             recordTagsStorageService.addTagsToRecord(recordDto, tagSet);
         }
     }

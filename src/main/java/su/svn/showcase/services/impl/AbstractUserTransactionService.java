@@ -9,12 +9,8 @@
 package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
-import su.svn.showcase.dao.Dao;
-import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.DBEntity;
-import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.Dto;
-import su.svn.showcase.dto.UserLoginDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.StringUtil;

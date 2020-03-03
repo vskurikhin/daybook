@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
-import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -52,7 +51,6 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
     private UserTransaction userTransaction;
 
     @Override
-    @Transactional
     public void addTagsToRecord(@Nonnull RecordFullDto record, @Nonnull Iterable<TagBaseDto> tags) {
         utxExecuteBySupplier(() -> acceptTagsToRecord(record, tags));
     }

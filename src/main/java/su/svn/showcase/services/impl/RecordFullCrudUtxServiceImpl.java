@@ -37,14 +37,6 @@ public class RecordFullCrudUtxServiceImpl extends AbstractUserTransactionService
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullCrudUtxServiceImpl.class);
 
-    /*
-    @EJB(beanName = "RecordDaoJpa")
-    private RecordDao recordDao;
-
-    @EJB(beanName = "UserLoginDaoJpa")
-    private UserLoginDao userLoginDao;
-     */
-
     @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
 
@@ -81,7 +73,7 @@ public class RecordFullCrudUtxServiceImpl extends AbstractUserTransactionService
 
     @Override
     public void delete(@Nonnull UUID id) {
-        // recordDao.delete(id);
+        // TODO recordDao.delete(id);
     }
 
     @Override
