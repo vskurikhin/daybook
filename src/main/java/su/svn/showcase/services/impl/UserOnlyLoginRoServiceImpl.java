@@ -28,7 +28,7 @@ public class UserOnlyLoginRoServiceImpl extends AbstractCrudService implements U
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserOnlyLoginRoServiceImpl.class);
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
     @Override

@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.dao.jpa.NewsGroupDaoJpa;
+import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.services.CrudService;
@@ -58,7 +58,7 @@ class NewsGroupBaseCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsGroupDaoJpa.class,
+            NewsGroupDaoEjb.class,
             NewsGroupBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)

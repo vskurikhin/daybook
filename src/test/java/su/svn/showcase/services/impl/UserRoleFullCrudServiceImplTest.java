@@ -16,7 +16,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.UserRoleDao;
-import su.svn.showcase.dao.jpa.UserRoleDaoJpa;
+import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.services.CrudService;
@@ -59,7 +59,7 @@ class UserRoleFullCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            UserRoleDaoJpa.class,
+            UserRoleDaoEjb.class,
             UserRoleFullCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleDaoJpa.java
+ * RoleDaoEjb.java
  * $Id$
  */
 
@@ -10,27 +10,29 @@ package su.svn.showcase.dao.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dao.UserRoleDao;
-import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dao.RoleDao;
+import su.svn.showcase.domain.Role;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
- * The UserRole DAO implementation.
+ * The Role DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
 @Stateless
-public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements UserRoleDao {
+public class RoleDaoEjb extends AbstractDaoJpa<UUID, Role> implements RoleDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoleDaoEjb.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -40,7 +42,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      *         is null
      */
     @Override
-    public Optional<UserRole> findById(UUID id) {
+    public Optional<Role> findById(UUID id) {
         return jpaFindById(id);
     }
 
@@ -65,80 +67,61 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      *         is rolled back
      */
     @Override
-    public Optional<UserRole> findWhereRole(String role) {
-        return jpaFindWhereField(UserRole.FIND_WHERE_ROLE, "role", role);
+    public Optional<Role> findWhereRole(String role) {
+        return jpaFindWhereField(Role.FIND_WHERE_ROLE, "role", role);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<UserRole> findAll() {
-        return abstractDaoFindAll(UserRole.FIND_ALL);
+    public List<Role> findAll() {
+        return abstractDaoFindAll(Role.FIND_ALL);
+    }
+
+    @Override
+    public List<Role> findAllOrderByRoleAsc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_ASC);
+    }
+
+    @Override
+    public List<Role> findAllOrderByRoleDesc() {
+        return abstractDaoFindAll(Role.FIND_ALL_ORDER_BY_ROLE_DESC);
     }
 
     /**
+     * TODO
+     *
      * {@inheritDoc }
      */
     @Override
-    public List<UserRole> fetchAllOrderByRoleAsc() {
-        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_ASC);
+    public List<Role> findAllByIdIn(Iterable<UUID> ids) {
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public List<UserRole> fetchAllOrderByRoleDesc() {
-        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_DESC);
+    public List<Role> findAllWhereRole(String role) {
+        return abstractDaoFindAllWhereField(Role.FIND_WHERE_ROLE, "role", role);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public List<UserRole> findAllByIdIn(Iterable<UUID> uuids) {
-        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ID_IN, "ids", uuids);
+    public List<Role> findAllByRoleIn(Iterable<String> roles) {
+        return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public List<UserRole> findAllWhereRole(String role) {
-        return abstractDaoFindAllWhereField(UserRole.FIND_WHERE_ROLE, "role", role);
+    public List<Role> range(int start, int size) {
+        return jpaRange(Role.FIND_ALL, start, size);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public List<UserRole> findAllByRoleIn(Iterable<String> roles) {
-        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+    public List<Role> rangeOrderByRoleAsc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_ASC, start, size);
     }
 
-    /**
-     * {@inheritDoc }
-     */
     @Override
-    public List<UserRole> range(int start, int size) {
-        return jpaRange(UserRole.RANGE, start, size);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<UserRole> rangeOrderByRoleAsc(int start, int size) {
-        return jpaRange(UserRole.RANGE_ORDER_BY_ROLE_ASC, start, size);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<UserRole> rangeOrderByRoleDesc(int start, int size) {
-        return jpaRange(UserRole.RANGE_ORDER_BY_ROLE_DESC, start, size);
+    public List<Role> rangeOrderByRoleDesc(int start, int size) {
+        return jpaRange(Role.FIND_ALL_ORDER_BY_ROLE_DESC, start, size);
     }
 
     /**
@@ -161,7 +144,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * @throws PersistenceException if the flush fails
      */
     @Override
-    public UserRole save(UserRole entity) {
+    public Role save(Role entity) {
         return jpaDaoSave(entity);
     }
 
@@ -169,7 +152,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public Iterable<UserRole> saveAll(Iterable<UserRole> entities) {
+    public Iterable<Role> saveAll(Iterable<Role> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -185,7 +168,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public void deleteAll(Iterable<UserRole> entities) {
+    public void deleteAll(Iterable<Role> entities) {
         abstractDaoDeleteAll(entities);
     }
 
@@ -194,7 +177,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     /**
@@ -209,8 +192,8 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      * {@inheritDoc }
      */
     @Override
-    public Class<UserRole> getEClass() {
-        return UserRole.class;
+    public Class<Role> getEClass() {
+        return Role.class;
     }
 }
 //EOF

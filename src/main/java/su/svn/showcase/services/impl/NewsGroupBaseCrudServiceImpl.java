@@ -31,7 +31,7 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractCrudService implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupBaseCrudServiceImpl.class);
 
-    @EJB(beanName = "NewsGroupDaoJpa")
+    @EJB(beanName = "NewsGroupDaoEjb")
     private NewsGroupDao newsGroupDao;
 
     @Override

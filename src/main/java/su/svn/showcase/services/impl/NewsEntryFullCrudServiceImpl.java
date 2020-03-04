@@ -34,13 +34,13 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullCrudServiceImpl.class);
 
-    @EJB(beanName = "NewsEntryDaoJpa")
+    @EJB(beanName = "NewsEntryDaoEjb")
     private NewsEntryDao newsEntryDao;
 
-    @EJB(beanName = "RecordDaoJpa")
+    @EJB(beanName = "RecordDaoEjb")
     private RecordDao recordDao;
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
     @Override

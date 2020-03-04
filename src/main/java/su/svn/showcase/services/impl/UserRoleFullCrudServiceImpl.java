@@ -33,10 +33,10 @@ public class UserRoleFullCrudServiceImpl extends AbstractCrudService implements 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleFullCrudServiceImpl.class);
 
-    @EJB(beanName = "UserRoleDaoJpa")
+    @EJB(beanName = "UserRoleDaoEjb")
     private UserRoleDao userRoleDao;
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
     @Override

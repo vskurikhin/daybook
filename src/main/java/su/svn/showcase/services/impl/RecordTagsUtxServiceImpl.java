@@ -10,10 +10,13 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoJpa;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordTagsStorageService;
 import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.StringUtil;
@@ -29,11 +32,9 @@ import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
-import static su.svn.showcase.utils.CollectionUtil.convertList;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
@@ -41,8 +42,6 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
        implements RecordTagsStorageService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordTagsUtxServiceImpl.class);
-
-    private static final Pattern validating = Pattern.compile("[\\w\\sа-яА-Я]+");
 
     @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;
@@ -57,14 +56,11 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
 
     private EntityManager acceptTagsToRecord(RecordFullDto dto, Iterable<TagBaseDto> tags) {
         EntityManager entityManager = emf.createEntityManager();
-        Record record = getRecord(entityManager, dto);
+        RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
+        Record record = recordDaoJpa.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
         acceptTagsToRecord(entityManager, record, tags);
 
         return entityManager;
-    }
-
-    private Record getRecord(EntityManager em, RecordFullDto dto) {
-        return em.find(Record.class, dto.getId());
     }
 
     @Override
@@ -78,65 +74,26 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
     }
 
     private void acceptTagsToRecord(EntityManager entityManager, Record record, Iterable<TagBaseDto> tags) {
+        RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
+        TagDaoJpa tagDaoJpa = new TagDaoJpa(entityManager);
         Set<String> setLabels = CollectionUtil.iterableToStream(tags)
                 .map(TagBaseDto::getTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord setLabels: {}", setLabels);
-        Set<String> newTagLabels = new HashSet<>(outerSection(entityManager, setLabels));
+        Set<String> newTagLabels = new HashSet<>(tagDaoJpa.outerSection(setLabels));
         getLogger().info("acceptTagsToRecord newTagLabels: {}", newTagLabels);
         Set<Tag> newTags = newTagLabels.stream()
                 .map(this::constructTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord newTags: {}", newTags);
-        if ( record != null && ! newTags.isEmpty()) {
-            saveAll(entityManager, newTags);
-            List<Tag> savedTags = findAllByTagIn(entityManager, setLabels);
+        if (record != null && ! newTags.isEmpty()) {
+            tagDaoJpa.saveAll(newTags);
+            List<Tag> savedTags = tagDaoJpa.findAllByTagIn(setLabels);
             record.setTags(new HashSet<>(savedTags));
-            entityManager.merge(record);
-            entityManager.flush();
+            recordDaoJpa.save(record);
             getLogger().info("acceptTagsToRecord entry: {}", record);
             getLogger().info("acceptTagsToRecord entry.getTags(): {}", record.getTags());
         }
-    }
-
-    private List<Tag> findAllByTagIn(EntityManager em, Set<String> tags) {
-        return em.createNamedQuery(Tag.FIND_ALL_WHERE_TAG_IN, Tag.class)
-                .setParameter("tags", tags)
-                .getResultList();
-    }
-
-    private void saveAll(EntityManager em, Set<Tag> newTags) {
-        List<String> ids = new ArrayList<>();
-        for (Tag entity : newTags) {
-            if (null == entity.getId()) {
-                em.persist(entity);
-            } else {
-                em.merge(entity);
-            }
-            ids.add(entity.getId());
-        }
-        getLogger().info("Save {} with ids: {}", Tag.class.getSimpleName(), ids);
-    }
-
-    private List<String> outerSection(EntityManager em, Iterable<String> tags) {
-        if ( ! isValidListOfTags(tags)) {
-            throw new RuntimeException("Isn't valid tag in list: " + tags);
-        }
-        String values = CollectionUtil.iterableToStream(tags)
-                .map(s -> "('" + s + "')")
-                .collect(Collectors.joining(","));
-        String sql = String.format(Tag.OUTER_SECTION, values);
-
-        return convertList(em.createNativeQuery(sql).getResultList(), String.class);
-    }
-
-    private boolean isValidListOfTags(Iterable<String> tags) {
-        for (String tag : tags) {
-            if ( ! validating.matcher(tag).matches()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private Tag constructTag(String tag) {

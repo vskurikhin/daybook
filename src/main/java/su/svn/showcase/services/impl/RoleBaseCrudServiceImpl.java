@@ -29,7 +29,7 @@ public class RoleBaseCrudServiceImpl extends AbstractCrudService implements Role
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleBaseCrudServiceImpl.class);
 
-    @EJB(beanName = "RoleDaoJpa")
+    @EJB(beanName = "RoleDaoEjb")
     private RoleDao roleDao;
 
     @Override

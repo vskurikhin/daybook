@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagDaoJpa.java
+ * UserLoginDaoEjb.java
  * $Id$
  */
 
@@ -10,31 +10,27 @@ package su.svn.showcase.dao.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.domain.Tag;
-import su.svn.showcase.utils.CollectionUtil;
+import su.svn.showcase.dao.UserLoginDao;
+import su.svn.showcase.domain.UserLogin;
 
-import javax.annotation.Nonnull;
+import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.*;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
+import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
- * The Tag DAO implementation.
+ * The UserLogin DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
-public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
+@Stateless
+public class UserLoginDaoEjb extends AbstractDaoJpa<UUID, UserLogin> implements UserLoginDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TagDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginDaoEjb.class);
 
-    private static final Pattern validating = Pattern.compile("[\\w\\sа-яА-Я]+");
-
-    private final EntityManager entityManager;
-
-    public TagDaoJpa(@Nonnull EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -44,7 +40,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      *         is null
      */
     @Override
-    public Optional<Tag> findById(String id) {
+    public Optional<UserLogin> findById(UUID id) {
         return jpaFindById(id);
     }
 
@@ -68,78 +64,54 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      *         the query timeout value set and the transaction
      *         is rolled back
      */
-    public Optional<Tag> findWhereTag(String tag) {
-        return jpaFindWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
+    @Override
+    public Optional<UserLogin> fetchById(UUID id) {
+        return jpaFindWhereField(UserLogin.FETCH_BY_ID, "id", id);
     }
 
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public Optional<UserLogin> findWhereLogin(String login) {
+        return jpaFindWhereField(UserLogin.FIND_WHERE_LOGIN, "login", login);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserLogin> findAll() {
+        return abstractDaoFindAll(UserLogin.FIND_ALL);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserLogin> findAllByIdIn(Iterable<UUID> ids) {
+        return abstractDaoFindAllWhereIn(UserLogin.FIND_ALL_WHERE_ID_IN, "ids", ids);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserLogin> findAllInUserRoleByName(String name) {
+        return abstractDaoFindAllWhereField(UserLogin.FIND_ALL_IN_USER_ROLE , "name", name);
+    }
+
+    @Override
+    public List<UserLogin> range(int start, int size) {
+        return jpaRange(UserLogin.RANGE, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
     @Override
     public long count() {
         return abstractCount();
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Tag> findAll() {
-        return abstractDaoFindAll(Tag.FIND_ALL);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> findAllOrderByTagAsc() {
-        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> findAllOrderByTagDesc() {
-        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> findAllWhereTag(String tag) {
-        return abstractDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    public List<Tag> findAllByIdIn(Iterable<String> ids) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> findAllByTagIn(Iterable<String> tags) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> range(int start, int size) {
-        return jpaRange(Tag.FIND_ALL, start, size);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> rangeOrderByTagAsc(int start, int size) {
-        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_ASC, start, size);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    public List<Tag> rangeOrderByTagDesc(int start, int size) {
-        return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_DESC, start, size);
     }
 
     /**
@@ -154,7 +126,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      * @throws PersistenceException if the flush fails
      */
     @Override
-    public Tag save(Tag entity) {
+    public UserLogin save(UserLogin entity) {
         return jpaDaoSave(entity);
     }
 
@@ -162,7 +134,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      * {@inheritDoc }
      */
     @Override
-    public Iterable<Tag> saveAll(Iterable<Tag> entities) {
+    public Iterable<UserLogin> saveAll(Iterable<UserLogin> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -170,7 +142,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      * {@inheritDoc }
      */
     @Override
-    public void delete(String id) {
+    public void delete(UUID id) {
         abstractDaoDelete(id);
     }
 
@@ -178,28 +150,8 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      * {@inheritDoc }
      */
     @Override
-    public void deleteAll(Iterable<Tag> entities) {
+    public void  deleteAll(Iterable<UserLogin> entities) {
         abstractDaoDeleteAll(entities);
-    }
-
-    private boolean isValidListOfTags(Iterable<String> tags) {
-        for (String tag : tags) {
-            if ( ! validating.matcher(tag).matches()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public List<String> outerSection(Iterable<String> tags) {
-        if ( ! isValidListOfTags(tags)) {
-            throw new RuntimeException("Isn't valid tag in list: " + tags);
-        }
-        String values = CollectionUtil.iterableToStream(tags)
-                .map(s -> "('" + s + "')")
-                .collect(Collectors.joining(","));
-        String sql = String.format(Tag.OUTER_SECTION, values);
-        return abstractDaoNativeResultList(sql, String.class);
     }
 
     /**
@@ -210,6 +162,9 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
         return this.entityManager;
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
     Logger getLogger() {
         return LOGGER;
@@ -219,8 +174,8 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      * {@inheritDoc }
      */
     @Override
-    public Class<Tag> getEClass() {
-        return Tag.class;
+    public Class<UserLogin> getEClass() {
+        return UserLogin.class;
     }
 }
 //EOF

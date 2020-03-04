@@ -28,7 +28,7 @@ public class TagBaseCrudServiceImpl extends AbstractCrudService implements TagBa
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagBaseCrudServiceImpl.class);
 
-    @EJB(beanName = "TagDaoJpa")
+    @EJB(beanName = "TagDaoEjb")
     private TagDao tagDao;
 
     @Override

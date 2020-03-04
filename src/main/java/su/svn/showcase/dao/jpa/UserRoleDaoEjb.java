@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserLoginDaoJpa.java
+ * UserRoleDaoEjb.java
  * $Id$
  */
 
@@ -10,8 +10,8 @@ package su.svn.showcase.dao.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dao.UserRoleDao;
+import su.svn.showcase.domain.UserRole;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
@@ -20,17 +20,17 @@ import java.util.*;
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
- * The UserLogin DAO implementation.
+ * The UserRole DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
 @Stateless
-public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements UserLoginDao {
+public class UserRoleDaoEjb extends AbstractDaoJpa<UUID, UserRole> implements UserRoleDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleDaoEjb.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -40,7 +40,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      *         is null
      */
     @Override
-    public Optional<UserLogin> findById(UUID id) {
+    public Optional<UserRole> findById(UUID id) {
         return jpaFindById(id);
     }
 
@@ -65,45 +65,80 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      *         is rolled back
      */
     @Override
-    public Optional<UserLogin> fetchById(UUID id) {
-        return jpaFindWhereField(UserLogin.FETCH_BY_ID, "id", id);
+    public Optional<UserRole> findWhereRole(String role) {
+        return jpaFindWhereField(UserRole.FIND_WHERE_ROLE, "role", role);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public Optional<UserLogin> findWhereLogin(String login) {
-        return jpaFindWhereField(UserLogin.FIND_WHERE_LOGIN, "login", login);
+    public List<UserRole> findAll() {
+        return abstractDaoFindAll(UserRole.FIND_ALL);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<UserLogin> findAll() {
-        return abstractDaoFindAll(UserLogin.FIND_ALL);
+    public List<UserRole> fetchAllOrderByRoleAsc() {
+        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_ASC);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<UserLogin> findAllByIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(UserLogin.FIND_ALL_WHERE_ID_IN, "ids", ids);
+    public List<UserRole> fetchAllOrderByRoleDesc() {
+        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_DESC);
     }
 
     /**
      * {@inheritDoc }
      */
     @Override
-    public List<UserLogin> findAllInUserRoleByName(String name) {
-        return abstractDaoFindAllWhereField(UserLogin.FIND_ALL_IN_USER_ROLE , "name", name);
+    public List<UserRole> findAllByIdIn(Iterable<UUID> uuids) {
+        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ID_IN, "ids", uuids);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public List<UserLogin> range(int start, int size) {
-        return jpaRange(UserLogin.RANGE, start, size);
+    public List<UserRole> findAllWhereRole(String role) {
+        return abstractDaoFindAllWhereField(UserRole.FIND_WHERE_ROLE, "role", role);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> findAllByRoleIn(Iterable<String> roles) {
+        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> range(int start, int size) {
+        return jpaRange(UserRole.RANGE, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> rangeOrderByRoleAsc(int start, int size) {
+        return jpaRange(UserRole.RANGE_ORDER_BY_ROLE_ASC, start, size);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<UserRole> rangeOrderByRoleDesc(int start, int size) {
+        return jpaRange(UserRole.RANGE_ORDER_BY_ROLE_DESC, start, size);
     }
 
     /**
@@ -126,7 +161,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * @throws PersistenceException if the flush fails
      */
     @Override
-    public UserLogin save(UserLogin entity) {
+    public UserRole save(UserRole entity) {
         return jpaDaoSave(entity);
     }
 
@@ -134,7 +169,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * {@inheritDoc }
      */
     @Override
-    public Iterable<UserLogin> saveAll(Iterable<UserLogin> entities) {
+    public Iterable<UserRole> saveAll(Iterable<UserRole> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -150,7 +185,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * {@inheritDoc }
      */
     @Override
-    public void  deleteAll(Iterable<UserLogin> entities) {
+    public void deleteAll(Iterable<UserRole> entities) {
         abstractDaoDeleteAll(entities);
     }
 
@@ -159,7 +194,7 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     /**
@@ -174,8 +209,8 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
      * {@inheritDoc }
      */
     @Override
-    public Class<UserLogin> getEClass() {
-        return UserLogin.class;
+    public Class<UserRole> getEClass() {
+        return UserRole.class;
     }
 }
 //EOF

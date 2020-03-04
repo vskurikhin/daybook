@@ -20,8 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.TagDao;
-import su.svn.showcase.dao.jpa.RecordDaoJpa;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.dao.jpa.RecordDaoEjb;
+import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordFullDto;
@@ -65,8 +65,8 @@ class RecordTagsStorageServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordDaoJpa.class,
-            TagDaoJpa.class,
+            RecordDaoEjb.class,
+            TagDaoEjb.class,
             RecordTagsUtxServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)

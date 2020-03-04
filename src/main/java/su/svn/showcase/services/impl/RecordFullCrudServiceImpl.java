@@ -30,10 +30,10 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullCrudServiceImpl.class);
 
-    @EJB(beanName = "RecordDaoJpa")
+    @EJB(beanName = "RecordDaoEjb")
     private RecordDao recordDao;
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
     @Override

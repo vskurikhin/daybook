@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.NewsEntryDao;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
+import su.svn.showcase.dao.jpa.NewsEntryDaoEjb;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
@@ -61,7 +61,7 @@ class NewsEntryFullCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsEntryDaoJpa.class,
+            NewsEntryDaoEjb.class,
             NewsEntryFullCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)

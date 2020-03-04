@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.TagDao;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.services.TagBaseCrudService;
@@ -59,7 +59,7 @@ class TagBaseCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            TagDaoJpa.class,
+            TagDaoEjb.class,
             TagBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
