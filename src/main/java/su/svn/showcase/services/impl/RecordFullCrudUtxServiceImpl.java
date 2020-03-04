@@ -97,7 +97,7 @@ public class RecordFullCrudUtxServiceImpl extends AbstractUserTransactionService
         validateUserLoginDto(userLogin, dto.getUserLogin());
         Record entity = new Record(UUID.randomUUID(), userLogin);
         entity = dto.update(entity);
-        entityManager.merge(entity);
+        entityManager.persist(entity);
         entityManager.flush();
 
         return entityManager;

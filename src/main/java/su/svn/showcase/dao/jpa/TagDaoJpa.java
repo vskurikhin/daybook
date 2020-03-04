@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 23:17 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDaoJpa.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dao.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.utils.CollectionUtil;
 
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  *
  * @author Victor N. Skurikhin
  */
-public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
+public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagDaoJpa.class);
 
@@ -68,6 +69,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
      *         the query timeout value set and the transaction
      *         is rolled back
      */
+    @Override
     public Optional<Tag> findWhereTag(String tag) {
         return jpaFindWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
@@ -88,6 +90,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> findAllOrderByTagAsc() {
         return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
     }
@@ -95,6 +98,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> findAllOrderByTagDesc() {
         return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
     }
@@ -102,6 +106,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> findAllWhereTag(String tag) {
         return abstractDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
@@ -117,6 +122,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> findAllByTagIn(Iterable<String> tags) {
         return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
     }
@@ -124,6 +130,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> range(int start, int size) {
         return jpaRange(Tag.FIND_ALL, start, size);
     }
@@ -131,6 +138,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> rangeOrderByTagAsc(int start, int size) {
         return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_ASC, start, size);
     }
@@ -138,6 +146,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
     /**
      * {@inheritDoc }
      */
+    @Override
     public List<Tag> rangeOrderByTagDesc(int start, int size) {
         return jpaRange(Tag.FIND_ALL_ORDER_BY_TAG_DESC, start, size);
     }
@@ -191,6 +200,10 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag>  {
         return true;
     }
 
+    /**
+     * {@inheritDoc }
+     */
+    @Override
     public List<String> outerSection(Iterable<String> tags) {
         if ( ! isValidListOfTags(tags)) {
             throw new RuntimeException("Isn't valid tag in list: " + tags);
