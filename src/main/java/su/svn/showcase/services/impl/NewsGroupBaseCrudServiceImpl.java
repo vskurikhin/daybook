@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 16:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseCrudServiceImpl.java
@@ -20,46 +20,43 @@ import su.svn.showcase.services.NewsGroupBaseCrudService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService implements NewsGroupBaseCrudService {
+public class NewsGroupBaseCrudServiceImpl extends AbstractCrudService implements NewsGroupBaseCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupBaseCrudServiceImpl.class);
 
-    @EJB(beanName = "NewsGroupDaoJpa")
+    @EJB(beanName = "NewsGroupDaoEjb")
     private NewsGroupDao newsGroupDao;
 
-    @Inject
-    private UserTransaction userTransaction;
-
     @Override
+    @Transactional
     public void create(@Nonnull NewsGroupBaseDto dto) {
-        consume(storageConsumer(dto), new NewsGroup(UUID.randomUUID()));
+        checkAndSetId(dto);
+        saveUpdatedEntity(new NewsGroup(dto.getId()), dto);
     }
 
     @Override
+    @Transactional
     public NewsGroupBaseDto readById(@Nonnull UUID id) {
         return new NewsGroupBaseDto(newsGroupDao.findById(id)
                 .orElseThrow(NotFound::is));
     }
 
     @Override
+    @Transactional
     public NewsGroupBaseDto readByGroup(@Nonnull String group) {
         return new NewsGroupBaseDto(newsGroupDao.findWhereGroup(group)
                 .orElseThrow(NotFound::is));
     }
 
     @Override
+    @Transactional
     public List<NewsGroupBaseDto> readRange(int start, int size) {
         return newsGroupDao.rangeOrderByGroupAsc(start, size).stream()
                 .map(NewsGroupBaseDto::new)
@@ -67,25 +64,23 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
     }
 
     @Override
+    @Transactional
     public void update(@Nonnull NewsGroupBaseDto dto) {
         validateId(dto);
-        consume(storageConsumer(dto), new NewsGroup(dto.getId()));
+        saveUpdatedEntity(getNewsGroup(dto.getId()), dto);
     }
 
     @Override
+    @Transactional
     public void delete(@Nonnull UUID id) {
         Objects.requireNonNull(id);
         newsGroupDao.delete(id);
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) newsGroupDao.count();
-    }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
     }
 
     @Override
@@ -93,15 +88,13 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractUserTransactionService
         return LOGGER;
     }
 
-    private Consumer<NewsGroup> storageConsumer(NewsGroupBaseDto dto) {
-        return entity -> {
-            if (entity == null) {
-                entity = newsGroupDao.findById(dto.getId())
-                        .orElseThrow(ErrorCase::notFound);
-            }
-            dto.update(entity);
-            newsGroupDao.save(entity);
-        };
+    private void saveUpdatedEntity(NewsGroup entity, NewsGroupBaseDto dto) {
+        entity = dto.update(entity);
+        newsGroupDao.save(entity);
+    }
+
+    private NewsGroup getNewsGroup(UUID id) {
+        return newsGroupDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 }
 //EOF

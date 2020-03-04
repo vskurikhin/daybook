@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 20:44 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupBaseCrudServiceImplTest.java$
+ * NewsGroupBaseCrudServiceImplTest.java
  * $Id$
  */
 
@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.dao.jpa.NewsGroupDaoJpa;
+import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.services.CrudService;
@@ -58,7 +58,7 @@ class NewsGroupBaseCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsGroupDaoJpa.class,
+            NewsGroupDaoEjb.class,
             NewsGroupBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
@@ -132,7 +132,7 @@ class NewsGroupBaseCrudServiceImplTest {
     void update(NewsGroupBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
-        service.update(dto);
+        Assertions.assertThrows(su.svn.showcase.exceptions.ErrorCase.class, () -> service.update(dto));
     }
 
     @Test

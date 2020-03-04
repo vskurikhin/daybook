@@ -18,9 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.*;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.domain.TestData;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -46,9 +45,9 @@ import static su.svn.showcase.domain.TestData.cloneTag1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
 @DisplayName("A TagDaoJpaTest unit test cases")
-@AddPackages(value = {TagDaoJpa.class})
+@AddPackages(value = {TagDaoEjb.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class TagDaoJpaTest {
+class TagDaoEjbTest {
 
     @Inject
     private BeanManager beanManager;
@@ -58,7 +57,7 @@ class TagDaoJpaTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            TagDaoJpa.class,
+            TagDaoEjb.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -103,7 +102,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_findById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
+        TagDao tagDao = weld.select(TagDaoEjb.class).get();
         Optional<Tag> test= tagDao.findById(StringUtil.generateStringId());
         assertNotNull(test);
         assertFalse(test.isPresent());
@@ -114,7 +113,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao tagDao = weld.select(TagDaoJpa.class).get();
+        TagDao tagDao = weld.select(TagDaoEjb.class).get();
         List<Tag> testList = tagDao.findAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
@@ -125,7 +124,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao dao = weld.select(TagDaoJpa.class).get();
+        TagDao dao = weld.select(TagDaoEjb.class).get();
         Tag test = dao.save(entity);
         Assertions.assertNotNull(test);
         Assertions.assertEquals(entity, test);
@@ -136,7 +135,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao dao = weld.select(TagDaoJpa.class).get();
+        TagDao dao = weld.select(TagDaoEjb.class).get();
         List<Tag> testList = new ArrayList<Tag>() {{ add(entity); }};
         Iterable<Tag> result = dao.saveAll(testList);
         assertNotNull(result);
@@ -148,7 +147,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao dao = weld.select(TagDaoJpa.class).get();
+        TagDao dao = weld.select(TagDaoEjb.class).get();
         dao.delete(StringUtil.generateStringId());
         userTransaction.rollback();
     }
@@ -157,7 +156,7 @@ class TagDaoJpaTest {
     @Test
     void whenTagDao_outerSection() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        TagDao dao = weld.select(TagDaoJpa.class).get();
+        TagDao dao = weld.select(TagDaoEjb.class).get();
         dao.save(entity);
         List<String> testTags = new ArrayList<String>() {{
             add("tag1");

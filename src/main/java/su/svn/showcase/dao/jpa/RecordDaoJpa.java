@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 23:17 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -13,27 +13,27 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
 
-import javax.ejb.Stateless;
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
-import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
-
 /**
  * The Record DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
-@Stateless
 public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordDaoJpa.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    private final EntityManager entityManager;
+
+    public RecordDaoJpa(@Nonnull EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     /**
      * {@inheritDoc }
@@ -74,10 +74,18 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException if the instance is not an
+     *          entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
      */
     @Override
     public Record save(Record entity) {
-        return abstractDaoSave(entity);
+        return jpaDaoSave(entity);
     }
 
     /**
@@ -265,7 +273,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     /**

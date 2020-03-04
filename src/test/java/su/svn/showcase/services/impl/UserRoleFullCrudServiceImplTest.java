@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImplTest.java
@@ -14,8 +14,9 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.UserRoleDao;
-import su.svn.showcase.dao.jpa.UserRoleDaoJpa;
+import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.services.CrudService;
@@ -58,7 +59,7 @@ class UserRoleFullCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            UserRoleDaoJpa.class,
+            UserRoleDaoEjb.class,
             UserRoleFullCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
@@ -70,11 +71,13 @@ class UserRoleFullCrudServiceImplTest {
             .build();
 
     private UserRoleDao mockDao = mock(UserRoleDao.class);
+    private UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
     private UserRoleFullCrudService mockService = mock(UserRoleFullCrudService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put(null,                                    mockDao);
         put(UserRoleDao.class.getName(),             mockDao);
+        put(UserLoginDao.class.getName(),            mockUserLoginDao);
         put(UserRoleFullCrudService.class.getName(), mockService);
     }};
 
@@ -112,6 +115,7 @@ class UserRoleFullCrudServiceImplTest {
     void create(UserRoleFullCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
+        when(mockUserLoginDao.findById(any())).thenReturn(Optional.empty());
         Assertions.assertThrows(su.svn.showcase.exceptions.ErrorCase.class, () -> service.create(dto));
     }
 

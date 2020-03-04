@@ -16,7 +16,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.dao.jpa.RecordDaoEjb;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.RecordFullDto;
@@ -62,7 +62,7 @@ class RecordFullCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordDaoJpa.class,
+            RecordDaoEjb.class,
             RecordFullCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)

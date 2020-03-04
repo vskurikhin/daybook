@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleDaoJpa.java
+ * UserRoleDaoEjb.java
  * $Id$
  */
 
@@ -25,12 +25,12 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
  * @author Victor N. Skurikhin
  */
 @Stateless
-public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements UserRoleDao {
+public class UserRoleDaoEjb extends AbstractDaoJpa<UUID, UserRole> implements UserRoleDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleDaoEjb.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -151,10 +151,18 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
 
     /**
      * {@inheritDoc }
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException if the instance is not an
+     *          entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
      */
     @Override
     public UserRole save(UserRole entity) {
-        return abstractDaoSave(entity);
+        return jpaDaoSave(entity);
     }
 
     /**
@@ -186,7 +194,7 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     /**

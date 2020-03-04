@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryBaseDto.java
@@ -60,8 +60,8 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
 
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity) {
-        updateIfNotNull(() -> entity.setDateTime(this.dateTime), this.dateTime);
-        updateIfNotNull(() -> entity.setTitle(this.title), this.title);
+        updateIfNotNull(entity::setDateTime, this.dateTime);
+        updateIfNotNull(entity::setTitle, this.title);
         entity.setContent(this.content);
 
         return entity;

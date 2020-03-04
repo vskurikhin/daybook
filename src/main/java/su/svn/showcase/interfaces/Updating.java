@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Updating.java
@@ -12,6 +12,7 @@ import su.svn.showcase.domain.DBEntity;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public interface Updating<E extends DBEntity> {
@@ -22,6 +23,10 @@ public interface Updating<E extends DBEntity> {
 
     default void updateIfNotNull(Runnable runnable, Object o) {
         if (o != null) runnable.run();
+    }
+
+    default <T> void updateIfNotNull(Consumer<T> consumer, T o) {
+        if (o != null) consumer.accept(o);
     }
 
     default <T> Optional<T> convertIfContainsKey(Class<T> c, Map<String, Object> map, String key) {

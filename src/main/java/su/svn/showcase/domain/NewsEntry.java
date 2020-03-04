@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntry.java
@@ -78,7 +78,7 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id")
     private Record record;
 
@@ -101,7 +101,7 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
 
     @Getter
     @Setter
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "db_news_group_id")
     private NewsGroup newsGroup;
 

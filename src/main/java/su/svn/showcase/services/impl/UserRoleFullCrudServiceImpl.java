@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullCrudServiceImpl.java
@@ -15,7 +15,6 @@ import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserLoginDto;
-import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserRoleFullCrudService;
@@ -23,44 +22,39 @@ import su.svn.showcase.services.UserRoleFullCrudService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService implements UserRoleFullCrudService {
+public class UserRoleFullCrudServiceImpl extends AbstractCrudService implements UserRoleFullCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRoleFullCrudServiceImpl.class);
 
-    @EJB(beanName = "UserRoleDaoJpa")
+    @EJB(beanName = "UserRoleDaoEjb")
     private UserRoleDao userRoleDao;
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
-    @Inject
-    private UserTransaction userTransaction;
-
     @Override
+    @Transactional
     public void create(@Nonnull UserRoleFullDto dto) {
         validateUserRoleId(dto);
-        consume(storageConsumer(dto), new UserRole(getOrGenerateUuidKey(dto)));
+        saveUpdatedEntity(new UserRole(getOrGenerateUuidKey(dto)), dto);
     }
 
     @Override
+    @Transactional
     public UserRoleFullDto readById(@Nonnull UUID id) {
         return new UserRoleFullDto(userRoleDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
     public List<UserRoleFullDto> readRange(int start, int size) {
         return userRoleDao.range(start, size).stream()
                 .map(UserRoleFullDto::new)
@@ -68,25 +62,23 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
     }
 
     @Override
+    @Transactional
     public void update(@Nonnull UserRoleFullDto dto) {
         validateId(dto);
         validateUserRoleId(dto);
-        consume(storageConsumer(dto), new UserRole(dto.getId()));
+        saveUpdatedEntity(getUserRole(dto.getId()), dto);
     }
 
     @Override
+    @Transactional
     public void delete(@Nonnull UUID id) {
         userRoleDao.delete(id);
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) userRoleDao.count();
-    }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
     }
 
     @Override
@@ -94,26 +86,20 @@ public class UserRoleFullCrudServiceImpl extends AbstractUserTransactionService 
         return LOGGER;
     }
 
-    private Consumer<UserRole> storageConsumer(UserRoleFullDto dto) {
-        if (dto.getUserLogin() instanceof UserOnlyLoginBaseDto) {
-            return entity -> {
-                if (entity == null) {
-                    entity = userRoleDao.findById(dto.getId())
-                            .orElseThrow(ErrorCase::notFound);
-                }
-                UserLogin userLogin = getUserLogin(dto);
-                validateUserLoginDto(userLogin, dto.getUserLogin());
-                entity.setUserLogin(userLogin);
-                dto.update(entity);
-                userRoleDao.save(entity);
-            };
-        }
-        throw ErrorCase.unsupportedOperation(dto.getUserLogin().getClass());
+    private void saveUpdatedEntity(UserRole entity, UserRoleFullDto dto) {
+        UserLogin userLogin = getUserLogin(dto.getUserLogin().getId());
+        validateUserLoginDto(userLogin, dto.getUserLogin());
+        entity.setUserLogin(userLogin);
+        entity = dto.update(entity);
+        userRoleDao.save(entity);
     }
 
-    private UserLogin getUserLogin(UserRoleFullDto dto) {
-        return userLoginDao.findById(dto.getUserLogin().getId())
-                .orElseThrow(ErrorCase::notFound);
+    private UserRole getUserRole(UUID id) {
+        return userRoleDao.findById(id).orElseThrow(ErrorCase::notFound);
+    }
+
+    private UserLogin getUserLogin(UUID id) {
+        return userLoginDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
     private void validateUserLoginDto(UserLogin userLogin, UserLoginDto dto) {
