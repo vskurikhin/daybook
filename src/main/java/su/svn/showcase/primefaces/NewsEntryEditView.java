@@ -46,9 +46,6 @@ public class NewsEntryEditView extends AbstractView {
     private NewsEntryFullCrudService newsEntryService;
 
     @EJB
-    private NewsGroupBaseCrudService newsGroupService;
-
-    @EJB
     private RecordTagsStorageService recordTagsStorageService;
 
     private NewsEntryEditModel.Builder newsEntryModelBuilder;
@@ -67,7 +64,6 @@ public class NewsEntryEditView extends AbstractView {
             assert request != null;
             newsEntryModelBuilder = NewsEntryEditModel.builder()
                     .newsEntryCrudService(newsEntryService)
-                    .newsGroupCrudService(newsGroupService)
                     .recordTagsStorageService(recordTagsStorageService)
                     .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
@@ -83,9 +79,7 @@ public class NewsEntryEditView extends AbstractView {
     }
 
     private UUID getIdParameter(@Nonnull HttpServletRequest request) {
-        System.out.println("id = " + id);
-        id = (String) request.getParameter("id");
-        System.out.println("id = " + id);
+        id = request.getParameter("id");
         return UUID.fromString(id);
     }
 

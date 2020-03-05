@@ -33,14 +33,11 @@ class NewsEntryEditModel {
 
     private final NewsEntryFullCrudService newsEntryCrudService;
 
-    private final NewsGroupBaseCrudService newsGroupCrudService;
-
     private final RecordTagsStorageService recordTagsStorageService;
 
     public void save() {
         Objects.requireNonNull(uuid);
         Objects.requireNonNull(newsEntryCrudService);
-        Objects.requireNonNull(newsGroupCrudService);
         Objects.requireNonNull(recordTagsStorageService);
         Objects.requireNonNull(title);
         this.login = "admin@mail.ru"; // Objects.requireNonNull(login); TODO
@@ -50,15 +47,12 @@ class NewsEntryEditModel {
                 .login(this.login)
                 .build();
         LocalDateTime now = LocalDateTime.now();
-        NewsGroupBaseDto newsGroupBaseDto = newsGroupCrudService.readByGroup(group);
         NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
                 .id(uuid)
                 .dateTime(now)
                 .title(title)
                 .content(content)
-                //.newsGroup(newsGroupBaseDto)
                 .build();
-        // recordDto.setNewsEntry(newsEntryDto);
         System.out.println("newsEntryDto = " + newsEntryDto);
         newsEntryCrudService.update(newsEntryDto);
         if (tags != null) {
