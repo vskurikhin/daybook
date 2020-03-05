@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,10 +79,10 @@ class RecordFullCrudServiceImplTest {
     private RecordFullCrudService mockService = mock(RecordFullCrudService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                                     mockDao);
+        put(null,                                  mockDao);
         put(RecordDao.class.getName(),             mockDao);
         put(RecordFullCrudService.class.getName(), mockService);
-        put(UserLoginDao.class.getName(),             mockUserLoginDao);
+        put(UserLoginDao.class.getName(),          mockUserLoginDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -99,14 +100,14 @@ class RecordFullCrudServiceImplTest {
     private UserLogin userLogin;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         entity = cloneRecord1();
         dto = cloneRecordFullDto1();
         userLogin = cloneUserLogin1();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
     }
 
     @DisplayName("Can inject entity manager and user transaction")
@@ -154,5 +155,17 @@ class RecordFullCrudServiceImplTest {
     void delete(RecordFullCrudService service) {
         Assertions.assertNotNull(service);
         service.delete(dto.getId());
+    }
+
+    @Test
+    void count(RecordFullCrudService service) {
+        Assertions.assertNotNull(service);
+        service.count();
+    }
+
+    @Test
+    void countByDay(RecordFullCrudService service) {
+        Assertions.assertNotNull(service);
+        service.countByDay(LocalDate.now());
     }
 }
