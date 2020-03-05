@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.dao.jpa.RecordDaoEjb;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
@@ -39,9 +39,9 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 import static su.svn.utils.TestData.RECORD_UUID0;
 
 @DisplayName("A RecordDaoJpaTest unit test cases")
-@AddPackages(value = {RecordDaoJpa.class})
+@AddPackages(value = {RecordDaoEjb.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class RecordDaoJpaTest {
+class RecordDaoEjbTest {
 
     @Inject
     private BeanManager beanManager;
@@ -51,7 +51,7 @@ class RecordDaoJpaTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordDaoJpa.class,
+            RecordDaoEjb.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -97,7 +97,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_findById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Optional<Record> test = dao.findById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
@@ -108,7 +108,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_findById_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Assertions.assertThrows(IllegalArgumentException.class, () -> dao.findById(null));
         userTransaction.rollback();
     }
@@ -117,7 +117,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_findAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         List<Record> testList = dao.findAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
@@ -128,7 +128,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_findAllByIdIn_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Assertions.assertThrows(IllegalArgumentException.class, () -> dao.findAllByIdIn(null));
         userTransaction.rollback();
     }
@@ -137,7 +137,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_findAllByIdIn_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         List<UUID> list = new ArrayList<UUID>() {{ add(RECORD_UUID0); }};
         List<Record> testList = dao.findAllByIdIn(list);
         assertNotNull(testList);
@@ -149,7 +149,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_fetchById_shouldBeReturnEmptyOptional() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        final RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        final RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Optional<Record> test = dao.fetchById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
@@ -161,7 +161,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_fetchAll_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         List<Record> testList = dao.fetchAll();
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
@@ -172,7 +172,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_fetchAllWhereIdIn_shouldBeThrowIllegalArgumentException() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Assertions.assertThrows(IllegalArgumentException.class, () -> dao.fetchAllWhereIdIn(null));
         userTransaction.rollback();
     }
@@ -181,7 +181,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_range_shouldBeReturnEmptyList() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         List<Record> testList = dao.range(0, Integer.MAX_VALUE);
         assertNotNull(testList);
         assertTrue(testList.isEmpty());
@@ -192,7 +192,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_save_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         Record result = dao.save(entity);
         assertNotNull(result);
         assertEquals(entity, result);
@@ -203,7 +203,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_save_iterable_success() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         List<Record> testList = new ArrayList<Record>() {{ add(entity); }};
         Iterable<Record> result = dao.saveAll(testList);
         assertNotNull(result);
@@ -215,7 +215,7 @@ class RecordDaoJpaTest {
     @Test
     void whenRecordDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
         userTransaction.begin();
-        RecordDao dao = weld.select(RecordDaoJpa.class).get();
+        RecordDao dao = weld.select(RecordDaoEjb.class).get();
         dao.delete(UUID.randomUUID());
         userTransaction.rollback();
     }

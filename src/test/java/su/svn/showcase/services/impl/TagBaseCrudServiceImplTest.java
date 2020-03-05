@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.21 22:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagBaseCrudServiceImplTest.java
@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.TagDao;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.services.TagBaseCrudService;
@@ -59,7 +59,7 @@ class TagBaseCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            TagDaoJpa.class,
+            TagDaoEjb.class,
             TagBaseCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
@@ -133,7 +133,7 @@ class TagBaseCrudServiceImplTest {
     void update(TagBaseCrudService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
-        service.update(dto);
+        Assertions.assertThrows(su.svn.showcase.exceptions.ErrorCase.class, () -> service.update(dto));
     }
 
     @Test

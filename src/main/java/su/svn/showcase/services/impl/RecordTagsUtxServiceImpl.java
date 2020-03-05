@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordTagsStorageServiceImpl.java
+ * RecordTagsUtxServiceImpl.java
  * $Id$
  */
 
@@ -10,8 +10,8 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.TagDao;
+import su.svn.showcase.dao.jpa.RecordDaoJpa;
+import su.svn.showcase.dao.jpa.TagDaoJpa;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordFullDto;
@@ -22,35 +22,45 @@ import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.StringUtil;
 
 import javax.annotation.Nonnull;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
+
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
+public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
        implements RecordTagsStorageService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecordTagsStorageServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecordTagsUtxServiceImpl.class);
 
-    @EJB(beanName = "TagDaoJpa")
-    private TagDao tagDao;
-
-    @EJB(beanName = "RecordDaoJpa")
-    private RecordDao recordDao;
+    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManagerFactory emf;
 
     @Inject
     private UserTransaction userTransaction;
 
     @Override
     public void addTagsToRecord(@Nonnull RecordFullDto record, @Nonnull Iterable<TagBaseDto> tags) {
-        execute(acceptTagsToRecord(record, tags));
+        utxExecuteBySupplier(() -> acceptTagsToRecord(record, tags));
+    }
+
+    private EntityManager acceptTagsToRecord(RecordFullDto dto, Iterable<TagBaseDto> tags) {
+        EntityManager entityManager = emf.createEntityManager();
+        RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
+        Record record = recordDaoJpa.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
+        acceptTagsToRecord(entityManager, record, tags);
+
+        return entityManager;
     }
 
     @Override
@@ -63,35 +73,31 @@ public class RecordTagsStorageServiceImpl extends AbstractUserTransactionService
         return LOGGER;
     }
 
-    private Runnable acceptTagsToRecord(RecordFullDto dto, Iterable<TagBaseDto> tags) {
-        getLogger().info("acceptTagsToRecord dto: {}", dto);
-        Optional<Record> recordOptional = recordDao.fetchById(dto.getId());
-        //noinspection SimplifyOptionalCallChains
-        if ( ! recordOptional.isPresent()) {
-            throw ErrorCase.open(getLogger(), "Don't accept a tags: {} to NewsEntryFullDto {}", tags, dto);
-        }
-        return () -> acceptTagsToRecord(dto.update(recordOptional.get()), tags);
-    }
-
-    private void acceptTagsToRecord(Record entry, Iterable<TagBaseDto> tags) {
+    private void acceptTagsToRecord(EntityManager entityManager, Record record, Iterable<TagBaseDto> tags) {
+        RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
+        TagDaoJpa tagDaoJpa = new TagDaoJpa(entityManager);
         Set<String> setLabels = CollectionUtil.iterableToStream(tags)
                 .map(TagBaseDto::getTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord setLabels: {}", setLabels);
-        Set<String> newTagLabels = new HashSet<>(tagDao.outerSection(setLabels));
+        Set<String> newTagLabels = new HashSet<>(tagDaoJpa.outerSection(setLabels));
         getLogger().info("acceptTagsToRecord newTagLabels: {}", newTagLabels);
         Set<Tag> newTags = newTagLabels.stream()
                 .map(this::constructTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord newTags: {}", newTags);
-        if ( ! newTags.isEmpty()) {
-            tagDao.saveAll(newTags);
-            List<Tag> savedTags = tagDao.findAllByTagIn(setLabels);
-            entry.setTags(new HashSet<>(savedTags));
-            recordDao.save(entry);
-            getLogger().info("acceptTagsToRecord entry: {}", entry);
-            getLogger().info("acceptTagsToRecord entry.getTags(): {}", entry.getTags());
+        if (record != null && notEqualsCardinalities(setLabels, record.getTags())) {
+            tagDaoJpa.saveAll(newTags);
+            List<Tag> savedTags = tagDaoJpa.findAllByTagIn(setLabels);
+            record.setTags(new HashSet<>(savedTags));
+            recordDaoJpa.save(record);
+            getLogger().info("acceptTagsToRecord entry: {}", record);
+            getLogger().info("acceptTagsToRecord entry.getTags(): {}", record.getTags());
         }
+    }
+
+    private boolean notEqualsCardinalities(Collection<?> collection1, Collection<?> collection2) {
+        return collection1.size() != collection2.size();
     }
 
     private Tag constructTag(String tag) {

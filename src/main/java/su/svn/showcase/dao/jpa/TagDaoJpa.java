@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 23:17 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDaoJpa.java
@@ -14,28 +14,28 @@ import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.utils.CollectionUtil;
 
-import javax.ejb.Stateless;
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
  * The Tag DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
-@Stateless
 public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagDaoJpa.class);
 
     private static final Pattern validating = Pattern.compile("[\\w\\sа-яА-Я]+");
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    private final EntityManager entityManager;
+
+    public TagDaoJpa(@Nonnull EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     /**
      * {@inheritDoc }
@@ -153,10 +153,18 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException if the instance is not an
+     *          entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
      */
     @Override
     public Tag save(Tag entity) {
-        return abstractDaoSave(entity);
+        return jpaDaoSave(entity);
     }
 
     /**
@@ -212,7 +220,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
      */
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     @Override

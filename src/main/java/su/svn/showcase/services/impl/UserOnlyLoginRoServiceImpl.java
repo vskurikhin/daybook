@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImpl.java
@@ -18,40 +18,41 @@ import su.svn.showcase.services.UserOnlyLoginRoService;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.transaction.UserTransaction;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService implements UserOnlyLoginRoService {
+public class UserOnlyLoginRoServiceImpl extends AbstractCrudService implements UserOnlyLoginRoService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserOnlyLoginRoServiceImpl.class);
 
-    @EJB(beanName = "UserLoginDaoJpa")
+    @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
-    @Inject
-    private UserTransaction userTransaction;
-
     @Override
+    @Transactional
     public void create(@Nonnull UserOnlyLoginBaseDto dto) {
         throw ErrorCase.unsupportedOperation(dto.getClass());
     }
 
     @Override
+    @Transactional
     public UserOnlyLoginBaseDto readById(@Nonnull UUID id) {
-        Objects.requireNonNull(id);
         return new UserOnlyLoginBaseDto(userLoginDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
+    @Transactional
+    public UserOnlyLoginBaseDto readByLogin(@Nonnull String login) {
+        return new UserOnlyLoginBaseDto(userLoginDao.findWhereLogin(login)
+                .orElseThrow(ErrorCase::notFound));
+    }
+
+    @Override
+    @Transactional
     public List<UserOnlyLoginBaseDto> readRange(int start, int size) {
         return userLoginDao.range(start, size).stream()
                 .map(UserOnlyLoginBaseDto::new)
@@ -69,13 +70,9 @@ public class UserOnlyLoginRoServiceImpl extends AbstractUserTransactionService i
     }
 
     @Override
+    @Transactional
     public int count() {
         return (int) userLoginDao.count();
-    }
-
-    @Override
-    UserTransaction getUserTransaction() {
-        return this.userTransaction;
     }
 
     @Override

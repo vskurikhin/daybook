@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -314,7 +314,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     //         <code>PersistenceContextType.TRANSACTION</code> and there is
     //         no transaction
     // @throws PersistenceException if the flush fails
-    E abstractDaoSave(E entity) {
+    E jpaDaoSave(E entity) {
         EntityManager em = getEntityManager();
         if (null == entity.getId()) {
             em.persist(entity);
@@ -327,8 +327,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
         return entity;
     }
 
-    E abstractDaoSave(Supplier<E> supplier) {
-        return abstractDaoSave(supplier.get());
+    E jpaDaoSave(Supplier<E> supplier) {
+        return jpaDaoSave(supplier.get());
     }
 
     // Saves all given entities.

@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS db;
 CREATE SCHEMA IF NOT EXISTS dictionary;
 
 CREATE TABLE db.db_user_login (
-  id                    UUID PRIMARY KEY            NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
   date_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   login                 VARCHAR(64)                 NOT NULL
                         UNIQUE,
@@ -11,14 +11,14 @@ CREATE TABLE db.db_user_login (
 );
 
 CREATE TABLE db.db_role (
-  id                    UUID PRIMARY KEY            NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
   role_name             VARCHAR(32)                 NOT NULL
                         UNIQUE,
                         UNIQUE (id, role_name)
 );
 
 CREATE TABLE db.db_user_role (
-  id                    UUID PRIMARY KEY            NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
   db_user_login_id      UUID                        NOT NULL,
                         FOREIGN KEY (db_user_login_id)
                         REFERENCES  db.db_user_login (id),
@@ -30,14 +30,14 @@ CREATE TABLE db.db_user_role (
 );
 
 CREATE TABLE db.db_news_group (
-  id                    UUID PRIMARY KEY            NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL PRIMARY KEY,
   date_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
   "group"               VARCHAR(64)                 NOT NULL
                         UNIQUE
 );
 
 CREATE TABLE db.db_record (
-  id                    UUID  PRIMARY KEY           NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
 
   db_user_login_id      UUID                        NOT NULL,
                         FOREIGN KEY (db_user_login_id)
@@ -50,7 +50,7 @@ CREATE TABLE db.db_record (
 );
 
 CREATE TABLE db.db_news_entry (
-  id                    UUID PRIMARY KEY            NOT NULL,
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
                         FOREIGN KEY (id)
                         REFERENCES  db.db_record (id),
 
@@ -73,7 +73,7 @@ CREATE TABLE dictionary.tag (
 );
 
 CREATE TABLE db.db_record_tag (
-  id            UUID PRIMARY KEY            NOT NULL,
+  id            UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
 
   db_record_id  UUID                        NOT NULL,
                 FOREIGN KEY (db_record_id)

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 22:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTagsStorageServiceImplTest.java
@@ -19,11 +19,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.TagDao;
-import su.svn.showcase.dao.jpa.RecordDaoJpa;
-import su.svn.showcase.dao.jpa.TagDaoJpa;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.services.RecordTagsStorageService;
@@ -38,21 +34,16 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.UserTransaction;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.transaction.*;
+import java.util.*;
 import java.util.function.Function;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 import static su.svn.utils.TestData.newList;
 
-@DisplayName("A NewsEntryTagsStorageServiceImplTest unit test cases")
+@DisplayName("A RecordTagsStorageServiceImplTest unit test cases")
 @AddPackages(value = {RecordDao.class, RecordTagsStorageService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class RecordTagsStorageServiceImplTest {
@@ -65,9 +56,7 @@ class RecordTagsStorageServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordDaoJpa.class,
-            TagDaoJpa.class,
-            RecordTagsStorageServiceImpl.class,
+            RecordTagsUtxServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -77,16 +66,7 @@ class RecordTagsStorageServiceImplTest {
             .inject(this)
             .build();
 
-    private TagDao tagDao = mock(TagDao.class);
-    private RecordDao mockDao = mock(RecordDao.class);
-    private RecordTagsStorageService mockService = mock(RecordTagsStorageService.class);
-
-    private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                                     mockDao);
-        put(RecordDao.class.getName(),                mockDao);
-        put(TagDao.class.getName(),                   tagDao);
-        put(RecordTagsStorageService.class.getName(), mockService);
-    }};
+    private Map<String, Object> ejbMap = new HashMap<String, Object>();
 
     private Function<InjectionPoint, Object> ejbFactory() {
         return ip -> ejbMap.get(ip.getAnnotated().getBaseType().getTypeName());
@@ -100,19 +80,28 @@ class RecordTagsStorageServiceImplTest {
 
     private Record entity;
     private RecordFullDto dto;
-    private Tag tag;
     private TagBaseDto tagDto;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         entity = cloneRecord0();
         dto = cloneRecordFullDto0();
-        tag = cloneTag1();
         tagDto = cloneTagBaseDto1();
+        userTransaction.begin();
+        entity.setNewsEntry(null);
+        entity.setTags(Collections.emptySet());
+        entityManager.persist(entity);
+        entityManager.flush();
+        userTransaction.commit();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        userTransaction.begin();
+        entityManager.createQuery("DELETE FROM Record").executeUpdate();
+        entityManager.createQuery("DELETE FROM UserLogin").executeUpdate();
+        entityManager.createQuery("DELETE FROM Tag").executeUpdate();
+        userTransaction.commit();
     }
 
     @DisplayName("Can inject entity manager and user transaction")
@@ -126,9 +115,6 @@ class RecordTagsStorageServiceImplTest {
     @Test
     void create(RecordTagsStorageService service) {
         Assertions.assertNotNull(service);
-        when(mockDao.fetchById(any())).thenReturn(Optional.of(entity));
-        when(tagDao.outerSection(any())).thenReturn(newList(tag.getTag()));
-        when(tagDao.findAllByTagIn(any())).thenReturn(newList(tag));
-        service.addTagsToRecord(dto, newList(tagDto) );
+        service.addTagsToRecord(dto, newList(tagDto));
     }
 }

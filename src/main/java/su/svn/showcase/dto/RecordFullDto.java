@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -83,10 +83,10 @@ public class RecordFullDto implements RecordDto, Serializable {
 
     @Override
     public Record update(@Nonnull Record entity) {
-        updateIfNotNull(() -> entity.setCreateDateTime(this.createDateTime), this.createDateTime);
-        updateIfNotNull(() -> entity.setEditDateTime(this.editDateTime), this.editDateTime);
-        updateIfNotNull(() -> entity.setIndex(this.index), this.index);
-        updateIfNotNull(() -> entity.setType(this.type), this.type);
+        updateIfNotNull(entity::setCreateDateTime, this.createDateTime);
+        updateIfNotNull(entity::setEditDateTime, this.editDateTime);
+        updateIfNotNull(entity::setIndex, this.index);
+        updateIfNotNull(entity::setType, this.type);
 
         assert this.userLogin != null;
         assert entity.getUserLogin() != null;
@@ -114,10 +114,11 @@ public class RecordFullDto implements RecordDto, Serializable {
     }
 
     private Record updateByNewsEntryBaseDto(@Nonnull Record entity) {
-        assert this.newsEntry != null;
-        entity.setNewsEntry(this.newsEntry.update(new NewsEntry(this.newsEntry.getId())));
-        entity.getNewsEntry().setRecord(entity);
-
+        if (this.newsEntry != null) {
+            NewsEntry newsEntry = new NewsEntry(this.newsEntry.getId());
+            entity.setNewsEntry(this.newsEntry.update(newsEntry));
+            entity.getNewsEntry().setRecord(entity);
+        }
         return entity;
     }
 }

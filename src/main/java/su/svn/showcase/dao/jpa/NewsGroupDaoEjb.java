@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupDaoJpa.java
+ * NewsGroupDaoEjb.java
  * $Id$
  */
 
@@ -22,12 +22,12 @@ import java.util.UUID;
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 @Stateless
-public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements NewsGroupDao {
+public class NewsGroupDaoEjb extends AbstractDaoJpa<UUID, NewsGroup> implements NewsGroupDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupDaoEjb.class);
 
-    @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
-    private EntityManagerFactory emf;
+    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
+    private EntityManager entityManager;
 
     /**
      * {@inheritDoc }
@@ -91,9 +91,20 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
         return abstractCount();
     }
 
+    /**
+     * {@inheritDoc }
+     * @param entity must not be {@literal null}.
+     * @throws IllegalArgumentException if the instance is not an
+     *          entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
+     */
     @Override
     public NewsGroup save(NewsGroup entity) {
-        return abstractDaoSave(entity);
+        return jpaDaoSave(entity);
     }
 
     @Override
@@ -133,7 +144,7 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
 
     @Override
     EntityManager getEntityManager() {
-        return this.emf.createEntityManager();
+        return this.entityManager;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.26 16:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.01 18:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordsListModel.java
@@ -23,6 +23,7 @@ public class RecordsListModel extends LazyDataModel<RecordFullDto> {
 
     public RecordsListModel(@NotNull RecordFullCrudService service) {
         this.recordFullCrudService = service;
+        this.setRowCount(service.count());
     }
 
     @Override

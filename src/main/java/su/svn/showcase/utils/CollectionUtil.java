@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.09 13:36 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * CollectionUtil.java
@@ -8,12 +8,8 @@
 
 package su.svn.showcase.utils;
 
-import su.svn.showcase.dto.RecordTypesEnum;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;

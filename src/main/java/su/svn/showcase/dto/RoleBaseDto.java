@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleBaseDto.java
@@ -51,7 +51,7 @@ public class RoleBaseDto implements RoleDto, Serializable {
 
     @Override
     public Role update(@Nonnull Role entity) {
-        updateIfNotNull(() -> entity.setRoleName(this.roleName), this.roleName);
+        updateIfNotNull(entity::setRoleName, this.roleName);
         return entity;
     }
 }
