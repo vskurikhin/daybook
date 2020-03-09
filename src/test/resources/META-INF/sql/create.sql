@@ -3,7 +3,7 @@ CREATE SCHEMA IF NOT EXISTS dictionary;
 
 CREATE TABLE db.db_user_login (
   id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
-  date_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+  date_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL  DEFAULT now(),
   login                 VARCHAR(64)                 NOT NULL
                         UNIQUE,
 
