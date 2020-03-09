@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.05 13:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -112,6 +113,18 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
         if ( ! (dto instanceof UserOnlyLoginBaseDto)) {
             throw ErrorCase.bad("user login DTO", String.valueOf(dto));
         }
+    }
+
+    @Override
+    public int countByDay(LocalDate localDate) {
+        return recordDao.countByDay(localDate);
+    }
+
+    @Override
+    public List<RecordFullDto> readRangeByDay(LocalDate localDate, int first, int pageSize) {
+        return recordDao.rangeByDay(first, pageSize, localDate).stream()
+                .map(RecordFullDto::new)
+                .collect(Collectors.toList());
     }
 }
 //EOF

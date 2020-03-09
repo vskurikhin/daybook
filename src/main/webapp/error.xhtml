@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="menu-box">
+        <div class="container">
+            <div class="center-div">
+                <h:form id="tags">
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:tagCloud model="#{tagCloudView.model}">
+                        <p:ajax event="select" update="msgs" listener="#{tagCloudView.onSelect}"/>
+                    </p:tagCloud>
+                </h:form>
+            </div>
+            <!--<p:chart type="line" model="#{chartView.lineModel1}" style="height:100px; width: 287px"/>-->
+        </div>
+    </ui:define>
+
+    <ui:define name="content">
+        <div style="color: red">Error login</div>
+    </ui:define>
+
+</ui:composition>

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.22 17:59 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -180,7 +180,8 @@ class RecordFullDtoTest {
         @DisplayName("Update entity by DTO")
         void update() {
             Record expected = clean(cloneRecord0());
-            assertEquals(expected, recordFullDto.update(new Record(ZERO, expected.getUserLogin())));
+            RecordFullDto dto = su.svn.showcase.dto.TestData.clean(cloneRecordFullDto0());
+            assertEquals(expected, dto.update(new Record(ZERO, expected.getUserLogin())));
         }
 
         @Test
@@ -194,8 +195,3 @@ class RecordFullDtoTest {
     }
 }
 //EOF
-/*
-expected: <
-RecordFullDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-28T16:09:13.268987, editDateTime=2020-02-28T16:09:13.268987, index=13, type=NewsEntryFullDto, userLogin=UserLoginBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, login=loginTest0, password=passwordTest0), newsEntry=NewsEntryBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, title=titleTest0, content=contentTest0))> but was: <
-RecordFullDto(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-28T16:09:13.268987, editDateTime=2020-02-28T16:09:13.268987, index=13, type=NewsEntryFullDto, userLogin=UserOnlyLoginBaseDto(id=00000000-0000-0000-0000-000000000000, login=loginTest0), newsEntry=NewsEntryBaseDto(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-28T16:09:13.268987, title=titleTest0, content=contentTest0))>
- */

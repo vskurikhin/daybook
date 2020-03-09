@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -7,6 +7,8 @@
  */
 
 package su.svn.showcase.dto;
+
+import java.util.Collections;
 
 import static su.svn.utils.TestData.*;
 
@@ -197,6 +199,12 @@ public class TestData {
     }
     public static RecordFullDto cloneRecordFullDto1() {
         return assertClone(recordFullDto1);
+    }
+
+    public static RecordFullDto clean(RecordFullDto dto) {
+        dto.setNewsEntry(null);
+        dto.setTags(Collections.emptySet());
+        return dto;
     }
 
     public static NewsGroupBaseDto cloneNewsGroupBaseDto0() {

@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/admin/template.xhtml">
+
+    <ui:define name="menu-box">
+        <h:form id="menuForm">
+            <p:growl id="msgs" showDetail="true"/>
+            <div class="container" style="min-height: 260px !important;">
+                <div class="center-div">
+                    <h:panelGrid columns="2" cellpadding="5" styleClass="my-companyHeaderGrid">
+                        <p:calendar id="my-ui-widget-content" value="#{calendarView.date}"
+                                    styleClass="my-ui-widget-content" mode="inline">
+                            <p:ajax event="dateSelect" listener="#{calendarView.onDateSelect}"
+                                    update=":mainForm:dataList"/>
+                        </p:calendar>
+                    </h:panelGrid>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="mainForm">
+            <p:dataList id="dataList"
+                        itemType="none"
+                        paginator="true"
+                        paginatorPosition="top"
+                        rows="3"
+                        rowsPerPageTemplate="3,6,9" lazy="true"
+                        styleClass="my-paginated"
+                        type="unordered"
+                        value="#{recordsByDayView.model}"
+                        var="record"
+                        paginatorTemplate=
+                            "{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink}
+                             {PageLinks} {NextPageLink} {LastPageLink}">
+                <div class="ContentSideSections">
+                    <span class="green fontSize24">
+                        <h:outputText value="#{record.newsEntry.title}" rendered="#{record.isTypeOfNewsEntry()}"/>
+                    </span>
+                    <span class="fontSize18 dispBlock regularFont wite"
+                          style="display: block; padding: 15px 0;">
+                        <h:outputText value="#{record.newsEntry.content}" escape="false" rendered="#{record.isTypeOfNewsEntry()}"/>
+                    </span>
+                    <ui:fragment rendered="#{record.isTypeOfNewsEntry()}">
+                    <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
+                            href="#{request.contextPath}/admin/edit-news.xhtml?id=#{record.newsEntry.id}">Edit</a>
+                        <ui:repeat value="#{record.tags}" var="tag">
+                            | #{tag.tag}
+                        </ui:repeat>
+                    </span>
+                    </ui:fragment>
+                    <span class="floatRight fontSize14 gray"><h:outputText value="#{record.toDateHourMinute()}" /></span>
+                    <div style="clear:both"/>
+                </div>
+            </p:dataList>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
