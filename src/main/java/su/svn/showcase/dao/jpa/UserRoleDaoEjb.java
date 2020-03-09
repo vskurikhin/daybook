@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.04 18:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 14:58 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleDaoEjb.java
@@ -33,7 +33,7 @@ public class UserRoleDaoEjb extends UserRoleDaoJpa implements UserRoleDao {
     private EntityManager entityManager;
 
     public UserRoleDaoEjb() {
-        super(new StubEntityManager());
+        super(new StubEntityManager()); // TODO create bridge for EntityManager
     }
 
     /**

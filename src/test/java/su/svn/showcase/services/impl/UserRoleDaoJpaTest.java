@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.09 11:51 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 14:58 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleDaoJpaTest.java
@@ -120,7 +120,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa findById return empty")
     @Test
-    void whenRoleDao_findById_shouldBeReturnEmptyOptional() throws Exception {
+    void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         Optional<UserRole> test = dao.findById(UUID.randomUUID());
@@ -131,7 +131,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa findById return empty")
     @Test
-    void whenRoleDao_findById_shouldBeReturnUserRole() throws Exception {
+    void whenDao_findById_shouldBeReturnUserRole() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         Optional<UserRole> test = dao.findById(UUID10);
@@ -142,7 +142,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa ")
     @Test
-    void whenRoleDao_findAll_shouldBeReturnEmptyList() throws Exception {
+    void whenDao_findAll_shouldBeReturnEmptyList() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         List<UserRole> testList = dao.findAll();
@@ -154,7 +154,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa save is success")
     @Test
-    void whenRoleDao_save_success() throws Exception {
+    void whenDao_save_success() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         Optional<UserRole> test = dao.findById(UUID.randomUUID());
@@ -165,7 +165,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa save of set is success")
     @Test
-    void whenRoleDao_save_iterable_success() throws Exception {
+    void whenDao_save_iterable_success() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         List<UserRole> testList = new ArrayList<UserRole>() {{ add(entity); }};
@@ -177,7 +177,7 @@ class UserRoleDaoJpaTest {
 
     @DisplayName("Test when RoleDaoJpa delete failed")
     @Test
-    void whenRoleDao_delete_shouldBeReturnFalse() throws Exception {
+    void whenDao_delete_shouldBeReturnFalse() throws Exception {
         userTransaction.begin();
         UserRoleDao dao = new UserRoleDaoJpa(entityManager);
         dao.delete(UUID.randomUUID());
