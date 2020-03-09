@@ -130,7 +130,7 @@ class NewsEntryDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsEntryDaoJpa findById return empty")
+    @DisplayName("Test when NewsEntryDaoJpa findById return the entity")
     @Test
     void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();

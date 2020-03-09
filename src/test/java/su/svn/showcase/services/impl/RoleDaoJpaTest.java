@@ -129,7 +129,7 @@ class RoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return ")
+    @DisplayName("Test when RoleDaoJpa findById return the entity")
     @Test
     void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();
@@ -175,7 +175,7 @@ class RoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa delete failed")
+    @DisplayName("Test when RoleDaoJpa delete ")
     @Test
     void whenDao_delete() throws Exception {
         userTransaction.begin();

@@ -42,7 +42,7 @@ import static org.mockito.Mockito.mock;
 import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A RoleDaoJpaTest unit test cases")
+@DisplayName("A UserRoleDaoJpaTest unit test cases")
 @AddPackages(value = {UserRoleDaoJpa.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class UserRoleDaoJpaTest {
@@ -118,7 +118,7 @@ class UserRoleDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return empty")
+    @DisplayName("Test when UserRoleDaoJpa findById return empty")
     @Test
     void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
@@ -129,7 +129,7 @@ class UserRoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return empty")
+    @DisplayName("Test when UserRoleDaoJpa findById return the entity")
     @Test
     void whenDao_findById_shouldBeReturnUserRole() throws Exception {
         userTransaction.begin();
@@ -140,7 +140,7 @@ class UserRoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa ")
+    @DisplayName("Test when UserRoleDaoJpa ")
     @Test
     void whenDao_findAll_shouldBeReturnEmptyList() throws Exception {
         userTransaction.begin();
@@ -152,7 +152,7 @@ class UserRoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa save is success")
+    @DisplayName("Test when UserRoleDaoJpa save is success")
     @Test
     void whenDao_save_success() throws Exception {
         userTransaction.begin();
@@ -163,7 +163,7 @@ class UserRoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa save of set is success")
+    @DisplayName("Test when UserRoleDaoJpa save of set is success")
     @Test
     void whenDao_save_iterable_success() throws Exception {
         userTransaction.begin();
@@ -175,7 +175,7 @@ class UserRoleDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa delete failed")
+    @DisplayName("Test when UserRoleDaoJpa delete ")
     @Test
     void whenDao_delete_shouldBeReturnFalse() throws Exception {
         userTransaction.begin();

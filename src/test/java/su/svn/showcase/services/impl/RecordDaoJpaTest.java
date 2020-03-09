@@ -130,7 +130,7 @@ class RecordDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RecordDaoJpa findById return empty")
+    @DisplayName("Test when RecordDaoJpa findById return the entity")
     @Test
     void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();
@@ -176,7 +176,7 @@ class RecordDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RecordDaoJpa delete failed")
+    @DisplayName("Test when RecordDaoJpa delete ")
     @Test
     void whenDao_delete() throws Exception {
         userTransaction.begin();

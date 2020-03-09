@@ -43,7 +43,7 @@ import static org.mockito.Mockito.mock;
 import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A UserLoginDaoTest unit test cases")
+@DisplayName("A UserLoginDaoJpaTest unit test cases")
 @AddPackages(value = {UserLoginDao.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class UserLoginDaoJpaTest {
@@ -119,7 +119,7 @@ class UserLoginDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return empty")
+    @DisplayName("Test when UserLoginDaoJpa findById return empty")
     @Test
     void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
@@ -130,7 +130,7 @@ class UserLoginDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RoleDaoJpa findById return empty")
+    @DisplayName("Test when UserLoginDaoJpa findById return the entity")
     @Test
     void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();
@@ -141,7 +141,7 @@ class UserLoginDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when newsEntryDao save success")
+    @DisplayName("Test when UserLoginDaoJpa save success")
     @Test
     void whenUserLoginDao_save_success() throws Exception {
         userTransaction.begin();

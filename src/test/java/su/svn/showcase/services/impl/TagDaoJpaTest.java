@@ -30,8 +30,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.io.InputStream;
 import java.util.*;
@@ -118,9 +116,9 @@ class TagDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when TagDaoJpa findById return")
+    @DisplayName("Test when TagDaoJpa findById return the entity")
     @Test
-    void whenTagDao_findById_shouldBeReturnTag() throws Exception {
+    void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         Optional<Tag> test= dao.findById(ID11);
@@ -131,7 +129,7 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa findById return empty")
     @Test
-    void whenTagDao_findById_shouldBeReturnEmptyOptional() throws Exception {
+    void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         Optional<Tag> test= dao.findById(StringUtil.generateStringId());
@@ -142,7 +140,7 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa")
     @Test
-    void whenTagDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
+    void whenDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         List<Tag> testList = dao.findAll();
@@ -154,7 +152,7 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa save is success")
     @Test
-    void whenTagDao_save_success() throws Exception {
+    void whenDao_save_success() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         Tag test = dao.save(entity);
@@ -165,7 +163,7 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa save of set is success")
     @Test
-    void whenTagDao_save_iterable_success() throws Exception {
+    void whenDao_save_iterable_success() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         List<Tag> testList = new ArrayList<Tag>() {{ add(entity); }};
@@ -177,16 +175,16 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa delete failed")
     @Test
-    void whenTagDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
+    void whenDao_delete_shouldBeReturnFalse() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         dao.delete(StringUtil.generateStringId());
-        userTransaction.rollback();
+        userTransaction.commit();
     }
 
     @DisplayName("Test when TagDaoJpa outer section")
     @Test
-    void whenTagDao_outerSection() throws Exception {
+    void whenDao_outerSection() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         dao.save(entity);

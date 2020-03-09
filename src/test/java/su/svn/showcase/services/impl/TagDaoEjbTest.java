@@ -120,7 +120,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb findById return")
     @Test
-    void whenTagDao_findById_shouldBeReturnTag() throws Exception {
+    void whenEjbDao_findById_shouldBeReturnTag() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         Optional<Tag> test= dao.findById(ID10);
@@ -131,7 +131,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb findById return empty")
     @Test
-    void whenTagDao_findById_shouldBeReturnEmptyOptional() throws Exception {
+    void whenEjbDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         Optional<Tag> test= dao.findById(StringUtil.generateStringId());
@@ -142,7 +142,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb")
     @Test
-    void whenTagDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
+    void whenEjbDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         List<Tag> testList = dao.findAll();
@@ -154,7 +154,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb save is success")
     @Test
-    void whenTagDao_save_success() throws Exception {
+    void whenEjbDao_save_success() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         Tag test = dao.save(entity);
@@ -165,7 +165,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb save of set is success")
     @Test
-    void whenTagDao_save_iterable_success() throws Exception {
+    void whenEjbDao_save_iterable_success() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         List<Tag> testList = new ArrayList<Tag>() {{ add(entity); }};
@@ -175,9 +175,9 @@ class TagDaoEjbTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when TagDaoEjb delete failed")
+    @DisplayName("Test when TagDaoEjb delete ")
     @Test
-    void whenTagDao_delete_shouldBeReturnFalse() throws Exception {
+    void whenEjbDao_delete_shouldBeReturnFalse() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         dao.delete(StringUtil.generateStringId());
@@ -186,7 +186,7 @@ class TagDaoEjbTest {
 
     @DisplayName("Test when TagDaoEjb outer section")
     @Test
-    void whenTagDao_outerSection() throws Exception {
+    void whenEjbDao_outerSection() throws Exception {
         userTransaction.begin();
         TagDao dao = weld.select(TagDaoEjb.class).get();
         dao.save(entity);
