@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.04 23:17 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoEjb.java
@@ -20,7 +20,7 @@ import javax.persistence.*;
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
- * The Record DAO implementation.
+ * The Record DAO/EJB implementation.
  *
  * @author Victor N. Skurikhin
  */
@@ -33,7 +33,7 @@ public class RecordDaoEjb extends RecordDaoJpa implements RecordDao {
     private EntityManager entityManager;
 
     public RecordDaoEjb() {
-        super(new StubEntityManager()); // TODO create stub proxy for EntityManager
+        super(new StubEntityManager()); // TODO create bridge for EntityManager
     }
 
     /**

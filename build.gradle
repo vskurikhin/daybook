@@ -28,8 +28,9 @@ buildscript {
 
   dependencies {
     classpath "gradle.plugin.com.avast.gradle:gradle-docker-compose-plugin:0.9.5"
-    classpath "io.thorntail:thorntail-gradle-plugin:$thorntail"
     classpath "io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE"
+    classpath "io.thorntail:thorntail-gradle-plugin:$thorntail"
+    classpath "org.padler.gradle.minify:gradle-minify-plugin:1.1.1"
     classpath("org.liquibase:liquibase-gradle-plugin:$liquibase_gradle_plugin") {
       exclude(module: 'liquibase-core') // exclude the dependency on liquibase-core:3.6.3
     }
@@ -43,9 +44,15 @@ apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 apply plugin: 'org.liquibase.gradle'
+apply plugin: 'org.padler.gradle.minify'
 apply plugin: 'thorntail'
 apply plugin: 'thorntail-arquillian'
 apply plugin: 'war'
+
+java {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
   mavenLocal()
@@ -63,6 +70,12 @@ repositories {
     url "https://repo.spring.io/plugins-release"
   }
 }
+
+ext.dirs = [
+    object_store              : file("${projectDir}/ObjectStore"),
+    out                       : file("${projectDir}/out"),
+    put_object_store_dir_here : file("${projectDir}/PutObjectStoreDirHere"),
+]
 
 static def getEnv(key, defaultValue) {
   return System.getenv(key) ?: defaultValue
@@ -247,6 +260,13 @@ dockerCompose {
   containerLogToDir = project.file('build/logs')
 }
 
+minification {
+  cssSrcDir = "${rootDir}/src/main/css"
+  cssDstDir = "${rootDir}/src/main/webapp/resources/main/css"
+  jsDstDir =  "${rootDir}/src/main/webapp/resources/main/js"
+  jsSrcDir =  "${rootDir}/src/main/js"
+}
+
 test {
   useJUnitPlatform()
   maxHeapSize = '1G'
@@ -288,3 +308,12 @@ def composeUp = project.properties['local'] ?: 'false'
 if (composeUp == 'true') {
   dockerCompose.isRequiredBy(integrationTest)
 }
+
+task cleanGenerated(type: Delete) {
+  delete dirs.object_store
+  delete dirs.out
+  delete dirs.put_object_store_dir_here
+}
+
+clean.dependsOn cleanGenerated
+

@@ -30,8 +30,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.io.InputStream;
 import java.util.*;
@@ -47,8 +45,9 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class TagDaoJpaTest {
 
-    private Class<?> tClass = TagDaoJpaTest.class;
-    private String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    private static final Class<?> tClass = TagDaoJpaTest.class;
+    private static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    private static final String ID11 = "tag1100000000011";
 
     @Inject
     private BeanManager beanManager;
@@ -71,7 +70,7 @@ class TagDaoJpaTest {
     private TagDao mockTagDao = mock(TagDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                           mockTagDao);
+        put(null, mockTagDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -117,9 +116,20 @@ class TagDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
+    @DisplayName("Test when TagDaoJpa findById return the entity")
+    @Test
+    void whenDao_findById_shouldBeReturnEntity() throws Exception {
+        userTransaction.begin();
+        TagDao dao = new TagDaoJpa(entityManager);
+        Optional<Tag> test= dao.findById(ID11);
+        assertNotNull(test);
+        assertTrue(test.isPresent());
+        userTransaction.commit();
+    }
+
     @DisplayName("Test when TagDaoJpa findById return empty")
     @Test
-    void whenTagDao_findById_shouldBeReturnEmptyOptional() throws Exception {
+    void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         Optional<Tag> test= dao.findById(StringUtil.generateStringId());
@@ -128,20 +138,21 @@ class TagDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when TagDaoJpa save success")
+    @DisplayName("Test when TagDaoJpa")
     @Test
-    void whenTagDao_findAll_shouldBeReturnEmptyList() throws Exception {
+    void whenDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         List<Tag> testList = dao.findAll();
         assertNotNull(testList);
         assertFalse(testList.isEmpty());
+        assertEquals(1, testList.size());
         userTransaction.commit();
     }
 
     @DisplayName("Test when TagDaoJpa save is success")
     @Test
-    void whenTagDao_save_success() throws Exception {
+    void whenDao_save_success() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         Tag test = dao.save(entity);
@@ -152,7 +163,7 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa save of set is success")
     @Test
-    void whenTagDao_save_iterable_success() throws Exception {
+    void whenDao_save_iterable_success() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         List<Tag> testList = new ArrayList<Tag>() {{ add(entity); }};
@@ -164,16 +175,16 @@ class TagDaoJpaTest {
 
     @DisplayName("Test when TagDaoJpa delete failed")
     @Test
-    void whenTagDao_delete_shouldBeReturnFalse() throws SystemException, NotSupportedException {
+    void whenDao_delete_shouldBeReturnFalse() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         dao.delete(StringUtil.generateStringId());
-        userTransaction.rollback();
+        userTransaction.commit();
     }
 
     @DisplayName("Test when TagDaoJpa outer section")
     @Test
-    void whenTagDao_outerSection() throws Exception {
+    void whenDao_outerSection() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         dao.save(entity);
