@@ -8,7 +8,6 @@
 
 package su.svn.showcase.domain;
 
-import su.svn.showcase.dto.NewsEntryBaseDto;
 import su.svn.showcase.dto.NewsEntryFullDto;
 
 import java.util.*;
