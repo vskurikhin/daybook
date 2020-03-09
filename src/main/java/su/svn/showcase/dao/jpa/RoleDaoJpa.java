@@ -13,25 +13,20 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RoleDao;
 import su.svn.showcase.domain.Role;
 
-import javax.ejb.Stateless;
 import javax.persistence.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 /**
  * The Role DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
-@Stateless
 public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RoleDaoJpa.class);
 
-    @PersistenceContext(unitName = PERSISTENCE_UNIT_NAME)
     private final EntityManager entityManager;
 
     public RoleDaoJpa(EntityManager entityManager) {
