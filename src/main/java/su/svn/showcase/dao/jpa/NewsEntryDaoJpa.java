@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupDaoJpa.java
+ * NewsEntryDaoJpa.java
  * $Id$
  */
 
@@ -10,8 +10,8 @@ package su.svn.showcase.dao.jpa;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.dao.NewsEntryDao;
+import su.svn.showcase.domain.NewsEntry;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -20,17 +20,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * The NewsGroup DAO implementation.
+ * The NewsEntry DAO implementation.
  *
  * @author Victor N. Skurikhin
  */
-public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements NewsGroupDao {
+public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements NewsEntryDao {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupDaoJpa.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryDaoJpa.class);
 
     private final EntityManager entityManager;
 
-    public NewsGroupDaoJpa(@Nonnull EntityManager entityManager) {
+    public NewsEntryDaoJpa(@Nonnull EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -42,7 +42,7 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
      *         is null
      */
     @Override
-    public Optional<NewsGroup> findById(UUID id) {
+    public Optional<NewsEntry> findById(UUID id) {
         return jpaFindById(id);
     }
 
@@ -67,28 +67,28 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
      *         is rolled back
      */
     @Override
-    public Optional<NewsGroup> findWhereGroup(String group) {
-        return jpaFindWhereField(NewsGroup.FIND_WHERE_GROUP, "group", group);
+    public Optional<NewsEntry> findWhereTitle(String title) {
+        return jpaFindWhereField(NewsEntry.FIND_WHERE_TITLE, "title", title);
     }
 
     @Override
-    public List<NewsGroup> findAll() {
-        return abstractDaoFindAll(NewsGroup.FIND_ALL);
+    public List<NewsEntry> findAll() {
+        return abstractDaoFindAll(NewsEntry.FIND_ALL);
     }
 
     @Override
-    public List<NewsGroup> findAllOrderByGroupAsc() {
-        return abstractDaoFindAll(NewsGroup.FIND_ALL_ORDER_BY_GROUP_ASC);
+    public List<NewsEntry> findAllOrderByTitleAsc() {
+        return abstractDaoFindAll(NewsEntry.FIND_ALL_ORDER_BY_TITLE_ASC);
     }
 
     @Override
-    public List<NewsGroup> findAllOrderByGroupDesc() {
-        return abstractDaoFindAll(NewsGroup.FIND_ALL_ORDER_BY_GROUP_DESC);
+    public List<NewsEntry> findAllOrderByTitleDesc() {
+        return abstractDaoFindAll(NewsEntry.FIND_ALL_ORDER_BY_TITLE_DESC);
     }
 
     @Override
-    public List<NewsGroup> findAllByIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(NewsGroup.FIND_ALL_WHERE_ID_IN, "ids", ids);
+    public List<NewsEntry> findAllByIdIn(Iterable<UUID> ids) {
+        return abstractDaoFindAllWhereIn(NewsEntry.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     @Override
@@ -108,12 +108,12 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
      * @throws PersistenceException if the flush fails
      */
     @Override
-    public NewsGroup save(NewsGroup entity) {
+    public NewsEntry save(NewsEntry entity) {
         return jpaDaoSave(entity);
     }
 
     @Override
-    public Iterable<NewsGroup> saveAll(Iterable<NewsGroup> entities) {
+    public Iterable<NewsEntry> saveAll(Iterable<NewsEntry> entities) {
         return abstractDaoSaveAll(entities);
     }
 
@@ -123,33 +123,42 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
     }
 
     @Override
-    public void deleteAll(Iterable<NewsGroup> entities) {
+    public void deleteAll(Iterable<NewsEntry> entities) {
         abstractDaoDeleteAll(entities);
     }
 
     @Override
-    public List<NewsGroup> findAllWhereGroup(String group) {
-        return abstractDaoFindAllWhereField(NewsGroup.FIND_WHERE_GROUP, "group", group);
+    public List<NewsEntry> findAllWhereTitle(String title) {
+        return abstractDaoFindAllWhereField(NewsEntry.FIND_WHERE_TITLE, "title", title);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public List<NewsGroup> range(int start, int size) {
-        return jpaRange(NewsGroup.FIND_ALL, start, size);
+    public List<NewsEntry> range(int start, int size) {
+        return jpaRange(NewsEntry.FIND_ALL, start, size);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public List<NewsGroup> rangeOrderByGroupAsc(int start, int size) {
-        return jpaRange(NewsGroup.FIND_ALL_ORDER_BY_GROUP_ASC, start, size);
+    public List<NewsEntry> rangeOrderByTitleAsc(int start, int size) {
+        return jpaRange(NewsEntry.FIND_ALL_ORDER_BY_TITLE_ASC, start, size);
     }
 
+    /**
+     * {@inheritDoc }
+     */
     @Override
-    public List<NewsGroup> rangeOrderByGroupDesc(int start, int size) {
-        return jpaRange(NewsGroup.FIND_ALL_ORDER_BY_GROUP_DESC, start, size);
+    public List<NewsEntry> findAllOrderByTitleDesc(int start, int size) {
+        return jpaRange(NewsEntry.FIND_ALL_ORDER_BY_TITLE_DESC, start, size);
     }
 
     @Override
     EntityManager getEntityManager() {
-        return this.entityManager;
+        return entityManager;
     }
 
     @Override
@@ -158,8 +167,7 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
     }
 
     @Override
-    public Class<NewsGroup> getEClass() {
-        return NewsGroup.class;
+    public Class<NewsEntry> getEClass() {
+        return NewsEntry.class;
     }
 }
-//EOF

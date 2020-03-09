@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupDaoJpaTest.java
+ * NewsEntryDaoJpaTest.java
  * $Id$
  */
 
@@ -17,9 +17,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.dao.jpa.NewsGroupDaoJpa;
-import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.dao.NewsEntryDao;
+import su.svn.showcase.dao.jpa.NewsEntryDaoJpa;
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -40,15 +40,15 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static su.svn.showcase.domain.TestData.clean;
-import static su.svn.showcase.domain.TestData.cloneNewsGroup1;
+import static su.svn.showcase.domain.TestData.cloneNewsEntry1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A NewsGroupDaoJpaTest unit test cases")
-@AddPackages(value = {NewsGroupDaoJpa.class})
+@DisplayName("A NewsEntryDaoJpaTest unit test cases")
+@AddPackages(value = {NewsEntryDaoJpa.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class NewsGroupDaoJpaTest {
+class NewsEntryDaoJpaTest {
 
-    private static final Class<?> tClass = NewsGroupDaoJpaTest.class;
+    private static final Class<?> tClass = NewsEntryDaoJpaTest.class;
     private static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
     private static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
@@ -60,7 +60,7 @@ class NewsGroupDaoJpaTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsGroupDaoJpa.class,
+            NewsEntryDaoJpa.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -70,7 +70,7 @@ class NewsGroupDaoJpaTest {
             .inject(this)
             .build();
 
-    private NewsGroupDao mockDao = mock(NewsGroupDao.class);
+    private NewsEntryDao mockDao = mock(NewsEntryDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put(null, mockDao);
@@ -86,7 +86,7 @@ class NewsGroupDaoJpaTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private NewsGroup entity;
+    private NewsEntry entity;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -96,7 +96,7 @@ class NewsGroupDaoJpaTest {
                 entityManager.createNativeQuery(sql).executeUpdate());
         userTransaction.commit();
 
-        entity = clean(cloneNewsGroup1());
+        entity = clean(cloneNewsEntry1());
     }
 
     @AfterEach
@@ -119,68 +119,68 @@ class NewsGroupDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa findById return empty")
+    @DisplayName("Test when NewsEntryDaoJpa findById return empty")
     @Test
     void whenDao_findById_shouldBeReturnEmptyOptional() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
-        Optional<NewsGroup> test = dao.findById(UUID.randomUUID());
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
+        Optional<NewsEntry> test = dao.findById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa findById return empty")
+    @DisplayName("Test when NewsEntryDaoJpa findById return empty")
     @Test
     void whenDao_findById_shouldBeReturnEntity() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
-        Optional<NewsGroup> test = dao.findById(UUID10);
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
+        Optional<NewsEntry> test = dao.findById(UUID10);
         assertNotNull(test);
         assertTrue(test.isPresent());
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa ")
+    @DisplayName("Test when NewsEntryDaoJpa ")
     @Test
     void whenDao_findAll_shouldBeReturnListOfOneEntity() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
-        List<NewsGroup> testList = dao.findAll();
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
+        List<NewsEntry> testList = dao.findAll();
         assertNotNull(testList);
         assertFalse(testList.isEmpty());
         assertEquals(1, testList.size());
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa ")
+    @DisplayName("Test when NewsEntryDaoJpa ")
     @Test
     void whenDao_save_success() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
-        Optional<NewsGroup> test = dao.findById(UUID.randomUUID());
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
+        Optional<NewsEntry> test = dao.findById(UUID.randomUUID());
         assertNotNull(test);
         assertFalse(test.isPresent());
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa save of set is success")
+    @DisplayName("Test when NewsEntryDaoJpa save of set is success")
     @Test
     void whenDao_save_iterable_success() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
-        List<NewsGroup> testList = new ArrayList<NewsGroup>() {{ add(entity); }};
-        Iterable<NewsGroup> result = dao.saveAll(testList);
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
+        List<NewsEntry> testList = new ArrayList<NewsEntry>() {{ add(entity); }};
+        Iterable<NewsEntry> result = dao.saveAll(testList);
         assertNotNull(result);
         assertEquals(testList, result);
         userTransaction.commit();
     }
 
-    @DisplayName("Test when NewsGroupDaoJpa delete failed")
+    @DisplayName("Test when NewsEntryDaoJpa delete failed")
     @Test
     void whenDao_delete() throws Exception {
         userTransaction.begin();
-        NewsGroupDao dao = new NewsGroupDaoJpa(entityManager);
+        NewsEntryDao dao = new NewsEntryDaoJpa(entityManager);
         dao.delete(UUID.randomUUID());
         userTransaction.commit();
     }

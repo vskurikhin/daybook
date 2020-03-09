@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.17 22:14 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -182,8 +182,7 @@ public class TestData {
     }
 
     public static Record clean(Record entity) {
-        entity.getNewsEntry().setNewsGroup(null);
-        entity.getNewsEntry().setRecord(null);
+        entity.setNewsEntry(null);
         entity.setTags(Collections.emptySet());
         entity.getUserLogin().setRoles(Collections.emptyList());
         return entity;
