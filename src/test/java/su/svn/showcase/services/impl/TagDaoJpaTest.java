@@ -47,8 +47,9 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class TagDaoJpaTest {
 
-    private Class<?> tClass = TagDaoJpaTest.class;
-    private String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    private static final Class<?> tClass = TagDaoJpaTest.class;
+    private static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    private static final String ID11 = "tag1100000000011";
 
     @Inject
     private BeanManager beanManager;
@@ -71,7 +72,7 @@ class TagDaoJpaTest {
     private TagDao mockTagDao = mock(TagDao.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                           mockTagDao);
+        put(null, mockTagDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -117,6 +118,17 @@ class TagDaoJpaTest {
         assertNotNull(userTransaction);
     }
 
+    @DisplayName("Test when TagDaoJpa findById return")
+    @Test
+    void whenTagDao_findById_shouldBeReturnTag() throws Exception {
+        userTransaction.begin();
+        TagDao dao = new TagDaoJpa(entityManager);
+        Optional<Tag> test= dao.findById(ID11);
+        assertNotNull(test);
+        assertTrue(test.isPresent());
+        userTransaction.commit();
+    }
+
     @DisplayName("Test when TagDaoJpa findById return empty")
     @Test
     void whenTagDao_findById_shouldBeReturnEmptyOptional() throws Exception {
@@ -128,14 +140,15 @@ class TagDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when TagDaoJpa save success")
+    @DisplayName("Test when TagDaoJpa")
     @Test
-    void whenTagDao_findAll_shouldBeReturnEmptyList() throws Exception {
+    void whenTagDao_findAll_shouldBeReturnNonEmptyList() throws Exception {
         userTransaction.begin();
         TagDao dao = new TagDaoJpa(entityManager);
         List<Tag> testList = dao.findAll();
         assertNotNull(testList);
         assertFalse(testList.isEmpty());
+        assertEquals(1, testList.size());
         userTransaction.commit();
     }
 
