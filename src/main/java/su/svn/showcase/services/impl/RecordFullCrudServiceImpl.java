@@ -122,7 +122,9 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
 
     @Override
     public List<RecordFullDto> readRangeByDay(LocalDate localDate, int first, int pageSize) {
-        return readRangeByDay(localDate, first, pageSize);
+        return recordDao.rangeByDay(first, pageSize, localDate).stream()
+                .map(RecordFullDto::new)
+                .collect(Collectors.toList());
     }
 }
 //EOF
