@@ -86,7 +86,7 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
                 .map(this::constructTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord newTags: {}", newTags);
-        if (record != null && ! newTags.isEmpty()) {
+        if (record != null && notEqualsCardinalities(setLabels, record.getTags())) {
             tagDaoJpa.saveAll(newTags);
             List<Tag> savedTags = tagDaoJpa.findAllByTagIn(setLabels);
             record.setTags(new HashSet<>(savedTags));
@@ -94,6 +94,10 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
             getLogger().info("acceptTagsToRecord entry: {}", record);
             getLogger().info("acceptTagsToRecord entry.getTags(): {}", record.getTags());
         }
+    }
+
+    private boolean notEqualsCardinalities(Collection<?> collection1, Collection<?> collection2) {
+        return collection1.size() != collection2.size();
     }
 
     private Tag constructTag(String tag) {
