@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.10 22:56 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.14 20:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleBaseDto.java
@@ -40,9 +40,6 @@ public class UserRoleBaseDto implements UserRoleDto, Serializable {
     private UUID id;
 
     @NotNull
-    private RoleBaseDto role;
-
-    @NotNull
     private LocalDateTime dateTime;
 
     @NotNull
@@ -52,7 +49,6 @@ public class UserRoleBaseDto implements UserRoleDto, Serializable {
     public UserRoleBaseDto(@NotNull UserRole entity) {
         assert entity != null;
         this.id = entity.getId();
-        this.role = new RoleBaseDto(entity.getRole());
         this.dateTime = entity.getDateTime();
         this.roleName = entity.getRoleName();
     }
@@ -64,8 +60,6 @@ public class UserRoleBaseDto implements UserRoleDto, Serializable {
 
     @Override
     public UserRole update(@Nonnull UserRole entity) {
-        assert this.role != null;
-        entity.setRole(this.role.update(new Role(this.role.getId())));
         updateIfNotNull(entity::setDateTime, this.dateTime);
         updateIfNotNull(entity::setRoleName, this.roleName);
 
