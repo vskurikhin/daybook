@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.10 22:56 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.14 13:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginFullDto.java
@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -90,3 +91,4 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
         return UserLoginFullDto.class;
     }
 }
+//EOF

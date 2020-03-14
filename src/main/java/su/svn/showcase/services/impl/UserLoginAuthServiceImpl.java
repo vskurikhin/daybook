@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.10 22:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.14 13:49 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginAuthServiceImpl.java
@@ -47,6 +47,12 @@ public class UserLoginAuthServiceImpl extends AbstractCrudService implements Use
     }
 
     @Override
+    public UserLoginAuthDto readByLogin(String login) {
+        return new UserLoginFullDto(userLoginDao.findWhereLogin(login)
+                .orElseThrow(ErrorCase::notFound));
+    }
+
+    @Override
     public List<UserLoginAuthDto> readRange(int start, int size) {
         return userLoginDao.range(start, size).stream()
                 .map(UserLoginFullDto::new)
@@ -72,11 +78,6 @@ public class UserLoginAuthServiceImpl extends AbstractCrudService implements Use
     @Override
     Logger getLogger() {
         return LOGGER;
-    }
-
-    @Override
-    public UserLoginAuthDto readByLogin(String login) {
-        return null;
     }
 
     private void saveUpdatedEntity(UserLogin entity, UserLoginAuthDto dto) {
