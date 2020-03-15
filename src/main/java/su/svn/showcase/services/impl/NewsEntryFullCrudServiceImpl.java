@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -69,6 +69,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     @Transactional
     public void update(@Nonnull NewsEntryFullDto dto) {
         validateId(dto);
+        // TODO validate login
         update(getNewsEntry(dto.getId()), dto);
     }
 
@@ -97,9 +98,9 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     }
 
     private void update(NewsEntry entity, NewsEntryFullDto dto) {
-        entity = dto.update(entity);
-        Record record = entity.getRecord();
-        recordDao.save(record);
+        RecordFullDto recordFullDto = (RecordFullDto) dto.getRecord();
+        entity = dto.update(entity, getUserLogin(recordFullDto.getUserLogin()));
+        newsEntryDao.save(entity);
     }
 
     private NewsEntry getNewsEntry(UUID id) {

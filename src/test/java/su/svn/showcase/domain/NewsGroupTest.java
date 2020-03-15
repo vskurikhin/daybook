@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.06 22:29 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupTest.java
@@ -13,7 +13,7 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.shared.Constants.Types.UUID.ZERO;
 import static su.svn.utils.TestData.EMPTY_NEWS_ENTRIES;
 import static su.svn.utils.TestData.NOW;
 

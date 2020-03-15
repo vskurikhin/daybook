@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 23:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateView.java
@@ -19,8 +19,10 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 @Data
 @ManagedBean
@@ -72,6 +74,7 @@ public class NewsEntryCreateView extends AbstractView {
         LOGGER.trace("save");
         try {
             NewsEntryCreateModel model = newsEntryModelBuilder
+                    .login(getCurrentUserName())
                     .title(this.title)
                     .tags(this.tags)
                     .date(this.date)
