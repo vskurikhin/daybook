@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseDtoTest.java
@@ -9,6 +9,7 @@
 package su.svn.showcase.dto;
 
 import org.junit.jupiter.api.*;
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.utils.ValidateUtil;
 
@@ -142,10 +143,12 @@ class RecordBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
+            NewsEntry newsEntry = cloneNewsEntry0();
             Record expected = cloneRecord0();
+            expected.setNewsEntry(newsEntry);
             Map<String, Object> values = new HashMap<String, Object>() {{
                 put("userLogin", cloneUserLogin0());
-                put("newsEntry", clean(cloneNewsEntry0()));
+                put("newsEntry", clean(newsEntry));
             }};
             expected.setType(RecordBaseDto.class.getSimpleName());
             assertEquals(expected, recordBaseDto.update(new Record(ZERO), values));
@@ -165,7 +168,7 @@ class RecordBaseDtoTest {
 //EOF
 /*
 expected: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-29T20:43:59.145826, editDateTime=2020-02-29T20:43:59.145826, index=13, type=null, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, group=groupTest0)))> but was: <
-Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-02-29T20:43:59.145826, editDateTime=2020-02-29T20:43:59.145826, index=13, type=Record, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-02-29T20:43:59.145826, group=groupTest0)))>
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-03-15T18:34:49.975105, editDateTime=2020-03-15T18:34:49.975105, index=13, type=RecordBaseDto, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-15T18:34:49.975105, login=loginTest0, password=passwordTest0), newsEntry=null, newsLinks=null)> but was: <
+Record(id=00000000-0000-0000-0000-000000000000, createDateTime=2020-03-15T18:34:49.975105, editDateTime=2020-03-15T18:34:49.975105, index=13, type=RecordBaseDto, userLogin=UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-15T18:34:49.975105, login=loginTest0, password=passwordTest0), newsEntry=NewsEntry(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-15T18:34:49.975105, title=titleTest0, content=contentTest0, newsGroup=NewsGroup(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-15T18:34:49.975105, group=groupTest0)), newsLinks=null)>
 
  */

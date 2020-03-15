@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -70,7 +70,13 @@ public class RecordFullDto implements RecordDto, Serializable {
         this.index = entity.getIndex();
         this.type = entity.getType();
         this.userLogin = new UserOnlyLoginBaseDto(entity.getUserLogin());
-        this.newsEntry = new NewsEntryBaseDto(entity.getNewsEntry());
+        RecordTypesEnum type = RecordTypesEnum.valueOf(entity.getType());
+        switch (type) {
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
+                this.newsEntry = new NewsEntryBaseDto(entity.getNewsEntry());
+                break;
+        }
         this.tags = entity.getTags().stream()
                 .map(TagBaseDto::new)
                 .collect(Collectors.toSet());
