@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:59 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 17:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -160,11 +160,11 @@ public class TestData {
         newsEntry1.setNewsGroup(newsGroup1);
 
         record0.setUserLogin(userLogin0);
-        record0.setNewsEntry(newsEntry0);
+        // TODO record0.setNewsEntry(newsEntry0);
         record0.setTags(newSet(tag0));
 
         record1.setUserLogin(userLogin1);
-        record1.setNewsEntry(newsEntry1);
+        // TODO record1.setNewsEntry(newsEntry1);
         record1.setTags(newSet(tag1));
 
         linkDescription0.setLink(link0);
@@ -175,6 +175,11 @@ public class TestData {
         link0.setDescriptions(newSet(linkDescription0));
         link1.setDescriptions(newSet(linkDescription1));
 
+        newsLinks0.setRecord(record0);
+        newsLinks1.setRecord(record1);
+        newsLinks0.setNewsGroup(newsGroup0);
+        newsLinks1.setNewsGroup(newsGroup1);
+        newsLinks1.setLinks(newSet(linkDescription1));
         newsLinks0.setLinks(newSet(linkDescription0));
         newsLinks1.setLinks(newSet(linkDescription1));
     }

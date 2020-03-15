@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImplTest.java
@@ -105,6 +105,7 @@ class NewsEntryFullCrudServiceImplTest {
     @BeforeEach
     void setUp() {
         entity = cloneNewsEntry1();
+        entity.getRecord().setNewsEntry(entity);
         dto = cloneNewsEntryFullDto1();
         newsGroupDto = cloneNewsGroupBaseDto1();
         record = cloneRecord1();
