@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -34,6 +34,8 @@ class RecordFullDtoTest {
 
     private NewsEntryBaseDto newsEntryDto;
 
+    private NewsLinksBaseDto newsLinksDto;
+
     private RecordFullDto recordFullDto;
 
     @Test
@@ -49,6 +51,7 @@ class RecordFullDtoTest {
         void createNew() {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
+            newsLinksDto = cloneNewsLinksBaseDto0();
             recordFullDto = new RecordFullDto();
         }
 
@@ -62,6 +65,7 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("type", null);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("userLogin", null);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", null);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", null);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("tags", null);
         }
 
@@ -91,12 +95,16 @@ class RecordFullDtoTest {
             recordFullDto.setNewsEntry(newsEntryDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
             assertEquals(newsEntryDto, recordFullDto.getNewsEntry());
+
+            recordFullDto.setNewsLinks(newsLinksDto);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
+            assertEquals(newsLinksDto, recordFullDto.getNewsLinks());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(7, recordFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(8, recordFullDto).hasNext());
         }
     }
 
@@ -126,7 +134,8 @@ class RecordFullDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            recordFullDto = new RecordFullDto(ROLE_UUID0, NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, tagDtos);
+            recordFullDto = new RecordFullDto(ROLE_UUID0,
+                    NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, newsLinksDto, tagDtos);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("createDateTime", NOW);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("editDateTime", NOW);
@@ -134,6 +143,7 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("type", "testType");
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("tags", tagDtos);
         }
 
@@ -148,6 +158,7 @@ class RecordFullDtoTest {
                     .type("testType")
                     .userLogin(userLoginDto)
                     .newsEntry(newsEntryDto)
+                    .newsLinks(newsLinksDto)
                     .tags(tagDtos)
                     .build();
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("id", ZERO);
@@ -157,6 +168,7 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("type", "testType");
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("tags", tagDtos);
         }
 
