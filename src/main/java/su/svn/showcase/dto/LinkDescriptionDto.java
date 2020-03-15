@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 22:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 23:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionDto.java
@@ -12,7 +12,6 @@ import su.svn.showcase.domain.*;
 import su.svn.showcase.interfaces.Updating;
 
 import javax.annotation.Nonnull;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public interface LinkDescriptionDto extends Dto<UUID>, Updating<LinkDescription>
 
     void setDetails(String details);
 
-    LinkDescription update(@NotNull LinkDescription entity, UserLogin userLogin);
+    LinkDescription update(@Nonnull LinkDescription entity, UserLogin userLogin);
 
     default LinkDescription update(@Nonnull LinkDescription entity, @Nonnull Map<String, Object> values) {
         convertIfContainsKey(NewsLinks.class, values, "newsLinks").ifPresent(entity::setNewsLinks);

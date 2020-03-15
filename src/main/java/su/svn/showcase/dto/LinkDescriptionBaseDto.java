@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 22:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 23:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionBaseDto.java
@@ -12,9 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.LinkDescription;
-import su.svn.showcase.domain.NewsLinks;
 import su.svn.showcase.domain.UserLogin;
 
 import javax.annotation.Nonnull;
@@ -73,7 +71,7 @@ public class LinkDescriptionBaseDto implements LinkDescriptionDto, Serializable 
     }
 
     @Override
-    public LinkDescription update(@NotNull LinkDescription entity, UserLogin userLogin) {
+    public LinkDescription update(@Nonnull LinkDescription entity, UserLogin userLogin) {
         return update(entity);
     }
 }
