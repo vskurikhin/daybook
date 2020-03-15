@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+  ~ This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
   ~ This is free and unencumbered software released into the public domain.
   ~ For more information, please refer to <http://unlicense.org>
   ~ persistence.xml
@@ -15,8 +15,11 @@
   <persistence-unit name="PgPU" transaction-type="JTA">
     <jta-data-source>jboss/datasources/PgDS</jta-data-source>
     <class>su.svn.showcase.domain.NewsEntry</class>
+    <class>su.svn.showcase.domain.NewsLinks</class>
     <class>su.svn.showcase.domain.NewsGroup</class>
     <class>su.svn.showcase.domain.Record</class>
+    <class>su.svn.showcase.domain.Link</class>
+    <class>su.svn.showcase.domain.LinkDescription</class>
     <class>su.svn.showcase.domain.Role</class>
     <class>su.svn.showcase.domain.Tag</class>
     <class>su.svn.showcase.domain.UserLogin</class>
