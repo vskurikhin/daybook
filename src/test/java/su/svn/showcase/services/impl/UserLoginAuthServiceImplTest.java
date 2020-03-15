@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.14 20:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullCrudServiceImplTest.java
+ * UserLoginAuthServiceImplTest.java
  * $Id$
  */
 
@@ -14,14 +14,12 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.RecordDaoEjb;
-import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.TestData;
+import su.svn.showcase.dto.UserLoginAuthDto;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.RecordFullCrudService;
+import su.svn.showcase.services.UserLoginAuthService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -34,7 +32,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,15 +41,14 @@ import java.util.function.Function;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static su.svn.showcase.domain.TestData.*;
-import static su.svn.showcase.dto.TestData.cloneRecordFullDto1;
+import static su.svn.showcase.domain.TestData.cloneUserLogin1;
+import static su.svn.showcase.dto.TestData.cloneUserLoginFullDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@SuppressWarnings("Convert2Diamond")
-@DisplayName("A RecordFullCrudServiceImplTest unit test cases")
-@AddPackages(value = {RecordDao.class, CrudService.class})
+@DisplayName("A UserLoginAuthServiceImplTest unit test cases")
+@AddPackages(value = {UserLoginAuthService.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class RecordFullCrudServiceImplTest {
+class UserLoginAuthServiceImplTest {
 
     @Inject
     private BeanManager beanManager;
@@ -62,8 +58,7 @@ class RecordFullCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordDaoEjb.class,
-            RecordFullCrudServiceImpl.class,
+            UserLoginAuthServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -73,15 +68,14 @@ class RecordFullCrudServiceImplTest {
             .inject(this)
             .build();
 
-    private RecordDao mockDao = mock(RecordDao.class);
-    private UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
-    private RecordFullCrudService mockService = mock(RecordFullCrudService.class);
+
+    private UserLoginDao mockDao = mock(UserLoginDao.class);
+    private UserLoginAuthService mockService = mock(UserLoginAuthService.class);
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                                  mockDao);
-        put(RecordDao.class.getName(),             mockDao);
-        put(RecordFullCrudService.class.getName(), mockService);
-        put(UserLoginDao.class.getName(),          mockUserLoginDao);
+        put(null,                                 mockService);
+        put(UserLoginAuthService.class.getName(), mockService);
+        put(UserLoginDao.class.getName(),         mockDao);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -94,20 +88,17 @@ class RecordFullCrudServiceImplTest {
     @Inject
     private UserTransaction userTransaction;
 
-    private Record entity;
-    private RecordFullDto dto;
-    private UserLogin userLogin;
+    private UserLogin entity;
+    private UserLoginAuthDto dto;
 
     @BeforeEach
-    void setUp() throws Exception {
-        entity = cloneRecord1();
-        entity.setNewsEntry(cloneNewsEntry1());
-        dto = cloneRecordFullDto1();
-        userLogin = cloneUserLogin1();
+    void setUp() {
+        entity = cloneUserLogin1();
+        dto = cloneUserLoginFullDto1();
     }
 
     @AfterEach
-    void tearDown() throws Exception {
+    void tearDown() {
     }
 
     @DisplayName("Can inject entity manager and user transaction")
@@ -118,54 +109,40 @@ class RecordFullCrudServiceImplTest {
     }
 
     @Test
-    void create(RecordFullCrudService service) {
+    void create(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
+        when(mockDao.findWhereLogin(any())).thenReturn(Optional.empty());
         service.create(dto);
     }
 
     @Test
-    void readById(RecordFullCrudService service) {
+    void readById(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        Assertions.assertEquals(dto, service.readById(entity.getId()));
+        Assertions.assertEquals(TestData.userLoginFullDto1, service.readById(entity.getId())); // TODO fix
     }
 
     @Test
-    void readRange(RecordFullCrudService service) {
+    void readRange(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        List<RecordFullDto> testList = service.readRange(0, Integer.MAX_VALUE);
+        List<UserLoginAuthDto> testList = service.readRange(0, Integer.MAX_VALUE);
         Assertions.assertTrue(testList.isEmpty());
     }
 
     @Test
-    void update(RecordFullCrudService service) {
+    void update(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         when(mockDao.save(any())).thenReturn(entity);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
+        when(mockDao.findWhereLogin(any())).thenReturn(Optional.of(entity));
         service.update(dto);
     }
 
     @Test
-    void delete(RecordFullCrudService service) {
+    void delete(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         service.delete(dto.getId());
     }
-
-    @Test
-    void count(RecordFullCrudService service) {
-        Assertions.assertNotNull(service);
-        service.count();
-    }
-
-    @Test
-    void countByDay(RecordFullCrudService service) {
-        Assertions.assertNotNull(service);
-        service.countByDay(LocalDate.now());
-    }
 }
+//EOF

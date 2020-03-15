@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RoleBaseDtoTest.java$
+ * RoleBaseDtoTest.java
  * $Id$
  */
 
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.shared.Constants.Types.UUID.ZERO;
 import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class RoleDto")

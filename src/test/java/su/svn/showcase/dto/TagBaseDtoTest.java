@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.02.15 14:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagBaseDtoTest.java$
+ * TagBaseDtoTest.java
  * $Id$
  */
 
@@ -21,7 +21,7 @@ import su.svn.utils.ValidateUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.shared.Constants.String.ZERO;
+import static su.svn.shared.Constants.Types.String.ZERO;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class TagBaseDto")
@@ -129,7 +129,7 @@ class TagBaseDtoTest {
             Tag expected1 = new Tag(ZERO, "testTag", true, NOW, EMPTY_RECORDS);
             assertEquals(expected1, tagBaseDto.update(new Tag(ZERO)));
 
-            Record record = new Record(Constants.UUID.ZERO);
+            Record record = new Record(Constants.Types.UUID.ZERO);
             record.setCreateDateTime(NOW);
             record.setEditDateTime(NOW);
             Set<Record> records = Collections.singleton(record);

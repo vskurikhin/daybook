@@ -86,3 +86,46 @@ CREATE TABLE db.db_record_tag (
   date_time     TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
                 UNIQUE (db_record_id, tag_id)
 );
+
+CREATE TABLE db.db_news_links (
+  id                    UUID DEFAULT RANDOM_UUID()  NOT NULL  PRIMARY KEY,
+                        FOREIGN KEY (id)
+                        REFERENCES  db.db_record (id),
+
+  db_news_group_id      UUID,
+                        FOREIGN KEY (db_news_group_id)
+                        REFERENCES  db.db_news_group (id),
+
+  date_time             TIMESTAMP WITHOUT TIME ZONE  NOT NULL  DEFAULT now(),
+  title                 VARCHAR(128)                 NOT NULL
+);
+
+CREATE TABLE db.db_link (
+  id         UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
+  date_time  TIMESTAMP WITHOUT TIME ZONE  NOT NULL  DEFAULT now(),
+  visible    BOOLEAN                                DEFAULT false,
+  link       VARCHAR(512)                 NOT NULL
+             CONSTRAINT UC_link_must_be_different_4fc8
+             UNIQUE
+);
+
+CREATE TABLE db.db_link_description (
+  id               UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
+
+  db_news_links_id UUID                         NOT NULL,
+                   CONSTRAINT FK_db_link_description_need_news_links_2044
+                   FOREIGN KEY (db_news_links_id)
+                   REFERENCES  db.db_news_links (id),
+
+  db_link_id       UUID                         NOT NULL,
+                   CONSTRAINT FK_db_link_description_need_link_4549
+                   FOREIGN KEY (db_link_id)
+                   REFERENCES  db.db_link (id),
+
+  date_time        TIMESTAMP WITHOUT TIME ZONE  NOT NULL DEFAULT now(),
+  description      VARCHAR(128)                 NOT NULL,
+  details          VARCHAR(8192),
+
+                   CONSTRAINT UC_db_link_description_must_be_different_9745
+                   UNIQUE (db_news_links_id, db_link_id)
+);

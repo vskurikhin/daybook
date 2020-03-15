@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 17:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -62,6 +62,32 @@ public class TestData {
             .visible(true)
             .build();
 
+    private static final Link link0 = Link.builder()
+            .id(LINK_UUID0)
+            .dateTime(NOW)
+            .visible(true)
+            .link("linkTest0")
+            .build();
+    private static final Link link1 = Link.builder()
+            .id(LINK_UUID1)
+            .dateTime(NOW)
+            .visible(true)
+            .link("linkTest1")
+            .build();
+
+    private static final LinkDescription linkDescription0 = LinkDescription.builder()
+            .id(LINK_DESCRIPTION_UUID0)
+            .dateTime(NOW)
+            .description("descriptionTest0")
+            .details("detailsTest0")
+            .build();
+    private static final LinkDescription linkDescription1 = LinkDescription.builder()
+            .id(LINK_DESCRIPTION_UUID1)
+            .dateTime(NOW)
+            .description("descriptionTest1")
+            .details("detailsTest1")
+            .build();
+
     private static final Record record0 = Record.builder()
             .id(RECORD_UUID0)
             .createDateTime(NOW)
@@ -101,6 +127,17 @@ public class TestData {
             .content("contentTest1")
             .build();
 
+    private static final NewsLinks newsLinks0 = NewsLinks.builder()
+            .id(NEWS_LINKS_UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .build();
+    private static final NewsLinks newsLinks1 = NewsLinks.builder()
+            .id(NEWS_LINKS_UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .build();
+
     static {
         userLogin0.setRoles(newList(userRole0));
         userLogin1.setRoles(newList(userRole1));
@@ -123,12 +160,28 @@ public class TestData {
         newsEntry1.setNewsGroup(newsGroup1);
 
         record0.setUserLogin(userLogin0);
-        record0.setNewsEntry(newsEntry0);
+        // TODO record0.setNewsEntry(newsEntry0);
         record0.setTags(newSet(tag0));
 
         record1.setUserLogin(userLogin1);
-        record1.setNewsEntry(newsEntry1);
+        // TODO record1.setNewsEntry(newsEntry1);
         record1.setTags(newSet(tag1));
+
+        linkDescription0.setLink(link0);
+        linkDescription1.setLink(link1);
+        linkDescription0.setNewsLinks(newsLinks0);
+        linkDescription1.setNewsLinks(newsLinks1);
+
+        link0.setDescriptions(newSet(linkDescription0));
+        link1.setDescriptions(newSet(linkDescription1));
+
+        newsLinks0.setRecord(record0);
+        newsLinks1.setRecord(record1);
+        newsLinks0.setNewsGroup(newsGroup0);
+        newsLinks1.setNewsGroup(newsGroup1);
+        newsLinks1.setLinks(newSet(linkDescription1));
+        newsLinks0.setLinks(newSet(linkDescription0));
+        newsLinks1.setLinks(newSet(linkDescription1));
     }
 
     public static Role cloneRole0() {
@@ -174,6 +227,25 @@ public class TestData {
         return tag;
     }
 
+    public static Link cloneLink0() {
+        return assertClone(link0);
+    }
+    public static Link cloneLink1() {
+        return assertClone(link1);
+    }
+
+    public static Link clean(Link entity) {
+        entity.setDescriptions(Collections.emptySet());
+        return entity;
+    }
+
+    public static LinkDescription cloneLinkDescription0() {
+        return assertClone(linkDescription0);
+    }
+    public static LinkDescription cloneLinkDescription1() {
+        return assertClone(linkDescription1);
+    }
+
     public static Record cloneRecord0() {
         return assertClone(record0);
     }
@@ -211,6 +283,21 @@ public class TestData {
         entity.getNewsGroup().setNewsEntries(Collections.emptyList());
         entity.getRecord().getUserLogin().setRoles(Collections.emptyList());
         entity.getRecord().setTags(Collections.emptySet());
+        return entity;
+    }
+
+    public static NewsLinks cloneNewsLinks0() {
+        return assertClone(newsLinks0);
+    }
+    public static NewsLinks cloneNewsLinks1() {
+        return assertClone(newsLinks1);
+    }
+
+    public static NewsLinks clean(NewsLinks entity) {
+        entity.getNewsGroup().setNewsEntries(Collections.emptyList());
+        entity.getRecord().getUserLogin().setRoles(Collections.emptyList());
+        entity.getRecord().setTags(Collections.emptySet());
+        entity.setLinks(Collections.emptySet());
         return entity;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.14 20:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -24,6 +24,17 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
+    private static final UserRoleBaseDto userRoleBaseDto0 = UserRoleBaseDto.builder()
+            .id(USER_LOGIN_UUID0)
+            .dateTime(NOW)
+            .roleName("testRole0")
+            .build();
+    private static final UserRoleBaseDto userRoleBaseDto1 = UserRoleBaseDto.builder()
+            .id(USER_LOGIN_UUID1)
+            .dateTime(NOW)
+            .roleName("testRole1")
+            .build();
+
     private static final UserRoleFullDto userRoleFullDto0 = UserRoleFullDto.builder()
             .id(USER_LOGIN_UUID0)
             .dateTime(NOW)
@@ -42,6 +53,19 @@ public class TestData {
     private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto1 = UserOnlyLoginBaseDto.builder()
             .id(USER_LOGIN_UUID1)
             .login("loginTest1")
+            .build();
+
+    private static final UserLoginFullDto userLoginFullDto0 = UserLoginFullDto.builder()
+            .id(USER_LOGIN_UUID0)
+            .dateTime(NOW)
+            .login("loginTest0")
+            .password("passwordTest0")
+            .build();
+    public static final UserLoginFullDto userLoginFullDto1 = UserLoginFullDto.builder()
+            .id(USER_LOGIN_UUID1)
+            .dateTime(NOW)
+            .login("loginTest1")
+            .password("passwordTest1")
             .build();
 
     private static final TagBaseDto tagBaseDto0 = TagBaseDto.builder()
@@ -146,6 +170,9 @@ public class TestData {
         userRoleFullDto1.setRole(cloneRoleBaseDto1());
         userRoleFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
 
+        userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
+        userLoginFullDto1.setRoles(newList(cloneUserRoleBaseDto1()));
+
         recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
         recordFullDto0.setNewsEntry(cloneNewsEntryBaseDto0());
@@ -166,6 +193,13 @@ public class TestData {
         return assertClone(roleBaseDto1);
     }
 
+    public static UserRoleBaseDto cloneUserRoleBaseDto0() {
+        return assertClone(userRoleBaseDto0);
+    }
+    public static UserRoleBaseDto cloneUserRoleBaseDto1() {
+        return assertClone(userRoleBaseDto1);
+    }
+
     public static UserRoleFullDto cloneUserRoleFullDto0() {
         return assertClone(userRoleFullDto0);
     }
@@ -178,6 +212,13 @@ public class TestData {
     }
     public static UserOnlyLoginBaseDto cloneUserOnlyLoginBaseDto1() {
         return assertClone(userOnlyLoginBaseDto1);
+    }
+
+    public static UserLoginFullDto cloneUserLoginFullDto0() {
+        return assertClone(userLoginFullDto0);
+    }
+    public static UserLoginFullDto cloneUserLoginFullDto1() {
+        return assertClone(userLoginFullDto1);
     }
 
     public static TagBaseDto cloneTagBaseDto0() {
