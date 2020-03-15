@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.14 13:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -22,10 +22,10 @@ import java.util.*;
 public class TestData {
     public static final LocalDateTime NOW = LocalDateTime.now();
 
-    public static final String ID0 = Constants.String.ZERO;
+    public static final String ID0 = Constants.Types.String.ZERO;
     public static final String ID1 = "0000000000000001";
 
-    public static final UUID UUID0 = Constants.UUID.ZERO;
+    public static final UUID UUID0 = Constants.Types.UUID.ZERO;
     public static final UUID UUID1 = UUID.fromString("00000000-0000-0000-0000-000000000001");
 
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();
