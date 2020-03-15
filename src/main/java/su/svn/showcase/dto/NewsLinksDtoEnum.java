@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordTypesEnum.java
+ * NewsLinksDtoEnum.java
  * $Id$
  */
 
@@ -12,21 +12,17 @@ import su.svn.showcase.utils.MapUtil;
 
 import java.util.Map;
 
-public enum RecordTypesEnum {
+public enum NewsLinksDtoEnum {
 
-    NewsEntryBaseDto(NewsEntryBaseDto.class.getSimpleName()),
-    NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName()),
     NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName());
 
-    private static final Map<Class<?>, RecordTypesEnum> map = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
-            .key(NewsEntryBaseDto.class).value(NewsEntryBaseDto)
-            .key(NewsEntryFullDto.class).value(NewsEntryFullDto)
+    private static final Map<Class<?>, NewsLinksDtoEnum> map = new MapUtil.Builder<Class<?>, NewsLinksDtoEnum>()
             .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
             .unmodifiableMap();
 
     private String value;
 
-    RecordTypesEnum(String value) {
+    NewsLinksDtoEnum(String value) {
         this.value = value;
     }
 
@@ -34,10 +30,11 @@ public enum RecordTypesEnum {
         return value;
     }
 
-    public static RecordTypesEnum getRecordType(Class<?> tClass) {
+    public static NewsLinksDtoEnum getRecordType(Class<?> tClass) {
         return map.get(tClass);
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean containsValue(String name) {
         try {
             return map.containsValue(valueOf(name));

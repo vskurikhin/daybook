@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.14 20:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -161,6 +161,17 @@ public class TestData {
             .content("contentTest1")
             .build();
 
+    private static final NewsLinksBaseDto newsLinksBaseDto0 = NewsLinksBaseDto.builder()
+            .id(NEWS_LINKS_UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .build();
+    private static final NewsLinksBaseDto newsLinksBaseDto1 = NewsLinksBaseDto.builder()
+            .id(NEWS_LINKS_UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .build();
+
     static {
         tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
         tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
@@ -267,6 +278,13 @@ public class TestData {
     }
     public static NewsEntryFullDto cloneNewsEntryFullDto1() {
         return assertClone(newsEntryFullDto1);
+    }
+
+    public static NewsLinksBaseDto cloneNewsLinksBaseDto0() {
+        return assertClone(newsLinksBaseDto0);
+    }
+    public static NewsLinksBaseDto cloneNewsLinksBaseDto1() {
+        return assertClone(newsLinksBaseDto1);
     }
 }
 //EOF
