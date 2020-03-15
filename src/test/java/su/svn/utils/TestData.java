@@ -13,6 +13,7 @@ import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.RecordDto;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.UserRoleDto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -38,6 +39,8 @@ public class TestData {
 
     public static final List<UserRole> EMPTY_USER_ROLES = Collections.emptyList();
     public static final List<NewsEntry> EMPTY_NEWS_ENTRIES = Collections.emptyList();
+
+    public static final List<UserRoleDto> EMPTY_USER_ROLE_DTOS = Collections.emptyList();
 
     public static final UUID ROLE_UUID0 = UUID0;
     public static final UUID ROLE_UUID1 = UUID1;
