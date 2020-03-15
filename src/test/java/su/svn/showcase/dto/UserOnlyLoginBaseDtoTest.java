@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.shared.Constants.Types.UUID.ZERO;
 import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
 import static su.svn.utils.TestData.USER_LOGIN_UUID0;
 
@@ -134,11 +134,3 @@ class UserOnlyLoginBaseDtoTest {
     }
 }
 //EOF
-/*
-
-                    .roles(EMPTY_USER_ROLE_DTOS)
-                    expected: <
-UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-14T13:41:39.885372, login=testLogin, password=testPassword)> but was: <
-UserLogin(id=00000000-0000-0000-0000-000000000000, dateTime=null, login=testLogin, password=null)>
-
- */

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -30,6 +30,8 @@ public class TestData {
 
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();
     public static final Set<Record> EMPTY_RECORDS = Collections.emptySet();
+    public static final Set<LinkDescription> EMPTY_LINK_DESCRIPTIONS = Collections.emptySet();
+    public static final Set<NewsLinks> EMPTY_NEWS_LINKS = Collections.emptySet();
 
     public static final Set<TagBaseDto> EMPTY_BASEDTO_TAGS = Collections.emptySet();
     public static final Set<TagFullDto> EMPTY_FULLDTO_TAGS = Collections.emptySet();
@@ -52,14 +54,23 @@ public class TestData {
     public static final String TAG_ID0 = ID0;
     public static final String TAG_ID1 = ID1;
 
-    public static final UUID NEWS_ENTRY_UUID0 = UUID0;
-    public static final UUID NEWS_ENTRY_UUID1 = UUID1;
+    public static final UUID LINK_UUID0 = UUID0;
+    public static final UUID LINK_UUID1 = UUID1;
+
+    public static final UUID LINK_DESCRIPTION_UUID0 = UUID0;
+    public static final UUID LINK_DESCRIPTION_UUID1 = UUID1;
 
     public static final UUID NEWS_GROUP_UUID0 = UUID0;
     public static final UUID NEWS_GROUP_UUID1 = UUID1;
 
-    public static final UUID RECORD_UUID0 = NEWS_ENTRY_UUID0;
-    public static final UUID RECORD_UUID1 = NEWS_ENTRY_UUID1;
+    public static final UUID RECORD_UUID0 = UUID0;
+    public static final UUID RECORD_UUID1 = UUID1;
+
+    public static final UUID NEWS_ENTRY_UUID0 = UUID0;
+    public static final UUID NEWS_ENTRY_UUID1 = UUID1;
+
+    public static final UUID NEWS_LINKS_UUID0 = UUID0;
+    public static final UUID NEWS_LINKS_UUID1 = UUID1;
 
     public static <T> List<T> newList(T o) {
         return new ArrayList<T>(){{add(o);}};
