@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static su.svn.shared.Constants.UUID.ZERO;
+import static su.svn.shared.Constants.Types.UUID.ZERO;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class UserLoginFullDto")
