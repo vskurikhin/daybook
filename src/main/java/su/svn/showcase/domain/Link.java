@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 16:59 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Link.java
@@ -94,12 +94,6 @@ public class Link implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     private Boolean visible;
-
-    @Getter
-    @Setter
-    @NotNull
-    @Column(name = "name", length = 128)
-    private String name;
 
     @Getter
     @Setter

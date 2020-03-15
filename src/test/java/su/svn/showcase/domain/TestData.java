@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.15 16:59 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -67,14 +67,12 @@ public class TestData {
             .dateTime(NOW)
             .visible(true)
             .link("linkTest0")
-            .name("nameTest0")
             .build();
     private static final Link link1 = Link.builder()
             .id(LINK_UUID1)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest1")
-            .name("nameTest1")
             .build();
 
     private static final LinkDescription linkDescription0 = LinkDescription.builder()
