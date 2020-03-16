@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 23:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkBaseDto.java
@@ -34,23 +34,18 @@ public class LinkBaseDto implements LinkDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
-    @Size(min = 1, max = 128)
-    private String tag;
+    private LocalDateTime dateTime;
 
     private Boolean visible;
 
-    @NotNull
-    private LocalDateTime dateTime;
-
-    @NotNull
+    @Size(max = 512)
     private String link;
 
     public LinkBaseDto(@Nonnull Link entity) {
         this.id = entity.getId();
-        this.tag = entity.getLink();
         this.visible = entity.getVisible();
         this.dateTime = entity.getDateTime();
+        this.link = entity.getLink();
     }
 
     @Override
@@ -60,9 +55,9 @@ public class LinkBaseDto implements LinkDto, Serializable {
 
     @Override
     public Link update(@Nonnull Link entity) {
-        updateIfNotNull(entity::setLink, this.tag);
         updateIfNotNull(entity::setDateTime, this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
+        updateIfNotNull(entity::setLink, this.link);
 
         return entity;
     }

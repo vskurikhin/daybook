@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 23:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullDto.java
@@ -39,17 +39,13 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
-    @Size(min = 1, max = 128)
+    @Size(max = 128)
     private String title;
 
-    @NotNull
     private RecordDto record;
 
-    @NotNull
     private NewsGroupDto newsGroup;
 
     public NewsLinksFullDto(@Nonnull NewsLinks entity) {
