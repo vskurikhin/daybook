@@ -4,6 +4,10 @@ CREATE TABLE db.db_article (
                 FOREIGN KEY (id)
                 REFERENCES db.db_record (id)
                 ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT FK_db_article_need_link_5f30
+                FOREIGN KEY (id)
+                REFERENCES  db.db_link (id)
+                ON DELETE CASCADE ON UPDATE CASCADE,
 
     date_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
     title       VARCHAR(128)      NOT NULL,
