@@ -132,6 +132,12 @@ CREATE TABLE db.db_link_description (
 
 CREATE TABLE db.db_article (
     id          UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
+                FOREIGN KEY (id)
+                REFERENCES  db.db_record (id),
+                CONSTRAINT FK_db_article_need_link_5f30
+                FOREIGN KEY (id)
+                REFERENCES  db.db_link (id),
+
     date_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
     title       VARCHAR(128)      NOT NULL,
     include     VARCHAR(128)      NOT NULL,

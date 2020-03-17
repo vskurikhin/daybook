@@ -22,8 +22,8 @@ import static su.svn.showcase.domain.Article.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"record"})
-@ToString(exclude = {"record"})
+@EqualsAndHashCode(exclude = {"link", "record"})
+@ToString(exclude = {"link", "record"})
 @Entity
 @Table(schema = "db", name = "db_article")
 @NamedQueries({
@@ -84,6 +84,13 @@ public class Article implements DBEntity<UUID>, Serializable {
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id")
     private Record record;
+
+    @Getter
+    @Setter
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "id")
+    private Link link;
 
     @Getter
     @Setter

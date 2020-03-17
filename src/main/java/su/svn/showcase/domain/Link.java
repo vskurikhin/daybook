@@ -9,6 +9,7 @@
 package su.svn.showcase.domain;
 
 import lombok.*;
+import org.wildfly.common.annotation.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -84,6 +85,14 @@ public class Link implements DBEntity<UUID>, Serializable {
     @NotNull
     @Id
     private UUID id;
+
+    @Getter
+    @Setter
+    @Nullable
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "id")
+    private Article article;
 
     @Getter
     @Setter
