@@ -11,6 +11,7 @@ package su.svn.showcase.domain;
 import lombok.*;
 import org.wildfly.common.annotation.Nullable;
 
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -228,6 +229,14 @@ public class Record implements DBEntity<UUID>, Serializable {
 
     @Getter
     @Setter
+    @Nullable
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "id")
+    private Article article;
+
+    @Getter
+    @Setter
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             schema = "db",
@@ -236,8 +245,7 @@ public class Record implements DBEntity<UUID>, Serializable {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
-    public Record(@NotNull UUID id) {
-        assert id != null;
+    public Record(@Nonnull UUID id) {
         this.id = id;
         this.createDateTime = LocalDateTime.now();
         this.editDateTime = LocalDateTime.now();
@@ -246,9 +254,7 @@ public class Record implements DBEntity<UUID>, Serializable {
         this.tags = new HashSet<>();
     }
 
-    public Record(@NotNull UUID id, @NotNull UserLogin userLogin) {
-        assert id != null;
-        assert userLogin != null;
+    public Record(@Nonnull UUID id, @Nonnull UserLogin userLogin) {
         this.id = id;
         this.createDateTime = LocalDateTime.now();
         this.editDateTime = LocalDateTime.now();

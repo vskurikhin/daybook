@@ -10,6 +10,7 @@ package su.svn.showcase.domain;
 
 import lombok.*;
 
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -112,14 +113,12 @@ public class NewsLinks implements DBEntity<UUID>, Serializable {
         this.id = this.record.getId();
     }
 
-    public NewsLinks(@NotNull Record record) {
-        assert record != null;
+    public NewsLinks(@Nonnull Record record) {
         this.id = record.getId();
         this.record = record;
     }
 
-    public NewsLinks(@NotNull UUID id) {
-        assert id != null;
+    public NewsLinks(@Nonnull UUID id) {
         this.id = id;
         this.record = new Record(id);
     }
