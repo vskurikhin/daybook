@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:59 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.18 15:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkTest.java
@@ -17,12 +17,14 @@ import su.svn.utils.ValidateUtil;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.Types.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.cloneArticle0;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class Link")
 class LinkTest {
 
     private Link link;
+    private Article article;
 
     @Test
     @DisplayName("is instantiated")
@@ -75,13 +77,14 @@ class LinkTest {
     class WhenNewAllArgsConstructor {
         @BeforeEach
         void createNew() {
-            link = new Link(ZERO, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
+            article = cloneArticle0();
+            link = new Link(ZERO, article, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            link = new Link(ZERO, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
+            link = new Link(ZERO, article, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
             assertThat(link).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(link).hasFieldOrPropertyWithValue("visible", true);
             assertThat(link).hasFieldOrPropertyWithValue("dateTime", NOW);
@@ -110,7 +113,7 @@ class LinkTest {
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
             assertNotEquals(new Link(), link);
-            Link expected = new Link(ZERO, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
+            Link expected = new Link(ZERO, article, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
             assertEquals(expected.hashCode(), link.hashCode());
             assertEquals(expected, link);
         }
