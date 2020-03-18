@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.18 15:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkBaseDtoTest.java
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.shared.Constants;
+import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.Link;
 import su.svn.utils.ValidateUtil;
@@ -25,11 +26,13 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.Types.UUID.ZERO;
+import static su.svn.showcase.domain.TestData.cloneArticle0;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class LinkBaseDto")
 class LinkBaseDtoTest {
 
+    private Article article;
     private LinkBaseDto linkBaseDto;
 
     @Test
@@ -43,6 +46,7 @@ class LinkBaseDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
+            article = cloneArticle0();
             linkBaseDto = new LinkBaseDto();
         }
 
@@ -129,7 +133,7 @@ class LinkBaseDtoTest {
         @Test
         @DisplayName("Update entity by DTO")
         void update() {
-            Link expected1 = new Link(ZERO, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
+            Link expected1 = new Link(ZERO, article, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
             assertEquals(expected1, linkBaseDto.update(new Link(ZERO)));
 
             LinkDescription linkDescription = new LinkDescription(Constants.Types.UUID.ZERO);
@@ -139,7 +143,7 @@ class LinkBaseDtoTest {
                 put("descriptions", linkDescriptions);
             }};
 
-            Link expected2 = new Link(ZERO, NOW, true, "testLink", linkDescriptions);
+            Link expected2 = new Link(ZERO, article, NOW, true, "testLink", linkDescriptions);
             Link test = linkBaseDto.update(new Link(ZERO), values);
             assertEquals(expected2, test);
             // TODO assertEquals(expected2.getRecords(), test.getRecords());
@@ -148,7 +152,7 @@ class LinkBaseDtoTest {
         @Test
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
-            Link entity = new Link(ZERO, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
+            Link entity = new Link(ZERO, article, NOW, true, "testLink", EMPTY_LINK_DESCRIPTIONS);
             LinkBaseDto expected = new LinkBaseDto(entity);
             assertEquals(expected, linkBaseDto);
         }
