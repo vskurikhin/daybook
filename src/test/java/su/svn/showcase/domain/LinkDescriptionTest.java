@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:59 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionTest.java
@@ -22,8 +22,7 @@ import static su.svn.showcase.domain.TestData.cloneNewsLinks0;
 import static su.svn.utils.TestData.NOW;
 
 @DisplayName("Class LinkDescription")
-class LinkDescriptionDescriptionTest {
-
+class LinkDescriptionTest {
 
     private Link link;
     private NewsLinks newsLinks;
@@ -144,8 +143,3 @@ class LinkDescriptionDescriptionTest {
     }
 }
 //EOF
-/*
-  <
-LinkDescription(id=null, link=Link(id=00000000-0000-0000-0000-000000000000, dateTime=2020-03-15T16:51:10.635869, visible=true, link=linkTest0), dateTime=null, description=null, details=null)>
-
- */

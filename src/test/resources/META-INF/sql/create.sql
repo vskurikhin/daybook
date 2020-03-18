@@ -129,3 +129,18 @@ CREATE TABLE db.db_link_description (
                    CONSTRAINT UC_db_link_description_must_be_different_9745
                    UNIQUE (db_news_links_id, db_link_id)
 );
+
+CREATE TABLE db.db_article (
+    id          UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
+                CONSTRAINT FK_db_article_need_record_4021
+                FOREIGN KEY (id)
+                REFERENCES  db.db_record (id),
+                CONSTRAINT FK_db_article_need_link_5f30
+                FOREIGN KEY (id)
+                REFERENCES  db.db_link (id),
+
+    date_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
+    title       VARCHAR(128)      NOT NULL,
+    include     VARCHAR(128)      NOT NULL,
+    summary     TEXT
+);

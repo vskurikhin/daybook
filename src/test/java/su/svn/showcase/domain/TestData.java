@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 17:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.18 15:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -17,86 +17,86 @@ import static su.svn.utils.TestData.*;
 public class TestData {
 
     private static final Role role0 = Role.builder()
-            .id(ROLE_UUID0)
+            .id(UUID0)
             .roleName("testRole0")
             .build();
     private static final Role role1 = Role.builder()
-            .id(ROLE_UUID1)
+            .id(UUID1)
             .roleName("testRole1")
             .build();
 
     private static final UserLogin userLogin0 = UserLogin.builder()
-            .id(USER_LOGIN_UUID0)
+            .id(UUID0)
             .login("loginTest0")
             .password("passwordTest0")
             .dateTime(NOW)
             .build();
     private static final UserLogin userLogin1 = UserLogin.builder()
-            .id(USER_LOGIN_UUID1)
+            .id(UUID1)
             .login("loginTest1")
             .password("passwordTest1")
             .dateTime(NOW)
             .build();
 
     private static final UserRole userRole0 = UserRole.builder()
-            .id(USER_ROLE_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .roleName("testRole0")
             .build();
     private static final UserRole userRole1 = UserRole.builder()
-            .id(USER_ROLE_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .roleName("testRole1")
             .build();
 
     private static final Tag tag0 = Tag.builder()
-            .id(TAG_ID0)
+            .id(SID0)
             .tag("tagTest0")
             .dateTime(NOW)
             .visible(true)
             .build();
     private static final Tag tag1 = Tag.builder()
-            .id(TAG_ID1)
+            .id(SID1)
             .tag("tagTest1")
             .dateTime(NOW)
             .visible(true)
             .build();
 
     private static final Link link0 = Link.builder()
-            .id(LINK_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest0")
             .build();
     private static final Link link1 = Link.builder()
-            .id(LINK_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest1")
             .build();
 
     private static final LinkDescription linkDescription0 = LinkDescription.builder()
-            .id(LINK_DESCRIPTION_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .description("descriptionTest0")
             .details("detailsTest0")
             .build();
     private static final LinkDescription linkDescription1 = LinkDescription.builder()
-            .id(LINK_DESCRIPTION_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .description("descriptionTest1")
             .details("detailsTest1")
             .build();
 
     private static final Record record0 = Record.builder()
-            .id(RECORD_UUID0)
+            .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
             .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final Record record1 = Record.builder()
-            .id(RECORD_UUID1)
+            .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
@@ -104,38 +104,53 @@ public class TestData {
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()
-            .id(NEWS_ENTRY_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .group("groupTest0")
             .build();
     private static final NewsGroup newsGroup1 = NewsGroup.builder()
-            .id(NEWS_ENTRY_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .group("groupTest1")
             .build();
 
     private static final NewsEntry newsEntry0 = NewsEntry.builder()
-            .id(NEWS_ENTRY_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build();
     private static final NewsEntry newsEntry1 = NewsEntry.builder()
-            .id(NEWS_ENTRY_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .content("contentTest1")
             .build();
 
     private static final NewsLinks newsLinks0 = NewsLinks.builder()
-            .id(NEWS_LINKS_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .build();
     private static final NewsLinks newsLinks1 = NewsLinks.builder()
-            .id(NEWS_LINKS_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
+            .build();
+
+    private static final Article article0 = Article.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .include("includeTest0")
+            .summary("summaryTest0")
+            .build();
+    private static final Article article1 = Article.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .include("includeTest1")
+            .summary("summaryTest1")
             .build();
 
     static {
@@ -182,6 +197,11 @@ public class TestData {
         newsLinks1.setLinks(newSet(linkDescription1));
         newsLinks0.setLinks(newSet(linkDescription0));
         newsLinks1.setLinks(newSet(linkDescription1));
+
+        article0.setRecord(record0);
+        article1.setRecord(record1);
+        article0.setLink(link0);
+        article1.setLink(link1);
     }
 
     public static Role cloneRole0() {
@@ -298,6 +318,20 @@ public class TestData {
         entity.getRecord().getUserLogin().setRoles(Collections.emptyList());
         entity.getRecord().setTags(Collections.emptySet());
         entity.setLinks(Collections.emptySet());
+        return entity;
+    }
+
+    public static Article cloneArticle0() {
+        return assertClone(article0);
+    }
+    public static Article cloneArticle1() {
+        return assertClone(article1);
+    }
+
+    public static Article clean(Article entity) {
+        entity.getRecord().getUserLogin().setRoles(Collections.emptyList());
+        entity.getRecord().setTags(Collections.emptySet());
+        entity.setLink(null);
         return entity;
     }
 }

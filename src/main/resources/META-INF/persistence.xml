@@ -24,6 +24,7 @@
     <class>su.svn.showcase.domain.Tag</class>
     <class>su.svn.showcase.domain.UserLogin</class>
     <class>su.svn.showcase.domain.UserRole</class>
+    <class>su.svn.showcase.domain.Article</class>
     <properties>
       <property name="javax.persistence.schema-generation.database.action" value="none"/>
       <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
