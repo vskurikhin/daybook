@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.19 22:42 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -16,93 +16,93 @@ import static su.svn.utils.TestData.*;
 public class TestData {
 
     private static final RoleBaseDto roleBaseDto0 = RoleBaseDto.builder()
-            .id(ROLE_UUID0)
+            .id(UUID0)
             .roleName("testRole0")
             .build();
     private static final RoleBaseDto roleBaseDto1 = RoleBaseDto.builder()
-            .id(ROLE_UUID1)
+            .id(UUID1)
             .roleName("testRole1")
             .build();
 
     private static final UserRoleBaseDto userRoleBaseDto0 = UserRoleBaseDto.builder()
-            .id(USER_LOGIN_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .roleName("testRole0")
             .build();
     private static final UserRoleBaseDto userRoleBaseDto1 = UserRoleBaseDto.builder()
-            .id(USER_LOGIN_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .roleName("testRole1")
             .build();
 
     private static final UserRoleFullDto userRoleFullDto0 = UserRoleFullDto.builder()
-            .id(USER_LOGIN_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .roleName("testRole0")
             .build();
     private static final UserRoleFullDto userRoleFullDto1 = UserRoleFullDto.builder()
-            .id(USER_LOGIN_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .roleName("testRole1")
             .build();
 
     private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto0 = UserOnlyLoginBaseDto.builder()
-            .id(USER_LOGIN_UUID0)
+            .id(UUID0)
             .login("loginTest0")
             .build();
     private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto1 = UserOnlyLoginBaseDto.builder()
-            .id(USER_LOGIN_UUID1)
+            .id(UUID1)
             .login("loginTest1")
             .build();
 
     private static final UserLoginFullDto userLoginFullDto0 = UserLoginFullDto.builder()
-            .id(USER_LOGIN_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .login("loginTest0")
             .password("passwordTest0")
             .build();
     public static final UserLoginFullDto userLoginFullDto1 = UserLoginFullDto.builder()
-            .id(USER_LOGIN_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .login("loginTest1")
             .password("passwordTest1")
             .build();
 
     private static final TagBaseDto tagBaseDto0 = TagBaseDto.builder()
-            .id(TAG_ID0)
+            .id(SID0)
             .tag("tagTest0")
             .dateTime(NOW)
             .visible(true)
             .build();
     private static final TagBaseDto tagBaseDto1 = TagBaseDto.builder()
-            .id(TAG_ID1)
+            .id(SID1)
             .tag("tagTest1")
             .dateTime(NOW)
             .visible(true)
             .build();
 
     private static final TagFullDto tagFullDto0 = TagFullDto.builder()
-            .id(TAG_ID0)
+            .id(SID0)
             .tag("tagTest0")
             .dateTime(NOW)
             .visible(true)
             .build();
     private static final TagFullDto tagFullDto1 = TagFullDto.builder()
-            .id(TAG_ID1)
+            .id(SID1)
             .tag("tagTest1")
             .dateTime(NOW)
             .visible(true)
             .build();
 
     private static final RecordBaseDto recordBaseDto0 = RecordBaseDto.builder()
-            .id(RECORD_UUID0)
+            .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
             .type(RecordBaseDto.class.getSimpleName())
             .build();
     private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
-            .id(RECORD_UUID1)
+            .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
@@ -110,14 +110,14 @@ public class TestData {
             .build();
 
     private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()
-            .id(RECORD_UUID0)
+            .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
             .type(NewsEntryFullDto.class.getSimpleName())
             .build();
     private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
-            .id(RECORD_UUID1)
+            .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
@@ -125,51 +125,66 @@ public class TestData {
             .build();
 
     private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()
-            .id(NEWS_GROUP_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .group("groupTest0")
             .build();
     private static final NewsGroupBaseDto newsGroupBaseDto1 = NewsGroupBaseDto.builder()
-            .id(NEWS_GROUP_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .group("groupTest1")
             .build();
 
     private static final NewsEntryBaseDto newsEntryBaseDto0 = NewsEntryBaseDto.builder()
-            .id(NEWS_ENTRY_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build();
     private static final NewsEntryBaseDto newsEntryBaseDto1 = NewsEntryBaseDto.builder()
-            .id(NEWS_ENTRY_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .content("contentTest1")
             .build();
 
     private static final NewsEntryFullDto newsEntryFullDto0 = NewsEntryFullDto.builder()
-            .id(NEWS_ENTRY_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build();
     private static final NewsEntryFullDto newsEntryFullDto1 = NewsEntryFullDto.builder()
-            .id(NEWS_ENTRY_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .content("contentTest1")
             .build();
 
     private static final NewsLinksBaseDto newsLinksBaseDto0 = NewsLinksBaseDto.builder()
-            .id(NEWS_LINKS_UUID0)
+            .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .build();
     private static final NewsLinksBaseDto newsLinksBaseDto1 = NewsLinksBaseDto.builder()
-            .id(NEWS_LINKS_UUID1)
+            .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
+            .build();
+
+    private static final ArticleBaseDto articleBaseDto0 = ArticleBaseDto.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .include("titleInclude0")
+            .summary("titleSummary0")
+            .build();
+    private static final ArticleBaseDto articleBaseDto1 = ArticleBaseDto.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .include("titleInclude1")
+            .summary("titleSummary1")
             .build();
 
     static {
@@ -285,6 +300,13 @@ public class TestData {
     }
     public static NewsLinksBaseDto cloneNewsLinksBaseDto1() {
         return assertClone(newsLinksBaseDto1);
+    }
+
+    public static ArticleBaseDto cloneArticleBaseDto0() {
+        return assertClone(articleBaseDto0);
+    }
+    public static ArticleBaseDto cloneArticleBaseDto1() {
+        return assertClone(articleBaseDto1);
     }
 }
 //EOF
