@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.16 18:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.19 22:42 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Article.java
@@ -10,6 +10,7 @@ package su.svn.showcase.domain;
 
 import lombok.*;
 
+import javax.annotation.Nonnull;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -20,7 +21,6 @@ import java.util.UUID;
 import static su.svn.showcase.domain.Article.*;
 
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"link", "record"})
 @ToString(exclude = {"link", "record"})
@@ -115,5 +115,20 @@ public class Article implements DBEntity<UUID>, Serializable {
     @NotNull
     @Column(name = "summary")
     private String summary;
+
+    public Article() {
+        this.record = new Record();
+        this.id = this.record.getId();
+    }
+
+    public Article(@Nonnull Record record) {
+        this.id = record.getId();
+        this.record = record;
+    }
+
+    public Article(@Nonnull UUID id) {
+        this.id = id;
+        this.record = new Record(id);
+    }
 }
 //EOF

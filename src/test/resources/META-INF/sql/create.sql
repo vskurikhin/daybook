@@ -132,6 +132,7 @@ CREATE TABLE db.db_link_description (
 
 CREATE TABLE db.db_article (
     id          UUID DEFAULT RANDOM_UUID() NOT NULL  PRIMARY KEY,
+                CONSTRAINT FK_db_article_need_record_4021
                 FOREIGN KEY (id)
                 REFERENCES  db.db_record (id),
                 CONSTRAINT FK_db_article_need_link_5f30
