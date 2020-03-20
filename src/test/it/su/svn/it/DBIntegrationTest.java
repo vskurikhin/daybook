@@ -55,6 +55,9 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     NewsEntryDao newsEntryDao;
 
     @Inject
+    ArticleDao articleDao;
+
+    @Inject
     TagBaseCrudService tagBaseCrudService;
 
     @Inject
@@ -273,6 +276,16 @@ public class DBIntegrationTest extends BaseIntegrationTest {
         NewsEntryFullDto dto = cloneNewsEntryFullDto(3);
         newsEntryFullCrudService.create(dto);
     }
+
+
+    @Test
+    @InSequence(2900)
+    public void test_articleDao_save() throws Exception {
+        Article entity = clean(cloneArticle(0));
+        Article expected = clean(cloneArticle(0));
+        save(articleDao, entity, expected);
+    }
+
 
     @Test
     @InSequence(99999)
