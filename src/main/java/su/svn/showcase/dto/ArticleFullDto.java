@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.18 17:41 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullDto.java
@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 
@@ -51,6 +52,8 @@ public class ArticleFullDto implements ArticleDto, Serializable {
 
     private RecordDto record;
 
+    private LinkDto link;
+
     public ArticleFullDto(@Nonnull Article entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
@@ -58,6 +61,7 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         this.include = entity.getInclude();
         this.summary = entity.getSummary();
         this.record = new RecordFullDto(entity.getRecord());
+        this.link = new LinkBaseDto(entity.getLink());
     }
 
     @Override
@@ -70,6 +74,10 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         if (this.record instanceof RecordBaseDto) {
             entity.setRecord(updateRecord(this.record));
             entity.getRecord().setArticle(entity);
+        }
+        if (this.link instanceof LinkBaseDto) {
+            entity.setLink(updateLink(this.link));
+            entity.getLink().setArticle(entity);
         }
         updateIfNotNull(entity::setDateTime, this.dateTime);
         updateIfNotNull(entity::setTitle, this.title);
@@ -95,6 +103,10 @@ public class ArticleFullDto implements ArticleDto, Serializable {
 
     private Record updateRecord(RecordFullDto dto, UserLogin userLogin) {
         return dto.update(new Record(dto.getId(), userLogin));
+    }
+
+    private Link updateLink(LinkDto dto) {
+        return dto.update(new Link(dto.getId()));
     }
 }
 //EOF
