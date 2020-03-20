@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksDaoJpa.java
@@ -187,9 +187,28 @@ public class NewsLinksDaoJpa extends AbstractDaoJpa<UUID, NewsLinks> implements 
         abstractDaoDeleteAll(entities);
     }
 
+    /**
+     * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     */
     @Override
     public List<NewsLinks> findAllWhereTitle(String title) {
-        return abstractDaoFindAllWhereField(NewsLinks.FIND_WHERE_TITLE, "title", title);
+        return jpaDaoFindAllWhereField(NewsLinks.FIND_WHERE_TITLE, "title", title);
     }
 
     /**

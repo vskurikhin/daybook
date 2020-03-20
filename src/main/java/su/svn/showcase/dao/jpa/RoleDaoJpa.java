@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleDaoJpa.java
@@ -155,9 +155,28 @@ public class RoleDaoJpa extends AbstractDaoJpa<UUID, Role> implements RoleDao {
         return abstractDaoFindAllWhereIn(Role.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
+    /**
+     * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     */
     @Override
     public List<Role> findAllWhereRole(String role) {
-        return abstractDaoFindAllWhereField(Role.FIND_WHERE_ROLE, "role", role);
+        return jpaDaoFindAllWhereField(Role.FIND_WHERE_ROLE, "role", role);
     }
 
     @Override
