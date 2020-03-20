@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.20 19:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleDaoJpa.java
@@ -71,26 +71,77 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<UserRole> findAll() {
-        return abstractDaoFindAll(UserRole.FIND_ALL);
+        return jpaDaoFindAll(UserRole.FIND_ALL);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<UserRole> fetchAllOrderByRoleAsc() {
-        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_ASC);
+        return jpaDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_ASC);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<UserRole> fetchAllOrderByRoleDesc() {
-        return abstractDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_DESC);
+        return jpaDaoFindAll(UserRole.FETCH_ALL_ORDER_BY_ROLE_DESC);
     }
 
     /**
