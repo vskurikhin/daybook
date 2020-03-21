@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullDto.java
@@ -52,7 +52,6 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
-        this.record = new RecordFullDto(entity.getRecord());
         this.newsGroup = entity.getNewsGroup() != null
                 ? new NewsGroupBaseDto(entity.getNewsGroup())
                 : null;

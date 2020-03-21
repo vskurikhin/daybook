@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateView.java
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.services.ArticleFullCrudService;
-import su.svn.showcase.services.NewsGroupBaseCrudService;
+import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
 
 import javax.annotation.Nullable;
@@ -40,12 +40,13 @@ public class ArticleCreateView extends AbstractView {
     private String date;
     private String summary;
     private String link = "Default";
+    private String tags;
 
     @EJB
     private ArticleFullCrudService articleService;
 
     @EJB
-    private NewsGroupBaseCrudService newsGroupService;
+    private LinkBaseCrudService linkBaseCrudService;
 
     @EJB
     private RecordTagsStorageService recordTagsStorageService;
@@ -59,7 +60,7 @@ public class ArticleCreateView extends AbstractView {
         LOGGER.trace("init");
         articleModelBuilder = ArticleCreateModel.builder()
                 .articleCrudService(articleService)
-                .newsGroupCrudService(newsGroupService)
+                .linkBaseCrudService(linkBaseCrudService)
                 .recordTagsStorageService(recordTagsStorageService);
     }
 
@@ -83,6 +84,7 @@ public class ArticleCreateView extends AbstractView {
                     .date(this.date)
                     .summary(this.summary)
                     .link(this.link)
+                    .tags(this.tags)
                     .build();
             model.save();
             showSaveInfo();

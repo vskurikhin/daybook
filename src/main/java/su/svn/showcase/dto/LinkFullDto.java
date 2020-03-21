@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.16 17:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkFullDto.java
@@ -41,13 +41,11 @@ public class LinkFullDto implements LinkDto, Serializable {
     @NotNull
     private UUID id;
 
-    @Size(max = 128)
-    private String tag;
+    private LocalDateTime dateTime;
 
     private Boolean visible;
 
-    private LocalDateTime dateTime;
-
+    @Size(max = 512)
     private String link;
 
     @Valid
@@ -55,9 +53,9 @@ public class LinkFullDto implements LinkDto, Serializable {
 
     public LinkFullDto(@Nonnull Link entity) {
         this.id = entity.getId();
-        this.tag = entity.getLink();
-        this.visible = entity.getVisible();
         this.dateTime = entity.getDateTime();
+        this.visible = entity.getVisible();
+        this.link = entity.getLink();
         this.descriptions = entity.getDescriptions().stream()
                 .map(LinkDescriptionBaseDto::new)
                 .collect(Collectors.toSet());
@@ -70,7 +68,7 @@ public class LinkFullDto implements LinkDto, Serializable {
 
     @Override
     public Link update(@Nonnull Link entity) {
-        updateIfNotNull(entity::setLink, this.tag);
+        updateIfNotNull(entity::setLink, this.link);
         updateIfNotNull(entity::setDateTime, this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
         if (this.descriptions != null) {

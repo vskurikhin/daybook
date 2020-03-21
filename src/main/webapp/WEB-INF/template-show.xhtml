@@ -1,0 +1,125 @@
+<!DOCTYPE html [
+        <!ENTITY nbsp "&#160;">
+        <!ENTITY bull "&#8226;">
+        <!ENTITY copy "&#169;">
+        ]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <link rel="shortcut icon" type="image/png" href="#{request.contextPath}/resources/main/images/favicon.png"/>
+    </f:facet>
+
+    <title>PrimeFaces ShowCase</title>
+    <h:outputStylesheet name="main/css/my-showcase.css" />
+    <h:outputStylesheet name="main/css/grid.css" />
+    <h:outputScript name="jquery/jquery.js" library="primefaces" />
+    <h:outputScript name="jquery/jquery-plugins.js" library="primefaces" />
+    <h:outputScript name="core.js" library="primefaces" />
+    <h:outputScript name="main/js/perfect-scrollbar.js" />
+    <h:outputScript name="main/js/showcase.js" />
+    <ui:insert name="head"/>
+</h:head>
+
+<h:body>
+    <!-- PC CONTENT STARTS HERE-->
+    <div class="PC">
+
+        <div id="CONTENTSIDE">
+
+            <!-- Notification Bar -->
+            <div class="notification-topbar" style="display:none;">
+                <a href="#PremiumTemplates">
+                    <h:graphicImage class="notification-topbar-image" name="main/images/notification-topbar-text.png"
+                                    alt="Showcase Notification Topbar"/>
+                    <h:graphicImage class="notification-topbar-image-mobile"
+                                    name="main/images/notification-topbar-text-mobile.png"
+                                    alt="Showcase Notification Topbar"/>
+                    <i class="notification-topbar-close fa fa-lg fa-times-circle"></i>
+                </a>
+            </div>
+
+            <div id="CONTENTSIDEindent">
+
+                <!-- header bar start-->
+                <div class="ContentSideSections" id="PFTopLinksCover">
+                    <a id="LOGOTEXTSIDE" href="#{request.contextPath}/welcome.xhtml">
+                        <span class="dispBlock logoDarkText fontSize30">SVN</span>
+                        <span class="dispBlock logoBlueText fontSize28 regularFont">Day Book</span>
+                    </a>
+
+                </div>
+                <!-- header bar end-->
+
+                <div class="content-container">
+                    <ui:insert name="content">
+
+                        <ui:insert name="subsubmenu"></ui:insert>
+
+                        <div class="ContentSideSections">
+                            <div class="Content100 overHidden TextShadow">
+                                <span class="fontSize30 TextShadow orange regularFont marginBottom20 dispBlock"><ui:insert
+                                        name="title"/></span>
+                                <span class="defaultText dispTable"><ui:insert name="description"/>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="ContentSideSections Implementation">
+                            <ui:insert name="implementation"/>
+                        </div>
+
+                        <div id="SourceContentSide" class="ContentSideSections Source">
+                            <div class="Content100 overHidden TextShadow">
+                                    <span class="defaultText">
+                                        <span class="fontSize16 logoBlueText">
+                                            <ui:insert name="source"/>
+                                        </span>
+                                    </span>
+                            </div>
+                        </div>
+
+                    </ui:insert>
+                </div>
+
+                <!-- footer start-->
+                <div>
+                    <span class="floatLeft fontSize14 gray">&nbsp;<a href="http://svn.su">SVN</a>, Copyright &copy; 2019 All rights reserved.</span>
+                    <span class="floatRight fontSize14 gray">Running<a href="admin">...&nbsp;&nbsp;</a></span>
+                    <div style="clear:both"/>
+                </div>
+                <!-- footer end-->
+
+            </div>
+        </div>
+
+    </div>
+    <!-- PC CONTENT END-->
+
+    <ui:insert name="status">
+        <p:ajaxStatus style="width:64px;height:64px;position:fixed;right:5px;bottom:5px">
+            <f:facet name="start">
+                <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value=""/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:insert>
+
+    <ui:insert name="highlight">
+        <h:outputScript name="main/js/sh.js" target="body"/>
+    </ui:insert>
+
+    <ui:insert name="body"></ui:insert>
+</h:body>
+</html>
