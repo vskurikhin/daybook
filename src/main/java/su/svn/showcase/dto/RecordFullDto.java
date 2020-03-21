@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -9,10 +9,7 @@
 package su.svn.showcase.dto;
 
 import lombok.*;
-import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.domain.NewsLinks;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.Tag;
+import su.svn.showcase.domain.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -61,6 +58,9 @@ public class RecordFullDto implements RecordDto, Serializable {
 
     @NotNull
     private NewsLinksDto newsLinks;
+
+    @NotNull
+    private ArticleDto article;
 
     @Valid
     @NotNull
@@ -124,6 +124,8 @@ public class RecordFullDto implements RecordDto, Serializable {
                 return updateByNewsEntryBaseDto(entity);
             case NewsLinksBaseDto:
                 return updateByNewsLinksBaseDto(entity);
+            case ArticleBaseDto:
+                return updateByArticleBaseDto(entity);
         }
         return entity;
     }
@@ -142,6 +144,15 @@ public class RecordFullDto implements RecordDto, Serializable {
             NewsEntry newsEntry = new NewsEntry(this.newsEntry.getId());
             entity.setNewsEntry(this.newsEntry.update(newsEntry));
             entity.getNewsEntry().setRecord(entity);
+        }
+        return entity;
+    }
+
+    private Record updateByArticleBaseDto(@Nonnull Record entity) {
+        if (this.article != null) {
+            Article article = new Article(this.article.getId());
+            entity.setArticle(this.article.update(article));
+            entity.getArticle().setRecord(entity);
         }
         return entity;
     }

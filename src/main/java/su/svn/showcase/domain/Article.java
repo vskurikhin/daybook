@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Article.java
@@ -37,24 +37,24 @@ import static su.svn.showcase.domain.Article.*;
                 " ORDER BY e.title ASC"
     ),
     @NamedQuery(
-            name = FIND_ALL_ORDER_BY_TITLE_DESC,
-            query = "SELECT DISTINCT e FROM Article e" +
-                    " ORDER BY e.title DESC"
+        name = FIND_ALL_ORDER_BY_TITLE_DESC,
+        query = "SELECT DISTINCT e FROM Article e" +
+                " ORDER BY e.title DESC"
     ),
     @NamedQuery(
-            name = FIND_ALL_WHERE_TITLE,
-            query = "SELECT DISTINCT e FROM Article e" +
-                    " WHERE e.title LIKE :title"
+        name = FIND_ALL_WHERE_TITLE,
+        query = "SELECT DISTINCT e FROM Article e" +
+                " WHERE e.title LIKE :title"
     ),
     @NamedQuery(
-            name = FIND_ALL_WHERE_ID_IN,
-            query = "SELECT DISTINCT e FROM Article e" +
-                    " WHERE e.id IN :ids"
+        name = FIND_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM Article e" +
+                " WHERE e.id IN :ids"
     ),
     @NamedQuery(
-            name = FIND_WHERE_TITLE,
-            query = "SELECT DISTINCT e FROM Article e" +
-                    " WHERE e.title = :title"
+        name = FIND_WHERE_TITLE,
+        query = "SELECT DISTINCT e FROM Article e" +
+                " WHERE e.title = :title"
     ),
 })
 public class Article implements DBEntity<UUID>, Serializable {
@@ -82,14 +82,14 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Setter
     @OneToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", nullable = false)
     private Record record;
 
     @Getter
     @Setter
     @OneToOne(fetch = FetchType.LAZY,
             cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", nullable = false)
     private Link link;
 
     @Getter

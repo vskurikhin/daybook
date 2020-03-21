@@ -187,6 +187,21 @@ public class TestData {
             .summary("titleSummary1")
             .build();
 
+    private static final ArticleFullDto articleFullDto0 = ArticleFullDto.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .include("titleInclude0")
+            .summary("titleSummary0")
+            .build();
+    private static final ArticleFullDto articleFullDto1 = ArticleFullDto.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .include("titleInclude1")
+            .summary("titleSummary1")
+            .build();
+
     static {
         tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
         tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
@@ -307,6 +322,13 @@ public class TestData {
     }
     public static ArticleBaseDto cloneArticleBaseDto1() {
         return assertClone(articleBaseDto1);
+    }
+
+    public static ArticleFullDto cloneArticleFullDto0() {
+        return assertClone(articleFullDto0);
+    }
+    public static ArticleFullDto cloneArticleFullDto1() {
+        return assertClone(articleFullDto1);
     }
 }
 //EOF

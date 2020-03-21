@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -115,8 +115,8 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     }
 
     private void validateOrFillRecordArticleId(ArticleFullDto dto) {
+        System.out.println("dto = " + dto);
         Objects.requireNonNull(dto.getRecord());
-        Objects.requireNonNull(dto.getLink());
         validateRecordUserLogin(dto.getRecord());
         if (dto.getId() == null) {
             UUID id = UUID.randomUUID();
