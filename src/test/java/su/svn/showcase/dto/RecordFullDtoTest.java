@@ -38,6 +38,10 @@ class RecordFullDtoTest {
 
     private RecordFullDto recordFullDto;
 
+    private ArticleDto articleDto;
+
+    private Set<TagDto> tagDtos;
+
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
@@ -52,6 +56,7 @@ class RecordFullDtoTest {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
             newsLinksDto = cloneNewsLinksBaseDto0();
+            articleDto = cloneArticleBaseDto0();
             recordFullDto = new RecordFullDto();
         }
 
@@ -104,7 +109,7 @@ class RecordFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(8, recordFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, recordFullDto).hasNext());
         }
     }
 
@@ -112,22 +117,12 @@ class RecordFullDtoTest {
     @DisplayName("when new with all args constructor")
     class WhenNewAllArgsConstructor {
 
-        UserLoginDto userLoginDto;
-
-        NewsEntryDto newsEntryDto;
-
-        NewsGroupDto newsGroupDto;
-
-        Set<Tag> tags;
-
-        Set<TagDto> tagDtos;
-
         @BeforeEach
         void createNew() {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
-            newsGroupDto = cloneNewsGroupBaseDto0();
             recordFullDto = cloneRecordFullDto0();
+            articleDto = cloneArticleBaseDto0();
             tagDtos = Collections.singleton(cloneTagBaseDto0());
         }
 
@@ -135,7 +130,7 @@ class RecordFullDtoTest {
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
             recordFullDto = new RecordFullDto(ROLE_UUID0,
-                    NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, newsLinksDto, tagDtos);
+                    NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, newsLinksDto, articleDto, tagDtos);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("createDateTime", NOW);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("editDateTime", NOW);

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullDto.java
@@ -8,10 +8,7 @@
 
 package su.svn.showcase.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.Record;
@@ -33,6 +30,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"record"})
+@ToString(exclude = {"record"})
 public class ArticleFullDto implements ArticleDto, Serializable {
 
     private static final long serialVersionUID = 9291L;
