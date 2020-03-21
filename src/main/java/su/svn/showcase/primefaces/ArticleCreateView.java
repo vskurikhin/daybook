@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateView.java
@@ -40,6 +40,7 @@ public class ArticleCreateView extends AbstractView {
     private String date;
     private String summary;
     private String link = "Default";
+    private String tags;
 
     @EJB
     private ArticleFullCrudService articleService;
@@ -83,6 +84,7 @@ public class ArticleCreateView extends AbstractView {
                     .date(this.date)
                     .summary(this.summary)
                     .link(this.link)
+                    .tags(this.tags)
                     .build();
             model.save();
             showSaveInfo();

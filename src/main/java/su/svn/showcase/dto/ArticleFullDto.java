@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullDto.java
@@ -59,8 +59,14 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         this.title = entity.getTitle();
         this.include = entity.getInclude();
         this.summary = entity.getSummary();
-        this.record = new RecordFullDto(entity.getRecord());
-        this.link = new LinkBaseDto(entity.getLink());
+        if (entity.getLink() != null) {
+            this.link = LinkFullDto.builder()
+                .id(entity.getLink().getId())
+                .dateTime(entity.getLink().getDateTime())
+                .link(entity.getLink().getLink())
+                .visible(entity.getLink().getVisible())
+                .build();
+        }
     }
 
     @Override

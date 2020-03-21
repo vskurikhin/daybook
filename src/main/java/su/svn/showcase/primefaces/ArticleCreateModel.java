@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateModel.java
@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.services.ArticleFullCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
@@ -20,6 +21,7 @@ import su.svn.showcase.services.RecordTagsStorageService;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -34,6 +36,7 @@ class ArticleCreateModel extends AbstractModel {
     private String date;
     private String summary;
     private String link;
+    private String tags;
     private String login;
 
     private final ArticleFullCrudService articleCrudService;
@@ -82,6 +85,11 @@ class ArticleCreateModel extends AbstractModel {
         LOGGER.info("articleDto = {}", articleDto); // TODO remove
         recordDto.setArticle(articleDto);
         articleCrudService.create(articleDto);
+        if (tags != null) {
+            Set<TagBaseDto> tagSet = StringTagSetConverter.map(tags);
+            LOGGER.info("recordDto = {}", recordDto); // TODO remove
+            recordTagsStorageService.addTagsToRecord(recordDto, tagSet);
+        }
     }
 
     @Override
