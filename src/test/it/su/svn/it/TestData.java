@@ -44,11 +44,6 @@ public class TestData {
     public static final List<UserRole> EMPTY_USER_ROLES = Collections.emptyList();
     public static final List<NewsEntry> EMPTY_NEWS_ENTRIES = Collections.emptyList();
 
-    public static final String TAG_ID0 = SID0;
-    public static final String TAG_ID1 = SID1;
-    public static final String TAG_ID2 = SID2;
-    public static final String TAG_ID3 = SID3;
-
     public static <T> List<T> newList(T o) {
         return new ArrayList<T>(){{add(o);}};
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -114,8 +114,10 @@ public class RecordFullDto implements RecordDto, Serializable {
             case NewsEntryFullDto:
                 return updateByNewsEntryBaseDto(entity);
             case NewsLinksBaseDto:
+            case NewsLinksFullDto:
                 return updateByNewsLinksBaseDto(entity);
             case ArticleBaseDto:
+            case ArticleFullDto:
                 return updateByArticleBaseDto(entity);
         }
         return entity;

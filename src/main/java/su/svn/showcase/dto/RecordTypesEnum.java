@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
@@ -17,6 +17,7 @@ public enum RecordTypesEnum {
     NewsEntryBaseDto(NewsEntryBaseDto.class.getSimpleName()),
     NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName()),
     NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName()),
+    NewsLinksFullDto(NewsLinksFullDto.class.getSimpleName()),
     ArticleBaseDto(ArticleBaseDto.class.getSimpleName()),
     ArticleFullDto(ArticleFullDto.class.getSimpleName());
 

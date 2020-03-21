@@ -73,6 +73,9 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     RecordFullCrudService recordFullCrudService;
 
     @Inject
+    ArticleFullCrudService articleFullCrudService;
+
+    @Inject
     UserTransaction userTransaction;
 
     @Deployment
@@ -286,11 +289,28 @@ public class DBIntegrationTest extends BaseIntegrationTest {
         save(articleDao, entity, expected);
     }
 
+    @Test
+    @InSequence(2901)
+    public void test_articleDao_saveAll() throws Exception {
+        List<Article> entityList = newList(clean(cloneArticle(1)));
+        List<Article> expected = newList(clean(cloneArticle(1)));
+        saveAll(articleDao, entityList, expected);
+    }
+
+    @Test
+    @InSequence(2902)
+    public void test_articleFullCrudService_create() throws Exception {
+        ArticleFullDto dto = cloneArticleFullDto(4);
+        System.out.println("dto = " + dto);
+        System.out.println("dto.getRecord() = " + dto.getRecord());
+        articleFullCrudService.create(dto);
+    }
+
 
     @Test
     @InSequence(99999)
     public void tearDown() throws SystemException, InterruptedException {
-        // Thread.sleep(99999);
+        Thread.sleep(99999);
         if (userTransaction.getStatus() != Status.STATUS_NO_TRANSACTION) {
             userTransaction.rollback();
         }
