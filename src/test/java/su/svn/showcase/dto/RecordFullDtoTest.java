@@ -109,7 +109,7 @@ class RecordFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(8, recordFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, recordFullDto).hasNext());
         }
     }
 

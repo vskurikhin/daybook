@@ -39,35 +39,26 @@ public class RecordFullDto implements RecordDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime createDateTime;
 
-    @NotNull
     private LocalDateTime editDateTime;
 
     private Integer index;
 
-    @NotNull
     private String type;
 
-    @NotNull
     private UserLoginDto userLogin;
 
-    @NotNull
     private NewsEntryDto newsEntry;
 
-    @NotNull
     private NewsLinksDto newsLinks;
 
-    @NotNull
     private ArticleDto article;
 
     @Valid
-    @NotNull
     private Set<TagDto> tags;
 
-    public RecordFullDto(@NotNull Record entity) {
-        assert entity != null;
+    public RecordFullDto(@Nonnull Record entity) {
         this.id = entity.getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();
