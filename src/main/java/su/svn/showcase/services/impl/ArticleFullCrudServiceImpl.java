@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 10:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -94,6 +94,8 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
         UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
         entity = dto.update(entity, getUserLogin(userLogin));
         Record record = entity.getRecord();
+        System.out.println("record = " + record);
+        System.out.println("record.getArticle() = " + record.getArticle());
         recordDao.save(record);
     }
 

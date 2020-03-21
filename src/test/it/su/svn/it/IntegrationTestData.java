@@ -239,6 +239,34 @@ public class IntegrationTestData extends TestData
             .editDateTime(NOW)
             .index(3)
             .type(null)
+            .build(),
+        RecordBaseDto.builder()
+            .id(UUID4)
+            .createDateTime(NOW)
+            .editDateTime(NOW)
+            .index(4)
+            .type(ArticleFullDto.class.getSimpleName())
+            .build(),
+        RecordBaseDto.builder()
+            .id(UUID5)
+            .createDateTime(NOW)
+            .editDateTime(NOW)
+            .index(5)
+            .type(ArticleFullDto.class.getSimpleName())
+            .build(),
+        RecordBaseDto.builder()
+            .id(UUID6)
+            .createDateTime(NOW)
+            .editDateTime(NOW)
+            .index(6)
+            .type(ArticleFullDto.class.getSimpleName())
+            .build(),
+        RecordBaseDto.builder()
+            .id(UUID7)
+            .createDateTime(NOW)
+            .editDateTime(NOW)
+            .index(7)
+            .type(ArticleFullDto.class.getSimpleName())
             .build()
     };
 
@@ -738,6 +766,9 @@ public class IntegrationTestData extends TestData
             articles[i].setRecord(records[i]);
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
+            articleFullDtos[i].setRecord(recordFullDtos[i]);
+            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i - 4]);
+            recordFullDtos[i].setArticle(articleFullDtos[i]);
         }
     }
 
