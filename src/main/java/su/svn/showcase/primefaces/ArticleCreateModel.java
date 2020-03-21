@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateModel.java
@@ -13,19 +13,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.services.ArticleFullCrudService;
-import su.svn.showcase.services.NewsGroupBaseCrudService;
+import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
-
-import static su.svn.shared.Constants.DEV_LOGIN;
-import static su.svn.shared.Constants.RELEASE;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -43,13 +38,13 @@ class ArticleCreateModel extends AbstractModel {
 
     private final ArticleFullCrudService articleCrudService;
 
-    private final NewsGroupBaseCrudService newsGroupCrudService;
+    private final LinkBaseCrudService linkBaseCrudService;
 
     private final RecordTagsStorageService recordTagsStorageService;
 
     public void save() {
         Objects.requireNonNull(articleCrudService);
-        Objects.requireNonNull(newsGroupCrudService);
+        Objects.requireNonNull(linkBaseCrudService);
         Objects.requireNonNull(recordTagsStorageService);
         Objects.requireNonNull(title);
         Objects.requireNonNull(login);
@@ -69,11 +64,12 @@ class ArticleCreateModel extends AbstractModel {
                 .type(ArticleFullDto.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        NewsGroupBaseDto newsGroupBaseDto = newsGroupCrudService.readByGroup(link);
         LinkBaseDto linkBaseDto = LinkBaseDto.builder()
                 .id(uuid)
+                .dateTime(currentDateTime)
                 .link(this.link)
                 .build();
+        linkBaseCrudService.create(linkBaseDto);
         ArticleFullDto articleDto = ArticleFullDto.builder()
                 .id(uuid)
                 .record(recordDto)

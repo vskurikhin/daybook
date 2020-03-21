@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:38 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDaoJpa.java
@@ -48,7 +48,7 @@ public class LinkDaoJpa extends AbstractDaoJpa<UUID, Link> implements LinkDao {
 
     @Override
     public List<Link> findAll() {
-        return abstractDaoFindAll(Link.FIND_ALL);
+        return jpaDaoFindAll(Link.FIND_ALL);
     }
 
     @Override

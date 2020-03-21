@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -11,9 +11,12 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.ArticleDao;
+import su.svn.showcase.dao.LinkDao;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
+import su.svn.showcase.dao.jpa.LinkDaoEjb;
 import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
@@ -39,6 +42,9 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
 
     @EJB(beanName = "RecordDaoEjb")
     private RecordDao recordDao;
+
+    @EJB(beanName = "LinkDaoEjb")
+    private LinkDao linkDao;
 
     @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
@@ -93,9 +99,17 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     private void create(Article entity, ArticleFullDto dto) {
         UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
         entity = dto.update(entity, getUserLogin(userLogin));
+//        Link link = entity.getLink();
+//        System.out.println("link = " + link); // TODO remove
+//        if (link != null) {
+//            System.out.println("link.getArticle() = " + link.getArticle()); // TODO remove
+//            linkDao.save(link);
+//        }
         Record record = entity.getRecord();
-        System.out.println("record = " + record);
-        System.out.println("record.getArticle() = " + record.getArticle());
+//        record.getArticle().setLink(link);
+        System.out.println("record = " + record); // TODO remove
+        System.out.println("record.getArticle() = " + record.getArticle()); // TODO remove
+        System.out.println("record.getArticle().getLink() = " + record.getArticle().getLink()); // TODO remove
         recordDao.save(record);
     }
 
