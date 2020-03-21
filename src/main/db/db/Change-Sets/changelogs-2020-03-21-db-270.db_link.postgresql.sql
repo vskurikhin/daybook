@@ -4,6 +4,4 @@ CREATE TABLE db.db_link (
   date_time  TIMESTAMP WITHOUT TIME ZONE  NOT NULL  DEFAULT now(),
   visible    BOOLEAN                                DEFAULT false,
   link       VARCHAR(512)                 NOT NULL
-             CONSTRAINT UC_link_must_be_different_4fc8
-             UNIQUE
 );

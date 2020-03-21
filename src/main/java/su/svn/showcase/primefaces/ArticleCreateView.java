@@ -2,7 +2,7 @@
  * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryCreateView.java
+ * ArticleCreateView.java
  * $Id$
  */
 
@@ -12,17 +12,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.services.*;
+import su.svn.showcase.services.ArticleFullCrudService;
+import su.svn.showcase.services.NewsGroupBaseCrudService;
+import su.svn.showcase.services.RecordTagsStorageService;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 
 import static su.svn.shared.Constants.DEV_LOGIN;
 import static su.svn.shared.Constants.RELEASE;
@@ -31,18 +31,18 @@ import static su.svn.shared.Constants.RELEASE;
 @ManagedBean
 @RequestScoped
 @EqualsAndHashCode(callSuper = false)
-public class NewsEntryCreateView extends AbstractView {
+public class ArticleCreateView extends AbstractView {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryCreateView.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCreateView.class);
 
     private String title;
-    private String tags;
+    private String include;
     private String date;
-    private String content;
-    private String group = "Default";
+    private String summary;
+    private String link = "Default";
 
     @EJB
-    private NewsEntryFullCrudService newsEntryService;
+    private ArticleFullCrudService articleService;
 
     @EJB
     private NewsGroupBaseCrudService newsGroupService;
@@ -50,15 +50,15 @@ public class NewsEntryCreateView extends AbstractView {
     @EJB
     private RecordTagsStorageService recordTagsStorageService;
 
-    private NewsEntryCreateModel.Builder newsEntryModelBuilder;
+    private ArticleCreateModel.Builder articleModelBuilder;
 
     private HttpServletRequest request;
 
     @PostConstruct
     private void init() {
         LOGGER.trace("init");
-        newsEntryModelBuilder = NewsEntryCreateModel.builder()
-                .newsEntryCrudService(newsEntryService)
+        articleModelBuilder = ArticleCreateModel.builder()
+                .articleCrudService(articleService)
                 .newsGroupCrudService(newsGroupService)
                 .recordTagsStorageService(recordTagsStorageService);
     }
@@ -66,7 +66,7 @@ public class NewsEntryCreateView extends AbstractView {
     public void onload() {
         LOGGER.trace("onload");
         try {
-            newsEntryModelBuilder.login(getCurrentUserName());
+            articleModelBuilder.login(getCurrentUserName());
             request = getHttpServletRequest();
         } catch (Exception e) {
             LOGGER.error("onload : ", e);
@@ -76,13 +76,13 @@ public class NewsEntryCreateView extends AbstractView {
     public void save() {
         LOGGER.trace("save");
         try {
-            NewsEntryCreateModel model = newsEntryModelBuilder
+            ArticleCreateModel model = articleModelBuilder
                     .login(RELEASE ? getCurrentUserName() : DEV_LOGIN)
                     .title(this.title)
-                    .tags(this.tags)
+                    .include(this.include)
                     .date(this.date)
-                    .content(this.content)
-                    .group(this.group)
+                    .summary(this.summary)
+                    .link(this.link)
                     .build();
             model.save();
             showSaveInfo();

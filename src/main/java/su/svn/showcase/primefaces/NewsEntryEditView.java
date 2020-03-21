@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditView.java
@@ -28,6 +28,9 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.UUID;
+
+import static su.svn.shared.Constants.DEV_LOGIN;
+import static su.svn.shared.Constants.RELEASE;
 
 @Data
 @ManagedBean
@@ -118,7 +121,7 @@ public class NewsEntryEditView extends AbstractView {
             System.out.println("newsEntryModelBuilder = " + newsEntryModelBuilder);
             NewsEntryEditModel model = newsEntryModelBuilder
                     .uuid(UUID.fromString(id)) // TODO fis bug NPE
-                    .login(getCurrentUserName())
+                    .login(RELEASE ? getCurrentUserName() : DEV_LOGIN)
                     .title(this.title)
                     .tags(this.tags)
                     .date(this.date)
