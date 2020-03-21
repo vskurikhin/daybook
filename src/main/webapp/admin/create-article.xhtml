@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                template="/admin/template.xhtml">
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{articleCreateView.onload}" />
+    </f:metadata>
+
+    <ui:define name="menu-box">
+        <h:form id="tagsCloud1">
+            <p:growl id="msgs1" showDetail="true"/>
+            <div class="container" style="min-height: 230px !important;">
+                <div class="center-div">
+                    <p:tagCloud model="#{tagCloudView.model}" style="padding-left: 20px; border: 0 !important;">
+                        <p:ajax event="select" update="msgs1" listener="#{tagCloudView.onSelect}"/>
+                    </p:tagCloud>
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="content-form">
+            <p:panel id="panel" header="Add News Entry">
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:commandButton value="Reset" type="reset"/>
+                    <p:commandButton value="Clear" type="button" onclick="PF('editor1').clear();" icon="pi pi-times"/>
+                    <p:message for="panel" display="icon"/>
+
+                    <p:outputLabel for="title" value="Title:"/>
+                    <p:inputText id="title" value="#{articleCreateView.title}" required="true" label="Title">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+                    <p:message for="title" display="icon"/>
+
+                    <p:outputLabel for="include" value="Include:"/>
+                    <p:inputText id="include" value="#{articleCreateView.include}" required="true" label="Tags">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+                    <p:message for="include" display="icon"/>
+
+                    <p:outputLabel for="date" value="Date: "/>
+                    <p:inputMask id="date" value="#{articleCreateView.date}" mask="99/99/9999"/>
+                    <p:message for="date" display="icon"/>
+                </h:panelGrid>
+                <h3 style="margin-top:0">Content</h3>
+                <p:textEditor widgetVar="editor1" value="#{articleCreateView.summary}" height="130" style="margin-bottom:10px"/>
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:commandButton value="Save" update="panel" action="#{articleCreateView.save}" icon="pi pi-check"/>
+                    <p:messages id="msgs"  showDetail="true"><p:autoUpdate /></p:messages>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
