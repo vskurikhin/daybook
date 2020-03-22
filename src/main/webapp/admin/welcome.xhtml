@@ -47,9 +47,7 @@
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
                                 href="#{request.contextPath}/admin/edit-article.xhtml?id=#{record.article.id}">Edit</a>
-                            <ui:repeat value="#{record.tags}" var="tag">
-                                | #{tag.tag}
-                            </ui:repeat>
+                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
                         </span>
                         <span class="floatRight fontSize14 gray">
                             <h:outputText value="#{record.toDateHourMinute()}" />
@@ -67,9 +65,7 @@
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
                                 href="#{request.contextPath}/admin/edit-news.xhtml?id=#{record.newsEntry.id}">Edit</a>
-                            <ui:repeat value="#{record.tags}" var="tag">
-                                | #{tag.tag}
-                            </ui:repeat>
+                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
                         </span>
                         <span class="floatRight fontSize14 gray">
                             <h:outputText value="#{record.toDateHourMinute()}" />
