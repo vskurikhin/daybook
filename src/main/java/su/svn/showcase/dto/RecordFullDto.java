@@ -66,7 +66,6 @@ public class RecordFullDto implements RecordDto, Serializable {
         this.type = entity.getType();
         this.userLogin = new UserOnlyLoginBaseDto(entity.getUserLogin());
         RecordTypesEnum type = RecordTypesEnum.valueOf(entity.getType());
-        System.out.println("type = " + type); // TODO remove
         switch (type) {
             case NewsEntryBaseDto:
             case NewsEntryFullDto:

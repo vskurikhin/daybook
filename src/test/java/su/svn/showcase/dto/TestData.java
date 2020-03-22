@@ -214,17 +214,18 @@ public class TestData {
         userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
         userLoginFullDto1.setRoles(newList(cloneUserRoleBaseDto1()));
 
+        newsEntryFullDto0.setNewsGroup(cloneNewsGroupBaseDto0());
+        newsEntryFullDto1.setNewsGroup(cloneNewsGroupBaseDto1());
+
         recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
-        recordFullDto0.setNewsEntry(cloneNewsEntryBaseDto0());
-        recordFullDto1.setNewsEntry(cloneNewsEntryBaseDto1());
+        recordFullDto0.setNewsEntry(cloneNewsEntryFullDto0());
+        recordFullDto1.setNewsEntry(cloneNewsEntryFullDto1());
         recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
         recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
 
         newsEntryFullDto0.setRecord(cloneRecordFullDto0());
-        newsEntryFullDto0.setNewsGroup(cloneNewsGroupBaseDto0());
         newsEntryFullDto1.setRecord(cloneRecordFullDto1());
-        newsEntryFullDto1.setNewsGroup(cloneNewsGroupBaseDto1());
     }
 
     public static RoleBaseDto cloneRoleBaseDto0() {

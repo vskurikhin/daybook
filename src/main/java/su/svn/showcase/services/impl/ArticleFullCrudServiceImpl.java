@@ -99,17 +99,7 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     private void create(Article entity, ArticleFullDto dto) {
         UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
         entity = dto.update(entity, getUserLogin(userLogin));
-//        Link link = entity.getLink();
-//        System.out.println("link = " + link); // TODO remove
-//        if (link != null) {
-//            System.out.println("link.getArticle() = " + link.getArticle()); // TODO remove
-//            linkDao.save(link);
-//        }
         Record record = entity.getRecord();
-//        record.getArticle().setLink(link);
-        System.out.println("record = " + record); // TODO remove
-        System.out.println("record.getArticle() = " + record.getArticle()); // TODO remove
-        System.out.println("record.getArticle().getLink() = " + record.getArticle().getLink()); // TODO remove
         recordDao.save(record);
     }
 

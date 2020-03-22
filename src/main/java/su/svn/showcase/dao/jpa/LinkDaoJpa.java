@@ -51,9 +51,31 @@ public class LinkDaoJpa extends AbstractDaoJpa<UUID, Link> implements LinkDao {
         return jpaDaoFindAll(Link.FIND_ALL);
     }
 
+    /**
+     * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Links.
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     */
     @Override
     public List<Link> findAllByIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(Link.FIND_ALL_WHERE_ID_IN, "ids", ids);
+        return jpaDaoFindAllWhereIn(Link.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     @Override

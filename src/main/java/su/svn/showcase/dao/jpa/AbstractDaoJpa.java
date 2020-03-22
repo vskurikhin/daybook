@@ -187,7 +187,8 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws IllegalArgumentException if a query has not been
     //         defined with the given name or if the query string is
     //         found to be invalid or if the query result is found to
-    //         not be assignable to the specified type TODO
+    //         not be assignable to the specified type
+    //         or if iterable is null
     // @throws QueryTimeoutException if the query execution exceeds
     //         the query timeout value set and only the statement is
     //         rolled back
@@ -200,7 +201,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws PersistenceException if the query execution exceeds
     //         the query timeout value set and the transaction
     //         is rolled back
-    <T> List<E> abstractDaoFindAllWhereIn(String namedQuery, String parameter, Iterable<T> iterable) {
+    <T> List<E> jpaDaoFindAllWhereIn(String namedQuery, String parameter, Iterable<T> iterable) {
         if (iterable == null) {
             throw new IllegalArgumentException();
         }
@@ -215,7 +216,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws IllegalArgumentException if a query has not been
     //         defined with the given name or if the query string is
     //         found to be invalid or if the query result is found to
-    //         not be assignable to the specified type TODO
+    //         not be assignable to the specified type
     // @throws QueryTimeoutException if the query execution exceeds
     //         the query timeout value set and only the statement is
     //         rolled back
@@ -228,7 +229,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // @throws PersistenceException if the query execution exceeds
     //         the query timeout value set and the transaction
     //         is rolled back
-    <T> List<T> abstractDaoNativeResultList(String namedQuery, Class<T> tClass) {
+    <T> List<T> jpaDaoNativeResultList(String namedQuery, Class<T> tClass) {
         return convertList(getEntityManager().createNativeQuery(namedQuery).getResultList(), tClass);
     }
 
@@ -272,8 +273,9 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     //         defined with the given name or if the query string is
     //         found to be invalid or if the query result is found to
     //         not be assignable to the specified type
-    // @throws IllegalArgumentException if the argument is negative TODO merge IllegalArgumentException
-    // @throws IllegalStateException if called for a Java           TODO merge IllegalArgumentException
+    // @throws IllegalArgumentException if the argument is negative
+    //         or if ids is null
+    // @throws IllegalStateException if called for a Java
     //         Persistence query language UPDATE or DELETE statement
     // @throws QueryTimeoutException if the query execution exceeds
     //         the query timeout value set and only the statement is

@@ -146,10 +146,29 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of UserRoles
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
-    public List<UserRole> findAllByIdIn(Iterable<UUID> uuids) {
-        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ID_IN, "ids", uuids);
+    public List<UserRole> findAllByIdIn(Iterable<UUID> ids) {
+        return jpaDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -178,10 +197,29 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
 
     /**
      * {@inheritDoc }
+     * @param roles - possible values.
+     * @return list of UserRoles
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<UserRole> findAllByRoleIn(Iterable<String> roles) {
-        return abstractDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
+        return jpaDaoFindAllWhereIn(UserRole.FIND_ALL_WHERE_ROLE_IN, "roles", roles);
     }
 
     /**

@@ -180,18 +180,56 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Tags
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Tag> findAllByIdIn(Iterable<String> ids) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
+        return jpaDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
      * {@inheritDoc }
+     * @param tags - possible values.
+     * @return list of Tags
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Tag> findAllByTagIn(Iterable<String> tags) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
+        return jpaDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
     }
 
     /**
@@ -269,6 +307,23 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @param tags - possible values.
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<String> outerSection(Iterable<String> tags) {
@@ -279,7 +334,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
                 .map(s -> "('" + s + "')")
                 .collect(Collectors.joining(","));
         String sql = String.format(Tag.OUTER_SECTION, values);
-        return abstractDaoNativeResultList(sql, String.class);
+        return jpaDaoNativeResultList(sql, String.class);
     }
 
     /**

@@ -34,12 +34,10 @@ public class RoleBaseDto implements RoleDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     @Size(min = 1, max = 64)
     private String roleName;
 
-    public RoleBaseDto(@NotNull Role entity) {
-        assert entity != null;
+    public RoleBaseDto(@Nonnull Role entity) {
         this.id = entity.getId();
         this.roleName = entity.getRoleName();
     }

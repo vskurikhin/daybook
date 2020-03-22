@@ -36,21 +36,16 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private RoleBaseDto role;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
     @Size(min = 1, max = 64)
     private String roleName;
 
-    @NotNull
     private UserLoginDto userLogin;
 
-    public UserRoleFullDto(@NotNull UserRole entity) {
-        assert entity != null;
+    public UserRoleFullDto(@Nonnull UserRole entity) {
         this.id = entity.getId();
         this.role = new RoleBaseDto(entity.getRole());
         this.dateTime = entity.getDateTime();

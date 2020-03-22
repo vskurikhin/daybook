@@ -34,21 +34,18 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
     @Size(min = 1, max = 64, message = "Size of code cannot be greater than {max} Characters")
     private String login;
 
     @Size(max = 256, message = "Size of code cannot be greater than {max} Characters")
     private String password;
 
-    @NotNull
     @Valid
     private List<UserRoleDto> roles;
 
-    public UserLoginFullDto(@NotNull UserLogin entity) {
+    public UserLoginFullDto(@Nonnull UserLogin entity) {
         assert entity != null;
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();

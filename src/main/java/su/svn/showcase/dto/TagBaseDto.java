@@ -33,17 +33,14 @@ public class TagBaseDto implements TagDto, Serializable {
     @NotNull
     private String id;
 
-    @NotNull
     @Size(min = 1, max = 128)
     private String tag;
 
     private Boolean visible;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    public TagBaseDto(@NotNull Tag entity) {
-        assert entity != null;
+    public TagBaseDto(@Nonnull Tag entity) {
         this.id = entity.getId();
         this.tag = entity.getTag();
         this.visible = entity.getVisible();

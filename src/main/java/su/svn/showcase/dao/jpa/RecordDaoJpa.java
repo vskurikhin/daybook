@@ -95,7 +95,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      */
     @Override
     public List<Record> findAllByIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN, "ids", ids);
+        return jpaDaoFindAllWhereIn(Record.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
@@ -173,11 +173,30 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Records
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
         final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-        return abstractDaoFindAllWhereIn(query, "ids", toList(ids));
+        return jpaDaoFindAllWhereIn(query, "ids", toList(ids));
     }
 
     /**
@@ -256,19 +275,57 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Records
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Record> fetchAllWhereIdIn(Iterable<UUID> ids) {
-        return abstractDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN, "ids", toList(ids));
+        return jpaDaoFindAllWhereIn(Record.FETCH_ALL_WHERE_ID_IN, "ids", toList(ids));
     }
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Records
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
         final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-        return abstractDaoFindAllWhereIn(query, "ids", toList(ids));
+        return jpaDaoFindAllWhereIn(query, "ids", toList(ids));
     }
 
     /**

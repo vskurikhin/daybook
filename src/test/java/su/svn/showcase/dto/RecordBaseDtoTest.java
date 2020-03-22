@@ -78,7 +78,7 @@ class RecordBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(4, recordBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, recordBaseDto).hasNext());
         }
     }
 
