@@ -15,10 +15,7 @@ import su.svn.showcase.dao.LinkDao;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.LinkDaoEjb;
-import su.svn.showcase.domain.Article;
-import su.svn.showcase.domain.Link;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.ArticleFullCrudService;
@@ -59,7 +56,7 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     @Override
     @Transactional
     public ArticleFullDto readById(@Nonnull UUID id) {
-        return new ArticleFullDto(articleDao.findById(id)
+        return createNewsLinksFullDto(articleDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
@@ -67,7 +64,7 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     @Transactional
     public List<ArticleFullDto> readRange(int start, int size) {
         return articleDao.range(start, size).stream()
-                .map(ArticleFullDto::new)
+                .map(this::createNewsLinksFullDto)
                 .collect(Collectors.toList());
     }
 
@@ -103,9 +100,21 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
         recordDao.save(record);
     }
 
+    private ArticleFullDto createNewsLinksFullDto(Article entity) {
+        RecordFullDto recordDto = new RecordFullDto(entity.getRecord());
+        if (recordDto.getArticle() instanceof ArticleFullDto) {
+            return (ArticleFullDto) recordDto.getArticle();
+        }
+        ArticleFullDto dto = new ArticleFullDto(entity);
+        dto.setRecord(recordDto);
+
+        return dto;
+    }
+
     private void update(Article entity, ArticleFullDto dto) {
         RecordFullDto recordFullDto = (RecordFullDto) dto.getRecord();
         entity = dto.update(entity, getUserLogin(recordFullDto.getUserLogin()));
+        recordDao.save(entity.getRecord());
         articleDao.save(entity);
     }
 

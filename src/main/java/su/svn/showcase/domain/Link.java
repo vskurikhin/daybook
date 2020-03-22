@@ -89,8 +89,7 @@ public class Link implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "id")
     private Article article;
 

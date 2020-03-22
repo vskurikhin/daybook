@@ -81,14 +81,13 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     @JoinColumn(name = "id", nullable = false)
     private Record record;
 
     @Getter
     @Setter
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "id")
     private Link link;
 
