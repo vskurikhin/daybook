@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
@@ -16,13 +16,19 @@ public enum RecordTypesEnum {
 
     NewsEntryBaseDto(NewsEntryBaseDto.class.getSimpleName()),
     NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName()),
-    NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName());
+    NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName()),
+    NewsLinksFullDto(NewsLinksFullDto.class.getSimpleName()),
+    ArticleBaseDto(ArticleBaseDto.class.getSimpleName()),
+    ArticleFullDto(ArticleFullDto.class.getSimpleName());
 
-    private static final Map<Class<?>, RecordTypesEnum> map = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
-            .key(NewsEntryBaseDto.class).value(NewsEntryBaseDto)
-            .key(NewsEntryFullDto.class).value(NewsEntryFullDto)
-            .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
-            .unmodifiableMap();
+    private static final Map<Class<?>, RecordTypesEnum> map
+        = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
+        .key(NewsEntryBaseDto.class).value(NewsEntryBaseDto)
+        .key(NewsEntryFullDto.class).value(NewsEntryFullDto)
+        .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
+        .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
+        .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
+        .unmodifiableMap();
 
     private String value;
 

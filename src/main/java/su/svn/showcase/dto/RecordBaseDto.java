@@ -33,19 +33,15 @@ public class RecordBaseDto implements RecordDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime createDateTime;
 
-    @NotNull
     private LocalDateTime editDateTime;
 
     private Integer index;
 
-    @NotNull
     private String type;
 
-    public RecordBaseDto(@NotNull Record entity) {
-        assert entity != null;
+    public RecordBaseDto(@Nonnull Record entity) {
         this.id = entity.getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();

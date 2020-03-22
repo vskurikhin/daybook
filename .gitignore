@@ -84,6 +84,7 @@ buildNumber.properties
 
 # webapp/resources
 src/main/webapp/resources/main/css/
+src/main/webapp/resources/main/html/
 src/main/webapp/resources/main/js/
 
 #Gradle

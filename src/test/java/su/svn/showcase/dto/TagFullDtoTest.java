@@ -62,7 +62,7 @@ class TagFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(4, tagFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, tagFullDto).hasNext());
         }
     }
 

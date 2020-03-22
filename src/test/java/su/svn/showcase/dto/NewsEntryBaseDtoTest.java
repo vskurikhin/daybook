@@ -69,7 +69,7 @@ class NewsEntryBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(3, newsEntryBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, newsEntryBaseDto).hasNext());
         }
     }
 

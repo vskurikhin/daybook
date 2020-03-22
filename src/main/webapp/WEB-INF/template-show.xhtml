@@ -1,0 +1,30 @@
+<!DOCTYPE html [
+        <!ENTITY nbsp "&#160;">
+        <!ENTITY bull "&#8226;">
+        <!ENTITY copy "&#169;">
+        ]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:jsf="http://xmlns.jcp.org/jsf">
+<h:head>
+    <f:facet name="first">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="viewport"
+              content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <link rel="shortcut icon" type="image/png"
+              href="#{request.contextPath}/resources/main/images/favicon.png"/>
+    </f:facet>
+
+    <title>SVN DayBook</title>
+</h:head>
+
+<h:body>
+    <ui:insert name="content"></ui:insert>
+</h:body>
+
+</html>

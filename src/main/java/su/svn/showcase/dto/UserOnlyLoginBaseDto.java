@@ -41,8 +41,7 @@ public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
     @Size(min = 1, max = 64, message = "Size of code cannot be greater than {max} Characters")
     private String login;
 
-    public UserOnlyLoginBaseDto(@NotNull UserLogin entity) {
-        assert entity != null;
+    public UserOnlyLoginBaseDto(@Nonnull UserLogin entity) {
         this.id = entity.getId();
         this.login = entity.getLogin();
     }

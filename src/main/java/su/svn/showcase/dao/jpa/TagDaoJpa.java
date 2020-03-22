@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.04 23:17 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagDaoJpa.java
@@ -81,50 +81,155 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<Tag> findAll() {
-        return abstractDaoFindAll(Tag.FIND_ALL);
+        return jpaDaoFindAll(Tag.FIND_ALL);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<Tag> findAllOrderByTagAsc() {
-        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
+        return jpaDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_ASC);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
+     * @return
      */
     @Override
     public List<Tag> findAllOrderByTagDesc() {
-        return abstractDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
+        return jpaDaoFindAll(Tag.FIND_ALL_ORDER_BY_TAG_DESC);
     }
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Tag> findAllWhereTag(String tag) {
-        return abstractDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
+        return jpaDaoFindAllWhereField(Tag.FIND_WHERE_TAG, "tag", tag);
     }
 
     /**
      * {@inheritDoc }
+     * @param ids - possible values.
+     * @return list of Tags
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Tag> findAllByIdIn(Iterable<String> ids) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
+        return jpaDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_ID_IN, "ids", ids);
     }
 
     /**
      * {@inheritDoc }
+     * @param tags - possible values.
+     * @return list of Tags
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     *         or if iterable is null
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<Tag> findAllByTagIn(Iterable<String> tags) {
-        return abstractDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
+        return jpaDaoFindAllWhereIn(Tag.FIND_ALL_WHERE_TAG_IN, "tags", tags);
     }
 
     /**
@@ -202,6 +307,23 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
 
     /**
      * {@inheritDoc }
+     * @param tags - possible values.
+     * @throws IllegalArgumentException if a query has not been
+     *         defined with the given name or if the query string is
+     *         found to be invalid or if the query result is found to
+     *         not be assignable to the specified type
+     * @throws QueryTimeoutException if the query execution exceeds
+     *         the query timeout value set and only the statement is
+     *         rolled back
+     * @throws TransactionRequiredException if a lock mode has
+     *         been set and there is no transaction
+     * @throws PessimisticLockException if pessimistic locking
+     *         fails and the transaction is rolled back
+     * @throws LockTimeoutException if pessimistic locking
+     *         fails and only the statement is rolled back
+     * @throws PersistenceException if the query execution exceeds
+     *         the query timeout value set and the transaction
+     *         is rolled back
      */
     @Override
     public List<String> outerSection(Iterable<String> tags) {
@@ -212,7 +334,7 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
                 .map(s -> "('" + s + "')")
                 .collect(Collectors.joining(","));
         String sql = String.format(Tag.OUTER_SECTION, values);
-        return abstractDaoNativeResultList(sql, String.class);
+        return jpaDaoNativeResultList(sql, String.class);
     }
 
     /**

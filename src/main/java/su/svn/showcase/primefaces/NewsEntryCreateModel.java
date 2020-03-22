@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateModel.java
@@ -54,7 +54,7 @@ class NewsEntryCreateModel extends AbstractModel {
         Objects.requireNonNull(group);
 
         UserOnlyLoginBaseDto userLoginDto = UserOnlyLoginBaseDto.builder()
-                .login(RELEASE ? this.login : DEV_LOGIN)
+                .login(this.login)
                 .build();
         UUID uuid = UUID.randomUUID();
         LocalDateTime nowDateTime = LocalDateTime.now();

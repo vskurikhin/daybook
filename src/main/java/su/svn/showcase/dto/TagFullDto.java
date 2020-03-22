@@ -39,21 +39,17 @@ public class TagFullDto implements TagDto, Serializable {
     @NotNull
     private String id;
 
-    @NotNull
     @Size(min = 1, max = 128)
     private String tag;
 
     private Boolean visible;
 
-    @NotNull
     private LocalDateTime dateTime;
 
     @Valid
-    @NotNull
     private Set<RecordDto> records;
 
-    public TagFullDto(@NotNull Tag entity) {
-        assert entity != null;
+    public TagFullDto(@Nonnull Tag entity) {
         this.id = entity.getId();
         this.tag = entity.getTag();
         this.visible = entity.getVisible();

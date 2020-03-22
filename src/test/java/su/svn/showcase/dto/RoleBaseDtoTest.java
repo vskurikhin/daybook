@@ -61,7 +61,7 @@ class RoleBaseDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, roleBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, roleBaseDto).hasNext());
         }
     }
 

@@ -75,7 +75,7 @@ class UserLoginFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(4, userLoginFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, userLoginFullDto).hasNext());
         }
     }
 

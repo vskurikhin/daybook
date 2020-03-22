@@ -34,6 +34,26 @@
                             "{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink}
                              {PageLinks} {NextPageLink} {LastPageLink}">
                 <div class="ContentSideSections">
+                    <!-- Article -->
+                    <ui:fragment rendered="#{record.isTypeOfArticle()}">
+                        <span class="green fontSize24">
+                            <h:outputText value="#{record.article.title}"/>
+                        </span>
+                        <span class="fontSize18 dispBlock regularFont wite"
+                              style="display: block; padding: 15px 0;">
+                            <h:outputText value="#{record.article.summary}" escape="false"/>
+                            <h:outputLink value="#{request.contextPath}/show-article.xhtml?a=#{record.article.link.id}"
+                                          styleClass="blue fontSize14">detail</h:outputLink>
+                        </span>
+                        <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
+                                href="#{request.contextPath}/admin/edit-article.xhtml?id=#{record.article.id}">Edit</a>
+                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
+                        </span>
+                        <span class="floatRight fontSize14 gray">
+                            <h:outputText value="#{record.toDateHourMinute()}" />
+                        </span>
+                    </ui:fragment>
+
                     <!-- NewsEntry -->
                     <ui:fragment rendered="#{record.isTypeOfNewsEntry()}">
                         <span class="green fontSize24">
@@ -45,14 +65,13 @@
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
                                 href="#{request.contextPath}/admin/edit-news.xhtml?id=#{record.newsEntry.id}">Edit</a>
-                            <ui:repeat value="#{record.tags}" var="tag">
-                                | #{tag.tag}
-                            </ui:repeat>
+                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
                         </span>
                         <span class="floatRight fontSize14 gray">
                             <h:outputText value="#{record.toDateHourMinute()}" />
                         </span>
                     </ui:fragment>
+
                     <div style="clear:both"/>
                 </div>
             </p:dataList>

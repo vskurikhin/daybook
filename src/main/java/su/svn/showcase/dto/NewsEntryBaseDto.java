@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryBaseDto.java
@@ -35,18 +35,15 @@ public class NewsEntryBaseDto implements NewsEntryDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
     @Size(min = 1, max = 128)
     private String title;
 
     @Size(min = 1, max = 1024)
     private String content;
 
-    public NewsEntryBaseDto(@NotNull NewsEntry entity) {
-        assert entity != null;
+    public NewsEntryBaseDto(@Nonnull NewsEntry entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();

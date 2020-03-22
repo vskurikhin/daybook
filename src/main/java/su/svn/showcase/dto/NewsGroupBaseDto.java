@@ -34,15 +34,12 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
     @Size(min = 1, max = 64)
     private String group;
 
-    public NewsGroupBaseDto(@NotNull NewsGroup entity) {
-        assert entity != null;
+    public NewsGroupBaseDto(@Nonnull NewsGroup entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.group = entity.getGroup();

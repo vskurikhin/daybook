@@ -85,7 +85,7 @@ class UserRoleFullDtoTest {
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(5, userRoleFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, userRoleFullDto).hasNext());
         }
     }
 
