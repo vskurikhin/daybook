@@ -43,15 +43,27 @@
                     </p:inputText>
                     <p:message for="tags" display="icon"/>
 
+                    <p:outputLabel for="include" value="Include:"/>
+                    <p:inputText id="include" value="#{articleEditView.include}" required="true" label="Tags">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+                    <p:message for="include" display="icon"/>
+
+                    <p:outputLabel for="link" value="Link:"/>
+                    <p:inputText id="link" value="#{articleEditView.link}" required="true" label="Tags">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+                    <p:message for="link" display="icon"/>
+
                     <p:outputLabel for="date" value="Date: "/>
                     <p:inputMask id="date" value="#{articleEditView.date}" mask="99/99/9999"/>
                     <p:message for="date" display="icon"/>
                 </h:panelGrid>
-                <h3 style="margin-top:0">Content</h3>
-                <p:editor widgetVar="editor1" value="#{articleEditView.content}" height="260" style="margin-bottom:10px"/>
+                <h3 style="margin-top:0">Summary</h3>
+                <p:textEditor widgetVar="editor1" value="#{articleEditView.summary}" height="130" style="margin-bottom:10px"/>
                 <h:panelGrid columns="2" cellpadding="5">
                     <p:commandButton value="Save" update="panel" action="#{articleEditView.save}" icon="pi pi-check"/>
-                    <p:messages id="msgs"/>
+                    <p:messages id="msgs"  showDetail="true"><p:autoUpdate /></p:messages>
                 </h:panelGrid>
             </p:panel>
         </h:form>

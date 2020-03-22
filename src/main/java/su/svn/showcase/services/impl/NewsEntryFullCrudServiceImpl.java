@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -53,7 +53,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     @Override
     @Transactional
     public NewsEntryFullDto readById(@Nonnull UUID id) {
-        return new NewsEntryFullDto(newsEntryDao.findById(id)
+        return createNewsLinksFullDto(newsEntryDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
@@ -61,7 +61,7 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     @Transactional
     public List<NewsEntryFullDto> readRange(int start, int size) {
         return newsEntryDao.range(start, size).stream()
-                .map(NewsEntryFullDto::new)
+                .map(this::createNewsLinksFullDto)
                 .collect(Collectors.toList());
     }
 
@@ -95,6 +95,17 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
         entity = dto.update(entity, getUserLogin(userLogin));
         Record record = entity.getRecord();
         recordDao.save(record);
+    }
+
+    private NewsEntryFullDto createNewsLinksFullDto(NewsEntry entity) {
+        RecordFullDto recordDto = new RecordFullDto(entity.getRecord());
+        if (recordDto.getNewsEntry() instanceof NewsEntryFullDto) {
+            return (NewsEntryFullDto) recordDto.getNewsEntry();
+        }
+        NewsEntryFullDto dto = new NewsEntryFullDto(entity);
+        dto.setRecord(recordDto);
+
+        return dto;
     }
 
     private void update(NewsEntry entity, NewsEntryFullDto dto) {
