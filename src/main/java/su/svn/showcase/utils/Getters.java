@@ -1,17 +1,15 @@
 /*
- * This file was last modified at 2020.03.22 22:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.22 22:46 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Getters.java
  * $Id$
  */
 
-package su.svn.showcase.converters;
+package su.svn.showcase.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.utils.FieldUtil;
-import su.svn.showcase.utils.MethodUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -53,13 +51,13 @@ public class Getters {
         for (Field field : aClass.getDeclaredFields()) {
             if ( ! FieldUtil.isTransientOrStatic(field)) {
                 LOGGER.trace("field = {}", field); // TODO remove
-                String methodName = MethodUtil.methodName(field.getName(), 3, MethodUtil.GET);
+                String methodName = MethodUtil.name(field.getName(), MethodUtil.GETTER);
                 LOGGER.trace("methodName = {}", methodName); // TODO remove
                 Method getter = methods.get(methodName);
                 if (MethodUtil.isValidGetter(getter, field)) {
                     result.put(field.getName(), getter);
                 } else {
-                    methodName = MethodUtil.methodName(field.getName(), 2, MethodUtil.IS);
+                    methodName = MethodUtil.name(field.getName(), MethodUtil.IS);
                     LOGGER.trace("methodName = {}", methodName); // TODO remove
                     getter = methods.get(methodName);
                     if (MethodUtil.isValidGetter(getter, field)) {
