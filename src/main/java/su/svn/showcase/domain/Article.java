@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Article.java
@@ -81,14 +81,13 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
+            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     @JoinColumn(name = "id", nullable = false)
     private Record record;
 
     @Getter
     @Setter
-    @OneToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "id")
     private Link link;
 
