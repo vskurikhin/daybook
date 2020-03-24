@@ -139,5 +139,6 @@ CREATE TABLE db.db_article (
     date_time   TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT now(),
     title       VARCHAR(128)      NOT NULL,
     include     VARCHAR(128)      NOT NULL,
+    anchor      VARCHAR(128)      NOT NULL,
     summary     TEXT
 );
