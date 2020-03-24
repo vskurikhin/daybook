@@ -55,6 +55,7 @@ class ArticleTest
             assertThat(article).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(article).hasFieldOrPropertyWithValue("title", null);
             assertThat(article).hasFieldOrPropertyWithValue("include", null);
+            assertThat(article).hasFieldOrPropertyWithValue("anchor", null);
             assertThat(article).hasFieldOrPropertyWithValue("summary", null);
         }
 
@@ -83,6 +84,10 @@ class ArticleTest
             assertThat(article).hasFieldOrPropertyWithValue("include", "testInclude");
             assertEquals("testInclude", article.getInclude());
 
+            article.setAnchor("testAnchor");
+            assertThat(article).hasFieldOrPropertyWithValue("anchor", "testAnchor");
+            assertEquals("testAnchor", article.getAnchor());
+
             article.setSummary("testSummary");
             assertThat(article).hasFieldOrPropertyWithValue("summary", "testSummary");
             assertEquals("testSummary", article.getSummary());
@@ -91,7 +96,7 @@ class ArticleTest
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(5, article).hasNext());
+            assertFalse(ValidateUtil.isNull(6, article).hasNext());
         }
     }
 
@@ -109,7 +114,7 @@ class ArticleTest
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            article = new Article(ZERO, record, link, NOW, "titleTest0", "testInclude0", "testSummary0");
+            article = new Article(ZERO, record, link, NOW, "titleTest0", "testInclude0", "testAnchor", "testSummary0");
             assertNotNull(article.getId());
             assertEquals(ZERO, article.getId());
             assertThat(article).hasFieldOrPropertyWithValue("record", record);
@@ -117,6 +122,7 @@ class ArticleTest
             assertThat(article).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(article).hasFieldOrPropertyWithValue("title", "titleTest0");
             assertThat(article).hasFieldOrPropertyWithValue("include", "testInclude0");
+            assertThat(article).hasFieldOrPropertyWithValue("anchor", "testAnchor");
             assertThat(article).hasFieldOrPropertyWithValue("summary", "testSummary0");
         }
 
@@ -124,20 +130,22 @@ class ArticleTest
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
             article = Article.builder()
-                .id(ZERO)
-                .record(record)
-                .link(link)
-                .dateTime(NOW)
-                .title("titleTest0")
-                .include("testInclude0")
-                .summary("testSummary0")
-                .build();
+                    .id(ZERO)
+                    .record(record)
+                    .link(link)
+                    .dateTime(NOW)
+                    .title("titleTest0")
+                    .include("testInclude0")
+                    .anchor("testAnchor")
+                    .summary("testSummary0")
+                    .build();
             assertThat(article).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(article).hasFieldOrPropertyWithValue("record", record);
             assertThat(article).hasFieldOrPropertyWithValue("link", link);
             assertThat(article).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(article).hasFieldOrPropertyWithValue("title", "titleTest0");
             assertThat(article).hasFieldOrPropertyWithValue("include", "testInclude0");
+            assertThat(article).hasFieldOrPropertyWithValue("anchor", "testAnchor");
             assertThat(article).hasFieldOrPropertyWithValue("summary", "testSummary0");
         }
 

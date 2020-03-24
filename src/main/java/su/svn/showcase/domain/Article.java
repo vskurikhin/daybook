@@ -112,6 +112,12 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @NotNull
+    @Column(name = "anchor", length = 128, nullable = false)
+    private String anchor;
+
+    @Getter
+    @Setter
+    @NotNull
     @Column(name = "summary")
     private String summary;
 
