@@ -43,7 +43,9 @@
                               style="display: block; padding: 15px 0;">
                             <h:outputText value="#{record.article.summary}" escape="false"/>
                             <h:outputLink value="#{request.contextPath}/show-article.xhtml?id=#{record.article.link.id}"
-                                          styleClass="blue fontSize14">goto</h:outputLink>
+                                          styleClass="blue fontSize14">goto
+                            <h:outputText value="#{record.article.anchor}" escape="false"/>
+                            </h:outputLink>
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
                                 href="#{request.contextPath}/admin/edit-article.xhtml?id=#{record.article.id}">Edit</a>

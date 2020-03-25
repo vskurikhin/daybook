@@ -83,6 +83,7 @@ public class NewsGroup implements DBEntity<UUID>, Serializable {
     @Getter
     @NotNull
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Getter
