@@ -73,10 +73,12 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
     @Getter
     @NotNull
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Getter
     @Setter
+    @PrimaryKeyJoinColumn
     @OneToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     @JoinColumn(name = "id")
