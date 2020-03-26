@@ -29,7 +29,7 @@ import static su.svn.utils.TestData.NOW;
 @DisplayName("Class ArticleBaseDto")
 class ArticleBaseDtoTest {
 
-    private ArticleBaseDto newsEntryBaseDto;
+    private ArticleBaseDto articleBaseDto;
 
     @Test
     @DisplayName("is instantiated")
@@ -42,43 +42,44 @@ class ArticleBaseDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            newsEntryBaseDto = new ArticleBaseDto();
+            articleBaseDto = new ArticleBaseDto();
         }
 
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("id", null);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", null);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("include", null);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("summary", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("id", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("title", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("include", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("anchor", null);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("summary", null);
         }
 
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            newsEntryBaseDto.setDateTime(NOW);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertEquals(NOW, newsEntryBaseDto.getDateTime());
+            articleBaseDto.setDateTime(NOW);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertEquals(NOW, articleBaseDto.getDateTime());
 
-            newsEntryBaseDto.setTitle("testTitle");
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", "testTitle");
-            assertEquals("testTitle", newsEntryBaseDto.getTitle());
+            articleBaseDto.setTitle("testTitle");
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("title", "testTitle");
+            assertEquals("testTitle", articleBaseDto.getTitle());
 
-            newsEntryBaseDto.setInclude("testInclude");
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("include", "testInclude");
-            assertEquals("testInclude", newsEntryBaseDto.getInclude());
+            articleBaseDto.setInclude("testInclude");
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("include", "testInclude");
+            assertEquals("testInclude", articleBaseDto.getInclude());
 
-            newsEntryBaseDto.setSummary("testSummary");
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("summary", "testSummary");
-            assertEquals("testSummary", newsEntryBaseDto.getSummary());
+            articleBaseDto.setSummary("testSummary");
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("summary", "testSummary");
+            assertEquals("testSummary", articleBaseDto.getSummary());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(1, newsEntryBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, articleBaseDto).hasNext());
         }
     }
 
@@ -99,43 +100,43 @@ class ArticleBaseDtoTest {
             recordFullDto = cloneRecordFullDto0();
             newsGroupBaseDto = cloneNewsGroupBaseDto0();
             tags = TestData.EMPTY_BASEDTO_TAGS;
-            newsEntryBaseDto = cloneArticleBaseDto0();
+            articleBaseDto = cloneArticleBaseDto0();
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            newsEntryBaseDto = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleSummary0");
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", "titleTest0");
+            articleBaseDto = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleAnchor0", "titleSummary0");
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("title", "titleTest0");
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            newsEntryBaseDto = ArticleBaseDto.builder()
+            articleBaseDto = ArticleBaseDto.builder()
                     .id(ZERO)
                     .dateTime(NOW)
                     .title("titleTest0")
                     .build();
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(newsEntryBaseDto).hasFieldOrPropertyWithValue("title", "titleTest0");
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(articleBaseDto).hasFieldOrPropertyWithValue("title", "titleTest0");
         }
 
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new ArticleBaseDto(), newsEntryBaseDto);
-            ArticleBaseDto expected = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleSummary0");
-            assertEquals(expected.hashCode(), newsEntryBaseDto.hashCode());
-            assertEquals(expected, newsEntryBaseDto);
+            assertNotEquals(new ArticleBaseDto(), articleBaseDto);
+            ArticleBaseDto expected = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleAnchor0", "titleSummary0");
+            assertEquals(expected.hashCode(), articleBaseDto.hashCode());
+            assertEquals(expected, articleBaseDto);
         }
 
         @Test
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
-            assertTrue(newsEntryBaseDto.toString().length() > 0);
+            assertTrue(articleBaseDto.toString().length() > 0);
         }
 
         @Test
@@ -145,7 +146,7 @@ class ArticleBaseDtoTest {
             expected.setDateTime(NOW);
             expected.setRecord(record);
             expected.setTitle("titleTest0");
-            assertEquals(expected, newsEntryBaseDto.update(expected));
+            assertEquals(expected, articleBaseDto.update(expected));
         }
 
         @Test
@@ -155,8 +156,9 @@ class ArticleBaseDtoTest {
             entity.setDateTime(NOW);
             entity.setTitle("titleTest0");
             entity.setInclude("titleInclude0");
+            entity.setAnchor("titleAnchor0");
             entity.setSummary("titleSummary0");
-            ArticleBaseDto expected = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleSummary0");
+            ArticleBaseDto expected = new ArticleBaseDto(ZERO, NOW, "titleTest0", "titleInclude0", "titleAnchor0", "titleSummary0");
             ArticleBaseDto test = new ArticleBaseDto(entity);
             assertEquals(expected, test);
         }

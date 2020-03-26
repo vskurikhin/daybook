@@ -177,6 +177,7 @@ public class TestData {
             .dateTime(NOW)
             .title("titleTest0")
             .include("titleInclude0")
+            .anchor("titleAnchor0")
             .summary("titleSummary0")
             .build();
     private static final ArticleBaseDto articleBaseDto1 = ArticleBaseDto.builder()
@@ -184,6 +185,7 @@ public class TestData {
             .dateTime(NOW)
             .title("titleTest1")
             .include("titleInclude1")
+            .anchor("titleAnchor1")
             .summary("titleSummary1")
             .build();
 
@@ -192,6 +194,7 @@ public class TestData {
             .dateTime(NOW)
             .title("titleTest0")
             .include("titleInclude0")
+            .anchor("titleAnchor0")
             .summary("titleSummary0")
             .build();
     private static final ArticleFullDto articleFullDto1 = ArticleFullDto.builder()
@@ -199,6 +202,7 @@ public class TestData {
             .dateTime(NOW)
             .title("titleTest1")
             .include("titleInclude1")
+            .anchor("titleAnchor1")
             .summary("titleSummary1")
             .build();
 

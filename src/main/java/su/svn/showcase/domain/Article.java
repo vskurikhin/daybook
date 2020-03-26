@@ -76,10 +76,12 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Getter
     @NotNull
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Getter
     @Setter
+    @PrimaryKeyJoinColumn
     @OneToOne(fetch = FetchType.EAGER,
             cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     @JoinColumn(name = "id", nullable = false)
@@ -87,6 +89,7 @@ public class Article implements DBEntity<UUID>, Serializable {
 
     @Getter
     @Setter
+    @PrimaryKeyJoinColumn
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "id")
     private Link link;
@@ -108,6 +111,12 @@ public class Article implements DBEntity<UUID>, Serializable {
     @NotNull
     @Column(name = "include", length = 128, nullable = false)
     private String include;
+
+    @Getter
+    @Setter
+    @NotNull
+    @Column(name = "anchor", length = 128, nullable = false)
+    private String anchor;
 
     @Getter
     @Setter

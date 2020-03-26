@@ -47,6 +47,9 @@ public class ArticleBaseDto implements ArticleDto, Serializable {
     @Size(max = 128)
     private String include;
 
+    @Size(max = 128)
+    private String anchor;
+
     private String summary;
 
     public ArticleBaseDto(@Nonnull Article entity) {
@@ -54,6 +57,7 @@ public class ArticleBaseDto implements ArticleDto, Serializable {
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.include = entity.getInclude();
+        this.anchor = entity.getAnchor();
         this.summary = entity.getSummary();
     }
 
@@ -67,6 +71,7 @@ public class ArticleBaseDto implements ArticleDto, Serializable {
         updateIfNotNull(entity::setDateTime, this.dateTime);
         updateIfNotNull(entity::setTitle, this.title);
         updateIfNotNull(entity::setInclude, this.include);
+        updateIfNotNull(entity::setAnchor, this.anchor);
         updateIfNotNull(entity::setSummary, this.summary);
 
         return entity;

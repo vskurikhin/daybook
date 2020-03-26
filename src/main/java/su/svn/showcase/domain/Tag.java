@@ -84,6 +84,7 @@ public class Tag implements DBEntity<String>, Serializable {
     @Getter
     @NotNull
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     private String id;
 
     @Getter
