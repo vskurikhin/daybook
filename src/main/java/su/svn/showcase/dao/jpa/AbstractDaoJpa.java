@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 18:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 19:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -398,22 +398,22 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // Deletes the given entities.
     //
     // @param entities
-    // @throws IllegalArgumentException if instance is not an TODO
+    // @throws IllegalArgumentException if instance is not an
     //         entity or is a removed entity
     // @throws TransactionRequiredException if invoked on a
     //         container-managed entity manager of type
     //         <code>PersistenceContextType.TRANSACTION</code> and there is
     //         no transaction
-    // @throws IllegalArgumentException if the instance is not an TODO merge IllegalArgumentException
+    // @throws IllegalArgumentException if the instance is not an
     //         entity or is a detached entity
-    // @throws TransactionRequiredException if invoked on a TODO merge IllegalArgumentException
+    // @throws TransactionRequiredException if invoked on a
     //         container-managed entity manager of type
     //         <code>PersistenceContextType.TRANSACTION</code> and there is
     //         no transaction
-    // @throws TransactionRequiredException if there is TODO merge IllegalArgumentException
+    // @throws TransactionRequiredException if there is
     //         no transaction
     // @throws PersistenceException if the flush fails
-    void abstractDaoDeleteAll(Iterable<E> entities) {
+    void jpaDaoDeleteAll(Iterable<E> entities) {
         if (entities == null) {
             throw new IllegalArgumentException();
         }

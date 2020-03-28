@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 18:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 19:35 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginDaoJpa.java
@@ -239,10 +239,25 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
 
     /**
      * {@inheritDoc }
+     * @throws IllegalArgumentException if instance is not an
+     *         entity or is a removed entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws IllegalArgumentException if the instance is not an
+     *         entity or is a detached entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws TransactionRequiredException if there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
      */
     @Override
     public void  deleteAll(Iterable<UserLogin> entities) {
-        abstractDaoDeleteAll(entities);
+        jpaDaoDeleteAll(entities);
     }
 
     /**
