@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 16:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 18:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDaoJpa.java
@@ -194,14 +194,37 @@ public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements 
         return jpaDaoSave(entity);
     }
 
+    /**
+     * {@inheritDoc }
+     * @param entities must not be {@literal null}.
+     */
     @Override
     public Iterable<NewsEntry> saveAll(Iterable<NewsEntry> entities) {
-        return abstractDaoSaveAll(entities);
+        return jpaDaoSaveAll(entities);
     }
 
+    /**
+     * {@inheritDoc }
+     * @param id must not be {@literal null}.
+     * @throws IllegalArgumentException if instance is not an
+     *         entity or is a removed entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws IllegalArgumentException if the instance is not an
+     *         entity or is a detached entity
+     * @throws TransactionRequiredException if invoked on a
+     *         container-managed entity manager of type
+     *         <code>PersistenceContextType.TRANSACTION</code> and there is
+     *         no transaction
+     * @throws TransactionRequiredException if there is
+     *         no transaction
+     * @throws PersistenceException if the flush fails
+     */
     @Override
     public void delete(UUID id) {
-        abstractDaoDelete(id);
+        jpaDaoDelete(id);
     }
 
     @Override
