@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 16:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 18:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -348,7 +348,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // Saves all given entities.
     //
     // @param entities must not be {@literal null}.
-    Iterable<E> abstractDaoSaveAll(Iterable<E> entities) {
+    Iterable<E> jpaDaoSaveAll(Iterable<E> entities) {
         if (entities == null) {
             throw new IllegalArgumentException();
         }
@@ -376,16 +376,16 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     //         container-managed entity manager of type
     //         <code>PersistenceContextType.TRANSACTION</code> and there is
     //         no transaction
-    // @throws IllegalArgumentException if the instance is not an TODO merge IllegalArgumentException
+    // @throws IllegalArgumentException if the instance is not an
     //         entity or is a detached entity
-    // @throws TransactionRequiredException if invoked on a TODO merge IllegalArgumentException
+    // @throws TransactionRequiredException if invoked on a
     //         container-managed entity manager of type
     //         <code>PersistenceContextType.TRANSACTION</code> and there is
     //         no transaction
-    // @throws TransactionRequiredException if there is TODO merge IllegalArgumentException
+    // @throws TransactionRequiredException if there is
     //         no transaction
     // @throws PersistenceException if the flush fails
-    void abstractDaoDelete(K id) {
+    void jpaDaoDelete(K id) {
         EntityManager em = getEntityManager();
         jpaFindById(id).ifPresent(e -> {
             e = em.merge(e);

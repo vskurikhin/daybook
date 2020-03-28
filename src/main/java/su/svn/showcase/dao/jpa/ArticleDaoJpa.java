@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 16:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 18:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleDaoJpa.java
@@ -195,14 +195,18 @@ public class ArticleDaoJpa extends AbstractDaoJpa<UUID, Article> implements Arti
         return jpaDaoSave(entity);
     }
 
+    /**
+     * {@inheritDoc }
+     * @param entities must not be {@literal null}.
+     */
     @Override
     public Iterable<Article> saveAll(Iterable<Article> entities) {
-        return abstractDaoSaveAll(entities);
+        return jpaDaoSaveAll(entities);
     }
 
     @Override
     public void delete(UUID id) {
-        abstractDaoDelete(id);
+        jpaDaoDelete(id);
     }
 
     @Override
