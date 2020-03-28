@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.28 16:31 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -233,11 +233,12 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
         return convertList(getEntityManager().createNativeQuery(namedQuery).getResultList(), tClass);
     }
 
-    // TODO
+    // Retrieves set of entity records with size of capacity
+    // and start - the position of the first result to retrieve.
     //
-    // @param query
-    // @param start
-    // @param size
+    // @param query - namedQuery
+    // @param start - the position of the first result to retrieve
+    // @param size - capacity
     // @return
     //
     // @throws IllegalArgumentException if a query has not been
@@ -267,8 +268,14 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
         return typedQuery.getResultList();
     }
 
-    // TODO
+    // Retrieves set of entity records with size of capacity
+    // and start - the position of the first result to retrieve.
     //
+    // @param query - namedQuery
+    // @param start - the position of the first result to retrieve
+    // @param size - capacity
+    // @param ids
+    // @return
     // @throws IllegalArgumentException if a query has not been
     //         defined with the given name or if the query string is
     //         found to be invalid or if the query result is found to
@@ -304,7 +311,7 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     // Returns the number of entities available.
     //
     // TODO
-    long abstractCount() {
+    long jpaCount() {
         CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         countQuery.select(criteriaBuilder.count(countQuery.from(getEClass())));
