@@ -38,6 +38,7 @@ public class ArticleCreateView extends AbstractView {
     private String title;
     private String include;
     private String date;
+    private String anchor;
     private String summary;
     private String link = "Default";
     private String tags;
@@ -82,6 +83,7 @@ public class ArticleCreateView extends AbstractView {
                     .title(this.title)
                     .include(this.include)
                     .date(this.date)
+                    .anchor(this.anchor)
                     .summary(this.summary)
                     .link(this.link)
                     .tags(this.tags)

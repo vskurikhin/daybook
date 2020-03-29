@@ -43,11 +43,13 @@
                               style="display: block; padding: 15px 0;">
                             <h:outputText value="#{record.article.summary}" escape="false"/>
                             <h:outputLink value="#{request.contextPath}/show-article.xhtml?id=#{record.article.link.id}"
-                                          styleClass="blue fontSize14">goto</h:outputLink>
+                                          styleClass="blue fontSize14">
+                                <h:outputText styleClass="blue fontSize21" value="#{record.article.anchor}" escape="false"/>
+                            </h:outputLink>
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
-                                href="#{request.contextPath}/admin/edit-article.xhtml?id=#{record.article.id}">Edit</a>
-                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
+                                href="https://svn.su">SVN</a>
+                            <ui:repeat value="#{record.tags}" var="tag">| #{tag.tag}</ui:repeat>
                         </span>
                         <span class="floatRight fontSize14 gray">
                             <h:outputText value="#{record.toDateHourMinute()}" />
@@ -64,8 +66,8 @@
                             <h:outputText value="#{record.newsEntry.content}" escape="false"/>
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a
-                                href="#{request.contextPath}/admin/edit-news.xhtml?id=#{record.newsEntry.id}">Edit</a>
-                            <ui:repeat value="#{record.tags}" var="tag"> | #{tag.tag}</ui:repeat>
+                                href="https://svn.su">SVN</a>
+                            <ui:repeat value="#{record.tags}" var="tag">| #{tag.tag}</ui:repeat>
                         </span>
                         <span class="floatRight fontSize14 gray">
                             <h:outputText value="#{record.toDateHourMinute()}" />

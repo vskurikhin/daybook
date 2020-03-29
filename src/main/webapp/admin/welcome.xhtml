@@ -23,7 +23,7 @@
         <h:form id="form">
             <p:dataList itemType="none"
                         paginator="true"
-                        paginatorPosition="top"
+                        paginatorPosition="both"
                         rows="10"
                         rowsPerPageTemplate="5,10,15" lazy="true"
                         styleClass="my-paginated"
@@ -43,8 +43,8 @@
                               style="display: block; padding: 15px 0;">
                             <h:outputText value="#{record.article.summary}" escape="false"/>
                             <h:outputLink value="#{request.contextPath}/show-article.xhtml?id=#{record.article.link.id}"
-                                          styleClass="blue fontSize14">goto
-                            <h:outputText value="#{record.article.anchor}" escape="false"/>
+                                          styleClass="blue fontSize14">
+                                <h:outputText styleClass="blue fontSize21" value="#{record.article.anchor}" escape="false"/>
                             </h:outputLink>
                         </span>
                         <span class="fontSize18 dispBlock regularFont wite" style="display: block; padding: 15px 0;"><a

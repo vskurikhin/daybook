@@ -34,6 +34,7 @@ class ArticleCreateModel extends AbstractModel {
     private String title;
     private String include;
     private String date;
+    private String anchor;
     private String summary;
     private String link;
     private String tags;
@@ -50,6 +51,7 @@ class ArticleCreateModel extends AbstractModel {
         Objects.requireNonNull(linkBaseCrudService);
         Objects.requireNonNull(recordTagsStorageService);
         Objects.requireNonNull(title);
+        Objects.requireNonNull(anchor);
         Objects.requireNonNull(login);
         Objects.requireNonNull(link);
 
@@ -79,6 +81,7 @@ class ArticleCreateModel extends AbstractModel {
                 .dateTime(currentDateTime)
                 .title(this.title)
                 .include(this.include)
+                .anchor(this.anchor)
                 .summary(this.summary)
                 .link(linkBaseDto)
                 .build();
