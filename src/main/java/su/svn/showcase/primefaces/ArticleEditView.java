@@ -44,6 +44,7 @@ public class ArticleEditView extends AbstractView {
     private String title;
     private String include;
     private String date;
+    private String anchor;
     private String summary;
     private String link = "Default";
     private String tags;
@@ -76,23 +77,29 @@ public class ArticleEditView extends AbstractView {
             request = getHttpServletRequest();
             assert request != null;
             articleModelBuilder = ArticleEditModel.builder()
-                .articleCrudService(articleService)
-                .recordTagsStorageService(recordTagsStorageService)
-                .login(getCurrentUserName());
+                    .articleCrudService(articleService)
+                    .recordTagsStorageService(recordTagsStorageService)
+                    .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
             ArticleFullDto article = articleService.readById(uuid);
             articleModelBuilder.uuid(getIdParameter(request))
-                .title(loadTitle(article))
-                .tags(loadTags(article))
-                .include(loadInclude(article))
-                .link(loadLink(article))
-                .date(loadDate(article))
-                .summary(loadSummary(article));
+                    .title(loadTitle(article))
+                    .tags(loadTags(article))
+                    .include(loadInclude(article))
+                    .link(loadLink(article))
+                    .date(loadDate(article))
+                    .anchor(loadAnchor(article))
+                    .summary(loadSummary(article));
             articleModelBuilder.login(getCurrentUserName());
             request = getHttpServletRequest();
         } catch (Exception e) {
             LOGGER.error("onload : ", e);
         }
+    }
+
+    private String loadAnchor(ArticleFullDto article) {
+        this.anchor = article.getAnchor();
+        return article.getAnchor();
     }
 
     private String loadTitle(ArticleFullDto article) {
@@ -141,6 +148,7 @@ public class ArticleEditView extends AbstractView {
                     .title(this.title)
                     .include(this.include)
                     .date(this.date)
+                    .anchor(this.anchor)
                     .summary(this.summary)
                     .link(this.link)
                     .tags(this.tags)

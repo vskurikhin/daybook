@@ -55,6 +55,12 @@
                     </p:inputText>
                     <p:message for="link" display="icon"/>
 
+                    <p:outputLabel for="anchor" value="Anchor:"/>
+                    <p:inputText id="anchor" value="#{articleEditView.anchor}" required="true" label="Anchor">
+                        <f:validateLength minimum="2"/>
+                    </p:inputText>
+                    <p:message for="anchor" display="icon"/>
+
                     <p:outputLabel for="date" value="Date: "/>
                     <p:inputMask id="date" value="#{articleEditView.date}" mask="99/99/9999"/>
                     <p:message for="date" display="icon"/>
