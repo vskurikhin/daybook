@@ -11,6 +11,7 @@ package su.svn.showcase.services.impl;
 import su.svn.showcase.converters.EntityConverter;
 import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.dto.Dto;
+import su.svn.showcase.services.ConverterRegistryService;
 
 import javax.ejb.Stateless;
 import java.util.Map;
@@ -18,36 +19,37 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Stateless
-public class ConverterRegistryServiceImpl {
+public class ConverterRegistryServiceImpl implements ConverterRegistryService {
 
     EntityConverterMap entityConverterMap = new EntityConverterMap();
 
-    public void put(EntityConverter<?, DBEntity<?>, Dto<?>> converter, Class<DBEntity<?>> eClass, Class<Dto<?>> dClass) {
+    @Override
+    public void put(Class<? extends DBEntity<?>> eClass, Class<? extends Dto<?>> dClass, EntityConverter<?, ?, ?> conv) {
         DtoConverterMap dtoConverterMap = entityConverterMap.get(eClass);
         if (dtoConverterMap == null) {
             dtoConverterMap = new DtoConverterMap();
         }
-        dtoConverterMap.put(dClass, converter);
+        dtoConverterMap.put(dClass, conv);
         entityConverterMap.put(eClass, dtoConverterMap);
     }
 
-    public EntityConverter<?, DBEntity<?>, Dto<?>> get(Class<DBEntity<?>> eClass, Class<Dto<?>> dClass) {
+    @Override
+    public EntityConverter<?, ?, ?> get(Class<? extends DBEntity<?>> eClass, Class<? extends Dto<?>> dClass) {
         DtoConverterMap dtoConverterMap = entityConverterMap.get(eClass);
         if (dtoConverterMap == null) {
             return null;
         }
-        //noinspection unchecked
-        return (EntityConverter<?, DBEntity<?>, Dto<?>>) dtoConverterMap.get(dClass);
+        return dtoConverterMap.get(dClass);
     }
 
     private static class DtoConverterMap {
-        private final Map<Class<Dto<?>>, EntityConverter<?, ?, Dto<?>>> map = new ConcurrentHashMap<>();
+        private final Map<Class<? extends Dto<?>>, EntityConverter<?, ?, ?>> map = new ConcurrentHashMap<>();
 
-        public EntityConverter<?, ?, Dto<?>> get(Class<Dto<?>> key) {
+        public EntityConverter<?, ?, ?> get(Class<? extends Dto<?>> key) {
             return map.get(key);
         }
 
-        public EntityConverter<?, ?, Dto<?>> put(Class<Dto<?>> key, EntityConverter<?, ?, Dto<?>> value) {
+        public EntityConverter<?, ?, ?> put(Class<? extends Dto<?>> key, EntityConverter<?, ?, ?> value) {
             return map.put(key, value);
         }
 
@@ -73,13 +75,13 @@ public class ConverterRegistryServiceImpl {
     }
 
     private static class EntityConverterMap {
-        private final Map<Class<DBEntity<?>>, DtoConverterMap> map = new ConcurrentHashMap<>();
+        private final Map<Class<?>, DtoConverterMap> map = new ConcurrentHashMap<>();
 
-        public DtoConverterMap get(Class<DBEntity<?>> key) {
+        public DtoConverterMap get(Class<? extends DBEntity<?>> key) {
             return map.get(key);
         }
 
-        public DtoConverterMap put(Class<DBEntity<?>> key, DtoConverterMap value) {
+        public DtoConverterMap put(Class<? extends DBEntity<?>> key, DtoConverterMap value) {
             return map.put(key, value);
         }
 

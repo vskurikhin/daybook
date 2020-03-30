@@ -8,20 +8,31 @@
 
 package su.svn.showcase.services.impl;
 
+import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
+import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.ArticleDao;
+import su.svn.showcase.converters.EntityConverter;
 import su.svn.showcase.services.ConverterRegistryService;
-import su.svn.showcase.services.impl.support.JtaEnvironment;
+
+import javax.enterprise.context.RequestScoped;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@AddPackages(value = {ArticleDao.class, ConverterRegistryService.class})
-@ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
+@AddPackages(value = {EntityConverter.class, ConverterRegistryService.class})
+@ExtendWith({WeldJunit5Extension.class})
 class ConverterRegistryServiceImplTest {
+
+
+    @WeldSetup
+    private
+    WeldInitiator weld = WeldInitiator.from(
+            ConverterRegistryServiceImpl.class)
+            .activate(RequestScoped.class)
+            .inject(this)
+            .build();
 
     @BeforeEach
     void setUp() {
@@ -29,5 +40,10 @@ class ConverterRegistryServiceImplTest {
 
     @AfterEach
     void tearDown() {
+    }
+
+    @Test
+    void test1(ConverterRegistryService service) {
+        Assertions.assertNotNull(service);
     }
 }

@@ -16,11 +16,11 @@ public interface ConverterRegistryService {
 
     /**
      * TODO
-     * @param converter
      * @param eClass
      * @param dClass
+     * @param converter
      */
-    void put(EntityConverter<?, DBEntity<?>, Dto<?>> converter, Class<DBEntity<?>> eClass, Class<Dto<?>> dClass);
+    void put(Class<? extends DBEntity<?>> eClass, Class<? extends Dto<?>> dClass, EntityConverter<?, ?, ?> converter);
 
     /**
      * TODO
@@ -28,5 +28,5 @@ public interface ConverterRegistryService {
      * @param dClass
      * @return
      */
-    EntityConverter<?, DBEntity<?>, Dto<?>> get(Class<DBEntity<?>> eClass, Class<Dto<?>> dClass);
+    EntityConverter<?, ?, ?> get(Class<? extends DBEntity<?>> eClass, Class<? extends Dto<?>> dClass);
 }
