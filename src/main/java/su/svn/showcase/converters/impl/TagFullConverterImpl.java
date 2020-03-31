@@ -16,16 +16,17 @@ import su.svn.showcase.dto.*;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Stateless
-public class TagConverterImpl extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
+@Named("tagFull")
+public class TagFullConverterImpl extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
 
     @Inject
-    private RecordConverter recordConverter;
+    private @Named("recordBase") RecordConverter recordConverter;
 
     @Override
     public TagFullDto convert(@Nonnull Tag entity) {
@@ -40,10 +41,14 @@ public class TagConverterImpl extends AbstractConverter<String, Tag, TagFullDto>
     private TagFullDto doConvert(TagFullDto dto, Tag entity, ReadyMap ready) {
         if (entity.getRecords() != null) {
             dto.setRecords(entity.getRecords().stream()
-                .map(RecordBaseDto::new)
+                .map(functionRecordToDto(ready))
                 .collect(Collectors.toSet()));
         }
-        return super.convertBySetter(dto, entity);
+        return super.convertByGetter(dto, entity);
+    }
+
+    private Function<Record, RecordFullDto> functionRecordToDto(ReadyMap ready) {
+        return record -> getOrConvertUuidDto(record, ready, recordConverter::convert);
     }
 
     @Override
@@ -59,25 +64,15 @@ public class TagConverterImpl extends AbstractConverter<String, Tag, TagFullDto>
     private Tag doConvert(Tag entity, TagFullDto dto, ReadyMap ready) {
         if (dto.getRecords() != null) {
             Set<Record> records = dto.getRecords().stream()
-                .map(recordDto -> getOrConvert(recordDto, ready))
+                .map(functionRecordDtoToEntity(ready))
                 .collect(Collectors.toSet());
             entity.setRecords(records);
         }
         return super.convertBySetter(entity, dto);
     }
 
-    private RecordFullDto getOrConvert(Record record, ReadyMap ready) {
-        if (ready.containsKey(record.getId())) {
-            return (RecordFullDto) ready.getDto(record.getId());
-        }
-        return ready.putByUuidKey(recordConverter.convert(record, ready));
-    }
-
-    private Record getOrConvert(RecordDto dto, ReadyMap ready) {
-        if (ready.containsKey(dto.getId())) {
-            return (Record) ready.getEntity(dto.getId());
-        }
-        return ready.putByUuidKey(recordConverter.convert((RecordFullDto) dto, ready));
+    private Function<RecordDto, Record> functionRecordDtoToEntity(ReadyMap ready) {
+        return recordDto -> getOrConvertUuidEntity((RecordFullDto) recordDto, ready, recordConverter::convert);
     }
 
     @Override
