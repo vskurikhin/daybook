@@ -49,14 +49,14 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>>
         dtoSetters = new Setters(getDClass());
     }
 
-    protected D convert(@Nonnull D dto, @Nonnull E entity) {
+    protected D convertBySetter(@Nonnull D dto, @Nonnull E entity) {
         entityGetters.forEach((fieldName, getter) ->
             invokeSetter(getDtoSetter(fieldName), dto, getter));
 
         return dto;
     }
 
-    protected E convert(@Nonnull E entity, @Nonnull D dto) {
+    protected E convertBySetter(@Nonnull E entity, @Nonnull D dto) {
         Objects.requireNonNull(dto.getId());
         entitySetters.forEach((fieldName, setter) ->
             invokeSetter(setter, entity, getDtoGetter(fieldName)));
