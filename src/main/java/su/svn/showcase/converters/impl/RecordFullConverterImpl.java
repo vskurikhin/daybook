@@ -1,22 +1,20 @@
 /*
- * This file was last modified at 2020.03.31 09:17 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordConverterImpl.java
+ * RecordFullConverterImpl.java
  * $Id$
  */
 
 package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.ArticleConverter;
+import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.ArticleFullDto;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.TagDto;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.*;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
@@ -35,6 +33,10 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     private ArticleConverter articleConverter;
 
     @Inject
+    @Named("newsEntryFull")
+    private NewsEntryConverter newsEntryConverter;
+
+    @Inject
     @Named("tagBase")
     private TagConverter tagConverter;
 
@@ -50,7 +52,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
         if (entity.getNewsEntry() != null) {
-            // TODO
+            dto.setNewsEntry(getOrConvertUuidDto(entity.getNewsEntry(), ready, newsEntryConverter::convert));
         }
         if (entity.getNewsLinks() != null) {
             // TODO
@@ -83,7 +85,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
         if (dto.getNewsEntry() != null) {
-            // TODO
+            entity.setNewsEntry(getOrConvertUuidEntity((NewsEntryFullDto) dto.getNewsEntry(), ready, newsEntryConverter::convert));
         }
         if (dto.getNewsLinks() != null) {
             // TODO
