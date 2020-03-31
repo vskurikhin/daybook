@@ -8,7 +8,6 @@
 
 package su.svn.showcase.utils;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,10 +29,6 @@ class GettersTest {
         c.b = 13;
         c.i = Integer.MAX_VALUE;
         c.s = "test";
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 
     @Test
