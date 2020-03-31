@@ -8,10 +8,12 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
+import su.svn.showcase.dto.ArticleFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.dto.TagFullDto;
@@ -19,13 +21,21 @@ import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class ArticleConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+@Named("recordFull")
+public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Inject
+    @Named("articleFull")
+    private ArticleConverter articleConverter;
+
+    @Inject
+    @Named("tagBase")
     private TagConverter tagConverter;
 
     @Override
@@ -38,7 +48,7 @@ public class ArticleConverterImpl extends AbstractConverter<UUID, Record, Record
         return doConvert(new RecordFullDto(), entity, ready);
     }
 
-    private RecordFullDto doConvert(RecordFullDto recordFullDto, Record entity, ReadyMap ready) {
+    private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
         if (entity.getNewsEntry() != null) {
             // TODO
         }
@@ -46,15 +56,19 @@ public class ArticleConverterImpl extends AbstractConverter<UUID, Record, Record
             // TODO
         }
         if (entity.getArticle() != null) {
-            // TODO
+            dto.setArticle(getOrConvertUuidDto(entity.getArticle(), ready, articleConverter::convert));
         }
         if (entity.getTags() != null) {
             Set<TagDto> set = entity.getTags().stream()
-                    .map(tag -> getOrConvert(tag, ready))
+                    .map(functionTagToDto(ready))
                     .collect(Collectors.toSet());
-            recordFullDto.setTags(set);
+            dto.setTags(set);
         }
-        return super.convertBySetter(recordFullDto, entity);
+        return super.convertByGetter(dto, entity);
+    }
+
+    private Function<Tag, TagFullDto> functionTagToDto(ReadyMap ready) {
+        return tag -> getOrConvertStringDto(tag, ready, tagConverter::convert);
     }
 
     @Override
@@ -64,10 +78,10 @@ public class ArticleConverterImpl extends AbstractConverter<UUID, Record, Record
 
     @Override
     public Record convert(@Nonnull RecordFullDto dto, ReadyMap ready) {
-        return null;
+        return doConvert(new Record(dto.getId()), dto, ready);
     }
 
-    private Record doConvert(Record record, RecordFullDto dto, ReadyMap ready) {
+    private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
         if (dto.getNewsEntry() != null) {
             // TODO
         }
@@ -75,29 +89,19 @@ public class ArticleConverterImpl extends AbstractConverter<UUID, Record, Record
             // TODO
         }
         if (dto.getArticle() != null) {
-            // TODO
+            entity.setArticle(getOrConvertUuidEntity((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
-                    .map(tagDto -> getOrConvert(tagDto, ready))
+                    .map(functionTagDtoToEntity(ready))
                     .collect(Collectors.toSet());
-            record.setTags(set);
+            entity.setTags(set);
         }
-        return super.convertBySetter(record, dto);
+        return super.convertBySetter(entity, dto);
     }
 
-    private TagFullDto getOrConvert(Tag tag, ReadyMap ready) {
-        if (ready.containsKey(tag.getId())) {
-            return (TagFullDto) ready.getDto(tag.getId());
-        }
-        return ready.putByStringKey(tagConverter.convert(tag, ready));
-    }
-
-    private Tag getOrConvert(TagDto dto, ReadyMap ready) {
-        if (ready.containsKey(dto.getId())) {
-            return (Tag) ready.getEntity(dto.getId());
-        }
-        return ready.putByStringKey(tagConverter.convert((TagFullDto) dto, ready));
+    private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
+        return tagDto -> getOrConvertStringEntity((TagFullDto) tagDto, ready, tagConverter::convert);
     }
 
     @Override
