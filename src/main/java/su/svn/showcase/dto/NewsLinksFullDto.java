@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.03.31 20:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullDto.java
@@ -9,17 +9,17 @@
 package su.svn.showcase.dto;
 
 import lombok.*;
-import su.svn.showcase.domain.NewsLinks;
-import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.domain.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * The extended DTO of NewsLinks.
@@ -48,6 +48,8 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
 
     private NewsGroupDto newsGroup;
 
+    private Set<LinkDescriptionDto> links;
+
     public NewsLinksFullDto(@Nonnull NewsLinks entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
@@ -55,6 +57,10 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
         this.newsGroup = entity.getNewsGroup() != null
                 ? new NewsGroupBaseDto(entity.getNewsGroup())
                 : null;
+
+        this.links = entity.getLinks().stream()
+                .map(LinkDescriptionBaseDto::new)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -73,6 +79,14 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
         if (this.newsGroup != null) {
             NewsGroup newsGroup = new NewsGroup(this.newsGroup.getId());
             entity.setNewsGroup(this.newsGroup.update(newsGroup));
+        }
+        if (this.links != null) {
+            Set<LinkDescription> links = this.links.stream()
+                    .map(dto -> dto.update(new LinkDescription(dto.getId())))
+                    .collect(Collectors.toSet());
+            entity.setLinks(links);
+        } else {
+            entity.setLinks(Collections.emptySet());
         }
 
         return entity;
