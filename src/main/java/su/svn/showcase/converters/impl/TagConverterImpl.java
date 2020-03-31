@@ -8,17 +8,14 @@
 
 package su.svn.showcase.converters.impl;
 
-import su.svn.showcase.converters.EntityConverter;
+import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.RecordBaseDto;
-import su.svn.showcase.dto.TagFullDto;
-import su.svn.showcase.services.ConverterRegistryService;
+import su.svn.showcase.dto.*;
+import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.Set;
@@ -28,42 +25,59 @@ import java.util.stream.Collectors;
 public class TagConverterImpl extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
 
     @Inject
-    private ConverterRegistryService converterRegistry;
-
-    @PostConstruct
-    private void init() {
-        converterRegistry.put(Tag.class, TagFullDto.class, this);
-    }
+    private RecordConverter recordConverter;
 
     @Override
     public TagFullDto convert(@Nonnull Tag entity) {
-        return doConvert(new TagFullDto(), entity);
+        return doConvert(new TagFullDto(), entity, new ReadyMap());
     }
 
-    private TagFullDto doConvert(TagFullDto dto, Tag entity) {
-        // TODO visited
+    @Override
+    public TagFullDto convert(@Nonnull Tag entity, ReadyMap ready) {
+        return doConvert(new TagFullDto(), entity, ready);
+    }
+
+    private TagFullDto doConvert(TagFullDto dto, Tag entity, ReadyMap ready) {
         if (entity.getRecords() != null) {
             dto.setRecords(entity.getRecords().stream()
-                .map(RecordBaseDto::new) // TODO invoke converter
+                .map(RecordBaseDto::new)
                 .collect(Collectors.toSet()));
         }
-        return convert(dto, entity);
+        return super.convertBySetter(dto, entity);
     }
 
     @Override
     public Tag convert(@Nonnull TagFullDto dto) {
-        return doConvert(new Tag(dto.getId()), dto);
+        return doConvert(new Tag(dto.getId()), dto, new ReadyMap());
     }
 
-    private Tag doConvert(Tag entity, TagFullDto dto) {
-        // TODO visited
+    @Override
+    public Tag convert(@Nonnull TagFullDto dto, ReadyMap ready) {
+        return doConvert(new Tag(dto.getId()), dto, ready);
+    }
+
+    private Tag doConvert(Tag entity, TagFullDto dto, ReadyMap ready) {
         if (dto.getRecords() != null) {
             Set<Record> records = dto.getRecords().stream()
-                .map(dto1 -> dto1.update(new Record(dto1.getId()))) // TODO invoke converter
+                .map(recordDto -> getOrConvert(recordDto, ready))
                 .collect(Collectors.toSet());
             entity.setRecords(records);
         }
-        return convert(entity, dto);
+        return super.convertBySetter(entity, dto);
+    }
+
+    private RecordFullDto getOrConvert(Record record, ReadyMap ready) {
+        if (ready.containsKey(record.getId())) {
+            return (RecordFullDto) ready.getDto(record.getId());
+        }
+        return ready.putByUuidKey(recordConverter.convert(record, ready));
+    }
+
+    private Record getOrConvert(RecordDto dto, ReadyMap ready) {
+        if (ready.containsKey(dto.getId())) {
+            return (Record) ready.getEntity(dto.getId());
+        }
+        return ready.putByUuidKey(recordConverter.convert((RecordFullDto) dto, ready));
     }
 
     @Override

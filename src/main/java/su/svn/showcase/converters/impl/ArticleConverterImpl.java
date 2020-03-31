@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class RecordConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+public class ArticleConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Inject
     private TagConverter tagConverter;

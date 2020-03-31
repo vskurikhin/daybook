@@ -10,6 +10,7 @@ package su.svn.showcase.converters;
 
 import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.dto.Dto;
+import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
 
@@ -30,4 +31,20 @@ public interface EntityConverter<K, E extends DBEntity<K>, D extends Dto<K>> {
      * @return
      */
     E convert(@Nonnull D dto);
+
+    /**
+     * TODO
+     * @param entity
+     * @param ready
+     * @return
+     */
+    D convert(@Nonnull E entity, ReadyMap ready);
+
+    /**
+     * TODO
+     * @param dto
+     * @param ready
+     * @return
+     */
+    E convert(@Nonnull D dto, ReadyMap ready);
 }
