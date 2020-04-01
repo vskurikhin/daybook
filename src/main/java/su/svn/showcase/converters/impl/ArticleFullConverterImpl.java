@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullConverterImpl.java
@@ -16,20 +16,18 @@ import su.svn.showcase.dto.*;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("articleFullConverter")
+@Stateless(name = "articleFullConverter")
 public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, ArticleFullDto>
        implements ArticleConverter {
 
-    @Inject
-    @Named("recordFullConverter")
+    @EJB(beanName = "recordFullConverter")
     private RecordConverter recordConverter;
 
-    @Inject
-    @Named("linkBaseConverter")
+    @EJB(beanName = "linkBaseConverter")
     private LinkConverter linkConverter;
 
     @Override

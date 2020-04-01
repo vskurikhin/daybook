@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 14:17 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractConverter.java
@@ -69,8 +69,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByLongKey(result);
 
-        return ready.putByLongKey(result);
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -80,8 +81,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByLongKey(result);
 
-        return ready.putByLongKey(result);
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -91,8 +93,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByStringKey(result);
 
-        return ready.putByStringKey(result);
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -102,8 +105,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByStringKey(result);
 
-        return ready.putByStringKey(result);
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -113,8 +117,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByUuidKey(result);
 
-        return ready.putByUuidKey(result);
+        return result;
     }
 
     @SuppressWarnings("unchecked")
@@ -124,8 +129,9 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
             return (R) ready.getDto(entity.getId());
         }
         R result = converter.apply(entity, ready);
+        ready.putByUuidKey(result);
 
-        return ready.putByUuidKey(result);
+        return result;
     }
 
     private void invokeSetter(BiConsumer<Object, Object> bi, Object o, Object value) {

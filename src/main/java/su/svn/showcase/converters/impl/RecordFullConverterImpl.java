@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -15,34 +15,30 @@ import su.svn.showcase.dto.*;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Named("recordFullConverter")
+@Stateless(name = "recordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
-    @Inject
-    @Named("articleFullConverter")
+    @EJB(beanName = "articleFullConverter")
     private ArticleConverter articleConverter;
 
-    @Inject
-    @Named("newsEntryFullConverter")
+    @EJB(beanName = "newsEntryFullConverter")
     private NewsEntryConverter newsEntryConverter;
 
-    @Inject
-    @Named("newsLinksFullConverter")
+    @EJB(beanName = "newsLinksFullConverter")
     private NewsLinksConverter newsLinksConverter;
 
-    @Inject
-    @Named("userOnlyLoginConverter")
+    @EJB(beanName = "userOnlyLoginConverter")
     private UserLoginConverter userLoginConverter;
 
-    @Inject
-    private @Named("tagBaseConverter") TagConverter tagConverter;
+    @EJB(beanName = "tagBaseConverter")
+    private TagConverter tagConverter;
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity) {
@@ -56,6 +52,8 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
         if (entity.getNewsEntry() != null) {
+            NewsEntryFullDto newsEntryFullDto = convertUuid(entity.getNewsEntry(), ready, newsEntryConverter::convert);
+            System.out.println("newsEntryFullDto = " + newsEntryFullDto); // TODO remove
             dto.setNewsEntry(convertUuid(entity.getNewsEntry(), ready, newsEntryConverter::convert));
         }
         if (entity.getNewsLinks() != null) {

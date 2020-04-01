@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:42 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginConverterImpl.java
@@ -14,10 +14,10 @@ import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("userOnlyLoginConverter")
+@Stateless(name = "userOnlyLoginConverter")
 public class UserOnlyLoginConverterImpl extends AbstractConverter<UUID, UserLogin, UserOnlyLoginBaseDto>
        implements UserLoginConverter {
 

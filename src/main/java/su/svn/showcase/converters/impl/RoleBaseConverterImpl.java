@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleBaseConverterImpl.java
@@ -14,10 +14,10 @@ import su.svn.showcase.dto.RoleFullDto;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("roleBaseConverter")
+@Stateless(name = "roleBaseConverter")
 public class RoleBaseConverterImpl extends AbstractConverter<UUID, Role, RoleFullDto>
        implements RoleConverter {
 
