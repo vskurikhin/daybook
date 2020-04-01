@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 14:17 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractConverter.java
@@ -50,14 +50,14 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
     }
 
     protected D convertByGetter(@Nonnull D dto, @Nonnull E entity) {
-        entityGetters.forEach((fieldName, getter) -> invokeSetter(getDtoSetter(fieldName), dto, getter));
+        entityGetters.forEach((fieldName, getter) -> invokeSetter(getDtoSetter(fieldName), dto, getter.apply(entity)));
 
         return dto;
     }
 
     protected E convertBySetter(@Nonnull E entity, @Nonnull D dto) {
         Objects.requireNonNull(dto.getId());
-        entitySetters.forEach((fieldName, setter) -> invokeSetter(setter, entity, getDtoGetter(fieldName)));
+        entitySetters.forEach((fieldName, setter) -> invokeSetter(setter, entity, getDtoGetter(fieldName).apply(dto)));
 
         return entity;
     }
