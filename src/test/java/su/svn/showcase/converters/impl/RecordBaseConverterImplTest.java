@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 14:17 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseConverterImplTest.java
@@ -12,10 +12,7 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Record;
@@ -43,7 +40,7 @@ class RecordBaseConverterImplTest {
             .build();
 
     @Inject
-    @Named("recordBase")
+    @Named("recordBaseConverter")
     RecordConverter converter;
 
     private Record entity;
@@ -56,16 +53,37 @@ class RecordBaseConverterImplTest {
         dto = cloneRecordFullDto0();
     }
 
-    @AfterEach
-    void tearDown() {
+    private Record clean(Record entity) {
+        entity.setArticle(null);
+        entity.setNewsEntry(null);
+        entity.setNewsLinks(null);
+        entity.setUserLogin(null);
+        entity.setTags(null);
+
+        return entity;
+    }
+
+    private RecordFullDto clean(RecordFullDto dto) {
+        dto.setArticle(null);
+        dto.setNewsEntry(null);
+        dto.setNewsLinks(null);
+        dto.setUserLogin(null);
+        dto.setTags(null);
+
+        return dto;
     }
 
     @Test
-    void convert() {
+    void when_convert_Entity_to_DTO() {
+        Assertions.assertNotNull(converter);
         RecordFullDto test = converter.convert(entity);
+        Assertions.assertEquals(clean(dto), test);
     }
 
     @Test
-    void testConvert() {
+    void when_convert_DTO_to_Entity() {
+        Assertions.assertNotNull(converter);
+        Record test = converter.convert(dto);
+        Assertions.assertEquals(clean(entity), test);
     }
 }

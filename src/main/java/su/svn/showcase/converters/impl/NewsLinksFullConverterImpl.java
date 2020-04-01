@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullConverterImpl.java
@@ -24,16 +24,16 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Named("newsLinksFull")
+@Named("newsLinksFullConverter")
 public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 
     @Inject
-    @Named("recordFull")
+    @Named("recordFullConverter")
     private RecordConverter recordConverter;
 
     @Inject
-    @Named("linkDescriptionBase")
+    @Named("linkDescriptionBaseConverter")
     private LinkDescriptionConverter linkDescriptionConverter;
 
     @Override

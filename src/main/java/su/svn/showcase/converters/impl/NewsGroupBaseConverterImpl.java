@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseConverterImpl.java
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Named;
 import java.util.UUID;
 
-@Named("newsGroupBase")
+@Named("newsGroupBaseConverter")
 public class NewsGroupBaseConverterImpl extends AbstractConverter<UUID, NewsGroup, NewsGroupFullDto>
        implements NewsGroupConverter {
 

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.09 16:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpaTest.java
@@ -141,12 +141,12 @@ class RecordDaoJpaTest {
         userTransaction.commit();
     }
 
-    @DisplayName("Test when RecordDaoJpa ")
+    @DisplayName("Test when RecordDaoJpa fetchAll")
     @Test
-    void whenDao_findAll_shouldBeReturnListOfOneEntity() throws Exception {
+    void whenDao_fetchAll_shouldBeReturnListOfOneEntity() throws Exception {
         userTransaction.begin();
         RecordDao dao = new RecordDaoJpa(entityManager);
-        List<Record> testList = dao.findAll();
+        List<Record> testList = dao.fetchAll();
         assertNotNull(testList);
         assertFalse(testList.isEmpty());
         assertEquals(1, testList.size());

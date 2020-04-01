@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -22,24 +22,27 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Named("recordFull")
+@Named("recordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Inject
-    @Named("articleFull")
+    @Named("articleFullConverter")
     private ArticleConverter articleConverter;
 
     @Inject
-    @Named("newsEntryFull")
+    @Named("newsEntryFullConverter")
     private NewsEntryConverter newsEntryConverter;
 
     @Inject
-    @Named("newsLinksFull")
+    @Named("newsLinksFullConverter")
     private NewsLinksConverter newsLinksConverter;
 
     @Inject
-    @Named("tagBase")
-    private TagConverter tagConverter;
+    @Named("userOnlyLoginConverter")
+    private UserLoginConverter userLoginConverter;
+
+    @Inject
+    private @Named("tagBaseConverter") TagConverter tagConverter;
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity) {
@@ -62,7 +65,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
             dto.setArticle(convertUuid(entity.getArticle(), ready, articleConverter::convert));
         }
         if (entity.getUserLogin() != null) {
-            // TODO
+            dto.setUserLogin(convertUuid(entity.getUserLogin(), ready, userLoginConverter::convert));
         }
         if (entity.getTags() != null) {
             Set<TagDto> set = entity.getTags().stream()
@@ -98,7 +101,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
             entity.setArticle(convertUuid((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
         }
         if (dto.getUserLogin() != null) {
-            // TODO
+            entity.setUserLogin(convertUuid((UserOnlyLoginBaseDto) dto.getUserLogin(), ready, userLoginConverter::convert));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
