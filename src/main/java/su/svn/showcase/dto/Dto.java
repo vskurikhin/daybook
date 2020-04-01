@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Dto.java
@@ -34,6 +34,6 @@ public interface Dto<K> {
      *
      * @return the dto type.
      */
-    Class<? extends Dto> getDtoClass();
+    Class<? extends Dto<K>> getDtoClass();
 }
 //EOF

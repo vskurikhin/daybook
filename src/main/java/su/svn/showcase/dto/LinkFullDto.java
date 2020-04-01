@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkFullDto.java
@@ -9,6 +9,7 @@
 package su.svn.showcase.dto;
 
 import lombok.*;
+import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.Link;
 
@@ -41,6 +42,8 @@ public class LinkFullDto implements LinkDto, Serializable {
     @NotNull
     private UUID id;
 
+    private ArticleDto article;
+
     private LocalDateTime dateTime;
 
     private Boolean visible;
@@ -53,6 +56,9 @@ public class LinkFullDto implements LinkDto, Serializable {
 
     public LinkFullDto(@Nonnull Link entity) {
         this.id = entity.getId();
+        this.article = entity.getArticle() != null
+                ? new ArticleFullDto(entity.getArticle())
+                : null;
         this.dateTime = entity.getDateTime();
         this.visible = entity.getVisible();
         this.link = entity.getLink();
@@ -62,7 +68,7 @@ public class LinkFullDto implements LinkDto, Serializable {
     }
 
     @Override
-    public Class<? extends Dto> getDtoClass() {
+    public Class<LinkFullDto> getDtoClass() {
         return LinkFullDto.class;
     }
 
@@ -71,6 +77,10 @@ public class LinkFullDto implements LinkDto, Serializable {
         updateIfNotNull(entity::setLink, this.link);
         updateIfNotNull(entity::setDateTime, this.dateTime);
         entity.setVisible(this.visible != null ? this.visible : false);
+        if (this.article != null) {
+            Article article = new Article(this.article.getId());
+            entity.setArticle(this.article.update(article));
+        }
         if (this.descriptions != null) {
             Set<LinkDescription> records = this.descriptions.stream()
                     .map(dto -> dto.update(new LinkDescription(dto.getId())))

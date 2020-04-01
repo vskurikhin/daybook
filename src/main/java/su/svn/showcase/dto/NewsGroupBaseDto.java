@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseDto.java
@@ -46,7 +46,7 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
     }
 
     @Override
-    public Class<? extends Dto> getDtoClass() {
+    public Class<NewsGroupBaseDto> getDtoClass() {
         return NewsGroupBaseDto.class;
     }
 
