@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractConverter.java
@@ -64,7 +64,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends DBEntity<Long>, X extends Dto<Long>>
-    R getOrConvertLongEntity(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertLong(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }
@@ -75,7 +75,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends Dto<Long>, X extends DBEntity<Long>>
-    R getOrConvertLongDto(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertLong(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }
@@ -86,7 +86,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends DBEntity<String>, X extends Dto<String>>
-    R getOrConvertStringEntity(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertString(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }
@@ -97,7 +97,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends Dto<String>, X extends DBEntity<String>>
-    R getOrConvertStringDto(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertString(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }
@@ -108,7 +108,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends DBEntity<UUID>, X extends Dto<UUID>>
-    R getOrConvertUuidEntity(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertUuid(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }
@@ -119,7 +119,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     @SuppressWarnings("unchecked")
     <R extends Dto<UUID>, X extends DBEntity<UUID>>
-    R getOrConvertUuidDto(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
+    R convertUuid(X entity, ReadyMap ready, BiFunction<X, ReadyMap, R> converter) {
         if (ready.containsKey(entity.getId())) {
             return (R) ready.getDto(entity.getId());
         }

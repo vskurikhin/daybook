@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagFullConverterImpl.java
@@ -48,7 +48,7 @@ public class TagFullConverterImpl extends AbstractConverter<String, Tag, TagFull
     }
 
     private Function<Record, RecordFullDto> functionRecordToDto(ReadyMap ready) {
-        return record -> getOrConvertUuidDto(record, ready, recordConverter::convert);
+        return record -> convertUuid(record, ready, recordConverter::convert);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TagFullConverterImpl extends AbstractConverter<String, Tag, TagFull
     }
 
     private Function<RecordDto, Record> functionRecordDtoToEntity(ReadyMap ready) {
-        return recordDto -> getOrConvertUuidEntity((RecordFullDto) recordDto, ready, recordConverter::convert);
+        return recordDto -> convertUuid((RecordFullDto) recordDto, ready, recordConverter::convert);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullConverterImpl.java
@@ -9,6 +9,7 @@
 package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.ArticleConverter;
+import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.dto.*;
@@ -27,6 +28,10 @@ public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, A
     @Named("recordFull")
     private RecordConverter recordConverter;
 
+    @Inject
+    @Named("linkBase")
+    private LinkConverter linkConverter;
+
     @Override
     public ArticleFullDto convert(@Nonnull Article entity) {
         return doConvert(new ArticleFullDto(), entity, new ReadyMap());
@@ -39,10 +44,10 @@ public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, A
 
     private ArticleFullDto doConvert(ArticleFullDto dto, Article entity, ReadyMap ready) {
         if (entity.getRecord() != null) {
-            dto.setRecord(getOrConvertUuidDto(entity.getRecord(), ready, recordConverter::convert));
+            dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
         }
         if (entity.getLink() != null) {
-            // TODO
+            dto.setLink(convertUuid(entity.getLink(), ready, linkConverter::convert));
         }
         return super.convertByGetter(dto, entity);
     }
@@ -59,10 +64,10 @@ public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, A
 
     private Article doConvert(Article entity, ArticleFullDto dto, ReadyMap ready) {
         if (dto.getRecord() != null) {
-            entity.setRecord(getOrConvertUuidEntity((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
+            entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
         }
         if (dto.getLink() != null) {
-            // TODO
+            entity.setLink(convertUuid((LinkFullDto) dto.getLink(), ready, linkConverter::convert));
         }
         return super.convertBySetter(entity, dto);
     }

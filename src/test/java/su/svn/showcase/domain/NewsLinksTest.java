@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:55 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksTest.java
@@ -53,7 +53,7 @@ class NewsLinksTest {
             assertThat(newsLinks).hasFieldOrPropertyWithValue("dateTime", null);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("title", null);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("newsGroup", null);
-            assertThat(newsLinks).hasFieldOrPropertyWithValue("links", null);
+            assertThat(newsLinks).hasFieldOrPropertyWithValue("descriptions", null);
         }
 
         @Test
@@ -71,9 +71,9 @@ class NewsLinksTest {
             assertThat(newsLinks).hasFieldOrPropertyWithValue("newsGroup", newsGroup);
             assertEquals(newsGroup, newsLinks.getNewsGroup());
 
-            newsLinks.setLinks(EMPTY_LINK_DESCRIPTIONS);
-            assertThat(newsLinks).hasFieldOrPropertyWithValue("links", EMPTY_LINK_DESCRIPTIONS);
-            assertEquals(EMPTY_LINK_DESCRIPTIONS, newsLinks.getLinks());
+            newsLinks.setDescriptions(EMPTY_LINK_DESCRIPTIONS);
+            assertThat(newsLinks).hasFieldOrPropertyWithValue("descriptions", EMPTY_LINK_DESCRIPTIONS);
+            assertEquals(EMPTY_LINK_DESCRIPTIONS, newsLinks.getDescriptions());
        }
 
         @Test
@@ -106,7 +106,7 @@ class NewsLinksTest {
             assertThat(newsLinks).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("title", "titleTest0");
             assertThat(newsLinks).hasFieldOrPropertyWithValue("newsGroup", newsGroup);
-            assertThat(newsLinks).hasFieldOrPropertyWithValue("links", EMPTY_LINK_DESCRIPTIONS);
+            assertThat(newsLinks).hasFieldOrPropertyWithValue("descriptions", EMPTY_LINK_DESCRIPTIONS);
         }
 
         @Test
@@ -118,14 +118,14 @@ class NewsLinksTest {
                     .dateTime(NOW)
                     .title("testTitle")
                     .newsGroup(newsGroup)
-                    .links(EMPTY_LINK_DESCRIPTIONS)
+                    .descriptions(EMPTY_LINK_DESCRIPTIONS)
                     .build();
             assertThat(newsLinks).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("record", record);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(newsLinks).hasFieldOrPropertyWithValue("title", "testTitle");
             assertThat(newsLinks).hasFieldOrPropertyWithValue("newsGroup", newsGroup);
-            assertThat(newsLinks).hasFieldOrPropertyWithValue("links", EMPTY_LINK_DESCRIPTIONS);
+            assertThat(newsLinks).hasFieldOrPropertyWithValue("descriptions", EMPTY_LINK_DESCRIPTIONS);
         }
 
         @Test

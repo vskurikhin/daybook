@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullConverterImpl.java
@@ -40,7 +40,7 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
 
     private NewsEntryFullDto doConvert(NewsEntryFullDto dto, NewsEntry entity, ReadyMap ready) {
         if (entity.getRecord() != null) {
-            dto.setRecord(getOrConvertUuidDto(entity.getRecord(), ready, recordConverter::convert));
+            dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
         }
         if (entity.getNewsGroup() != null) {
             // TODO
@@ -60,7 +60,7 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
 
     private NewsEntry doConvert(NewsEntry entity, NewsEntryFullDto dto, ReadyMap ready) {
         if (dto.getRecord() != null) {
-            entity.setRecord(getOrConvertUuidEntity((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
+            entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
         }
         if (dto.getNewsGroup() != null) {
             // TODO
