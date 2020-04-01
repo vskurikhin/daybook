@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Inject
-    @Named("articleFull")
+    @Named("articleFullConverter")
     private ArticleConverter articleConverter;
 
     @Inject

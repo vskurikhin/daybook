@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkFullConverterImpl.java
@@ -24,12 +24,12 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Named("linkFull")
+@Named("linkFullConverter")
 public class LinkFullConverterImpl extends AbstractConverter<UUID, Link, LinkFullDto>
        implements LinkConverter {
 
     @Inject
-    @Named("articleBase")
+    @Named("articleBaseConverter")
     private ArticleConverter articleConverter;
 
     @Inject
