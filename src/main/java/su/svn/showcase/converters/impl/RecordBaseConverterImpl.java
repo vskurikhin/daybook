@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseConverterImpl.java
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Named;
 import java.util.UUID;
 
-@Named("recordBase")
+@Named("recordBaseConverter")
 public class RecordBaseConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Override

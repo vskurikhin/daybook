@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullConverterImpl.java
@@ -22,16 +22,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.UUID;
 
-@Named("newsEntryFull")
+@Named("newsEntryFullConverter")
 public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
        implements NewsEntryConverter {
 
     @Inject
-    @Named("recordFull")
+    @Named("recordFullConverter")
     private RecordConverter recordConverter;
 
     @Inject
-    @Named("newsGroupBase")
+    @Named("newsGroupBaseConverter")
     private NewsGroupConverter newsGroupConverter;
 
     @Override
@@ -70,7 +70,6 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
         }
         if (dto.getNewsGroup() != null) {
             entity.setNewsGroup(convertUuid((NewsGroupFullDto) dto.getNewsGroup(), ready, newsGroupConverter::convert));
-            // TODO
         }
         return super.convertBySetter(entity, dto);
     }

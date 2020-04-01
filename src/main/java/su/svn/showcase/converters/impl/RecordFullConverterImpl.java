@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:42 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Named("recordFull")
+@Named("recordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Inject
@@ -30,11 +30,11 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     private ArticleConverter articleConverter;
 
     @Inject
-    @Named("newsEntryFull")
+    @Named("newsEntryFullConverter")
     private NewsEntryConverter newsEntryConverter;
 
     @Inject
-    @Named("newsLinksFull")
+    @Named("newsLinksFullConverter")
     private NewsLinksConverter newsLinksConverter;
 
     @Inject
@@ -42,8 +42,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     private UserLoginConverter userLoginConverter;
 
     @Inject
-    @Named("tagBase")
-    private TagConverter tagConverter;
+    private @Named("tagBaseConverter") TagConverter tagConverter;
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity) {
