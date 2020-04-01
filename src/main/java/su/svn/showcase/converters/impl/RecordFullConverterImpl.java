@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -8,10 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
-import su.svn.showcase.converters.ArticleConverter;
-import su.svn.showcase.converters.NewsEntryConverter;
-import su.svn.showcase.converters.RecordConverter;
-import su.svn.showcase.converters.TagConverter;
+import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
@@ -37,6 +34,10 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     private NewsEntryConverter newsEntryConverter;
 
     @Inject
+    @Named("newsLinksFull")
+    private NewsLinksConverter newsLinksConverter;
+
+    @Inject
     @Named("tagBase")
     private TagConverter tagConverter;
 
@@ -52,13 +53,13 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
         if (entity.getNewsEntry() != null) {
-            dto.setNewsEntry(getOrConvertUuidDto(entity.getNewsEntry(), ready, newsEntryConverter::convert));
+            dto.setNewsEntry(convertUuid(entity.getNewsEntry(), ready, newsEntryConverter::convert));
         }
         if (entity.getNewsLinks() != null) {
-            // TODO
+            dto.setNewsLinks(convertUuid(entity.getNewsLinks(), ready, newsLinksConverter::convert));
         }
         if (entity.getArticle() != null) {
-            dto.setArticle(getOrConvertUuidDto(entity.getArticle(), ready, articleConverter::convert));
+            dto.setArticle(convertUuid(entity.getArticle(), ready, articleConverter::convert));
         }
         if (entity.getTags() != null) {
             Set<TagDto> set = entity.getTags().stream()
@@ -70,7 +71,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     }
 
     private Function<Tag, TagFullDto> functionTagToDto(ReadyMap ready) {
-        return tag -> getOrConvertStringDto(tag, ready, tagConverter::convert);
+        return entity -> convertString(entity, ready, tagConverter::convert);
     }
 
     @Override
@@ -85,13 +86,13 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
         if (dto.getNewsEntry() != null) {
-            entity.setNewsEntry(getOrConvertUuidEntity((NewsEntryFullDto) dto.getNewsEntry(), ready, newsEntryConverter::convert));
+            entity.setNewsEntry(convertUuid((NewsEntryFullDto) dto.getNewsEntry(), ready, newsEntryConverter::convert));
         }
         if (dto.getNewsLinks() != null) {
-            // TODO
+            entity.setNewsLinks(convertUuid((NewsLinksFullDto) dto.getNewsLinks(), ready, newsLinksConverter::convert));
         }
         if (dto.getArticle() != null) {
-            entity.setArticle(getOrConvertUuidEntity((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
+            entity.setArticle(convertUuid((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
@@ -103,7 +104,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     }
 
     private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
-        return tagDto -> getOrConvertStringEntity((TagFullDto) tagDto, ready, tagConverter::convert);
+        return dto -> convertString((TagFullDto) dto, ready, tagConverter::convert);
     }
 
     @Override

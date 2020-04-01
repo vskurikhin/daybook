@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:41 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionFullConverterImpl.java
@@ -27,7 +27,7 @@ public class LinkDescriptionFullConverterImpl extends AbstractConverter<UUID, Li
        implements LinkDescriptionConverter {
 
     @Inject
-    @Named("newsLinks")
+    @Named("newsLinksBase")
     private NewsLinksConverter newsLinksConverter;
 
     @Inject
@@ -46,10 +46,10 @@ public class LinkDescriptionFullConverterImpl extends AbstractConverter<UUID, Li
 
     private LinkDescriptionFullDto doConvert(LinkDescriptionFullDto dto, LinkDescription entity, ReadyMap ready) {
         if (entity.getNewsLinks() != null) {
-            dto.setNewsLinks(getOrConvertUuidDto(entity.getNewsLinks(), ready, newsLinksConverter::convert));
+            dto.setNewsLinks(convertUuid(entity.getNewsLinks(), ready, newsLinksConverter::convert));
         }
         if (entity.getLink() != null) {
-            dto.setLink(getOrConvertUuidDto(entity.getLink(), ready, linkConverter::convert));
+            dto.setLink(convertUuid(entity.getLink(), ready, linkConverter::convert));
         }
         return super.convertByGetter(dto, entity);
     }
@@ -66,10 +66,10 @@ public class LinkDescriptionFullConverterImpl extends AbstractConverter<UUID, Li
 
     private LinkDescription doConvert(LinkDescription entity, LinkDescriptionFullDto dto, ReadyMap ready) {
         if (dto.getNewsLinks() != null) {
-            entity.setNewsLinks(getOrConvertUuidEntity((NewsLinksFullDto) dto.getNewsLinks(), ready, newsLinksConverter::convert));
+            entity.setNewsLinks(convertUuid((NewsLinksFullDto) dto.getNewsLinks(), ready, newsLinksConverter::convert));
         }
         if (dto.getLink() != null) {
-            entity.setLink(getOrConvertUuidEntity((LinkFullDto) dto.getLink(), ready, linkConverter::convert));
+            entity.setLink(convertUuid((LinkFullDto) dto.getLink(), ready, linkConverter::convert));
         }
         return super.convertBySetter(entity, dto);
     }

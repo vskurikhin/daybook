@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullDto.java
@@ -48,7 +48,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
 
     private NewsGroupDto newsGroup;
 
-    private Set<LinkDescriptionDto> links;
+    private Set<LinkDescriptionDto> descriptions;
 
     public NewsLinksFullDto(@Nonnull NewsLinks entity) {
         this.id = entity.getId();
@@ -58,7 +58,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
                 ? new NewsGroupBaseDto(entity.getNewsGroup())
                 : null;
 
-        this.links = entity.getLinks().stream()
+        this.descriptions = entity.getDescriptions().stream()
                 .map(LinkDescriptionBaseDto::new)
                 .collect(Collectors.toSet());
     }
@@ -80,13 +80,13 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
             NewsGroup newsGroup = new NewsGroup(this.newsGroup.getId());
             entity.setNewsGroup(this.newsGroup.update(newsGroup));
         }
-        if (this.links != null) {
-            Set<LinkDescription> links = this.links.stream()
+        if (this.descriptions != null) {
+            Set<LinkDescription> links = this.descriptions.stream()
                     .map(dto -> dto.update(new LinkDescription(dto.getId())))
                     .collect(Collectors.toSet());
-            entity.setLinks(links);
+            entity.setDescriptions(links);
         } else {
-            entity.setLinks(Collections.emptySet());
+            entity.setDescriptions(Collections.emptySet());
         }
 
         return entity;
