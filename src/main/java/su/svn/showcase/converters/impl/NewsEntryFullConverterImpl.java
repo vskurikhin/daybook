@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 12:06 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullConverterImpl.java
@@ -9,9 +9,11 @@
 package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.NewsEntryConverter;
+import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.utils.ReadyMap;
 
@@ -28,6 +30,10 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
     @Named("recordFull")
     private RecordConverter recordConverter;
 
+    @Inject
+    @Named("newsGroupBase")
+    private NewsGroupConverter newsGroupConverter;
+
     @Override
     public NewsEntryFullDto convert(@Nonnull NewsEntry entity) {
         return doConvert(new NewsEntryFullDto(), entity, new ReadyMap());
@@ -43,7 +49,7 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
             dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
         }
         if (entity.getNewsGroup() != null) {
-            // TODO
+            dto.setNewsGroup(convertUuid(entity.getNewsGroup(), ready, newsGroupConverter::convert));
         }
         return super.convertByGetter(dto, entity);
     }
@@ -63,6 +69,7 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
             entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
         }
         if (dto.getNewsGroup() != null) {
+            entity.setNewsGroup(convertUuid((NewsGroupFullDto) dto.getNewsGroup(), ready, newsGroupConverter::convert));
             // TODO
         }
         return super.convertBySetter(entity, dto);
