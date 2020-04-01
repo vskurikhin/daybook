@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:42 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -38,6 +38,10 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     private NewsLinksConverter newsLinksConverter;
 
     @Inject
+    @Named("userOnlyLoginConverter")
+    private UserLoginConverter userLoginConverter;
+
+    @Inject
     @Named("tagBase")
     private TagConverter tagConverter;
 
@@ -62,7 +66,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
             dto.setArticle(convertUuid(entity.getArticle(), ready, articleConverter::convert));
         }
         if (entity.getUserLogin() != null) {
-            // TODO
+            dto.setUserLogin(convertUuid(entity.getUserLogin(), ready, userLoginConverter::convert));
         }
         if (entity.getTags() != null) {
             Set<TagDto> set = entity.getTags().stream()
@@ -98,7 +102,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
             entity.setArticle(convertUuid((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
         }
         if (dto.getUserLogin() != null) {
-            // TODO
+            entity.setUserLogin(convertUuid((UserOnlyLoginBaseDto) dto.getUserLogin(), ready, userLoginConverter::convert));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()

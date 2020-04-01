@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:28 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 15:42 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkBaseConverterImpl.java
@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.inject.Named;
 import java.util.UUID;
 
-@Named("linkBase")
+@Named("linkBaseConverter")
 public class LinkBaseConverterImpl extends AbstractConverter<UUID, Link, LinkFullDto>
        implements LinkConverter {
 
