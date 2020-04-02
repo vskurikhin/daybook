@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ErrorCase.java
@@ -43,6 +43,10 @@ public class ErrorCase extends RuntimeException {
 
     public static RuntimeException bad(String msg, String value) {
         return open("Bad {} '{}'!", msg, value);
+    }
+
+    public static RuntimeException badType(String type) {
+        return open("Bad type '{}'!", type);
     }
 
     public static RuntimeException notFound() {

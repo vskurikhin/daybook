@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.19 22:42 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -135,6 +135,17 @@ public class TestData {
             .group("groupTest1")
             .build();
 
+    private static final NewsGroupFullDto newsGroupFullDto0 = NewsGroupFullDto.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .group("groupTest0")
+            .build();
+    private static final NewsGroupFullDto newsGroupFullDto1 = NewsGroupFullDto.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .group("groupTest1")
+            .build();
+
     private static final NewsEntryBaseDto newsEntryBaseDto0 = NewsEntryBaseDto.builder()
             .id(UUID0)
             .dateTime(NOW)
@@ -221,6 +232,9 @@ public class TestData {
         newsEntryFullDto0.setNewsGroup(cloneNewsGroupBaseDto0());
         newsEntryFullDto1.setNewsGroup(cloneNewsGroupBaseDto1());
 
+        newsGroupFullDto0.setNewsEntries(newSet(cloneNewsEntryFullDto0()));
+        newsGroupFullDto1.setNewsEntries(newSet(cloneNewsEntryFullDto1()));
+
         recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
         recordFullDto0.setNewsEntry(cloneNewsEntryFullDto0());
@@ -274,6 +288,13 @@ public class TestData {
         return assertClone(tagBaseDto1);
     }
 
+    public static TagFullDto cloneTagFullDto0() {
+        return assertClone(tagFullDto0);
+    }
+    public static TagFullDto cloneTagFullDto1() {
+        return assertClone(tagFullDto1);
+    }
+
     public static RecordBaseDto cloneRecordBaseDto0() {
         return assertClone(recordBaseDto0);
     }
@@ -299,6 +320,13 @@ public class TestData {
     }
     public static NewsGroupBaseDto cloneNewsGroupBaseDto1() {
         return assertClone(newsGroupBaseDto1);
+    }
+
+    public static NewsGroupFullDto cloneNewsGroupFullDto0() {
+        return assertClone(newsGroupFullDto0);
+    }
+    public static NewsGroupFullDto cloneNewsGroupFullDto1() {
+        return assertClone(newsGroupFullDto1);
     }
 
     public static NewsEntryBaseDto cloneNewsEntryBaseDto0() {
