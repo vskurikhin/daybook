@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleBaseConverterImpl.java
@@ -9,16 +9,12 @@
 package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.ArticleConverter;
-import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.dto.ArticleFullDto;
-import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.UUID;
 
 @Stateless(name = "articleBaseConverter")

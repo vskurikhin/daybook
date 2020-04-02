@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksFullConverterImpl.java
@@ -9,11 +9,13 @@
 package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.LinkDescriptionConverter;
+import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.NewsLinksConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.NewsLinks;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
@@ -31,25 +33,38 @@ public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLink
     @EJB(beanName = "recordFullConverter")
     private RecordConverter recordConverter;
 
+    @EJB(beanName = "newsGroupBaseConverter")
+    private NewsGroupConverter newsGroupConverter;
+
     @EJB(beanName = "linkDescriptionBaseConverter")
     private LinkDescriptionConverter linkDescriptionConverter;
 
     @Override
     public NewsLinksFullDto convert(@Nonnull NewsLinks entity) {
-        return doConvert(new NewsLinksFullDto(), entity, new ReadyMap());
+        return doConvert(new NewsLinksFullDto(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
     public NewsLinksFullDto convert(@Nonnull NewsLinks entity, ReadyMap ready) {
-        return doConvert(new NewsLinksFullDto(), entity, ready);
+        return doConvert(new NewsLinksFullDto(entity.getId()), entity, ready);
     }
 
     private NewsLinksFullDto doConvert(NewsLinksFullDto dto, NewsLinks entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), NewsLinksFullDto.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof NewsLinksFullDto) {
+                return (NewsLinksFullDto) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(dto);
+        }
         if (entity.getRecord() != null) {
-            dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
+            dto.setRecord(recordConverter.convert(entity.getRecord(), ready));
         }
         if (entity.getNewsGroup() != null) {
-            // TODO
+            dto.setNewsGroup(newsGroupConverter.convert(entity.getNewsGroup(), ready));
         }
         if (entity.getDescriptions() != null) {
             Set<LinkDescriptionDto> set = entity.getDescriptions().stream()
@@ -61,7 +76,7 @@ public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLink
     }
 
     private Function<LinkDescription, LinkDescriptionFullDto> functionLinkDescriptionToDto(ReadyMap ready) {
-        return entity -> convertUuid(entity, ready, linkDescriptionConverter::convert);
+        return entity -> linkDescriptionConverter.convert(entity, ready);
     }
 
     @Override
@@ -75,11 +90,21 @@ public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLink
     }
 
     private NewsLinks doConvert(NewsLinks entity, NewsLinksFullDto dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), NewsLinks.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof NewsLinks) {
+                return (NewsLinks) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
         if (dto.getRecord() != null) {
-            entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
+            entity.setRecord(recordConverter.convert((RecordFullDto) dto.getRecord(), ready));
         }
         if (dto.getNewsGroup() != null) {
-            // TODO
+            entity.setNewsGroup(newsGroupConverter.convert((NewsGroupFullDto) dto.getNewsGroup(), ready));
         }
         if (dto.getDescriptions() != null) {
             Set<LinkDescription> set = dto.getDescriptions().stream()
@@ -92,7 +117,7 @@ public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLink
     }
 
     private Function<LinkDescriptionDto, LinkDescription> functionLinkDescriptionDtoToEntity(ReadyMap ready) {
-        return dto -> convertUuid((LinkDescriptionFullDto) dto, ready, linkDescriptionConverter::convert);
+        return dto ->  linkDescriptionConverter.convert((LinkDescriptionFullDto) dto, ready);
     }
 
     @Override

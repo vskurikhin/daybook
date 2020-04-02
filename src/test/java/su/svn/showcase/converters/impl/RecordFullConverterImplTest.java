@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImplTest.java
@@ -12,16 +12,20 @@ import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldJunit5Extension;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
+import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsLinks;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.ArticleFullDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.NewsLinksFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.InjectionPoint;
 
@@ -30,14 +34,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.cloneNewsEntry0;
 import static su.svn.showcase.domain.TestData.cloneRecord0;
-import static su.svn.showcase.dto.TestData.cloneRecordFullDto0;
+import static su.svn.showcase.dto.TestData.*;
+import static su.svn.utils.TestData.newSet;
 
 @DisplayName("A RecordBaseConverterImplTest unit test cases")
 @AddPackages(value = {RecordConverter.class, RecordFullConverterImpl.class})
 @ExtendWith({WeldJunit5Extension.class})
-@Disabled
 class RecordFullConverterImplTest {
 
     static ArticleConverter articleFullConverter = new ArticleFullConverterImpl();
@@ -80,12 +87,11 @@ class RecordFullConverterImplTest {
             TagBaseConverterImpl.class,
             UserOnlyLoginConverterImpl.class,
             UserRoleBaseConverterImpl.class)
-            .activate(RequestScoped.class)
+            .activate(ApplicationScoped.class)
             .setEjbFactory(ejbFactory())
-            .inject(this)
-            .inject(articleFullConverter)
+            .inject(recordFullConverter)
             .inject(newsEntryFullConverter)
-            .inject(newsLinksFullConverter)
+            .inject(this)
             .build();
 
     @EJB(beanName = "recordFullConverter")
@@ -98,13 +104,6 @@ class RecordFullConverterImplTest {
         Field field = tClass.getDeclaredField(filedName);
         field.setAccessible(true);
         field.set(o, v);
-    }
-
-    @BeforeAll
-    static void init() throws Exception {
-        set(RecordFullConverterImpl.class, "articleConverter", recordFullConverter, articleFullConverter);
-        set(RecordFullConverterImpl.class, "newsEntryConverter", recordFullConverter, newsEntryFullConverter);
-        set(RecordFullConverterImpl.class, "newsLinksConverter", recordFullConverter, newsLinksFullConverter);
     }
 
     @BeforeEach
@@ -137,16 +136,21 @@ class RecordFullConverterImplTest {
         Assertions.assertNotNull(converter);
         entity.setNewsEntry(cloneNewsEntry0());
         entity.getNewsEntry().setRecord(entity);
-        System.out.println("entity = " + entity);
         RecordFullDto test = converter.convert(entity);
-        System.out.println("test = " + test);
-        System.out.println("dto = " + dto);
+        // TODO Assertions.assertEquals(dto, test);
+        Assertions.assertTrue(test == ((NewsEntryFullDto) test.getNewsEntry()).getRecord());
     }
 
     @Test
     void when_convert_DTO_to_Entity() {
-//        Assertions.assertNotNull(converter);
-//        Record test = converter.convert(dto);
-//        Assertions.assertEquals(clean(entity), test);
+        Assertions.assertNotNull(converter);
+        dto.setNewsEntry(cloneNewsEntryFullDto0());
+        dto.setTags(newSet(cloneTagFullDto0()));
+        ((NewsEntryFullDto) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
+        ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(dto);
+        Record test = converter.convert(dto);
+        entity.setNewsEntry(cloneNewsEntry0());
+        // TODO Assertions.assertEquals(entity, test);
+        Assertions.assertTrue(test == test.getNewsEntry().getRecord());
     }
 }

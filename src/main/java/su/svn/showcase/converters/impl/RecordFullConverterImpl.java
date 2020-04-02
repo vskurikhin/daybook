@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterImpl.java
@@ -8,20 +8,28 @@
 
 package su.svn.showcase.converters.impl;
 
-import su.svn.showcase.converters.*;
+import su.svn.showcase.converters.ArticleConverter;
+import su.svn.showcase.converters.NewsEntryConverter;
+import su.svn.showcase.converters.NewsLinksConverter;
+import su.svn.showcase.converters.RecordConverter;
+import su.svn.showcase.converters.TagConverter;
+import su.svn.showcase.converters.UserLoginConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@ApplicationScoped
 @Stateless(name = "recordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
@@ -42,28 +50,36 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity) {
-        return doConvert(new RecordFullDto(), entity, new ReadyMap());
+        return doConvert(new RecordFullDto(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity, ReadyMap ready) {
-        return doConvert(new RecordFullDto(), entity, ready);
+        return doConvert(new RecordFullDto(entity.getId()), entity, ready);
     }
 
     private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
-        if (entity.getNewsEntry() != null) {
-            NewsEntryFullDto newsEntryFullDto = convertUuid(entity.getNewsEntry(), ready, newsEntryConverter::convert);
-            System.out.println("newsEntryFullDto = " + newsEntryFullDto); // TODO remove
-            dto.setNewsEntry(convertUuid(entity.getNewsEntry(), ready, newsEntryConverter::convert));
-        }
-        if (entity.getNewsLinks() != null) {
-            dto.setNewsLinks(convertUuid(entity.getNewsLinks(), ready, newsLinksConverter::convert));
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), RecordFullDto.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof RecordFullDto) {
+                return (RecordFullDto) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(dto);
         }
         if (entity.getArticle() != null) {
-            dto.setArticle(convertUuid(entity.getArticle(), ready, articleConverter::convert));
+            dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
+        }
+        if (entity.getNewsEntry() != null) {
+            dto.setNewsEntry(newsEntryConverter.convert(entity.getNewsEntry(), ready));
+        }
+        if (entity.getNewsLinks() != null) {
+            dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
         }
         if (entity.getUserLogin() != null) {
-            dto.setUserLogin(convertUuid(entity.getUserLogin(), ready, userLoginConverter::convert));
+            dto.setUserLogin(userLoginConverter.convert(entity.getUserLogin(), ready));
         }
         if (entity.getTags() != null) {
             Set<TagDto> set = entity.getTags().stream()
@@ -75,7 +91,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     }
 
     private Function<Tag, TagFullDto> functionTagToDto(ReadyMap ready) {
-        return entity -> convertString(entity, ready, tagConverter::convert);
+        return entity -> tagConverter.convert(entity, ready);
     }
 
     @Override
@@ -89,17 +105,27 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     }
 
     private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
-        if (dto.getNewsEntry() != null) {
-            entity.setNewsEntry(convertUuid((NewsEntryFullDto) dto.getNewsEntry(), ready, newsEntryConverter::convert));
-        }
-        if (dto.getNewsLinks() != null) {
-            entity.setNewsLinks(convertUuid((NewsLinksFullDto) dto.getNewsLinks(), ready, newsLinksConverter::convert));
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Record.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof Record) {
+                return (Record) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
         }
         if (dto.getArticle() != null) {
-            entity.setArticle(convertUuid((ArticleFullDto) dto.getArticle(), ready, articleConverter::convert));
+            entity.setArticle(articleConverter.convert((ArticleFullDto) dto.getArticle(), ready));
+        }
+        if (dto.getNewsEntry() != null) {
+            entity.setNewsEntry(newsEntryConverter.convert((NewsEntryFullDto) dto.getNewsEntry(), ready));
+        }
+        if (dto.getNewsLinks() != null) {
+            entity.setNewsLinks(newsLinksConverter.convert((NewsLinksFullDto) dto.getNewsLinks(), ready));
         }
         if (dto.getUserLogin() != null) {
-            entity.setUserLogin(convertUuid((UserOnlyLoginBaseDto) dto.getUserLogin(), ready, userLoginConverter::convert));
+            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
@@ -111,7 +137,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
     }
 
     private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
-        return dto -> convertString((TagFullDto) dto, ready, tagConverter::convert);
+        return dto -> tagConverter.convert((TagFullDto) dto, ready);
     }
 
     @Override

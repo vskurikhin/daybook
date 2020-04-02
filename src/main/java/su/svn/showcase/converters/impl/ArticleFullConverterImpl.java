@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullConverterImpl.java
@@ -12,7 +12,10 @@ import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
-import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.ArticleFullDto;
+import su.svn.showcase.dto.LinkFullDto;
+import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
@@ -32,20 +35,30 @@ public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, A
 
     @Override
     public ArticleFullDto convert(@Nonnull Article entity) {
-        return doConvert(new ArticleFullDto(), entity, new ReadyMap());
+        return doConvert(new ArticleFullDto(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
     public ArticleFullDto convert(@Nonnull Article entity, ReadyMap ready) {
-        return doConvert(new ArticleFullDto(), entity, ready);
+        return doConvert(new ArticleFullDto(entity.getId()), entity, ready);
     }
 
     private ArticleFullDto doConvert(ArticleFullDto dto, Article entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), ArticleFullDto.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof ArticleFullDto) {
+                return (ArticleFullDto) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(dto);
+        }
         if (entity.getRecord() != null) {
-            dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
+            dto.setRecord(recordConverter.convert(entity.getRecord(), ready));
         }
         if (entity.getLink() != null) {
-            dto.setLink(convertUuid(entity.getLink(), ready, linkConverter::convert));
+            dto.setLink(linkConverter.convert(entity.getLink(), ready));
         }
         return super.convertByGetter(dto, entity);
     }
@@ -61,11 +74,21 @@ public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, A
     }
 
     private Article doConvert(Article entity, ArticleFullDto dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Article.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof Article) {
+                return (Article) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
         if (dto.getRecord() != null) {
-            entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
+            entity.setRecord(recordConverter.convert((RecordFullDto) dto.getRecord(), ready));
         }
         if (dto.getLink() != null) {
-            entity.setLink(convertUuid((LinkFullDto) dto.getLink(), ready, linkConverter::convert));
+            entity.setLink(linkConverter.convert((LinkFullDto) dto.getLink(), ready));
         }
         return super.convertBySetter(entity, dto);
     }
