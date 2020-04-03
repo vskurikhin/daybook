@@ -37,7 +37,7 @@ class RecordBaseConverterImplTest {
     static RecordConverter recordBaseConverter = new RecordBaseConverterImpl();
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put("recordBaseConverter", recordBaseConverter);
+        put("RecordBaseConverter", recordBaseConverter);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -53,7 +53,7 @@ class RecordBaseConverterImplTest {
             .inject(this)
             .build();
 
-    @EJB(beanName = "recordBaseConverter")
+    @EJB(beanName = "RecordBaseConverter")
     RecordConverter converter;
 
     private Record entity;

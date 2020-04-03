@@ -15,18 +15,12 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
-import su.svn.showcase.domain.Article;
-import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.domain.NewsLinks;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.ArticleFullDto;
 import su.svn.showcase.dto.NewsEntryFullDto;
-import su.svn.showcase.dto.NewsLinksFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 import java.lang.reflect.Field;
@@ -34,9 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.cloneNewsEntry0;
 import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.*;
@@ -56,19 +47,19 @@ class RecordFullConverterImplTest {
     static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverterImpl();
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put("articleFullConverter", articleFullConverter);
-        put("newsEntryFullConverter", newsEntryFullConverter);
-        put("newsGroupBaseConverter", newsGroupBaseConverter);
-        put("newsLinksFullConverter", newsLinksFullConverter);
-        put("recordFullConverter", recordFullConverter);
-        put("tagBaseConverter", tagBaseConverter);
-        put("userOnlyLoginConverter", userOnlyLoginConverter);
+        put("ArticleFullConverter", articleFullConverter);
+        put("NewsEntryFullConverter", newsEntryFullConverter);
+        put("NewsGroupBaseConverter", newsGroupBaseConverter);
+        put("NewsLinksFullConverter", newsLinksFullConverter);
+        put("RecordFullConverter", recordFullConverter);
+        put("TagBaseConverter", tagBaseConverter);
+        put("UserOnlyLoginConverter", userOnlyLoginConverter);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
         return ip -> {
             String name = ip.getAnnotated().getAnnotation(EJB.class).beanName();
-            System.err.println("beanName: " + name);
+            // System.err.println("beanName: " + name);
             return ejbMap.get(name);
         };
     }
@@ -94,7 +85,7 @@ class RecordFullConverterImplTest {
             .inject(this)
             .build();
 
-    @EJB(beanName = "recordFullConverter")
+    @EJB(beanName = "RecordFullConverter")
     RecordConverter converter;
 
     private Record entity;

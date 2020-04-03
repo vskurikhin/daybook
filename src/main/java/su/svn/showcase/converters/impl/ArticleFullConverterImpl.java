@@ -23,14 +23,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "articleFullConverter")
+@Stateless(name = "ArticleFullConverter")
 public class ArticleFullConverterImpl extends AbstractConverter<UUID, Article, ArticleFullDto>
        implements ArticleConverter {
 
-    @EJB(beanName = "recordFullConverter")
+    @EJB(beanName = "RecordFullConverter")
     private RecordConverter recordConverter;
 
-    @EJB(beanName = "linkBaseConverter")
+    @EJB(beanName = "LinkBaseConverter")
     private LinkConverter linkConverter;
 
     @Override

@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "newsLinksBaseConverter")
+@Stateless(name = "NewsLinksBaseConverter")
 public class NewsLinksBaseConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 

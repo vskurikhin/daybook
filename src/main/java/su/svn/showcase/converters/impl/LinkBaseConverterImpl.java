@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "linkBaseConverter")
+@Stateless(name = "LinkBaseConverter")
 public class LinkBaseConverterImpl extends AbstractConverter<UUID, Link, LinkFullDto>
        implements LinkConverter {
 

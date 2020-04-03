@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "articleBaseConverter")
+@Stateless(name = "ArticleBaseConverter")
 public class ArticleBaseConverterImpl extends AbstractConverter<UUID, Article, ArticleFullDto>
        implements ArticleConverter {
 

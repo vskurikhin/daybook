@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "recordBaseConverter")
+@Stateless(name = "RecordBaseConverter")
 public class RecordBaseConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Override
