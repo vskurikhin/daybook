@@ -23,14 +23,12 @@ import su.svn.showcase.utils.ReadyMap;
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.enterprise.context.ApplicationScoped;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("DuplicatedCode")
-@ApplicationScoped
 @Stateless(name = "RecordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
@@ -79,7 +77,7 @@ public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, Rec
         if (entity.getNewsLinks() != null) {
             dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
         }
-        if (entity.getUserLogin() != null) {
+        if (entity.getUserLogin() != null) { // TODO only check
             dto.setUserLogin(userLoginConverter.convert(entity.getUserLogin(), ready));
         }
         if (entity.getTags() != null) {
