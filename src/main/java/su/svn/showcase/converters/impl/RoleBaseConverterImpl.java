@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "roleBaseConverter")
+@Stateless(name = "RoleBaseConverter")
 public class RoleBaseConverterImpl extends AbstractConverter<UUID, Role, RoleFullDto>
        implements RoleConverter {
 

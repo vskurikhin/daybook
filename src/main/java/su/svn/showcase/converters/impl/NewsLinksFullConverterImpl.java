@@ -26,17 +26,17 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Stateless(name = "newsLinksFullConverter")
+@Stateless(name = "NewsLinksFullConverter")
 public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 
-    @EJB(beanName = "recordFullConverter")
+    @EJB(beanName = "RecordFullConverter")
     private RecordConverter recordConverter;
 
-    @EJB(beanName = "newsGroupBaseConverter")
+    @EJB(beanName = "NewsGroupBaseConverter")
     private NewsGroupConverter newsGroupConverter;
 
-    @EJB(beanName = "linkDescriptionBaseConverter")
+    @EJB(beanName = "LinkDescriptionBaseConverter")
     private LinkDescriptionConverter linkDescriptionConverter;
 
     @Override

@@ -29,23 +29,24 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("DuplicatedCode")
 @ApplicationScoped
-@Stateless(name = "recordFullConverter")
+@Stateless(name = "RecordFullConverter")
 public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
-    @EJB(beanName = "articleFullConverter")
+    @EJB(beanName = "ArticleFullConverter")
     private ArticleConverter articleConverter;
 
-    @EJB(beanName = "newsEntryFullConverter")
+    @EJB(beanName = "NewsEntryFullConverter")
     private NewsEntryConverter newsEntryConverter;
 
-    @EJB(beanName = "newsLinksFullConverter")
+    @EJB(beanName = "NewsLinksFullConverter")
     private NewsLinksConverter newsLinksConverter;
 
-    @EJB(beanName = "userOnlyLoginConverter")
+    @EJB(beanName = "UserOnlyLoginConverter")
     private UserLoginConverter userLoginConverter;
 
-    @EJB(beanName = "tagBaseConverter")
+    @EJB(beanName = "TagBaseConverter")
     private TagConverter tagConverter;
 
     @Override

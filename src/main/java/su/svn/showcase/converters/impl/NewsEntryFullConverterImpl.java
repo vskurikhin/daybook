@@ -23,14 +23,14 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "newsEntryFullConverter")
+@Stateless(name = "NewsEntryFullConverter")
 public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
        implements NewsEntryConverter {
 
-    @EJB(beanName = "recordFullConverter")
+    @EJB(beanName = "RecordFullConverter")
     private RecordConverter recordConverter;
 
-    @EJB(beanName = "newsGroupBaseConverter")
+    @EJB(beanName = "NewsGroupBaseConverter")
     private NewsGroupConverter newsGroupConverter;
 
     @Override

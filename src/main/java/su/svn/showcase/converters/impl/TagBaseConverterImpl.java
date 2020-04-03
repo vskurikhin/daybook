@@ -16,7 +16,7 @@ import su.svn.showcase.utils.ReadyMap;
 import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 
-@Stateless(name = "tagBaseConverter")
+@Stateless(name = "TagBaseConverter")
 public class TagBaseConverterImpl extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
 
     @Override
