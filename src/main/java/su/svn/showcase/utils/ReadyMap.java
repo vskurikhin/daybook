@@ -50,8 +50,6 @@ public class ReadyMap {
     private final Map<Key, Object> map = new HashMap<>();
 
     public boolean containsKey(Key key) {
-        System.out.println("map.size() = " + map.size());
-        System.out.println("map = " + map);
         return map.containsKey(key);
     }
 

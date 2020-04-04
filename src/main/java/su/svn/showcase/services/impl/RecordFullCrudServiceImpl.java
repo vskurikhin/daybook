@@ -10,6 +10,7 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.Record;
@@ -37,6 +38,12 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
+    @EJB(beanName = "RecordFullConverter")
+    private RecordConverter recordFullConverter;
+
+    @EJB(beanName = "RecordPartConverter")
+    private RecordConverter recordPartConverter;
+
     @Override
     @Transactional
     public void create(@Nonnull RecordFullDto dto) {
@@ -47,15 +54,14 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @Override
     @Transactional
     public RecordFullDto readById(@Nonnull UUID id) {
-        return new RecordFullDto(recordDao.findById(id)
-                .orElseThrow(ErrorCase::notFound));
+        return recordFullConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
     public List<RecordFullDto> readRange(int start, int size) {
         return recordDao.range(start, size).stream()
-                .map(RecordFullDto::new)
+                .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -88,7 +94,8 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
         UserLogin userLogin = getUserLogin(dto.getUserLogin());
         validateUserLoginDto(userLogin, dto.getUserLogin());
         entity.setUserLogin(userLogin);
-        entity = dto.update(entity);
+        // entity = dto.update(entity);
+        entity = recordFullConverter.convert(dto);
         recordDao.save(entity);
     }
 
@@ -123,7 +130,7 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @Override
     public List<RecordFullDto> readRangeByDay(LocalDate localDate, int first, int pageSize) {
         return recordDao.rangeByDay(first, pageSize, localDate).stream()
-                .map(RecordFullDto::new)
+                .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
     }
 }
