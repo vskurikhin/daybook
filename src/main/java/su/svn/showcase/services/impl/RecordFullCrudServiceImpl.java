@@ -60,6 +60,7 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @Override
     @Transactional
     public List<RecordFullDto> readRange(int start, int size) {
+        System.err.println("recordPartConverter = " + recordPartConverter);
         return recordDao.range(start, size).stream()
                 .map(recordPartConverter::convert)
                 .collect(Collectors.toList());

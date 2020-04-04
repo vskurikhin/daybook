@@ -20,7 +20,6 @@ import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.RecordDaoEjb;
 import su.svn.showcase.dao.jpa.UserLoginDaoEjb;
-import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.NewsEntryFullDto;
@@ -48,9 +47,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.cloneRecordFullDto1;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
@@ -73,15 +69,12 @@ class RecordFullCrudServiceImplTest {
     static RecordDao recordDao = new RecordDaoEjb();
     static UserLoginDao userLoginDao = new UserLoginDaoEjb();
 
-    static RecordDao mockDao = mock(RecordDao.class);
-    static UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
-    static RecordFullCrudService mockService = mock(RecordFullCrudService.class);
-
     static ArticleConverter articleFullConverter = new ArticleFullConverter();
     static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
     static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
     static NewsLinksConverter newsLinksFullConverter = new NewsLinksFullConverter();
     static RecordConverter recordFullConverter = new RecordFullConverter();
+    static RecordConverter recordPartConverter = new RecordPartConverter();
     static TagConverter tagBaseConverter = new TagBaseConverter();
     static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
 
@@ -96,6 +89,7 @@ class RecordFullCrudServiceImplTest {
         put("NewsGroupBaseConverter", newsGroupBaseConverter);
         put("NewsLinksFullConverter", newsLinksFullConverter);
         put("RecordFullConverter", recordFullConverter);
+        put("RecordPartConverter", recordPartConverter);
         put("TagBaseConverter", tagBaseConverter);
         put("UserOnlyLoginConverter", userOnlyLoginConverter);
 
@@ -105,9 +99,6 @@ class RecordFullCrudServiceImplTest {
     private Function<InjectionPoint, Object> ejbFactory() {
         return ip -> {
             String name = ip.getAnnotated().getAnnotation(EJB.class).beanName();
-            if (name == null) {
-                name = ip.getAnnotated().getBaseType().getTypeName();
-            }
             System.err.println("beanName: " + name);
             return ejbMap.get(name);
         };
@@ -127,6 +118,7 @@ class RecordFullCrudServiceImplTest {
             .inject(recordDao)
             .inject(userLoginDao)
             .inject(recordFullConverter)
+            .inject(recordPartConverter)
             .inject(newsEntryFullConverter)
             .inject(recordFullCrudService)
             .inject(this)
@@ -163,6 +155,10 @@ class RecordFullCrudServiceImplTest {
 
     @AfterEach
     void tearDown() throws Exception {
+        try {
+            userTransaction.rollback();
+        } catch (Exception ignored) {}
+
         InputStream is = tClass.getResourceAsStream(resourceNamePrefix + "_tearDown.sql");
         userTransaction.begin();
         InputStreamUtil.readAndExecuteLine(is, sql ->
@@ -184,45 +180,49 @@ class RecordFullCrudServiceImplTest {
     }
 
     @Test
-    void readById(RecordFullCrudService service) throws Exception {
+    void readById() throws Exception {
          userTransaction.begin();
-         service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
+         RecordFullDto test = service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
+         System.err.println("test = " + test); // TODO assertion
          userTransaction.rollback();
     }
 
     @Test
-    void readRange(RecordFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        List<RecordFullDto> testList = service.readRange(0, Integer.MAX_VALUE);
-        Assertions.assertTrue(testList.isEmpty());
+    void readRange(RecordFullCrudService service) throws Exception {
+        userTransaction.begin();
+        List<RecordFullDto> test = service.readRange(0, Integer.MAX_VALUE);
+        System.err.println("test = " + test); // TODO assertion
+        userTransaction.rollback();
     }
 
     @Test
-    void update(RecordFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
-        service.update(dto);
+    void update(RecordFullCrudService service) throws SystemException, NotSupportedException {
+        // service.update(dto); // TODO update via children entity service
     }
 
     @Test
-    void delete(RecordFullCrudService service) {
-        Assertions.assertNotNull(service);
-        service.delete(dto.getId());
+    @Disabled // TODO
+    void delete(RecordFullCrudService service) throws Exception {
+        userTransaction.begin();
+        service.delete(UUID.fromString("00000000-0000-0000-0000-000000000010"));
+        userTransaction.rollback();
     }
 
     @Test
-    void count(RecordFullCrudService service) {
+    void count(RecordFullCrudService service) throws Exception {
         Assertions.assertNotNull(service);
-        service.count();
+        userTransaction.begin();
+        int test = service.count();
+        Assertions.assertEquals(1, test);
+        userTransaction.rollback();
     }
 
     @Test
-    void countByDay(RecordFullCrudService service) {
+    void countByDay(RecordFullCrudService service) throws Exception {
         Assertions.assertNotNull(service);
-        service.countByDay(LocalDate.now());
+        userTransaction.begin();
+        int test = service.countByDay(LocalDate.now());
+        Assertions.assertEquals(1, test);
+        userTransaction.rollback();
     }
 }
