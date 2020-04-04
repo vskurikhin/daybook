@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "LinkDescriptionBaseConverter")
-public class LinkDescriptionBaseConverterImpl extends AbstractConverter<UUID, LinkDescription, LinkDescriptionFullDto>
+public class LinkDescriptionBaseConverter extends AbstractConverter<UUID, LinkDescription, LinkDescriptionFullDto>
        implements LinkDescriptionConverter {
 
     @Override

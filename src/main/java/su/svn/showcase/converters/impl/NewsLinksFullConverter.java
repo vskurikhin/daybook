@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Stateless(name = "NewsLinksFullConverter")
-public class NewsLinksFullConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
+public class NewsLinksFullConverter extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 
     @EJB(beanName = "RecordFullConverter")

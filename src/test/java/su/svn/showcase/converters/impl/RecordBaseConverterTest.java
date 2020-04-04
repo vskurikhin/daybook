@@ -30,11 +30,11 @@ import static su.svn.showcase.domain.TestData.cloneRecord0;
 import static su.svn.showcase.dto.TestData.cloneRecordFullDto0;
 
 @DisplayName("A RecordBaseConverterImplTest unit test cases")
-@AddPackages(value = {RecordConverter.class, RecordBaseConverterImpl.class})
+@AddPackages(value = {RecordConverter.class, RecordBaseConverter.class})
 @ExtendWith({WeldJunit5Extension.class})
-class RecordBaseConverterImplTest {
+class RecordBaseConverterTest {
 
-    static RecordConverter recordBaseConverter = new RecordBaseConverterImpl();
+    static RecordConverter recordBaseConverter = new RecordBaseConverter();
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("RecordBaseConverter", recordBaseConverter);
@@ -47,7 +47,7 @@ class RecordBaseConverterImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            RecordBaseConverterImpl.class)
+            RecordBaseConverter.class)
             .activate(RequestScoped.class)
             .setEjbFactory(ejbFactory())
             .inject(this)

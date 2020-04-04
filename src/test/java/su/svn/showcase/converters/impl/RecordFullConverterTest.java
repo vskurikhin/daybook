@@ -34,17 +34,17 @@ import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.newSet;
 
 @DisplayName("A RecordBaseConverterImplTest unit test cases")
-@AddPackages(value = {RecordConverter.class, RecordFullConverterImpl.class})
+@AddPackages(value = {RecordConverter.class, RecordFullConverter.class})
 @ExtendWith({WeldJunit5Extension.class})
-class RecordFullConverterImplTest {
+class RecordFullConverterTest {
 
-    static ArticleConverter articleFullConverter = new ArticleFullConverterImpl();
-    static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverterImpl();
-    static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverterImpl();
-    static NewsLinksConverter newsLinksFullConverter = new NewsLinksFullConverterImpl();
-    static RecordConverter recordFullConverter = new RecordFullConverterImpl();
-    static TagConverter tagBaseConverter = new TagBaseConverterImpl();
-    static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverterImpl();
+    static ArticleConverter articleFullConverter = new ArticleFullConverter();
+    static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
+    static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
+    static NewsLinksConverter newsLinksFullConverter = new NewsLinksFullConverter();
+    static RecordConverter recordFullConverter = new RecordFullConverter();
+    static TagConverter tagBaseConverter = new TagBaseConverter();
+    static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("ArticleFullConverter", articleFullConverter);
@@ -67,17 +67,17 @@ class RecordFullConverterImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            ArticleFullConverterImpl.class,
-            LinkBaseConverterImpl.class,
-            LinkDescriptionBaseConverterImpl.class,
-            NewsEntryFullConverterImpl.class,
-            NewsGroupBaseConverterImpl.class,
-            NewsLinksFullConverterImpl.class,
-            RecordFullConverterImpl.class,
-            RoleBaseConverterImpl.class,
-            TagBaseConverterImpl.class,
-            UserOnlyLoginConverterImpl.class,
-            UserRoleBaseConverterImpl.class)
+            ArticleFullConverter.class,
+            LinkBaseConverter.class,
+            LinkDescriptionBaseConverter.class,
+            NewsEntryFullConverter.class,
+            NewsGroupBaseConverter.class,
+            NewsLinksFullConverter.class,
+            RecordFullConverter.class,
+            RoleBaseConverter.class,
+            TagBaseConverter.class,
+            UserOnlyLoginConverter.class,
+            UserRoleBaseConverter.class)
             .activate(ApplicationScoped.class)
             .setEjbFactory(ejbFactory())
             .inject(recordFullConverter)

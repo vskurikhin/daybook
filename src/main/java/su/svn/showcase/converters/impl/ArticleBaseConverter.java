@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleBaseConverterImpl.java
+ * ArticleBaseConverterImpl.java
  * $Id$
  */
 
@@ -17,8 +17,8 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Stateless(name = "UserRoleBaseConverter")
-public class UserRoleBaseConverterImpl extends AbstractConverter<UUID, Article, ArticleFullDto>
+@Stateless(name = "ArticleBaseConverter")
+public class ArticleBaseConverter extends AbstractConverter<UUID, Article, ArticleFullDto>
        implements ArticleConverter {
 
     @Override

@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "NewsLinksBaseConverter")
-public class NewsLinksBaseConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
+public class NewsLinksBaseConverter extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 
     @Override
