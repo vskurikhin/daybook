@@ -8,12 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
-import su.svn.showcase.converters.ArticleConverter;
-import su.svn.showcase.converters.NewsEntryConverter;
-import su.svn.showcase.converters.NewsLinksConverter;
-import su.svn.showcase.converters.RecordConverter;
-import su.svn.showcase.converters.TagConverter;
-import su.svn.showcase.converters.UserLoginConverter;
+import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
@@ -31,16 +26,16 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("DuplicatedCode")
 @ApplicationScoped
-@Stateless(name = "RecordFullConverter")
-public class RecordFullConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+@Stateless(name = "RecordPartConverter")
+public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
-    @EJB(beanName = "ArticleFullConverter")
+    @EJB(beanName = "ArticleBaseConverter")
     private ArticleConverter articleConverter;
 
-    @EJB(beanName = "NewsEntryFullConverter")
+    @EJB(beanName = "NewsEntryBaseConverter")
     private NewsEntryConverter newsEntryConverter;
 
-    @EJB(beanName = "NewsLinksFullConverter")
+    @EJB(beanName = "NewsLinksBaseConverter")
     private NewsLinksConverter newsLinksConverter;
 
     @EJB(beanName = "UserOnlyLoginConverter")

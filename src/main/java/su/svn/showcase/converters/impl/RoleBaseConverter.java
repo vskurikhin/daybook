@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "RoleBaseConverter")
-public class RoleBaseConverterImpl extends AbstractConverter<UUID, Role, RoleFullDto>
+public class RoleBaseConverter extends AbstractConverter<UUID, Role, RoleFullDto>
        implements RoleConverter {
 
     @Override

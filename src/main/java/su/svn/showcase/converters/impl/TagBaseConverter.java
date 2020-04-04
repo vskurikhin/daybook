@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 
 @Stateless(name = "TagBaseConverter")
-public class TagBaseConverterImpl extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
+public class TagBaseConverter extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
 
     @Override
     public TagFullDto convert(@Nonnull Tag entity) {

@@ -26,7 +26,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Stateless
+@Stateless(name = "RecordFullCrudService")
 public class RecordFullCrudServiceImpl extends AbstractCrudService implements RecordFullCrudService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullCrudServiceImpl.class);

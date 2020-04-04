@@ -24,7 +24,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "NewsEntryFullConverter")
-public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
+public class NewsEntryFullConverter extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
        implements NewsEntryConverter {
 
     @EJB(beanName = "RecordFullConverter")

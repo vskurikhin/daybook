@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "UserOnlyLoginConverter")
-public class UserOnlyLoginConverterImpl extends AbstractConverter<UUID, UserLogin, UserOnlyLoginBaseDto>
+public class UserOnlyLoginConverter extends AbstractConverter<UUID, UserLogin, UserOnlyLoginBaseDto>
        implements UserLoginConverter {
 
     @Override

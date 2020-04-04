@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
 import java.util.UUID;
 
 @Stateless(name = "RecordBaseConverter")
-public class RecordBaseConverterImpl extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+public class RecordBaseConverter extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
 
     @Override
     public RecordFullDto convert(@Nonnull Record entity) {
