@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 23:23 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -10,11 +10,11 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.dao.ArticleDao;
 import su.svn.showcase.dao.LinkDao;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.LinkDaoEjb;
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -46,25 +46,30 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
+    @EJB(beanName = "ArticleFullConverter")
+    private ArticleConverter articleFullConverter;
+
+    @EJB(beanName = "ArticlePartConverter")
+    private ArticleConverter articlePartConverter;
+
     @Override
     @Transactional
     public void create(@Nonnull ArticleFullDto dto) {
         validateOrFillRecordArticleId(dto);
-        create(new Article(getOrGenerateUuidKey(dto)), dto);
+        create(dto, getUserLogin(dto));
     }
 
     @Override
     @Transactional
     public ArticleFullDto readById(@Nonnull UUID id) {
-        return createNewsLinksFullDto(articleDao.findById(id)
-                .orElseThrow(ErrorCase::notFound));
+        return articlePartConverter.convert(articleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
     public List<ArticleFullDto> readRange(int start, int size) {
         return articleDao.range(start, size).stream()
-                .map(this::createNewsLinksFullDto)
+                .map(articlePartConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -93,33 +98,26 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
         return LOGGER;
     }
 
-    private void create(Article entity, ArticleFullDto dto) {
-        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
-        entity = dto.update(entity, getUserLogin(userLogin));
+    private void create(ArticleFullDto dto, UserLogin userLogin) {
+        Article entity = articleFullConverter.convert(dto);
         Record record = entity.getRecord();
-        recordDao.save(record);
-    }
-
-    private ArticleFullDto createNewsLinksFullDto(Article entity) {
-        RecordFullDto recordDto = new RecordFullDto(entity.getRecord());
-        if (recordDto.getArticle() instanceof ArticleFullDto) {
-            return (ArticleFullDto) recordDto.getArticle();
-        }
-        ArticleFullDto dto = new ArticleFullDto(entity);
-        dto.setRecord(recordDto);
-
-        return dto;
-    }
-
-    private void update(Article entity, ArticleFullDto dto) {
-        RecordFullDto recordFullDto = (RecordFullDto) dto.getRecord();
-        entity = dto.update(entity, getUserLogin(recordFullDto.getUserLogin()));
-        recordDao.save(entity.getRecord());
+        record.setUserLogin(userLogin);
         articleDao.save(entity);
     }
 
+    private void update(Article entity, ArticleFullDto dto) {
+        ArticleConverter.Updater.update(entity, dto);
+        recordDao.save(entity.getRecord());
+    }
+
     private Article getArticle(UUID id) {
+        System.err.println("id = " + id);
         return articleDao.findById(id).orElseThrow(ErrorCase::notFound);
+    }
+
+    private UserLogin getUserLogin(ArticleFullDto dto) {
+        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
+        return getUserLogin(userLogin);
     }
 
     private UserLogin getUserLogin(UserLoginDto userLogin) {

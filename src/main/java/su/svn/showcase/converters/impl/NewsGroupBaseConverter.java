@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseConverterImpl.java
@@ -14,11 +14,11 @@ import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("newsGroupBase")
-public class NewsGroupBaseConverterImpl extends AbstractConverter<UUID, NewsGroup, NewsGroupFullDto>
+@Stateless(name = "NewsGroupBaseConverter")
+public class NewsGroupBaseConverter extends AbstractConverter<UUID, NewsGroup, NewsGroupFullDto>
        implements NewsGroupConverter {
 
     @Override

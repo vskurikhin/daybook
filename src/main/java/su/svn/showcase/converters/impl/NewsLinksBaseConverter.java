@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.31 20:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksBaseConverterImpl.java
@@ -14,11 +14,11 @@ import su.svn.showcase.dto.NewsLinksFullDto;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Named;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("newsLinksBase")
-public class NewsLinksBaseConverterImpl extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
+@Stateless(name = "NewsLinksBaseConverter")
+public class NewsLinksBaseConverter extends AbstractConverter<UUID, NewsLinks, NewsLinksFullDto>
        implements NewsLinksConverter {
 
     @Override

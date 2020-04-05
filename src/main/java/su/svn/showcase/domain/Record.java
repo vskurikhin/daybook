@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 16:05 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -10,6 +10,7 @@ package su.svn.showcase.domain;
 
 import lombok.*;
 import org.wildfly.common.annotation.Nullable;
+import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -67,39 +68,70 @@ import static su.svn.showcase.domain.Record.*;
         name = FETCH_BY_ID,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.tags t WHERE e.id = :id"
+                " LEFT JOIN FETCH e.newsLinks l" +
+                " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
+                " WHERE e.id = :id"
     ),
 
     @NamedQuery(
         name = FETCH_ALL,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.tags t"
+                " LEFT JOIN FETCH e.newsLinks l" +
+                " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld"
     ),
     @NamedQuery(
         name = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
                 " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
                 " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
     @NamedQuery(
         name = FETCH_ALL_WHERE_ID_IN,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
                 " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
                 " WHERE e.id IN (:id)"
     ),
     @NamedQuery(
         name = FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
                 " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
                 " WHERE e.id IN (:id)" +
                 " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
@@ -107,21 +139,32 @@ import static su.svn.showcase.domain.Record.*;
         name = FETCH_ALL_BY_DAY,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
                 " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
                 " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
     ),
     @NamedQuery(
         name = FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
                 " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
                 " LEFT JOIN FETCH e.tags t" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
                 " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
 })
-public class Record implements DBEntity<UUID>, Serializable {
+public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     private static final long serialVersionUID = 235L;
 
@@ -231,9 +274,7 @@ public class Record implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true, mappedBy = "record")
     private Article article;
 
     @Getter

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Article.java
@@ -82,9 +82,7 @@ public class Article implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @PrimaryKeyJoinColumn
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
-    @JoinColumn(name = "id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
     private Record record;
 
     @Getter

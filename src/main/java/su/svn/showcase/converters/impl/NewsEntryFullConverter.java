@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 13:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullConverterImpl.java
@@ -15,41 +15,50 @@ import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.util.UUID;
 
-@Named("newsEntryFull")
-public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
+@Stateless(name = "NewsEntryFullConverter")
+public class NewsEntryFullConverter extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto>
        implements NewsEntryConverter {
 
-    @Inject
-    @Named("recordFull")
+    @EJB(beanName = "RecordFullConverter")
     private RecordConverter recordConverter;
 
-    @Inject
-    @Named("newsGroupBase")
+    @EJB(beanName = "NewsGroupBaseConverter")
     private NewsGroupConverter newsGroupConverter;
 
     @Override
     public NewsEntryFullDto convert(@Nonnull NewsEntry entity) {
-        return doConvert(new NewsEntryFullDto(), entity, new ReadyMap());
+        return doConvert(new NewsEntryFullDto(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
     public NewsEntryFullDto convert(@Nonnull NewsEntry entity, ReadyMap ready) {
-        return doConvert(new NewsEntryFullDto(), entity, ready);
+        return doConvert(new NewsEntryFullDto(entity.getId()), entity, ready);
     }
 
     private NewsEntryFullDto doConvert(NewsEntryFullDto dto, NewsEntry entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), NewsEntryFullDto.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof NewsEntryFullDto) {
+                return (NewsEntryFullDto) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(dto);
+        }
         if (entity.getRecord() != null) {
-            dto.setRecord(convertUuid(entity.getRecord(), ready, recordConverter::convert));
+            dto.setRecord(recordConverter.convert(entity.getRecord(), ready));
         }
         if (entity.getNewsGroup() != null) {
-            dto.setNewsGroup(convertUuid(entity.getNewsGroup(), ready, newsGroupConverter::convert));
+            dto.setNewsGroup(newsGroupConverter.convert(entity.getNewsGroup(), ready));
         }
         return super.convertByGetter(dto, entity);
     }
@@ -65,12 +74,21 @@ public class NewsEntryFullConverterImpl extends AbstractConverter<UUID, NewsEntr
     }
 
     private NewsEntry doConvert(NewsEntry entity, NewsEntryFullDto dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), NewsEntry.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof NewsEntry) {
+                return (NewsEntry) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
         if (dto.getRecord() != null) {
-            entity.setRecord(convertUuid((RecordFullDto) dto.getRecord(), ready, recordConverter::convert));
+            entity.setRecord(recordConverter.convert((RecordFullDto) dto.getRecord(), ready));
         }
         if (dto.getNewsGroup() != null) {
-            entity.setNewsGroup(convertUuid((NewsGroupFullDto) dto.getNewsGroup(), ready, newsGroupConverter::convert));
-            // TODO
+            entity.setNewsGroup(newsGroupConverter.convert((NewsGroupFullDto) dto.getNewsGroup(), ready));
         }
         return super.convertBySetter(entity, dto);
     }
