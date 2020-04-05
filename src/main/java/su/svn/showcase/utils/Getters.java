@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 22:46 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Getters.java
@@ -58,21 +58,17 @@ public class Getters {
     private static Map<String, Method> getters(Class aClass) {
         Map<String, Method> methods = Arrays.stream(aClass.getDeclaredMethods())
             .filter(MethodUtil::isGetter)
-            .peek(Getters::logTrace) // TODO remove
             .collect(Collectors.toMap(Method::getName, Function.identity()));
         Map<String, Method> result = new HashMap<>();
 
         for (Field field : aClass.getDeclaredFields()) {
             if ( ! FieldUtil.isTransientOrStatic(field)) {
-                LOGGER.trace("field = {}", field); // TODO remove
                 String methodName = MethodUtil.name(field.getName(), MethodUtil.GETTER);
-                LOGGER.trace("methodName = {}", methodName); // TODO remove
                 Method getter = methods.get(methodName);
                 if (MethodUtil.isValidGetter(getter, field)) {
                     result.put(field.getName(), getter);
                 } else {
                     methodName = MethodUtil.name(field.getName(), MethodUtil.IS);
-                    LOGGER.trace("methodName = {}", methodName); // TODO remove
                     getter = methods.get(methodName);
                     if (MethodUtil.isValidGetter(getter, field)) {
                         result.put(field.getName(), getter);

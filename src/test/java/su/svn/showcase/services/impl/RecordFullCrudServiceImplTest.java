@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImplTest.java
@@ -185,7 +185,6 @@ class RecordFullCrudServiceImplTest {
     void readById() throws Exception {
          userTransaction.begin();
          RecordFullDto test = service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
-         System.err.println("test = " + test); // TODO assertion
          userTransaction.rollback();
     }
 
@@ -193,7 +192,6 @@ class RecordFullCrudServiceImplTest {
     void readRange(RecordFullCrudService service) throws Exception {
         userTransaction.begin();
         List<RecordFullDto> test = service.readRange(0, Integer.MAX_VALUE);
-        System.err.println("test = " + test); // TODO assertion
         userTransaction.rollback();
     }
 

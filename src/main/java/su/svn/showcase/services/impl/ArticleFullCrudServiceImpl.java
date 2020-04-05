@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -125,7 +125,6 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
         if (userLogin.getLogin() == null) {
             return userLoginDao.findById(userLogin.getId()).orElseThrow(ErrorCase::notFound);
         }
-        System.out.println("userLogin = " + userLogin); // TODO remove
         return userLoginDao.findWhereLogin(userLogin.getLogin()).orElseThrow(ErrorCase::notFound);
     }
 

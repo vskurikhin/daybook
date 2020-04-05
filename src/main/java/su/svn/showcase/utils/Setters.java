@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 22:46 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Setters.java
@@ -59,7 +59,6 @@ public class Setters {
     private static Map<String, Method> setters(Class aClass) {
         Map<String, Method> methods = Arrays.stream(aClass.getMethods())
             .filter(MethodUtil::isSetter)
-            .peek(Setters::logTrace) // TODO remove
             .collect(Collectors.toMap(Method::getName, Function.identity()));
         Map<String, Method> result = new HashMap<>();
 
@@ -68,7 +67,6 @@ public class Setters {
                 String methodName = MethodUtil.name(field.getName(), MethodUtil.SETTER);
                 Method setter = methods.get(methodName);
                 if (MethodUtil.isValidSetter(setter, field)) {
-                    LOGGER.trace("methodName = {}", methodName); // TODO remove
                     result.put(field.getName(), setter);
                 }
             }
