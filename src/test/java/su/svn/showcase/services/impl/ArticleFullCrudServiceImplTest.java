@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 23:23 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImplTest.java
@@ -240,12 +240,6 @@ class ArticleFullCrudServiceImplTest {
 
     @Test
     void update() throws Exception {
-        RecordFullDto recordDto = RecordFullDto.builder()
-                .id(UUID.fromString("00000000-0000-0000-0000-000000000010"))
-                .editDateTime(NOW1)
-                .type(ArticleFullDto.class.getSimpleName())
-                .userLogin(userLoginDto)
-                .build();
         ArticleFullDto articleDto = ArticleFullDto.builder()
                 .id(UUID.fromString("00000000-0000-0000-0000-000000000010"))
                 .dateTime(NOW1)
@@ -255,7 +249,6 @@ class ArticleFullCrudServiceImplTest {
                 .summary("summaryTest10")
                 .record(recordDto)
                 .build();
-        recordDto.setArticle(articleDto);
         userTransaction.begin();
         service.update(articleDto);
         userTransaction.rollback();
