@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.27 18:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDao.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dao;
 
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.exceptions.ErrorCase;
+import su.svn.showcase.interfaces.Typing;
 
 import java.time.LocalDate;
 import java.util.List;

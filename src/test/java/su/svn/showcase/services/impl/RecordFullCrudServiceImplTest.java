@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImplTest.java
@@ -70,6 +70,7 @@ class RecordFullCrudServiceImplTest {
     static UserLoginDao userLoginDao = new UserLoginDaoEjb();
 
     static ArticleConverter articleFullConverter = new ArticleFullConverter();
+    static NewsEntryConverter newsEntryBaseConverter = new NewsEntryBaseConverter();
     static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
     static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
     static NewsLinksConverter newsLinksFullConverter = new NewsLinksFullConverter();
@@ -85,6 +86,7 @@ class RecordFullCrudServiceImplTest {
         put("UserLoginDaoEjb", userLoginDao);
 
         put("ArticleFullConverter", articleFullConverter);
+        put("NewsEntryBaseConverter", newsEntryBaseConverter);
         put("NewsEntryFullConverter", newsEntryFullConverter);
         put("NewsGroupBaseConverter", newsGroupBaseConverter);
         put("NewsLinksFullConverter", newsLinksFullConverter);

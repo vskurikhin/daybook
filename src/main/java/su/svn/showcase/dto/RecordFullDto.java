@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"tags"})
 @ToString(exclude = {"tags"})
-public class RecordFullDto implements RecordDto, Serializable {
+public class RecordFullDto implements RecordDto, Serializable, Typing {
 
     private static final long serialVersionUID = 9241L;
 

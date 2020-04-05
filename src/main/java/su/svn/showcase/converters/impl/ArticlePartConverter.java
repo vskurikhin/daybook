@@ -2,7 +2,7 @@
  * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * ArticleFullConverter.java
+ * ArticlePartConverter.java
  * $Id$
  */
 
@@ -20,9 +20,9 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 @Stateless(name = "ArticleFullConverter")
-public class ArticleFullConverter extends AbstractArticleConverter implements ArticleConverter {
+public class ArticlePartConverter extends AbstractArticleConverter implements ArticleConverter {
 
-    @EJB(beanName = "RecordFullConverter")
+    @EJB(beanName = "RecordBaseConverter")
     private RecordConverter recordConverter;
 
     @EJB(beanName = "LinkBaseConverter")
