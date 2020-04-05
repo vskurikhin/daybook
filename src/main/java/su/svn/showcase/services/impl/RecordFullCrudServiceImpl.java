@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.05 13:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullCrudServiceImpl.java
@@ -54,7 +54,7 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @Override
     @Transactional
     public RecordFullDto readById(@Nonnull UUID id) {
-        return recordFullConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
+        return recordPartConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override

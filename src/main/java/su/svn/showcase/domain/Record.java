@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 17:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -10,6 +10,7 @@ package su.svn.showcase.domain;
 
 import lombok.*;
 import org.wildfly.common.annotation.Nullable;
+import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -163,7 +164,7 @@ import static su.svn.showcase.domain.Record.*;
                 " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
 })
-public class Record implements DBEntity<UUID>, Serializable {
+public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     private static final long serialVersionUID = 235L;
 
@@ -273,9 +274,7 @@ public class Record implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true, mappedBy = "record")
     private Article article;
 
     @Getter

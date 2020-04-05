@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullConverterImpl.java
+ * RecordPartConverter.java
  * $Id$
  */
 
@@ -13,11 +13,14 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
+import su.svn.showcase.interfaces.Typing;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -63,14 +66,19 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
         } else {
             ready.put(dto);
         }
-        if (entity.getArticle() != null) {
-            dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
-        }
-        if (entity.getNewsEntry() != null) {
-            dto.setNewsEntry(newsEntryConverter.convert(entity.getNewsEntry(), ready));
-        }
-        if (entity.getNewsLinks() != null) {
-            dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
+        switch (Objects.requireNonNull(getPosition(entity))) {
+            case ArticleBaseDto:
+            case ArticleFullDto:
+                dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
+                break;
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
+                dto.setNewsEntry(newsEntryConverter.convert(entity.getNewsEntry(), ready));
+                break;
+            case NewsLinksBaseDto:
+            case NewsLinksFullDto:
+                dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
+                break;
         }
         if (entity.getUserLogin() != null) { // TODO only check
             dto.setUserLogin(userLoginConverter.convert(entity.getUserLogin(), ready));
@@ -109,14 +117,19 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
         } else {
             ready.put(entity);
         }
-        if (dto.getArticle() != null) {
-            entity.setArticle(articleConverter.convert((ArticleFullDto) dto.getArticle(), ready));
-        }
-        if (dto.getNewsEntry() != null) {
-            entity.setNewsEntry(newsEntryConverter.convert((NewsEntryFullDto) dto.getNewsEntry(), ready));
-        }
-        if (dto.getNewsLinks() != null) {
-            entity.setNewsLinks(newsLinksConverter.convert((NewsLinksFullDto) dto.getNewsLinks(), ready));
+        switch (Objects.requireNonNull(getPosition(dto))) {
+            case ArticleBaseDto:
+            case ArticleFullDto:
+                entity.setArticle(articleConverter.convert((ArticleFullDto) dto.getArticle(), ready));
+                break;
+            case NewsEntryBaseDto:
+            case NewsEntryFullDto:
+                entity.setNewsEntry(newsEntryConverter.convert((NewsEntryFullDto) dto.getNewsEntry(), ready));
+                break;
+            case NewsLinksBaseDto:
+            case NewsLinksFullDto:
+                entity.setNewsLinks(newsLinksConverter.convert((NewsLinksFullDto) dto.getNewsLinks(), ready));
+                break;
         }
         if (dto.getUserLogin() != null) {
             entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
@@ -128,6 +141,14 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             entity.setTags(set);
         }
         return super.convertBySetter(entity, dto);
+    }
+
+    @Nullable
+    private RecordTypesEnum getPosition(Typing typing) {
+        if (typing.getType() != null) {
+            return RecordTypesEnum.valueOf(typing.getType());
+        }
+        return null;
     }
 
     private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
