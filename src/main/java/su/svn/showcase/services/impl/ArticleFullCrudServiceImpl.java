@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 23:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImpl.java
@@ -107,11 +107,11 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
 
     private void update(Article entity, ArticleFullDto dto) {
         ArticleConverter.Updater.update(entity, dto);
+        // RecordConverter.Updater.update(entity.getRecord(), dto.getRecord());
         recordDao.save(entity.getRecord());
     }
 
     private Article getArticle(UUID id) {
-        System.err.println("id = " + id);
         return articleDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
@@ -128,7 +128,6 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     }
 
     private void validateOrFillRecordArticleId(ArticleFullDto dto) {
-        System.out.println("dto = " + dto);
         Objects.requireNonNull(dto.getRecord());
         validateRecordUserLogin(dto.getRecord());
         if (dto.getId() == null) {

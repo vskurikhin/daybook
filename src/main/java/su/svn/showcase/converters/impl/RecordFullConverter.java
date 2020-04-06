@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverter.java
@@ -139,6 +139,7 @@ public class RecordFullConverter extends AbstractConverter<UUID, Record, RecordF
         if (dto.getUserLogin() != null) {
             entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
         }
+        System.err.println("dto.getTags() = " + dto.getTags()); // TODO remove
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
                     .map(functionTagDtoToEntity(ready))

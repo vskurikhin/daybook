@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 23:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullCrudServiceImplTest.java
@@ -59,31 +59,26 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class ArticleFullCrudServiceImplTest {
 
-    private static final Class<?> tClass = ArticleFullCrudServiceImplTest.class;
-    private static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
-    private static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
+    static final Class<?> tClass = ArticleFullCrudServiceImplTest.class;
+    static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
-    @Inject
-    private BeanManager beanManager;
+    static final ArticleDao articleDao = new ArticleDaoEjb();
+    static final RecordDao recordDao = new RecordDaoEjb();
+    static final LinkDao linkDao = new LinkDaoEjb();
+    static final UserLoginDao userLoginDao = new UserLoginDaoEjb();
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("PgPU", configure(beanManager));
+    static final ArticleConverter articleFullConverter = new ArticleFullConverter();
+    static final ArticleConverter articlePartConverter = new ArticlePartConverter();
+    static final LinkBaseConverter linkBaseConverter = new LinkBaseConverter();
+    static final RecordConverter recordBaseConverter = new RecordBaseConverter();
+    static final RecordConverter recordFullConverter = new RecordFullConverter();
+    static final TagConverter tagBaseConverter = new TagBaseConverter();
+    static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
 
-    static ArticleDao articleDao = new ArticleDaoEjb();
-    static RecordDao recordDao = new RecordDaoEjb();
-    static LinkDao linkDao = new LinkDaoEjb();
-    static UserLoginDao userLoginDao = new UserLoginDaoEjb();
+    static final ArticleFullCrudService articleFullCrudService = new ArticleFullCrudServiceImpl();
 
-    static ArticleConverter articleFullConverter = new ArticleFullConverter();
-    static ArticleConverter articlePartConverter = new ArticlePartConverter();
-    static LinkBaseConverter linkBaseConverter = new LinkBaseConverter();
-    static RecordConverter recordBaseConverter = new RecordBaseConverter();
-    static RecordConverter recordFullConverter = new RecordFullConverter();
-    static TagConverter tagBaseConverter = new TagBaseConverter();
-    static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
-
-    static ArticleFullCrudService articleFullCrudService = new ArticleFullCrudServiceImpl();
-
-    private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
+    private final Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("ArticleDaoEjb", articleDao);
         put("RecordDaoEjb", recordDao);
         put("LinkDaoEjb", linkDao);
@@ -100,7 +95,6 @@ class ArticleFullCrudServiceImplTest {
         put("ArticleFullCrudService", articleFullCrudService);
     }};
 
-
     private Function<InjectionPoint, Object> ejbFactory() {
         return ip -> {
             String name = ip.getAnnotated().getAnnotation(EJB.class).beanName();
@@ -110,8 +104,12 @@ class ArticleFullCrudServiceImplTest {
     }
 
 
+    @Inject
+    BeanManager beanManager;
+
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("PgPU", configure(beanManager));
+
     @WeldSetup
-    private
     WeldInitiator weld = WeldInitiator.from(
             ArticleDaoEjb.class,
             ArticleFullCrudServiceImpl.class,
@@ -138,10 +136,10 @@ class ArticleFullCrudServiceImplTest {
             .build();
 
     @Inject
-    private EntityManager entityManager;
+    EntityManager entityManager;
 
     @Inject
-    private UserTransaction userTransaction;
+    UserTransaction userTransaction;
 
     @EJB(beanName = "ArticleFullCrudService")
     ArticleFullCrudService service;
@@ -196,12 +194,11 @@ class ArticleFullCrudServiceImplTest {
         Assertions.assertNotNull(userTransaction);
     }
 
-    private static final UUID UUID1 = UUID.randomUUID();
-    private static final LocalDateTime NOW1 = LocalDateTime.now();
+    static final UUID UUID1 = UUID.randomUUID();
+    static final LocalDateTime NOW1 = LocalDateTime.now();
 
     @Test
     void create() throws Exception {
-        userTransaction.begin();
         RecordFullDto recordDto = RecordFullDto.builder()
                 .id(UUID1)
                 .createDateTime(NOW1)
@@ -220,6 +217,7 @@ class ArticleFullCrudServiceImplTest {
                 .summary("summaryTest1")
                 .build();
         recordDto.setArticle(newsEntryDto);
+        userTransaction.begin();
         service.create(newsEntryDto);
         userTransaction.rollback();
     }
@@ -227,7 +225,7 @@ class ArticleFullCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        ArticleFullDto test = service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
+        ArticleFullDto test = service.readById(UUID10);
         userTransaction.rollback();
     }
 
@@ -241,7 +239,7 @@ class ArticleFullCrudServiceImplTest {
     @Test
     void update() throws Exception {
         ArticleFullDto articleDto = ArticleFullDto.builder()
-                .id(UUID.fromString("00000000-0000-0000-0000-000000000010"))
+                .id(UUID10)
                 .dateTime(NOW1)
                 .title("titleTest10")
                 .include("includeTest10")

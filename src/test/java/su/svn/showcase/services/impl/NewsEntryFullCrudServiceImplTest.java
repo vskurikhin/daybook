@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImplTest.java
@@ -14,10 +14,10 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.dao.NewsEntryDao;
-import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.NewsEntryDaoEjb;
+import su.svn.showcase.converters.*;
+import su.svn.showcase.converters.impl.*;
+import su.svn.showcase.dao.*;
+import su.svn.showcase.dao.jpa.*;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
@@ -27,7 +27,9 @@ import su.svn.showcase.services.NewsEntryFullCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
+import su.svn.utils.InputStreamUtil;
 
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -36,13 +38,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.transaction.UserTransaction;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.internal.util.collections.Sets.newSet;
 import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
@@ -53,13 +54,59 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
 class NewsEntryFullCrudServiceImplTest {
 
-    @Inject
-    private BeanManager beanManager;
+    static final Class<?> tClass = NewsEntryFullCrudServiceImplTest.class;
+    static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
+    static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("PgPU", configure(beanManager));
+    static final NewsEntryDao newsEntryDao = new NewsEntryDaoEjb();
+    static final RecordDao recordDao = new RecordDaoEjb();
+    static final UserLoginDao userLoginDao = new UserLoginDaoEjb();
+
+    static final NewsEntryConverter newsEntryBaseConverter = new NewsEntryBaseConverter();
+    static final NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
+    static final NewsEntryConverter newsEntryPartConverter = new NewsEntryPartConverter();
+    static final NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
+    static final RecordConverter recordBaseConverter = new RecordBaseConverter();
+    static final RecordConverter recordFullConverter = new RecordFullConverter();
+    static final RecordConverter recordPartConverter = new RecordPartConverter();
+    static final TagConverter tagBaseConverter = new TagBaseConverter();
+    static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
+
+    static final NewsEntryFullCrudService newsEntryFullCrudService = new NewsEntryFullCrudServiceImpl();
+
+    private final Map<String, Object> ejbMap = new HashMap<String, Object>() {{
+        put("NewsEntryDaoEjb", newsEntryDao);
+        put("RecordDaoEjb", recordDao);
+        put("UserLoginDaoEjb", userLoginDao);
+
+        put("NewsEntryBaseConverter", newsEntryBaseConverter);
+        put("NewsEntryFullConverter", newsEntryFullConverter);
+        put("NewsEntryPartConverter", newsEntryPartConverter);
+        put("NewsGroupBaseConverter", newsGroupBaseConverter);
+        put("RecordBaseConverter", recordBaseConverter);
+        put("RecordFullConverter", recordFullConverter);
+        put("RecordPartConverter", recordPartConverter);
+        put("TagBaseConverter", tagBaseConverter);
+        put("UserOnlyLoginConverter", userOnlyLoginConverter);
+
+        put("NewsEntryFullCrudService", newsEntryFullCrudService);
+    }};
+
+    private Function<InjectionPoint, Object> ejbFactory() {
+        return ip -> {
+            String name = ip.getAnnotated().getAnnotation(EJB.class).beanName();
+            System.err.println("beanName: " + name);
+            return ejbMap.get(name);
+        };
+    }
+
+
+    @Inject
+    BeanManager beanManager;
+
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("PgPU", configure(beanManager));
 
     @WeldSetup
-    private
     WeldInitiator weld = WeldInitiator.from(
             NewsEntryDaoEjb.class,
             NewsEntryFullCrudServiceImpl.class,
@@ -69,53 +116,72 @@ class NewsEntryFullCrudServiceImplTest {
             .setEjbFactory(ejbFactory())
             .setPersistenceContextFactory(injectionPoint -> emf.createEntityManager())
             .setPersistenceUnitFactory(injectionPoint -> emf)
+
+            .inject(newsEntryDao)
+            .inject(recordDao)
+            .inject(userLoginDao)
+            .inject(recordBaseConverter)
+            .inject(recordFullConverter)
+            .inject(recordPartConverter)
+            .inject(tagBaseConverter)
+            .inject(userOnlyLoginConverter)
+            .inject(newsEntryFullConverter)
+            .inject(newsEntryPartConverter)
+            .inject(newsEntryFullCrudService)
             .inject(this)
+
             .build();
 
-    private NewsEntryDao mockDao = mock(NewsEntryDao.class);
-    private RecordDao mockRecordDao = mock(RecordDao.class);
-    private UserLoginDao mockUserLoginDao = mock(UserLoginDao.class);
-    private NewsEntryFullCrudService mockService = mock(NewsEntryFullCrudService.class);
-
-    private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put(null,                                     mockDao);
-        put(NewsEntryDao.class.getName(),             mockDao);
-        put(RecordDao.class.getName(),                mockRecordDao);
-        put(NewsEntryFullCrudService.class.getName(), mockService);
-        put(UserLoginDao.class.getName(),             mockUserLoginDao);
-    }};
-
-    private Function<InjectionPoint, Object> ejbFactory() {
-        return ip -> ejbMap.get(ip.getAnnotated().getBaseType().getTypeName());
-    }
+    @Inject
+    EntityManager entityManager;
 
     @Inject
-    private EntityManager entityManager;
+    UserTransaction userTransaction;
 
-    @Inject
-    private UserTransaction userTransaction;
+
+    @EJB(beanName = "NewsEntryFullCrudService")
+    NewsEntryFullCrudService service;
 
     private NewsEntry entity;
     private NewsEntryFullDto dto;
-    private NewsGroupBaseDto newsGroupDto;
+    private NewsGroupFullDto newsGroupDto;
     private Record record;
     private UserLogin userLogin;
     private UserLoginDto userLoginDto;
 
+
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+        InputStream is = tClass.getResourceAsStream(resourceNamePrefix + "_setUp.sql");
+        userTransaction.begin();
+        InputStreamUtil.readAndExecuteLine(is, sql ->
+                entityManager.createNativeQuery(sql).executeUpdate());
+        userTransaction.commit();
+
         entity = cloneNewsEntry1();
         entity.getRecord().setNewsEntry(entity);
         dto = cloneNewsEntryFullDto1();
-        newsGroupDto = cloneNewsGroupBaseDto1();
+        ((RecordFullDto) dto.getRecord()).setTags(newSet(cloneTagFullDto1()));
+        newsGroupDto = cloneNewsGroupFullDto1();
+        dto.setNewsGroup(newsGroupDto);
         record = cloneRecord1();
         userLogin = cloneUserLogin1();
         userLoginDto = cloneUserOnlyLoginBaseDto1();
     }
 
     @AfterEach
-    void tearDown() {
+    void tearDown() throws Exception {
+        try {
+            userTransaction.rollback();
+        } catch (Exception ignored) {}
+
+        InputStream is = tClass.getResourceAsStream(resourceNamePrefix + "_tearDown.sql");
+        userTransaction.begin();
+        InputStreamUtil.readAndExecuteLine(is, sql ->
+                entityManager.createNativeQuery(sql).executeUpdate());
+        userTransaction.commit();
     }
+
 
     @DisplayName("Can inject entity manager and user transaction")
     @Test
@@ -124,22 +190,11 @@ class NewsEntryFullCrudServiceImplTest {
         Assertions.assertNotNull(userTransaction);
     }
 
-    @Test
-    void create(NewsEntryFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
-        when(mockRecordDao.save(any())).thenReturn(record);
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
-        service.create(dto);
-    }
-
-    private static final UUID UUID1 = UUID.randomUUID();
-    private static final LocalDateTime NOW1 = LocalDateTime.now();
+    static UUID UUID1 = UUID.randomUUID();
+    static LocalDateTime NOW1 = LocalDateTime.now();
 
     @Test
-    void create_new_random(NewsEntryFullCrudService service) {
-
+    void create() throws Exception {
         RecordFullDto recordDto = RecordFullDto.builder()
                 .id(UUID1)
                 .createDateTime(NOW1)
@@ -152,75 +207,45 @@ class NewsEntryFullCrudServiceImplTest {
                 .id(UUID1)
                 .record(recordDto)
                 .dateTime(NOW1)
-                .title("titleTest1")
-                .content("contentTest1")
+                .title("titleTest10")
+                .content("contentTest10")
                 .newsGroup(newsGroupDto)
                 .build();
         recordDto.setNewsEntry(newsEntryDto);
-
-        Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
-        when(mockRecordDao.save(any())).thenReturn(record);
-        when(mockUserLoginDao.findById(userLoginDto.getId())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(userLoginDto.getLogin())).thenReturn(Optional.of(userLogin));
-        service.create(newsEntryDto);
+        userTransaction.begin();
+        service.create(dto);
+        userTransaction.rollback();
     }
 
     @Test
-    void readById(NewsEntryFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        Assertions.assertEquals(dto, service.readById(entity.getId()));
+    void readById() throws Exception {
+        userTransaction.begin();
+        NewsEntryFullDto test = service.readById(UUID10);
+        userTransaction.rollback();
     }
 
     @Test
-    void readRange(NewsEntryFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        List<NewsEntryFullDto> testList = service.readRange(0, Integer.MAX_VALUE);
-        Assertions.assertTrue(testList.isEmpty());
+    void readRange() throws Exception {
+        userTransaction.begin();
+        List<NewsEntryFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        userTransaction.rollback();
     }
 
     @Test
-    void update(NewsEntryFullCrudService service) {
-        Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
-        when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
-        service.update(dto);
-    }
-
-    @Test
-    void update2(NewsEntryFullCrudService service) {
-
-        RecordFullDto recordDto = RecordFullDto.builder()
-                .id(UUID1)
-                .editDateTime(NOW1)
-                .type(NewsEntryFullDto.class.getSimpleName())
-                .userLogin(userLoginDto)
-                .build();
+    void update() throws Exception {
         NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
-                .id(UUID1)
+                .id(UUID10)
                 .dateTime(NOW1)
-                .title("titleTest1")
-                .content("contentTest1")
-                .record(recordDto)
-                .newsGroup(newsGroupDto)
+                .title("titleTest10")
+                .content("contentTest10")
                 .build();
-        recordDto.setNewsEntry(newsEntryDto);
-
-        Assertions.assertNotNull(service);
-        when(mockDao.save(any())).thenReturn(entity);
-        when(mockDao.findById(newsEntryDto.getId())).thenReturn(Optional.of(entity));
-        when(mockUserLoginDao.findById(any())).thenReturn(Optional.of(userLogin));
-        when(mockUserLoginDao.findWhereLogin(any())).thenReturn(Optional.of(userLogin));
-        service.update(newsEntryDto);
+        userTransaction.begin();
+        service.create(dto);
+        userTransaction.rollback();
     }
 
     @Test
     void delete(NewsEntryFullCrudService service) {
-        Assertions.assertNotNull(service);
-        service.delete(dto.getId());
+        // TODO
     }
 }
