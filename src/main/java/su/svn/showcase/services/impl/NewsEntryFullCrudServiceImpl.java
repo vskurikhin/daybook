@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullCrudServiceImpl.java
@@ -10,6 +10,7 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.dao.NewsEntryDao;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
@@ -43,25 +44,33 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
+    @EJB(beanName = "NewsEntryFullConverter")
+    private NewsEntryConverter newsEntryFullConverter;
+
+    @EJB(beanName = "NewsEntryPartConverter")
+    private NewsEntryConverter newsEntryPartConverter;
+
     @Override
     @Transactional
     public void create(@Nonnull NewsEntryFullDto dto) {
         validateOrFillRecordNewsEntryId(dto);
-        create(new NewsEntry(getOrGenerateUuidKey(dto)), dto);
+        create(dto, getUserLogin(dto));
+        // create(new NewsEntry(getOrGenerateUuidKey(dto)), dto);
     }
 
     @Override
     @Transactional
     public NewsEntryFullDto readById(@Nonnull UUID id) {
-        return createNewsLinksFullDto(newsEntryDao.findById(id)
-                .orElseThrow(ErrorCase::notFound));
+        return newsEntryPartConverter.convert(newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound));
+        /* return createNewsLinksFullDto(newsEntryDao.findById(id)
+                .orElseThrow(ErrorCase::notFound)); */
     }
 
     @Override
     @Transactional
     public List<NewsEntryFullDto> readRange(int start, int size) {
         return newsEntryDao.range(start, size).stream()
-                .map(this::createNewsLinksFullDto)
+                .map(newsEntryPartConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -90,14 +99,21 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
         return LOGGER;
     }
 
-    private void create(NewsEntry entity, NewsEntryFullDto dto) {
+    private void create(NewsEntryFullDto dto, UserLogin userLogin) {
+        NewsEntry entity = newsEntryFullConverter.convert(dto);
+        Record record = entity.getRecord();
+        record.setUserLogin(userLogin);
+        newsEntryDao.save(entity);
+
+    }
+    /* private void create(NewsEntry entity, NewsEntryFullDto dto) {
         UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
         entity = dto.update(entity, getUserLogin(userLogin));
         Record record = entity.getRecord();
         recordDao.save(record);
-    }
+    } */
 
-    private NewsEntryFullDto createNewsLinksFullDto(NewsEntry entity) {
+    /* private NewsEntryFullDto createNewsLinksFullDto(NewsEntry entity) {
         RecordFullDto recordDto = new RecordFullDto(entity.getRecord());
         if (recordDto.getNewsEntry() instanceof NewsEntryFullDto) {
             return (NewsEntryFullDto) recordDto.getNewsEntry();
@@ -106,16 +122,28 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
         dto.setRecord(recordDto);
 
         return dto;
-    }
+    }*/
 
-    private void update(NewsEntry entity, NewsEntryFullDto dto) {
+    /* private void update(NewsEntry entity, NewsEntryFullDto dto) {
         RecordFullDto recordFullDto = (RecordFullDto) dto.getRecord();
         entity = dto.update(entity, getUserLogin(recordFullDto.getUserLogin()));
         newsEntryDao.save(entity);
+    }*/
+
+    private void update(NewsEntry entity, NewsEntryFullDto dto) {
+        NewsEntryConverter.Updater.update(entity, dto);
+        // RecordConverter.Updater.update(entity.getRecord(), dto.getRecord());
+        recordDao.save(entity.getRecord());
     }
+
 
     private NewsEntry getNewsEntry(UUID id) {
         return newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound);
+    }
+
+    private UserLogin getUserLogin(NewsEntryFullDto dto) {
+        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
+        return getUserLogin(userLogin);
     }
 
     private UserLogin getUserLogin(UserLoginDto userLogin) {

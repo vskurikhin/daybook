@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Link.java
@@ -90,8 +90,7 @@ public class Link implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @Nullable
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "link")
     private Article article;
 
     @Getter

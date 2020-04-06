@@ -2,7 +2,7 @@
  * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryFullConverter.java
+ * NewsEntryPartConverter.java
  * $Id$
  */
 
@@ -19,10 +19,10 @@ import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-@Stateless(name = "NewsEntryFullConverter")
-public class NewsEntryFullConverter extends NewsEntryAbstractConverter implements NewsEntryConverter {
+@Stateless(name = "NewsEntryPartConverter")
+public class NewsEntryPartConverter extends NewsEntryAbstractConverter implements NewsEntryConverter {
 
-    @EJB(beanName = "RecordFullConverter")
+    @EJB(beanName = "RecordPartConverter")
     private RecordConverter recordConverter;
 
     @EJB(beanName = "NewsGroupBaseConverter")
