@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditModel.java
@@ -22,9 +22,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import static su.svn.shared.Constants.DEV_LOGIN;
-import static su.svn.shared.Constants.RELEASE;
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder(builderClassName = "Builder")
@@ -40,7 +37,7 @@ class NewsEntryEditModel extends AbstractModel {
     private String group;
     private String login;
 
-    private final NewsEntryFullCrudService newsEntryCrudService;
+    private final NewsEntryCrudService newsEntryCrudService;
 
     private final RecordTagsStorageService recordTagsStorageService;
 

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupBaseCrudServiceImpl.java
+ * NewsGroupCrudServiceImpl.java
  * $Id$
  */
 
@@ -10,12 +10,17 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.dao.NewsGroupDao;
+import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.dto.NewsGroupBaseDto;
+import su.svn.showcase.domain.Record;
+import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.exceptions.NotFound;
-import su.svn.showcase.services.NewsGroupBaseCrudService;
+import su.svn.showcase.services.NewsGroupCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
@@ -27,47 +32,48 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
-public class NewsGroupBaseCrudServiceImpl extends AbstractCrudService implements NewsGroupBaseCrudService {
+public class NewsGroupCrudServiceImpl extends AbstractCrudService implements NewsGroupCrudService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupBaseCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsGroupCrudServiceImpl.class);
 
     @EJB(beanName = "NewsGroupDaoEjb")
     private NewsGroupDao newsGroupDao;
 
+    @EJB(beanName = "NewsGroupBaseConverter")
+    private NewsGroupConverter newsGroupConverter;
+
     @Override
     @Transactional
-    public void create(@Nonnull NewsGroupBaseDto dto) {
+    public void create(@Nonnull NewsGroupFullDto dto) {
         checkAndSetId(dto);
-        saveUpdatedEntity(new NewsGroup(dto.getId()), dto);
+        save(dto);
     }
 
     @Override
     @Transactional
-    public NewsGroupBaseDto readById(@Nonnull UUID id) {
-        return new NewsGroupBaseDto(newsGroupDao.findById(id)
-                .orElseThrow(NotFound::is));
+    public NewsGroupFullDto readById(@Nonnull UUID id) {
+        return newsGroupConverter.convert(newsGroupDao.findById(id).orElseThrow(NotFound::is));
     }
 
     @Override
     @Transactional
-    public NewsGroupBaseDto readByGroup(@Nonnull String group) {
-        return new NewsGroupBaseDto(newsGroupDao.findWhereGroup(group)
-                .orElseThrow(NotFound::is));
+    public NewsGroupFullDto readByGroup(@Nonnull String group) {
+        return newsGroupConverter.convert(newsGroupDao.findWhereGroup(group).orElseThrow(NotFound::is));
     }
 
     @Override
     @Transactional
-    public List<NewsGroupBaseDto> readRange(int start, int size) {
+    public List<NewsGroupFullDto> readRange(int start, int size) {
         return newsGroupDao.rangeOrderByGroupAsc(start, size).stream()
-                .map(NewsGroupBaseDto::new)
+                .map(newsGroupConverter::convert)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void update(@Nonnull NewsGroupBaseDto dto) {
+    public void update(@Nonnull NewsGroupFullDto dto) {
         validateId(dto);
-        saveUpdatedEntity(getNewsGroup(dto.getId()), dto);
+        save(dto);
     }
 
     @Override
@@ -88,13 +94,10 @@ public class NewsGroupBaseCrudServiceImpl extends AbstractCrudService implements
         return LOGGER;
     }
 
-    private void saveUpdatedEntity(NewsGroup entity, NewsGroupBaseDto dto) {
-        entity = dto.update(entity);
-        newsGroupDao.save(entity);
-    }
 
-    private NewsGroup getNewsGroup(UUID id) {
-        return newsGroupDao.findById(id).orElseThrow(ErrorCase::notFound);
+    private void save(NewsGroupFullDto dto) {
+        NewsGroup entity = newsGroupConverter.convert(dto);
+        newsGroupDao.save(entity);
     }
 }
 //EOF

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullCrudServiceImpl.java
+ * RecordCrudServiceImpl.java
  * $Id$
  */
 
@@ -17,7 +17,7 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.RecordFullCrudService;
+import su.svn.showcase.services.RecordCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
@@ -28,9 +28,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Stateless(name = "RecordFullCrudService")
-public class RecordFullCrudServiceImpl extends AbstractCrudService implements RecordFullCrudService {
+public class RecordCrudServiceImpl extends AbstractCrudService implements RecordCrudService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecordCrudServiceImpl.class);
 
     @EJB(beanName = "RecordDaoEjb")
     private RecordDao recordDao;

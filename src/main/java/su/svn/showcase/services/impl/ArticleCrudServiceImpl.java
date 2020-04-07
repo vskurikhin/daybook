@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * ArticleFullCrudServiceImpl.java
+ * ArticleCrudServiceImpl.java
  * $Id$
  */
 
@@ -18,7 +18,7 @@ import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.ArticleFullCrudService;
+import su.svn.showcase.services.ArticleCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
@@ -30,9 +30,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
-public class ArticleFullCrudServiceImpl extends AbstractCrudService implements ArticleFullCrudService {
+public class ArticleCrudServiceImpl extends AbstractCrudService implements ArticleCrudService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleFullCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCrudServiceImpl.class);
 
     @EJB(beanName = "ArticleDaoEjb")
     private ArticleDao articleDao;

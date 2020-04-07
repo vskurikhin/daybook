@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditView.java
@@ -17,16 +17,13 @@ import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.services.*;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.UUID;
 
 import static su.svn.shared.Constants.DEV_LOGIN;
@@ -48,7 +45,7 @@ public class NewsEntryEditView extends AbstractView {
     private String group = "Default";
 
     @EJB
-    private NewsEntryFullCrudService newsEntryService;
+    private NewsEntryCrudService newsEntryService;
 
     @EJB
     private RecordTagsStorageService recordTagsStorageService;

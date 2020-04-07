@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateView.java
@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.services.ArticleFullCrudService;
+import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
 
@@ -44,7 +44,7 @@ public class ArticleCreateView extends AbstractView {
     private String tags;
 
     @EJB
-    private ArticleFullCrudService articleService;
+    private ArticleCrudService articleService;
 
     @EJB
     private LinkBaseCrudService linkBaseCrudService;

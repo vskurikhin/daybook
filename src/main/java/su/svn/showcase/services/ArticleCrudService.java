@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * ArticleFullCrudService.java
+ * ArticleCrudService.java
  * $Id$
  */
 
@@ -12,5 +12,5 @@ import su.svn.showcase.dto.ArticleFullDto;
 
 import java.util.UUID;
 
-public interface ArticleFullCrudService extends CrudService<UUID, ArticleFullDto> {
+public interface ArticleCrudService extends CrudService<UUID, ArticleFullDto> {
 }

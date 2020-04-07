@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -67,13 +67,13 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     UserRoleFullCrudService userRoleFullCrudService;
 
     @Inject
-    NewsEntryFullCrudService newsEntryFullCrudService;
+    NewsEntryCrudService newsEntryCrudService;
 
     @Inject
-    RecordFullCrudService recordFullCrudService;
+    RecordCrudService recordCrudService;
 
     @Inject
-    ArticleFullCrudService articleFullCrudService;
+    ArticleCrudService articleCrudService;
 
     @Inject
     UserTransaction userTransaction;
@@ -254,7 +254,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     public void test_recordFullCrudService_create() throws Exception {
         RecordFullDto dto = cloneRecordFullDto(2);
         dto.setTags(Collections.emptySet());
-        recordFullCrudService.create(dto);
+        recordCrudService.create(dto);
     }
 
     @Test
@@ -277,7 +277,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @InSequence(2502)
     public void test_newsEntryFullCrudService_create() throws Exception {
         NewsEntryFullDto dto = cloneNewsEntryFullDto(3);
-        newsEntryFullCrudService.create(dto);
+        newsEntryCrudService.create(dto);
     }
 
 
@@ -303,7 +303,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
         ArticleFullDto dto = cloneArticleFullDto(4);
         System.out.println("dto = " + dto);
         System.out.println("dto.getRecord() = " + dto.getRecord());
-        articleFullCrudService.create(dto);
+        articleCrudService.create(dto);
     }
 
 

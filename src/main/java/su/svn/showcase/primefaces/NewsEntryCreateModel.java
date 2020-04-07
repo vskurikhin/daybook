@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateModel.java
@@ -22,9 +22,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-import static su.svn.shared.Constants.DEV_LOGIN;
-import static su.svn.shared.Constants.RELEASE;
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder(builderClassName = "Builder")
@@ -39,9 +36,9 @@ class NewsEntryCreateModel extends AbstractModel {
     private String group;
     private String login;
 
-    private final NewsEntryFullCrudService newsEntryCrudService;
+    private final NewsEntryCrudService newsEntryCrudService;
 
-    private final NewsGroupBaseCrudService newsGroupCrudService;
+    private final NewsGroupCrudService newsGroupCrudService;
 
     private final RecordTagsStorageService recordTagsStorageService;
 
@@ -67,14 +64,14 @@ class NewsEntryCreateModel extends AbstractModel {
                 .type(NewsEntryFullDto.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        NewsGroupBaseDto newsGroupBaseDto = newsGroupCrudService.readByGroup(group);
+        NewsGroupFullDto newsGroupFullDto = newsGroupCrudService.readByGroup(group);
         NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
                 .id(uuid)
                 .record(recordDto)
                 .dateTime(currentDateTime)
                 .title(title)
                 .content(content)
-                .newsGroup(newsGroupBaseDto)
+                .newsGroup(newsGroupFullDto)
                 .build();
         LOGGER.info("newsEntryDto = {}", newsEntryDto); // TODO remove
         recordDto.setNewsEntry(newsEntryDto);
