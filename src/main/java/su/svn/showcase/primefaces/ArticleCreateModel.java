@@ -69,12 +69,12 @@ class ArticleCreateModel extends AbstractModel {
                 .type(ArticleFullDto.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        LinkBaseDto linkBaseDto = LinkBaseDto.builder()
+        LinkFullDto linkFullDto = LinkFullDto.builder()
                 .id(uuid)
                 .dateTime(currentDateTime)
                 .link(this.link)
                 .build();
-        linkBaseCrudService.create(linkBaseDto);
+        // linkBaseCrudService.create(linkBaseDto);
         ArticleFullDto articleDto = ArticleFullDto.builder()
                 .id(uuid)
                 .record(recordDto)
@@ -83,7 +83,7 @@ class ArticleCreateModel extends AbstractModel {
                 .include(this.include)
                 .anchor(this.anchor)
                 .summary(this.summary)
-                .link(linkBaseDto)
+                .link(linkFullDto)
                 .build();
         LOGGER.info("articleDto = {}", articleDto); // TODO remove
         recordDto.setArticle(articleDto);

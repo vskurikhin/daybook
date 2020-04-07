@@ -54,7 +54,7 @@ public class RecordFullCrudServiceImpl extends AbstractCrudService implements Re
     @Override
     @Transactional
     public RecordFullDto readById(@Nonnull UUID id) {
-        return recordPartConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
+        return recordFullConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override

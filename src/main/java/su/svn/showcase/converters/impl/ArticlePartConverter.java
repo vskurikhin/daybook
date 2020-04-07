@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-@Stateless(name = "ArticleFullConverter")
+@Stateless(name = "ArticlePartConverter")
 public class ArticlePartConverter extends ArticleAbstractConverter implements ArticleConverter {
 
     @EJB(beanName = "RecordBaseConverter")
