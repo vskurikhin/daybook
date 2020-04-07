@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullCrudServiceImplTest.java
+ * RecordCrudServiceImplTest.java
  * $Id$
  */
 
@@ -25,7 +25,7 @@ import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.RecordFullCrudService;
+import su.svn.showcase.services.RecordCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -55,9 +55,9 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @DisplayName("A RecordFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {RecordDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class RecordFullCrudServiceImplTest {
+class RecordCrudServiceImplTest {
 
-    private static final Class<?> tClass = RecordFullCrudServiceImplTest.class;
+    private static final Class<?> tClass = RecordCrudServiceImplTest.class;
     private static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
     private static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
@@ -69,7 +69,9 @@ class RecordFullCrudServiceImplTest {
     static RecordDao recordDao = new RecordDaoEjb();
     static UserLoginDao userLoginDao = new UserLoginDaoEjb();
 
+    static ArticleConverter articleBaseConverter = new ArticleBaseConverter();
     static ArticleConverter articleFullConverter = new ArticleFullConverter();
+    static LinkConverter linkBaseConverter = new LinkBaseConverter();
     static NewsEntryConverter newsEntryBaseConverter = new NewsEntryBaseConverter();
     static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
     static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
@@ -79,13 +81,15 @@ class RecordFullCrudServiceImplTest {
     static TagConverter tagBaseConverter = new TagBaseConverter();
     static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
 
-    static RecordFullCrudService recordFullCrudService = new RecordFullCrudServiceImpl();
+    static RecordCrudService recordCrudService = new RecordCrudServiceImpl();
 
     private Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("RecordDaoEjb", recordDao);
         put("UserLoginDaoEjb", userLoginDao);
 
+        put("ArticleBaseConverter", articleBaseConverter);
         put("ArticleFullConverter", articleFullConverter);
+        put("LinkBaseConverter", linkBaseConverter);
         put("NewsEntryBaseConverter", newsEntryBaseConverter);
         put("NewsEntryFullConverter", newsEntryFullConverter);
         put("NewsGroupBaseConverter", newsGroupBaseConverter);
@@ -95,7 +99,7 @@ class RecordFullCrudServiceImplTest {
         put("TagBaseConverter", tagBaseConverter);
         put("UserOnlyLoginConverter", userOnlyLoginConverter);
 
-        put("RecordFullCrudService", recordFullCrudService);
+        put("RecordCrudService", recordCrudService);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -110,7 +114,7 @@ class RecordFullCrudServiceImplTest {
     private
     WeldInitiator weld = WeldInitiator.from(
             RecordDaoEjb.class,
-            RecordFullCrudServiceImpl.class,
+            RecordCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -119,10 +123,11 @@ class RecordFullCrudServiceImplTest {
             .setPersistenceUnitFactory(injectionPoint -> emf)
             .inject(recordDao)
             .inject(userLoginDao)
+            .inject(articleFullConverter)
             .inject(recordFullConverter)
             .inject(recordPartConverter)
             .inject(newsEntryFullConverter)
-            .inject(recordFullCrudService)
+            .inject(recordCrudService)
             .inject(this)
             .build();
 
@@ -132,8 +137,8 @@ class RecordFullCrudServiceImplTest {
     @Inject
     private UserTransaction userTransaction;
 
-    @EJB(beanName = "RecordFullCrudService")
-    RecordFullCrudService service;
+    @EJB(beanName = "RecordCrudService")
+    RecordCrudService service;
 
     private Record entity;
     private RecordFullDto dto;
@@ -189,27 +194,27 @@ class RecordFullCrudServiceImplTest {
     }
 
     @Test
-    void readRange(RecordFullCrudService service) throws Exception {
+    void readRange(RecordCrudService service) throws Exception {
         userTransaction.begin();
         List<RecordFullDto> test = service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
     }
 
     @Test
-    void update(RecordFullCrudService service) throws SystemException, NotSupportedException {
+    void update(RecordCrudService service) throws SystemException, NotSupportedException {
         // service.update(dto); // TODO update via children entity service
     }
 
     @Test
     @Disabled // TODO
-    void delete(RecordFullCrudService service) throws Exception {
+    void delete(RecordCrudService service) throws Exception {
         userTransaction.begin();
         service.delete(UUID.fromString("00000000-0000-0000-0000-000000000010"));
         userTransaction.rollback();
     }
 
     @Test
-    void count(RecordFullCrudService service) throws Exception {
+    void count(RecordCrudService service) throws Exception {
         Assertions.assertNotNull(service);
         userTransaction.begin();
         int test = service.count();
@@ -218,7 +223,7 @@ class RecordFullCrudServiceImplTest {
     }
 
     @Test
-    void countByDay(RecordFullCrudService service) throws Exception {
+    void countByDay(RecordCrudService service) throws Exception {
         Assertions.assertNotNull(service);
         userTransaction.begin();
         int test = service.countByDay(LocalDate.now());

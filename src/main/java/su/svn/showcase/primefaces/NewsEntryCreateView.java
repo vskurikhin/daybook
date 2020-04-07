@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 19:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateView.java
@@ -19,10 +19,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 
 import static su.svn.shared.Constants.DEV_LOGIN;
 import static su.svn.shared.Constants.RELEASE;
@@ -42,10 +40,10 @@ public class NewsEntryCreateView extends AbstractView {
     private String group = "Default";
 
     @EJB
-    private NewsEntryFullCrudService newsEntryService;
+    private NewsEntryCrudService newsEntryService;
 
     @EJB
-    private NewsGroupBaseCrudService newsGroupService;
+    private NewsGroupCrudService newsGroupService;
 
     @EJB
     private RecordTagsStorageService recordTagsStorageService;

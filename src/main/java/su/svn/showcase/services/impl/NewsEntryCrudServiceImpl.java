@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryFullCrudServiceImpl.java
+ * NewsEntryCrudServiceImpl.java
  * $Id$
  */
 
@@ -19,7 +19,7 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.NewsEntryFullCrudService;
+import su.svn.showcase.services.NewsEntryCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
@@ -31,9 +31,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
-public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements NewsEntryFullCrudService {
+public class NewsEntryCrudServiceImpl extends AbstractCrudService implements NewsEntryCrudService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryCrudServiceImpl.class);
 
     @EJB(beanName = "NewsEntryDaoEjb")
     private NewsEntryDao newsEntryDao;
@@ -55,15 +55,12 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
     public void create(@Nonnull NewsEntryFullDto dto) {
         validateOrFillRecordNewsEntryId(dto);
         create(dto, getUserLogin(dto));
-        // create(new NewsEntry(getOrGenerateUuidKey(dto)), dto);
     }
 
     @Override
     @Transactional
     public NewsEntryFullDto readById(@Nonnull UUID id) {
         return newsEntryPartConverter.convert(newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound));
-        /* return createNewsLinksFullDto(newsEntryDao.findById(id)
-                .orElseThrow(ErrorCase::notFound)); */
     }
 
     @Override
@@ -104,35 +101,10 @@ public class NewsEntryFullCrudServiceImpl extends AbstractCrudService implements
         Record record = entity.getRecord();
         record.setUserLogin(userLogin);
         newsEntryDao.save(entity);
-
     }
-    /* private void create(NewsEntry entity, NewsEntryFullDto dto) {
-        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
-        entity = dto.update(entity, getUserLogin(userLogin));
-        Record record = entity.getRecord();
-        recordDao.save(record);
-    } */
-
-    /* private NewsEntryFullDto createNewsLinksFullDto(NewsEntry entity) {
-        RecordFullDto recordDto = new RecordFullDto(entity.getRecord());
-        if (recordDto.getNewsEntry() instanceof NewsEntryFullDto) {
-            return (NewsEntryFullDto) recordDto.getNewsEntry();
-        }
-        NewsEntryFullDto dto = new NewsEntryFullDto(entity);
-        dto.setRecord(recordDto);
-
-        return dto;
-    }*/
-
-    /* private void update(NewsEntry entity, NewsEntryFullDto dto) {
-        RecordFullDto recordFullDto = (RecordFullDto) dto.getRecord();
-        entity = dto.update(entity, getUserLogin(recordFullDto.getUserLogin()));
-        newsEntryDao.save(entity);
-    }*/
 
     private void update(NewsEntry entity, NewsEntryFullDto dto) {
         NewsEntryConverter.Updater.update(entity, dto);
-        // RecordConverter.Updater.update(entity.getRecord(), dto.getRecord());
         recordDao.save(entity.getRecord());
     }
 

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryFullCrudServiceImplTest.java
+ * NewsEntryCrudServiceImplTest.java
  * $Id$
  */
 
@@ -23,7 +23,7 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.NewsEntryFullCrudService;
+import su.svn.showcase.services.NewsEntryCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -52,9 +52,9 @@ import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer
 @DisplayName("A NewsEntryFullCrudServiceImplTest unit test cases")
 @AddPackages(value = {NewsEntryDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class NewsEntryFullCrudServiceImplTest {
+class NewsEntryCrudServiceImplTest {
 
-    static final Class<?> tClass = NewsEntryFullCrudServiceImplTest.class;
+    static final Class<?> tClass = NewsEntryCrudServiceImplTest.class;
     static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
     static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
@@ -72,7 +72,7 @@ class NewsEntryFullCrudServiceImplTest {
     static final TagConverter tagBaseConverter = new TagBaseConverter();
     static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
 
-    static final NewsEntryFullCrudService newsEntryFullCrudService = new NewsEntryFullCrudServiceImpl();
+    static final NewsEntryCrudService NEWS_ENTRY_CRUD_SERVICE = new NewsEntryCrudServiceImpl();
 
     private final Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("NewsEntryDaoEjb", newsEntryDao);
@@ -89,7 +89,7 @@ class NewsEntryFullCrudServiceImplTest {
         put("TagBaseConverter", tagBaseConverter);
         put("UserOnlyLoginConverter", userOnlyLoginConverter);
 
-        put("NewsEntryFullCrudService", newsEntryFullCrudService);
+        put("NewsEntryCrudService", NEWS_ENTRY_CRUD_SERVICE);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -109,7 +109,7 @@ class NewsEntryFullCrudServiceImplTest {
     @WeldSetup
     WeldInitiator weld = WeldInitiator.from(
             NewsEntryDaoEjb.class,
-            NewsEntryFullCrudServiceImpl.class,
+            NewsEntryCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
@@ -127,7 +127,7 @@ class NewsEntryFullCrudServiceImplTest {
             .inject(userOnlyLoginConverter)
             .inject(newsEntryFullConverter)
             .inject(newsEntryPartConverter)
-            .inject(newsEntryFullCrudService)
+            .inject(NEWS_ENTRY_CRUD_SERVICE)
             .inject(this)
 
             .build();
@@ -139,8 +139,8 @@ class NewsEntryFullCrudServiceImplTest {
     UserTransaction userTransaction;
 
 
-    @EJB(beanName = "NewsEntryFullCrudService")
-    NewsEntryFullCrudService service;
+    @EJB(beanName = "NewsEntryCrudService")
+    NewsEntryCrudService service;
 
     private NewsEntry entity;
     private NewsEntryFullDto dto;
@@ -245,7 +245,7 @@ class NewsEntryFullCrudServiceImplTest {
     }
 
     @Test
-    void delete(NewsEntryFullCrudService service) {
+    void delete(NewsEntryCrudService service) {
         // TODO
     }
 }

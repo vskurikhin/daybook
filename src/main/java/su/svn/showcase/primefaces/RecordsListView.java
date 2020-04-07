@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.26 16:30 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordsListView.java
@@ -10,7 +10,7 @@ package su.svn.showcase.primefaces;
 
 import org.primefaces.model.LazyDataModel;
 import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.services.RecordFullCrudService;
+import su.svn.showcase.services.RecordCrudService;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -21,13 +21,13 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class RecordsListView {
     @EJB
-    private RecordFullCrudService recordFullCrudService;
+    private RecordCrudService recordCrudService;
 
     private RecordsListModel recordsListModel;
 
     @PostConstruct
     private void init() {
-        recordsListModel = new RecordsListModel(recordFullCrudService);
+        recordsListModel = new RecordsListModel(recordCrudService);
     }
 
     public LazyDataModel<RecordFullDto> getModel() {
