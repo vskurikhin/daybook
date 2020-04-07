@@ -85,7 +85,7 @@ public class RecordFullConverter extends AbstractConverter<UUID, Record, RecordF
                 dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
                 break;
         }
-        if (entity.getUserLogin() != null) { // TODO only check
+        if (entity.getUserLogin() != null) {
             dto.setUserLogin(userLoginConverter.convert(entity.getUserLogin(), ready));
         }
         if (entity.getTags() != null) {
@@ -136,10 +136,11 @@ public class RecordFullConverter extends AbstractConverter<UUID, Record, RecordF
                 entity.setNewsLinks(newsLinksConverter.convert((NewsLinksFullDto) dto.getNewsLinks(), ready));
                 break;
         }
-        if (dto.getUserLogin() != null) {
-            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
+        if (dto.getUserLogin() != null) { // TODO only check
+            UserOnlyLoginBaseDto userLogin = ((UserOnlyLoginBaseDto) dto.getUserLogin());
+            System.err.println("userLogin = " + userLogin);
+            // entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
         }
-        System.err.println("dto.getTags() = " + dto.getTags()); // TODO remove
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
                     .map(functionTagDtoToEntity(ready))

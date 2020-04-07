@@ -62,7 +62,7 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
     @Override
     @Transactional
     public ArticleFullDto readById(@Nonnull UUID id) {
-        return articlePartConverter.convert(articleDao.findById(id).orElseThrow(ErrorCase::notFound));
+        return articleFullConverter.convert(articleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ArticleFullCrudServiceImpl extends AbstractCrudService implements A
         Article entity = articleFullConverter.convert(dto);
         Record record = entity.getRecord();
         record.setUserLogin(userLogin);
-        articleDao.save(entity);
+        recordDao.save(record);
     }
 
     private void update(Article entity, ArticleFullDto dto) {

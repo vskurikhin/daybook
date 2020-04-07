@@ -71,6 +71,7 @@ class ArticleFullCrudServiceImplTest {
     static final ArticleConverter articleFullConverter = new ArticleFullConverter();
     static final ArticleConverter articlePartConverter = new ArticlePartConverter();
     static final LinkBaseConverter linkBaseConverter = new LinkBaseConverter();
+    static final NewsLinksFullConverter newsLinksFullConverter = new NewsLinksFullConverter();
     static final RecordConverter recordBaseConverter = new RecordBaseConverter();
     static final RecordConverter recordFullConverter = new RecordFullConverter();
     static final TagConverter tagBaseConverter = new TagBaseConverter();
@@ -87,6 +88,7 @@ class ArticleFullCrudServiceImplTest {
         put("ArticleFullConverter", articleFullConverter);
         put("ArticlePartConverter", articlePartConverter);
         put("LinkBaseConverter", linkBaseConverter);
+        put("NewsLinksFullConverter", newsLinksFullConverter);
         put("RecordBaseConverter", recordBaseConverter);
         put("RecordFullConverter", recordFullConverter);
         put("TagBaseConverter", tagBaseConverter);
@@ -124,6 +126,7 @@ class ArticleFullCrudServiceImplTest {
             .inject(recordDao)
             .inject(linkDao)
             .inject(userLoginDao)
+            .inject(newsLinksFullConverter)
             .inject(recordBaseConverter)
             .inject(recordFullConverter)
             .inject(tagBaseConverter)
