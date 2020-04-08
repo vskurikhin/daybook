@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullCrudUtxServiceImpl.java
+ * RecordCrudUtxServiceImpl.java
  * $Id$
  */
 
@@ -11,12 +11,11 @@ package su.svn.showcase.services.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.RecordConverter;
-import su.svn.showcase.converters.impl.RecordPartConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.RecordFullCrudUtxService;
+import su.svn.showcase.services.RecordCrudUtxService;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Resource;
@@ -36,9 +35,9 @@ import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-public class RecordFullCrudUtxServiceImpl extends AbstractUserTransactionService implements RecordFullCrudUtxService {
+public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService implements RecordCrudUtxService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullCrudUtxServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecordCrudUtxServiceImpl.class);
 
     @PersistenceUnit(unitName = PERSISTENCE_UNIT_NAME)
     private EntityManagerFactory emf;

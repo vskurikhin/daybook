@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupCrudServiceImpl.java
@@ -12,13 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.NewsEntryFullDto;
 import su.svn.showcase.dto.NewsGroupFullDto;
-import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.exceptions.NotFound;
 import su.svn.showcase.services.NewsGroupCrudService;
 

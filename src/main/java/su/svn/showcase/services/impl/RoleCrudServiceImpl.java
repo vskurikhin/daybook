@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RoleBaseCrudServiceImpl.java
+ * RoleCrudServiceImpl.java
  * $Id$
  */
 
@@ -10,11 +10,12 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.RoleConverter;
 import su.svn.showcase.dao.RoleDao;
 import su.svn.showcase.domain.Role;
-import su.svn.showcase.dto.RoleBaseDto;
+import su.svn.showcase.dto.RoleFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
-import su.svn.showcase.services.RoleBaseCrudService;
+import su.svn.showcase.services.RoleCrudService;
 
 import javax.annotation.Nonnull;
 import javax.ejb.EJB;
@@ -25,38 +26,41 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless
-public class RoleBaseCrudServiceImpl extends AbstractCrudService implements RoleBaseCrudService {
+public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrudService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RoleBaseCrudServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoleCrudServiceImpl.class);
 
     @EJB(beanName = "RoleDaoEjb")
     private RoleDao roleDao;
 
+    @EJB(beanName = "RoleBaseConverter")
+    private RoleConverter roleConverter;
+
     @Override
     @Transactional
-    public void create(@Nonnull RoleBaseDto dto) {
-        saveUpdatedEntity(new Role(getOrGenerateUuidKey(dto)), dto);
+    public void create(@Nonnull RoleFullDto dto) {
+        save(dto);
     }
 
     @Override
     @Transactional
-    public RoleBaseDto readById(@Nonnull UUID id) {
-        return new RoleBaseDto(roleDao.findById(id).orElseThrow(ErrorCase::notFound));
+    public RoleFullDto readById(@Nonnull UUID id) {
+        return roleConverter.convert(roleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<RoleBaseDto> readRange(int start, int size) {
+    public List<RoleFullDto> readRange(int start, int size) {
         return roleDao.rangeOrderByRoleAsc(start, size).stream()
-                .map(RoleBaseDto::new)
+                .map(roleConverter::convert)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void update(@Nonnull RoleBaseDto dto) {
+    public void update(@Nonnull RoleFullDto dto) {
         validateId(dto);
-        saveUpdatedEntity(getNewsGroup(dto.getId()), dto);
+        save(dto);
     }
 
     @Override
@@ -76,13 +80,10 @@ public class RoleBaseCrudServiceImpl extends AbstractCrudService implements Role
         return LOGGER;
     }
 
-    private void saveUpdatedEntity(Role entity, RoleBaseDto dto) {
-        entity = dto.update(entity);
-        roleDao.save(entity);
-    }
 
-    private Role getNewsGroup(UUID id) {
-        return roleDao.findById(id).orElseThrow(ErrorCase::notFound);
+    private void save(RoleFullDto dto) {
+        Role entity = roleConverter.convert(dto);
+        roleDao.save(entity);
     }
 }
 //EOF
