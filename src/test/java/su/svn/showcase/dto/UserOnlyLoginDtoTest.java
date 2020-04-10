@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.14 13:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserOnlyLoginBaseDtoTest.java
+ * UserOnlyLoginDtoTest.java
  * $Id$
  */
 
@@ -24,15 +24,15 @@ import static su.svn.utils.TestData.NEWS_GROUP_UUID0;
 import static su.svn.utils.TestData.USER_LOGIN_UUID0;
 
 @DisplayName("Class UserOnlyLoginBaseDto")
-class UserOnlyLoginBaseDtoTest {
+class UserOnlyLoginDtoTest {
     private final static LocalDateTime NOW = LocalDateTime.now();
 
-    private UserOnlyLoginBaseDto userOnlyLoginBaseDto;
+    private UserOnlyLoginDto userOnlyLoginDto;
 
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
-        new UserOnlyLoginBaseDto();
+        new UserOnlyLoginDto();
     }
 
     @Nested
@@ -40,28 +40,28 @@ class UserOnlyLoginBaseDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            userOnlyLoginBaseDto = new UserOnlyLoginBaseDto();
+            userOnlyLoginDto = new UserOnlyLoginDto();
         }
 
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("id", null);
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("login", null);
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("id", null);
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("login", null);
         }
 
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            userOnlyLoginBaseDto.setLogin("testLogin");
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
-            assertEquals("testLogin", userOnlyLoginBaseDto.getLogin());
+            userOnlyLoginDto.setLogin("testLogin");
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertEquals("testLogin", userOnlyLoginDto.getLogin());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(2, userOnlyLoginBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(2, userOnlyLoginDto).hasNext());
         }
     }
 
@@ -70,47 +70,47 @@ class UserOnlyLoginBaseDtoTest {
     class WhenNewAllArgsConstructor {
         @BeforeEach
         void createNew() {
-            userOnlyLoginBaseDto = new UserOnlyLoginBaseDto(ZERO, "testLogin");
+            userOnlyLoginDto = new UserOnlyLoginDto(ZERO, "testLogin");
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userOnlyLoginBaseDto = new UserOnlyLoginBaseDto(USER_LOGIN_UUID0, "testLogin");
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
+            userOnlyLoginDto = new UserOnlyLoginDto(USER_LOGIN_UUID0, "testLogin");
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("login", "testLogin");
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            userOnlyLoginBaseDto = UserOnlyLoginBaseDto.builder()
+            userOnlyLoginDto = UserOnlyLoginDto.builder()
                     .id(ZERO)
                     .login("testLogin")
                     .build();
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("login", "testLogin");
         }
 
         @Test
         @DisplayName("initialized values")
         void defaults() {
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userOnlyLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userOnlyLoginDto).hasFieldOrPropertyWithValue("login", "testLogin");
         }
 
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new UserOnlyLoginBaseDto(), userOnlyLoginBaseDto);
-            UserOnlyLoginBaseDto expected = new UserOnlyLoginBaseDto(NEWS_GROUP_UUID0, "testLogin");
-            assertEquals(expected.hashCode(), userOnlyLoginBaseDto.hashCode());
-            assertEquals(expected, userOnlyLoginBaseDto);
+            assertNotEquals(new UserOnlyLoginDto(), userOnlyLoginDto);
+            UserOnlyLoginDto expected = new UserOnlyLoginDto(NEWS_GROUP_UUID0, "testLogin");
+            assertEquals(expected.hashCode(), userOnlyLoginDto.hashCode());
+            assertEquals(expected, userOnlyLoginDto);
         }
 
         @Test
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
-            assertTrue(userOnlyLoginBaseDto.toString().length() > 0);
+            assertTrue(userOnlyLoginDto.toString().length() > 0);
         }
 
         @Test
@@ -120,7 +120,7 @@ class UserOnlyLoginBaseDtoTest {
             expected.setLogin("testLogin");
             UserLogin userLogin = new UserLogin(ZERO);
             userLogin.setLogin("testLogin");
-            assertEquals(expected, userOnlyLoginBaseDto.update(userLogin));
+            assertEquals(expected, userOnlyLoginDto.update(userLogin));
         }
 
         @Test
@@ -128,8 +128,8 @@ class UserOnlyLoginBaseDtoTest {
         void instantiatedEntity() {
             UserLogin entity = new UserLogin(ZERO);
             entity.setLogin("testLogin");
-            UserOnlyLoginBaseDto expected = new UserOnlyLoginBaseDto(entity);
-            assertEquals(expected, userOnlyLoginBaseDto);
+            UserOnlyLoginDto expected = new UserOnlyLoginDto(entity);
+            assertEquals(expected, userOnlyLoginDto);
         }
     }
 }

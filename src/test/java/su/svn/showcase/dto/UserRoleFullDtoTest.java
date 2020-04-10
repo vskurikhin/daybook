@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullDtoTest.java
@@ -34,7 +34,7 @@ class UserRoleFullDtoTest {
 
     private UserRoleFullDto userRoleFullDto;
 
-    private UserOnlyLoginBaseDto userLoginDto;
+    private UserOnlyLoginDto userLoginDto;
 
     @Test
     @DisplayName("is instantiated")
@@ -48,7 +48,7 @@ class UserRoleFullDtoTest {
         @BeforeEach
         void createNew() {
             roleBaseDto = cloneRoleBaseDto0();
-            userLoginDto = new UserOnlyLoginBaseDto();
+            userLoginDto = new UserOnlyLoginDto();
             userRoleFullDto = new UserRoleFullDto();
         }
 

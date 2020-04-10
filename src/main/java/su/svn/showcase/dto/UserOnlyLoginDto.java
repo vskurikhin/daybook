@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserOnlyLoginBaseDto.java
+ * UserOnlyLoginDto.java
  * $Id$
  */
 
@@ -30,7 +30,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
+public class UserOnlyLoginDto implements UserLoginDto, Serializable {
 
     private static final long serialVersionUID = 9209L;
 
@@ -41,14 +41,14 @@ public class UserOnlyLoginBaseDto implements UserLoginDto, Serializable {
     @Size(min = 1, max = 64, message = "Size of code cannot be greater than {max} Characters")
     private String login;
 
-    public UserOnlyLoginBaseDto(@Nonnull UserLogin entity) {
+    public UserOnlyLoginDto(@Nonnull UserLogin entity) {
         this.id = entity.getId();
         this.login = entity.getLogin();
     }
 
     @Override
-    public Class<UserOnlyLoginBaseDto> getDtoClass() {
-        return UserOnlyLoginBaseDto.class;
+    public Class<UserOnlyLoginDto> getDtoClass() {
+        return UserOnlyLoginDto.class;
     }
 
     @Override

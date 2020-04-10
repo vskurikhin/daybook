@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudUtxServiceImpl.java
@@ -136,7 +136,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
     }
 
     private void validateRecordUserLogin(UserLoginDto dto) {
-        if ( ! (dto instanceof UserOnlyLoginBaseDto)) {
+        if ( ! (dto instanceof UserOnlyLoginDto)) {
             throw ErrorCase.bad("user login DTO", String.valueOf(dto));
         }
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordPartConverter.java
@@ -132,7 +132,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
                 break;
         }
         if (dto.getUserLogin() != null) {
-            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
+            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginDto) dto.getUserLogin(), ready));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -73,20 +73,20 @@ public class IntegrationTestData extends TestData
             .build(),
     };
 
-    private static final UserOnlyLoginBaseDto[] userOnlyLoginBaseDtos = {
-        UserOnlyLoginBaseDto.builder()
+    private static final UserOnlyLoginDto[] USER_ONLY_LOGIN_DTOS = {
+        UserOnlyLoginDto.builder()
             .id(UUID0)
             .login("loginTest0")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID1)
             .login("loginTest1")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID2)
             .login("loginTest2")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID3)
             .login("loginTest3")
             .build(),
@@ -747,13 +747,13 @@ public class IntegrationTestData extends TestData
             userRoles[i].setRole(roles[i]);
             userRoles[i].setUserLogin(userLogins[i]);
             userRoleFullDtos[i].setRole(roleBaseDtos[i]);
-            userRoleFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
+            userRoleFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i]);
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
+            recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i]);
             recordFullDtos[i].setNewsEntry(newsEntryFullDtos[i]);
             recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
@@ -767,7 +767,7 @@ public class IntegrationTestData extends TestData
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
             articleFullDtos[i].setRecord(recordFullDtos[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i - 4]);
+            recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i - 4]);
             recordFullDtos[i].setArticle(articleFullDtos[i]);
         }
     }

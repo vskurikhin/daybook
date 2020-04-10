@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCrudServiceImpl.java
@@ -147,7 +147,7 @@ public class ArticleCrudServiceImpl extends AbstractCrudService implements Artic
     private void validateRecordUserLogin(RecordDto dto) {
         if (dto instanceof RecordFullDto) {
             RecordFullDto recordFullDto = (RecordFullDto) dto;
-            if ( ! (recordFullDto.getUserLogin() instanceof UserOnlyLoginBaseDto)) {
+            if ( ! (recordFullDto.getUserLogin() instanceof UserOnlyLoginDto)) {
                 throw ErrorCase.bad("user login DTO", String.valueOf(recordFullDto.getUserLogin()));
             }
         }

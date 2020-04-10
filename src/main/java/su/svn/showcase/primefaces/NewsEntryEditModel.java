@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditModel.java
@@ -49,7 +49,7 @@ class NewsEntryEditModel extends AbstractModel {
         Objects.requireNonNull(login);
         Objects.requireNonNull(group);
 
-        UserOnlyLoginBaseDto userLoginDto = UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto userLoginDto = UserOnlyLoginDto.builder()
                 .login(this.login)
                 .build();
         LocalDateTime currentDateTime = parseLocalDateTime(this.date);
