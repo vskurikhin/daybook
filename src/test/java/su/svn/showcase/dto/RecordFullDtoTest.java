@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 20:31 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.Tag;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
@@ -30,7 +29,7 @@ import static su.svn.utils.TestData.ROLE_UUID0;
 @DisplayName("Class RecordFullDto")
 class RecordFullDtoTest {
 
-    private UserOnlyLoginBaseDto userLoginDto;
+    private UserOnlyLoginDto userLoginDto;
 
     private NewsEntryBaseDto newsEntryDto;
 

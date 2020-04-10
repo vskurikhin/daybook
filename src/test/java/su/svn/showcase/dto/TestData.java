@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -46,11 +46,11 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
-    private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto0 = UserOnlyLoginBaseDto.builder()
+    private static final UserOnlyLoginDto USER_ONLY_LOGIN_DTO_0 = UserOnlyLoginDto.builder()
             .id(UUID0)
             .login("loginTest0")
             .build();
-    private static final UserOnlyLoginBaseDto userOnlyLoginBaseDto1 = UserOnlyLoginBaseDto.builder()
+    private static final UserOnlyLoginDto USER_ONLY_LOGIN_DTO_1 = UserOnlyLoginDto.builder()
             .id(UUID1)
             .login("loginTest1")
             .build();
@@ -267,11 +267,11 @@ public class TestData {
         return assertClone(userRoleFullDto1);
     }
 
-    public static UserOnlyLoginBaseDto cloneUserOnlyLoginBaseDto0() {
-        return assertClone(userOnlyLoginBaseDto0);
+    public static UserOnlyLoginDto cloneUserOnlyLoginBaseDto0() {
+        return assertClone(USER_ONLY_LOGIN_DTO_0);
     }
-    public static UserOnlyLoginBaseDto cloneUserOnlyLoginBaseDto1() {
-        return assertClone(userOnlyLoginBaseDto1);
+    public static UserOnlyLoginDto cloneUserOnlyLoginBaseDto1() {
+        return assertClone(USER_ONLY_LOGIN_DTO_1);
     }
 
     public static UserLoginFullDto cloneUserLoginFullDto0() {
