@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleDto.java
@@ -40,8 +40,10 @@ public interface ArticleDto extends Dto<UUID>, Updating<Article> {
 
     void setSummary(String summary);
 
+    @Deprecated
     Article update(@Nonnull Article entity, @Nonnull UserLogin userLogin);
 
+    @Deprecated
     default Article update(@Nonnull Article entity, @Nonnull Map<String, Object> values) {
         convertIfContainsKey(Record.class, values, "record").ifPresent(entity::setRecord);
         convertIfContainsKey(Link.class, values, "link").ifPresent(entity::setLink);

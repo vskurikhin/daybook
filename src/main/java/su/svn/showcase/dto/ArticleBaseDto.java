@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleBaseDto.java
@@ -77,6 +77,7 @@ public class ArticleBaseDto implements ArticleDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public Article update(@Nonnull Article entity, @Nonnull UserLogin userLogin) {
         return update(entity);

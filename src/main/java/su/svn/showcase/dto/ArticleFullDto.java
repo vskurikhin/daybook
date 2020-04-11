@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullDto.java
@@ -82,6 +82,7 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         return ArticleDto.class;
     }
 
+    @Deprecated
     @Override
     public Article update(@Nonnull Article entity) {
         if (this.record instanceof RecordBaseDto) {
@@ -101,6 +102,7 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public Article update(@Nonnull Article entity, @Nonnull UserLogin userLogin) {
         assert this.record != null;
