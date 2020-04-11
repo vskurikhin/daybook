@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -172,12 +172,37 @@ public class TestData {
             .content("contentTest1")
             .build();
 
+    private static final LinkFullDto linksFullDto0 = LinkFullDto.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .link("linkTest0")
+            .visible(true)
+            .build();
+
+    private static final LinkFullDto linksFullDto1 = LinkFullDto.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .link("linkTest1")
+            .visible(true)
+            .build();
+
     private static final NewsLinksBaseDto newsLinksBaseDto0 = NewsLinksBaseDto.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .build();
     private static final NewsLinksBaseDto newsLinksBaseDto1 = NewsLinksBaseDto.builder()
+            .id(UUID1)
+            .dateTime(NOW)
+            .title("titleTest1")
+            .build();
+
+    private static final NewsLinksFullDto newsLinksFullDto0 = NewsLinksFullDto.builder()
+            .id(UUID0)
+            .dateTime(NOW)
+            .title("titleTest0")
+            .build();
+    private static final NewsLinksFullDto newsLinksFullDto1 = NewsLinksFullDto.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
@@ -343,11 +368,25 @@ public class TestData {
         return assertClone(newsEntryFullDto1);
     }
 
+    public static LinkFullDto cloneLinkFullDto0() {
+        return assertClone(linksFullDto0);
+    }
+    public static LinkFullDto cloneLinkFullDto1() {
+        return assertClone(linksFullDto1);
+    }
+
     public static NewsLinksBaseDto cloneNewsLinksBaseDto0() {
         return assertClone(newsLinksBaseDto0);
     }
     public static NewsLinksBaseDto cloneNewsLinksBaseDto1() {
         return assertClone(newsLinksBaseDto1);
+    }
+
+    public static NewsLinksFullDto cloneNewsLinksFullDto0() {
+        return assertClone(newsLinksFullDto0);
+    }
+    public static NewsLinksFullDto cloneNewsLinksFullDto1() {
+        return assertClone(newsLinksFullDto1);
     }
 
     public static ArticleBaseDto cloneArticleBaseDto0() {
