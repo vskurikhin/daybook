@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudUtxServiceImpl.java
@@ -60,7 +60,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
     @Override
     public RecordFullDto readById(@Nonnull UUID id) {
         return utxFindById(emf.createEntityManager(), Record.class, id)
-                .map(recordFullConverter::convert /* RecordFullDto::new */)
+                .map(recordFullConverter::convert)
                 .orElseThrow(ErrorCase::notFound);
     }
 
@@ -68,7 +68,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
     public List<RecordFullDto> readRange(int start, int size) {
         return utxRange(emf.createEntityManager(), Record.class, Record.RANGE, start, size)
                 .stream()
-                .map(recordPartConverter::convert /* RecordFullDto::new */)
+                .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
     }
 
@@ -103,9 +103,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
         EntityManager entityManager = emf.createEntityManager();
         UserLogin userLogin = getUserLogin(entityManager, dto);
         validateUserLoginDto(userLogin, dto.getUserLogin());
-        Record entity = new Record(UUID.randomUUID(), userLogin);
-        // entity = dto.update(entity);
-        entity = recordFullConverter.convert(dto);
+        Record entity = recordFullConverter.convert(dto);
         entityManager.persist(entity);
         entityManager.flush();
 
@@ -117,7 +115,6 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
         UserLogin userLogin = getUserLogin(entityManager, dto);
         validateUserLoginDto(userLogin, dto.getUserLogin());
         Record entity = entityManager.find(Record.class, dto.getId());
-        // entity = dto.update(entity);
         entity = recordFullConverter.convert(dto);
         entityManager.merge(entity);
         entityManager.flush();

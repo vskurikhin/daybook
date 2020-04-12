@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleAbstractConverter.java
@@ -12,7 +12,7 @@ import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.LinkFullDto;
+import su.svn.showcase.dto.jdo.LinkJdo;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
@@ -61,7 +61,7 @@ abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article,
             entity.setRecord(getRecordConverter().convert((RecordFullDto) dto.getRecord(), ready));
         }
         if (dto.getLink() != null) {
-            entity.setLink(getLinkConverter().convert((LinkFullDto) dto.getLink(), ready));
+            entity.setLink(getLinkConverter().convert((LinkJdo) dto.getLink(), ready));
         }
         return super.convertBySetter(entity, dto);
     }

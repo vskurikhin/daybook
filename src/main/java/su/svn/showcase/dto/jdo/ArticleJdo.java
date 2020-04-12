@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleJdo.java
@@ -62,8 +62,8 @@ public class ArticleJdo implements ArticleDto, Serializable {
     }
 
     @Override
-    public Class<ArticleDto> getDtoClass() {
-        return ArticleDto.class;
+    public Class<ArticleJdo> getDtoClass() {
+        return ArticleJdo.class;
     }
 
     @Deprecated
@@ -75,7 +75,7 @@ public class ArticleJdo implements ArticleDto, Serializable {
         this.anchor = entity.getAnchor();
         this.summary = entity.getSummary();
         if (entity.getLink() != null) {
-            this.link = LinkFullDto.builder()
+            this.link = su.svn.showcase.dto.jdo.LinkJdo.builder()
                 .id(entity.getLink().getId())
                 .dateTime(entity.getLink().getDateTime())
                 .link(entity.getLink().getLink())
@@ -91,7 +91,7 @@ public class ArticleJdo implements ArticleDto, Serializable {
             entity.setRecord(updateRecord(this.record));
             entity.getRecord().setArticle(entity);
         }
-        if (this.link instanceof LinkBaseDto) {
+        if (this.link instanceof LinkJdo) {
             entity.setLink(updateLink(this.link));
             entity.getLink().setArticle(entity);
         }

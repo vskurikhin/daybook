@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -9,8 +9,17 @@
 package su.svn.it;
 
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.NewsGroupBaseDto;
+import su.svn.showcase.dto.RecordBaseDto;
+import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.RoleBaseDto;
+import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
+import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.LinkJdo;
 
 import java.util.*;
 
@@ -462,101 +471,50 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final LinkBaseDto[] linkBaseDtos = {
-        LinkBaseDto.builder()
+    private static final LinkJdo[] LINK_FULL_JDOS = {
+        LinkJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest0")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest1")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest2")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest3")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID4)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest4")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID5)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest5")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID6)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest6")
             .build(),
-        LinkBaseDto.builder()
-            .id(UUID7)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest7")
-            .build()
-    };
-
-    private static final LinkFullDto[] linkFullDtos = {
-        LinkFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest0")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest1")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest2")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest3")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID4)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest4")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID5)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest5")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID6)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest6")
-            .build(),
-        LinkFullDto.builder()
+        LinkJdo.builder()
             .id(UUID7)
             .dateTime(NOW)
             .visible(true)
@@ -886,16 +844,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static LinkBaseDto cloneLinkBaseDto(int i)
+    public static LinkJdo cloneLinkJdo(int i)
     {
-        LinkBaseDto dto = clone(linkBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static LinkFullDto cloneLinkFullDto(int i)
-    {
-        LinkFullDto dto = clone(linkFullDtos[i]);
+        LinkJdo dto = clone(LINK_FULL_JDOS[i]);
         assert dto != null;
         return dto;
     }

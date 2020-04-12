@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -9,6 +9,7 @@
 package su.svn.showcase.dto;
 
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.LinkJdo;
 
 import java.util.Collections;
 
@@ -174,14 +175,14 @@ public class TestData {
             .content("contentTest1")
             .build();
 
-    private static final LinkFullDto linksFullDto0 = LinkFullDto.builder()
+    private static final LinkJdo linksFullDto0 = LinkJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .link("linkTest0")
             .visible(true)
             .build();
 
-    private static final LinkFullDto linksFullDto1 = LinkFullDto.builder()
+    private static final LinkJdo linksFullDto1 = LinkJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .link("linkTest1")
@@ -353,10 +354,10 @@ public class TestData {
         return assertClone(newsEntryFullDto1);
     }
 
-    public static LinkFullDto cloneLinkFullDto0() {
+    public static LinkJdo cloneLinkFullDto0() {
         return assertClone(linksFullDto0);
     }
-    public static LinkFullDto cloneLinkFullDto1() {
+    public static LinkJdo cloneLinkFullDto1() {
         return assertClone(linksFullDto1);
     }
 

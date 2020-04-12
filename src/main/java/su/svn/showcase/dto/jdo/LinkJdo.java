@@ -1,19 +1,20 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * LinkFullDto.java
+ * LinkJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.Link;
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
+import su.svn.showcase.dto.ArticleDto;
+import su.svn.showcase.dto.LinkDescriptionDto;
+import su.svn.showcase.dto.LinkDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"descriptions"})
 @ToString(exclude = {"descriptions"})
-public class LinkFullDto implements LinkDto, Serializable {
+public class LinkJdo implements LinkDto, Serializable {
 
     private static final long serialVersionUID = 9270L;
 
@@ -56,8 +57,17 @@ public class LinkFullDto implements LinkDto, Serializable {
     @Valid
     private Set<LinkDescriptionDto> descriptions;
 
+    public LinkJdo(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<LinkJdo> getDtoClass() {
+        return LinkJdo.class;
+    }
+
     @Deprecated
-    public LinkFullDto(@Nonnull Link entity) {
+    public LinkJdo(@Nonnull Link entity) {
         this.id = entity.getId();
         this.article = entity.getArticle() != null
                 ? new ArticleJdo(entity.getArticle())
@@ -70,11 +80,7 @@ public class LinkFullDto implements LinkDto, Serializable {
                 .collect(Collectors.toSet());
     }
 
-    @Override
-    public Class<LinkFullDto> getDtoClass() {
-        return LinkFullDto.class;
-    }
-
+    @Deprecated
     @Override
     public Link update(@Nonnull Link entity) {
         updateIfNotNull(entity::setLink, this.link);
