@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -65,7 +65,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     RoleCrudService roleCrudService;
 
     @Inject
-    UserRoleFullCrudService userRoleFullCrudService;
+    UserRoleCrudService userRoleCrudService;
 
     @Inject
     NewsEntryCrudService newsEntryCrudService;
@@ -193,7 +193,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @InSequence(2202)
     public void test_userRoleFullCrudService_create() throws Exception {
         UserRoleFullDto dto = cloneUserRoleFullDto(2);
-        userRoleFullCrudService.create(dto);
+        userRoleCrudService.create(dto);
     }
 
     @Test

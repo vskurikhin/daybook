@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleCrudServiceImpl.java
@@ -39,7 +39,7 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
     @Override
     @Transactional
     public void create(@Nonnull RoleFullDto dto) {
-        save(dto);
+        createAndSave(dto);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
     @Transactional
     public void update(@Nonnull RoleFullDto dto) {
         validateId(dto);
-        save(dto);
+        createAndSave(dto); // TODO update
     }
 
     @Override
@@ -80,8 +80,7 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
         return LOGGER;
     }
 
-
-    private void save(RoleFullDto dto) {
+    private void createAndSave(RoleFullDto dto) {
         Role entity = roleConverter.convert(dto);
         roleDao.save(entity);
     }

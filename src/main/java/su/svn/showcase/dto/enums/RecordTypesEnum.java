@@ -1,13 +1,16 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.enums;
 
+import su.svn.showcase.dto.NewsEntryBaseDto;
+import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.NewsLinksBaseDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.utils.MapUtil;
 
@@ -15,10 +18,10 @@ import java.util.Map;
 
 public enum RecordTypesEnum {
 
-    NewsEntryBaseDto(NewsEntryBaseDto.class.getSimpleName()),
-    NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName()),
-    NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName()),
-    NewsLinksFullDto(NewsLinksFullDto.class.getSimpleName()),
+    NewsEntryBaseDto(su.svn.showcase.dto.NewsEntryBaseDto.class.getSimpleName()),
+    NewsEntryFullDto(su.svn.showcase.dto.NewsEntryFullDto.class.getSimpleName()),
+    NewsLinksBaseDto(su.svn.showcase.dto.NewsLinksBaseDto.class.getSimpleName()),
+    NewsLinksFullDto(su.svn.showcase.dto.NewsLinksFullDto.class.getSimpleName()),
     ArticleJdo(ArticleJdo.class.getSimpleName());
 
     private static final Map<Class<?>, RecordTypesEnum> map

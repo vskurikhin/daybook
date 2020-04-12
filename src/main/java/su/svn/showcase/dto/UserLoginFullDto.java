@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginFullDto.java
@@ -45,6 +45,11 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
     @Valid
     private List<UserRoleDto> roles;
 
+    public UserLoginFullDto(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Deprecated
     public UserLoginFullDto(@Nonnull UserLogin entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
@@ -55,11 +60,7 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<UserRoleDto> getRoles() {
-        return this.roles;
-    }
-
+    @Deprecated
     @Override
     public UserLogin update(@Nonnull UserLogin entity) {
         updateIfNotNull(entity::setDateTime, this.dateTime);
@@ -76,12 +77,14 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public UserLogin update(@Nonnull UserLogin entity, @Nonnull Map<String, Object> values) {
         convertListIfContainsKey(UserRole.class, values, "roles").ifPresent(entity::setRoles);
         return update(entity);
     }
 
+    @Deprecated
     @Override
     public Class<UserLoginFullDto> getDtoClass() {
         return UserLoginFullDto.class;
