@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 14:53 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.dto;
 
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.utils.MapUtil;
 
 import java.util.Map;
@@ -18,8 +19,7 @@ public enum RecordTypesEnum {
     NewsEntryFullDto(NewsEntryFullDto.class.getSimpleName()),
     NewsLinksBaseDto(NewsLinksBaseDto.class.getSimpleName()),
     NewsLinksFullDto(NewsLinksFullDto.class.getSimpleName()),
-    ArticleBaseDto(ArticleBaseDto.class.getSimpleName()),
-    ArticleFullDto(ArticleFullDto.class.getSimpleName());
+    ArticleJdo(ArticleJdo.class.getSimpleName());
 
     private static final Map<Class<?>, RecordTypesEnum> map
         = new MapUtil.Builder<Class<?>, RecordTypesEnum>()

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkFullDto.java
@@ -12,6 +12,7 @@ import lombok.*;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.Link;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -57,7 +58,7 @@ public class LinkFullDto implements LinkDto, Serializable {
     public LinkFullDto(@Nonnull Link entity) {
         this.id = entity.getId();
         this.article = entity.getArticle() != null
-                ? new ArticleFullDto(entity.getArticle())
+                ? new ArticleJdo(entity.getArticle())
                 : null;
         this.dateTime = entity.getDateTime();
         this.visible = entity.getVisible();

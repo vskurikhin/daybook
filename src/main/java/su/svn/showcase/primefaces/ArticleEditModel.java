@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleEditModel.java
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
@@ -65,7 +66,7 @@ class ArticleEditModel extends AbstractModel {
                 .id(uuid)
                 .editDateTime(currentDateTime)
                 .index(13)
-                .type(ArticleFullDto.class.getSimpleName())
+                .type(ArticleJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
         LinkBaseDto linkBaseDto = LinkBaseDto.builder()
@@ -74,7 +75,7 @@ class ArticleEditModel extends AbstractModel {
                 .link(this.link)
                 .build();
         // TODO linkBaseCrudService.create(linkBaseDto);
-        ArticleFullDto articleDto = ArticleFullDto.builder()
+        ArticleJdo articleDto = ArticleJdo.builder()
                 .id(uuid)
                 .record(recordDto)
                 .dateTime(currentDateTime)

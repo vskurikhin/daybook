@@ -55,7 +55,7 @@ class RecordFullDtoTest {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
             newsLinksDto = cloneNewsLinksBaseDto0();
-            articleDto = cloneArticleBaseDto0();
+            articleDto = cloneArticleJdo0();
             recordFullDto = new RecordFullDto();
         }
 
@@ -121,7 +121,7 @@ class RecordFullDtoTest {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryBaseDto0();
             recordFullDto = cloneRecordFullDto0();
-            articleDto = cloneArticleBaseDto0();
+            articleDto = cloneArticleJdo0();
             tagDtos = Collections.singleton(cloneTagBaseDto0());
         }
 

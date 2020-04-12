@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -7,6 +7,8 @@
  */
 
 package su.svn.showcase.dto;
+
+import su.svn.showcase.dto.jdo.ArticleJdo;
 
 import java.util.Collections;
 
@@ -208,7 +210,7 @@ public class TestData {
             .title("titleTest1")
             .build();
 
-    private static final ArticleBaseDto articleBaseDto0 = ArticleBaseDto.builder()
+    private static final ArticleJdo ARTICLE_JDO_0 = ArticleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
@@ -216,24 +218,7 @@ public class TestData {
             .anchor("titleAnchor0")
             .summary("titleSummary0")
             .build();
-    private static final ArticleBaseDto articleBaseDto1 = ArticleBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .include("titleInclude1")
-            .anchor("titleAnchor1")
-            .summary("titleSummary1")
-            .build();
-
-    private static final ArticleFullDto articleFullDto0 = ArticleFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .include("titleInclude0")
-            .anchor("titleAnchor0")
-            .summary("titleSummary0")
-            .build();
-    private static final ArticleFullDto articleFullDto1 = ArticleFullDto.builder()
+    private static final ArticleJdo ARTICLE_JDO_1 = ArticleJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
@@ -389,18 +374,11 @@ public class TestData {
         return assertClone(newsLinksFullDto1);
     }
 
-    public static ArticleBaseDto cloneArticleBaseDto0() {
-        return assertClone(articleBaseDto0);
+    public static ArticleJdo cloneArticleJdo0() {
+        return assertClone(ARTICLE_JDO_0);
     }
-    public static ArticleBaseDto cloneArticleBaseDto1() {
-        return assertClone(articleBaseDto1);
-    }
-
-    public static ArticleFullDto cloneArticleFullDto0() {
-        return assertClone(articleFullDto0);
-    }
-    public static ArticleFullDto cloneArticleFullDto1() {
-        return assertClone(articleFullDto1);
+    public static ArticleJdo cloneArticleJdo1() {
+        return assertClone(ARTICLE_JDO_1);
     }
 }
 //EOF

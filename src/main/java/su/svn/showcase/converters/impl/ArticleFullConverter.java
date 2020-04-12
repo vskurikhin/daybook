@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleFullConverter.java
@@ -12,7 +12,7 @@ import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
-import su.svn.showcase.dto.ArticleFullDto;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
@@ -29,22 +29,22 @@ public class ArticleFullConverter extends ArticleAbstractConverter implements Ar
     private LinkConverter linkConverter;
 
     @Override
-    public ArticleFullDto convert(@Nonnull Article entity) {
-        return doConvert(new ArticleFullDto(entity.getId()), entity, new ReadyMap());
+    public ArticleJdo convert(@Nonnull Article entity) {
+        return doConvert(new ArticleJdo(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
-    public ArticleFullDto convert(@Nonnull Article entity, ReadyMap ready) {
-        return doConvert(new ArticleFullDto(entity.getId()), entity, ready);
+    public ArticleJdo convert(@Nonnull Article entity, ReadyMap ready) {
+        return doConvert(new ArticleJdo(entity.getId()), entity, ready);
     }
 
     @Override
-    public Article convert(@Nonnull ArticleFullDto dto) {
+    public Article convert(@Nonnull ArticleJdo dto) {
         return doConvert(new Article(dto.getId()), dto, new ReadyMap());
     }
 
     @Override
-    public Article convert(@Nonnull ArticleFullDto dto, ReadyMap ready) {
+    public Article convert(@Nonnull ArticleJdo dto, ReadyMap ready) {
         return doConvert(new Article(dto.getId()), dto, ready);
     }
 

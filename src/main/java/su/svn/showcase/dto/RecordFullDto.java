@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
@@ -80,9 +81,8 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
                 newsLinksDto.setRecord(this);
                 this.newsLinks = new NewsLinksFullDto(entity.getNewsLinks());
                 break;
-            case ArticleBaseDto:
-            case ArticleFullDto:
-                ArticleFullDto articleDto = new ArticleFullDto(entity.getArticle());
+            case ArticleJdo:
+                ArticleJdo articleDto = new ArticleJdo(entity.getArticle());
                 articleDto.setRecord(this);
                 this.article = articleDto;
                 break;
@@ -132,8 +132,7 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
             case NewsLinksBaseDto:
             case NewsLinksFullDto:
                 return updateByNewsLinksBaseDto(entity);
-            case ArticleBaseDto:
-            case ArticleFullDto:
+            case ArticleJdo:
                 return updateByArticleBaseDto(entity);
         }
         return entity;
