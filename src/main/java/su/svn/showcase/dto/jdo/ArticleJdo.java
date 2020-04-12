@@ -1,18 +1,19 @@
 /*
- * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * ArticleFullDto.java
+ * ArticleJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"record"})
 @ToString(exclude = {"record"})
-public class ArticleFullDto implements ArticleDto, Serializable {
+public class ArticleJdo implements ArticleDto, Serializable {
 
     private static final long serialVersionUID = 9291L;
 
@@ -56,7 +57,17 @@ public class ArticleFullDto implements ArticleDto, Serializable {
 
     private LinkDto link;
 
-    public ArticleFullDto(@Nonnull Article entity) {
+    public ArticleJdo(UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<ArticleDto> getDtoClass() {
+        return ArticleDto.class;
+    }
+
+    @Deprecated
+    public ArticleJdo(@Nonnull Article entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
@@ -71,15 +82,6 @@ public class ArticleFullDto implements ArticleDto, Serializable {
                 .visible(entity.getLink().getVisible())
                 .build();
         }
-    }
-
-    public ArticleFullDto(UUID id) {
-        this.id = id;
-    }
-
-    @Override
-    public Class<ArticleDto> getDtoClass() {
-        return ArticleDto.class;
     }
 
     @Deprecated
@@ -113,14 +115,17 @@ public class ArticleFullDto implements ArticleDto, Serializable {
         return update(entity);
     }
 
+    @Deprecated
     private Record updateRecord(RecordDto dto) {
         return dto.update(new Record(dto.getId()));
     }
 
+    @Deprecated
     private Record updateRecord(RecordFullDto dto, UserLogin userLogin) {
         return dto.update(new Record(dto.getId(), userLogin));
     }
 
+    @Deprecated
     private Link updateLink(LinkDto dto) {
         return dto.update(new Link(dto.getId()));
     }

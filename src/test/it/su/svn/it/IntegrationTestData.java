@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -10,6 +10,7 @@ package su.svn.it;
 
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 
 import java.util.*;
 
@@ -186,28 +187,28 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build()
     };
 
@@ -245,28 +246,28 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordBaseDto.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordBaseDto.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordBaseDto.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build()
     };
 
@@ -304,28 +305,28 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build()
     };
 
@@ -622,116 +623,57 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final ArticleBaseDto[] articleBaseDtos = {
-        ArticleBaseDto.builder()
+    private static final ArticleJdo[] ARTICLE_JDOS = {
+        ArticleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .include("includeTest0")
             .summary("summaryTest0")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .include("includeTest1")
             .summary("summaryTest1")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .title("titleTest2")
             .include("includeTest2")
             .summary("summaryTest2")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .title("titleTest3")
             .include("includeTest3")
             .summary("summaryTest3")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID4)
             .dateTime(NOW)
             .title("titleTest4")
             .include("includeTest4")
             .summary("summaryTest4")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID5)
             .dateTime(NOW)
             .title("titleTest5")
             .include("includeTest5")
             .summary("summaryTest5")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID6)
             .dateTime(NOW)
             .title("titleTest6")
             .include("includeTest6")
             .summary("summaryTest6")
             .build(),
-        ArticleBaseDto.builder()
-            .id(UUID7)
-            .dateTime(NOW)
-            .title("titleTest7")
-            .include("includeTest7")
-            .summary("summaryTest7")
-            .build()
-    };
-
-    private static final ArticleFullDto[] articleFullDtos = {
-        ArticleFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .include("includeTest0")
-            .summary("summaryTest0")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .include("includeTest1")
-            .summary("summaryTest1")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .title("titleTest2")
-            .include("includeTest2")
-            .summary("summaryTest2")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .title("titleTest3")
-            .include("includeTest3")
-            .summary("summaryTest3")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID4)
-            .dateTime(NOW)
-            .title("titleTest4")
-            .include("includeTest4")
-            .summary("summaryTest4")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID5)
-            .dateTime(NOW)
-            .title("titleTest5")
-            .include("includeTest5")
-            .summary("summaryTest5")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID6)
-            .dateTime(NOW)
-            .title("titleTest6")
-            .include("includeTest6")
-            .summary("summaryTest6")
-            .build(),
-        ArticleFullDto.builder()
+        ArticleJdo.builder()
             .id(UUID7)
             .dateTime(NOW)
             .title("titleTest7")
@@ -766,9 +708,9 @@ public class IntegrationTestData extends TestData
             articles[i].setRecord(records[i]);
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
-            articleFullDtos[i].setRecord(recordFullDtos[i]);
+            ARTICLE_JDOS[i].setRecord(recordFullDtos[i]);
             recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i - 4]);
-            recordFullDtos[i].setArticle(articleFullDtos[i]);
+            recordFullDtos[i].setArticle(ARTICLE_JDOS[i]);
         }
     }
 
@@ -972,16 +914,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static ArticleBaseDto cloneArticleBaseDto(int i)
+    public static ArticleJdo cloneArticleJdo(int i)
     {
-        ArticleBaseDto dto = clone(articleBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static ArticleFullDto cloneArticleFullDto(int i)
-    {
-        ArticleFullDto dto = clone(articleFullDtos[i]);
+        ArticleJdo dto = clone(ARTICLE_JDOS[i]);
         assert dto != null;
         return dto;
     }

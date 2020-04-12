@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.20 19:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleDtoEnum.java
@@ -8,19 +8,17 @@
 
 package su.svn.showcase.dto;
 
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.utils.MapUtil;
 
 import java.util.Map;
 
-public enum ArticleDtoEnum
-{
+public enum ArticleDtoEnum {
 
-    ArticleBaseDto(ArticleBaseDto.class.getSimpleName()),
-    ArticleFullDto(ArticleFullDto.class.getSimpleName());
+    ArticleJdo(ArticleJdo.class.getSimpleName());
 
     private static final Map<Class<?>, ArticleDtoEnum> map = new MapUtil.Builder<Class<?>, ArticleDtoEnum>()
-            .key(ArticleBaseDto.class).value(ArticleBaseDto)
-            .key(ArticleFullDto.class).value(ArticleFullDto)
+            .key(ArticleJdo.class).value(ArticleJdo)
             .unmodifiableMap();
 
     private String value;

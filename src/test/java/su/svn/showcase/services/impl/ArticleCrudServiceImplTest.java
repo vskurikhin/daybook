@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCrudServiceImplTest.java
@@ -28,6 +28,7 @@ import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -148,7 +149,7 @@ class ArticleCrudServiceImplTest {
     ArticleCrudService service;
 
     private Article entity;
-    private ArticleFullDto dto;
+    private ArticleJdo dto;
     private NewsGroupBaseDto newsGroupDto;
     private Record record;
     private RecordDto recordDto;
@@ -166,12 +167,12 @@ class ArticleCrudServiceImplTest {
 
         entity = cloneArticle1();
         entity.getRecord().setArticle(entity);
-        entity.getRecord().setType(ArticleFullDto.class.getSimpleName());
-        dto = cloneArticleFullDto1();
+        entity.getRecord().setType(ArticleJdo.class.getSimpleName());
+        dto = cloneArticleJdo1();
         newsGroupDto = cloneNewsGroupBaseDto1();
         record = cloneRecord1();
         recordDto = cloneRecordFullDto1();
-        recordDto.setType(ArticleFullDto.class.getSimpleName());
+        recordDto.setType(ArticleJdo.class.getSimpleName());
         dto.setRecord(recordDto);
         userLogin = cloneUserLogin1();
         userLoginDto = cloneUserOnlyLoginBaseDto1();
@@ -207,10 +208,10 @@ class ArticleCrudServiceImplTest {
                 .createDateTime(NOW1)
                 .editDateTime(NOW1)
                 .index(13)
-                .type(ArticleFullDto.class.getSimpleName())
+                .type(ArticleJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        ArticleFullDto newsEntryDto = ArticleFullDto.builder()
+        ArticleJdo newsEntryDto = ArticleJdo.builder()
                 .id(UUID1)
                 .record(recordDto)
                 .dateTime(NOW1)
@@ -228,20 +229,20 @@ class ArticleCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        ArticleFullDto test = service.readById(UUID10);
+        ArticleJdo test = service.readById(UUID10);
         userTransaction.rollback();
     }
 
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<ArticleFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        List<ArticleJdo> test= service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
     }
 
     @Test
     void update() throws Exception {
-        ArticleFullDto articleDto = ArticleFullDto.builder()
+        ArticleJdo articleDto = ArticleJdo.builder()
                 .id(UUID10)
                 .dateTime(NOW1)
                 .title("titleTest10")

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordPartConverter.java
@@ -12,6 +12,7 @@ import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
 import su.svn.showcase.utils.ReadyMap;
@@ -67,8 +68,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             ready.put(dto);
         }
         switch (Objects.requireNonNull(getPosition(entity))) {
-            case ArticleBaseDto:
-            case ArticleFullDto:
+            case ArticleJdo:
                 dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
                 break;
             case NewsEntryBaseDto:
@@ -118,9 +118,8 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             ready.put(entity);
         }
         switch (Objects.requireNonNull(getPosition(dto))) {
-            case ArticleBaseDto:
-            case ArticleFullDto:
-                entity.setArticle(articleConverter.convert((ArticleFullDto) dto.getArticle(), ready));
+            case ArticleJdo:
+                entity.setArticle(articleConverter.convert((ArticleJdo) dto.getArticle(), ready));
                 break;
             case NewsEntryBaseDto:
             case NewsEntryFullDto:

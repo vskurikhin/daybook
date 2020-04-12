@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleAbstractConverter.java
@@ -11,7 +11,7 @@ package su.svn.showcase.converters.impl;
 import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
-import su.svn.showcase.dto.ArticleFullDto;
+import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.LinkFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -20,18 +20,18 @@ import su.svn.showcase.utils.ReadyMap;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article, ArticleFullDto> {
+abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article, ArticleJdo> {
 
     abstract RecordConverter getRecordConverter();
 
     abstract LinkConverter getLinkConverter();
 
-    ArticleFullDto doConvert(ArticleFullDto dto, Article entity, ReadyMap ready) {
-        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), ArticleFullDto.class);
+    ArticleJdo doConvert(ArticleJdo dto, Article entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), ArticleJdo.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
-            if (value instanceof ArticleFullDto) {
-                return (ArticleFullDto) value;
+            if (value instanceof ArticleJdo) {
+                return (ArticleJdo) value;
             }
             throw ErrorCase.badType(value.getClass().getSimpleName());
         } else {
@@ -46,7 +46,7 @@ abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article,
         return super.convertByGetter(dto, entity);
     }
 
-    Article doConvert(Article entity, ArticleFullDto dto, ReadyMap ready) {
+    Article doConvert(Article entity, ArticleJdo dto, ReadyMap ready) {
         ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Article.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
@@ -76,7 +76,7 @@ abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article,
     }
 
     @Override
-    Class<ArticleFullDto> getDClass() {
-        return ArticleFullDto.class;
+    Class<ArticleJdo> getDClass() {
+        return ArticleJdo.class;
     }
 }
