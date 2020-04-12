@@ -35,8 +35,10 @@ public interface LinkDescriptionDto extends Dto<UUID>, Updating<LinkDescription>
 
     void setDetails(String details);
 
+    @Deprecated
     LinkDescription update(@Nonnull LinkDescription entity, UserLogin userLogin);
 
+    @Deprecated
     default LinkDescription update(@Nonnull LinkDescription entity, @Nonnull Map<String, Object> values) {
         convertIfContainsKey(NewsLinks.class, values, "newsLinks").ifPresent(entity::setNewsLinks);
         convertIfContainsKey(Link.class, values, "link").ifPresent(entity::setLink);

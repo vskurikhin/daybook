@@ -15,6 +15,7 @@ import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.NewsLinks;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
@@ -75,7 +76,7 @@ public class NewsLinksFullConverter extends AbstractConverter<UUID, NewsLinks, N
         return super.convertByGetter(dto, entity);
     }
 
-    private Function<LinkDescription, LinkDescriptionFullDto> functionLinkDescriptionToDto(ReadyMap ready) {
+    private Function<LinkDescription, LinkDescriptionJdo> functionLinkDescriptionToDto(ReadyMap ready) {
         return entity -> linkDescriptionConverter.convert(entity, ready);
     }
 
@@ -117,7 +118,7 @@ public class NewsLinksFullConverter extends AbstractConverter<UUID, NewsLinks, N
     }
 
     private Function<LinkDescriptionDto, LinkDescription> functionLinkDescriptionDtoToEntity(ReadyMap ready) {
-        return dto ->  linkDescriptionConverter.convert((LinkDescriptionFullDto) dto, ready);
+        return dto ->  linkDescriptionConverter.convert((LinkDescriptionJdo) dto, ready);
     }
 
     @Override

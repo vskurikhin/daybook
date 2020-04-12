@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -50,6 +51,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
 
     private Set<LinkDescriptionDto> descriptions;
 
+    @Deprecated
     public NewsLinksFullDto(@Nonnull NewsLinks entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
@@ -59,7 +61,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
                 : null;
 
         this.descriptions = entity.getDescriptions().stream()
-                .map(LinkDescriptionBaseDto::new)
+                .map(LinkDescriptionJdo::new)
                 .collect(Collectors.toSet());
     }
 

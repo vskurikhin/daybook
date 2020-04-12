@@ -57,7 +57,7 @@ public class ArticleJdo implements ArticleDto, Serializable {
 
     private LinkDto link;
 
-    public ArticleJdo(UUID id) {
+    public ArticleJdo(@Nonnull UUID id) {
         this.id = id;
     }
 

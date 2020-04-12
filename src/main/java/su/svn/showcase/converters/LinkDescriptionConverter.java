@@ -10,14 +10,14 @@ package su.svn.showcase.converters;
 
 import su.svn.showcase.domain.Link;
 import su.svn.showcase.domain.LinkDescription;
-import su.svn.showcase.dto.LinkDescriptionFullDto;
+import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
 import su.svn.showcase.dto.LinkFullDto;
 import su.svn.showcase.utils.FieldUtil;
 
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
-public interface LinkDescriptionConverter extends EntityConverter<UUID, LinkDescription, LinkDescriptionFullDto> {
+public interface LinkDescriptionConverter extends EntityConverter<UUID, LinkDescription, LinkDescriptionJdo> {
 
     class Updater {
 
