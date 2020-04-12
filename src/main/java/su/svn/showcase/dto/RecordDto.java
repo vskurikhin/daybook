@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 23:39 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDto.java
@@ -12,6 +12,8 @@ import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.enums.ArticleDtoEnum;
+import su.svn.showcase.dto.enums.NewsEntryDtoEnum;
 import su.svn.showcase.interfaces.Updating;
 
 import javax.annotation.Nonnull;

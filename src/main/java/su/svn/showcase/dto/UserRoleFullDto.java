@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleFullDto.java
@@ -45,6 +45,11 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
 
     private UserLoginDto userLogin;
 
+    public UserRoleFullDto(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Deprecated
     public UserRoleFullDto(@Nonnull UserRole entity) {
         this.id = entity.getId();
         this.role = new RoleBaseDto(entity.getRole());
@@ -53,11 +58,13 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
         this.userLogin = new UserOnlyLoginDto(entity.getUserLogin());
     }
 
+    @Deprecated
     @Override
     public Class<UserRoleFullDto> getDtoClass() {
         return UserRoleFullDto.class;
     }
 
+    @Deprecated
     @Override
     public UserRole update(@Nonnull UserRole entity) {
         if (this.role != null) {
@@ -75,6 +82,7 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public UserRole update(@NotNull UserRole entity, UserLogin userLogin) {
         return update(entity);

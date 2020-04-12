@@ -2,7 +2,7 @@
  * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupCrudServiceImplTest.java
+ * UserRoleCrudServiceImplTest.java
  * $Id$
  */
 
@@ -14,24 +14,19 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.converters.*;
-import su.svn.showcase.converters.impl.*;
-import su.svn.showcase.dao.NewsEntryDao;
-import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.NewsEntryDaoEjb;
-import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
-import su.svn.showcase.dao.jpa.RecordDaoEjb;
-import su.svn.showcase.dao.jpa.UserLoginDaoEjb;
-import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.dto.NewsEntryFullDto;
-import su.svn.showcase.dto.NewsGroupBaseDto;
+import su.svn.showcase.converters.RoleConverter;
+import su.svn.showcase.converters.UserRoleConverter;
+import su.svn.showcase.converters.impl.RoleBaseConverter;
+import su.svn.showcase.converters.impl.UserLoginBaseConverter;
+import su.svn.showcase.converters.impl.UserRolePartConverter;
+import su.svn.showcase.dao.UserRoleDao;
+import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
 import su.svn.showcase.dto.NewsGroupFullDto;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.RoleFullDto;
+import su.svn.showcase.dto.UserLoginFullDto;
+import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.NewsEntryCrudService;
-import su.svn.showcase.services.NewsGroupCrudService;
+import su.svn.showcase.services.UserRoleCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
 import su.svn.showcase.services.impl.support.JtaEnvironment;
@@ -53,32 +48,29 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.collections.Sets.newSet;
-import static su.svn.showcase.domain.TestData.*;
-import static su.svn.showcase.domain.TestData.cloneUserLogin1;
-import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
-@DisplayName("A NewsGroupBaseCrudServiceImplTest unit test cases")
-@AddPackages(value = {NewsGroupDao.class, CrudService.class})
+@DisplayName("A UserRoleFullCrudServiceImplTest unit test cases")
+@AddPackages(value = {UserRoleDao.class, CrudService.class})
 @ExtendWith({JtaEnvironment.class, WeldJunit5Extension.class})
-class NewsGroupCrudServiceImplTest {
+class UserRoleCrudServiceImplTest {
 
-    static final Class<?> tClass = NewsGroupCrudServiceImplTest.class;
+    static final Class<?> tClass = UserRoleCrudServiceImplTest.class;
     static final String resourceNamePrefix = "/META-INF/sql/" + tClass.getSimpleName();
     static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
-    static final NewsGroupDao newsGroupDaoEjb = new NewsGroupDaoEjb();
-    static final NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
-    static final NewsGroupCrudService newsGroupCrudService = new NewsGroupCrudServiceImpl();
+    static final UserRoleDao userRoleDaoEjb = new UserRoleDaoEjb();
+    static final RoleConverter roleBaseConverter = new RoleBaseConverter();
+    static final UserLoginBaseConverter userLoginBaseConverter = new UserLoginBaseConverter();
+    static final UserRoleConverter userRolePartConverter = new UserRolePartConverter();
+    static final UserRoleCrudService userRoleCrudServiceImpl = new UserRoleCrudServiceImpl();
 
     private final Map<String, Object> ejbMap = new HashMap<String, Object>() {{
-        put("NewsGroupDaoEjb", newsGroupDaoEjb);
-        put("NewsGroupBaseConverter", newsGroupBaseConverter);
-        put("NewsGroupCrudService", newsGroupCrudService);
+        put("UserRoleDaoEjb", userRoleDaoEjb);
+        put("RoleBaseConverter", roleBaseConverter);
+        put("UserLoginBaseConverter", userLoginBaseConverter);
+        put("UserRolePartConverter", userRolePartConverter);
+        put("UserRoleCrudService", userRoleCrudServiceImpl);
     }};
 
     private Function<InjectionPoint, Object> ejbFactory() {
@@ -97,16 +89,17 @@ class NewsGroupCrudServiceImplTest {
     @WeldSetup
     private
     WeldInitiator weld = WeldInitiator.from(
-            NewsGroupDaoEjb.class,
-            NewsGroupCrudServiceImpl.class,
+            UserRoleDaoEjb.class,
+            UserRoleCrudServiceImpl.class,
             EntityManagerFactoryProducer.class,
             EntityManagerProducer.class)
             .activate(RequestScoped.class)
             .setEjbFactory(ejbFactory())
             .setPersistenceContextFactory(injectionPoint -> emf.createEntityManager())
             .setPersistenceUnitFactory(injectionPoint -> emf)
-            .inject(newsGroupDaoEjb)
-            .inject(newsGroupCrudService)
+            .inject(userRoleDaoEjb)
+            .inject(userRolePartConverter)
+            .inject(userRoleCrudServiceImpl)
             .inject(this)
             .build();
 
@@ -116,8 +109,8 @@ class NewsGroupCrudServiceImplTest {
     @Inject
     private UserTransaction userTransaction;
 
-    @EJB(beanName = "NewsGroupCrudService")
-    NewsGroupCrudService service;
+    @EJB(beanName = "UserRoleCrudService")
+    UserRoleCrudService service;
 
 
     @BeforeEach
@@ -143,6 +136,9 @@ class NewsGroupCrudServiceImplTest {
     }
 
 
+    static UUID UUID1 = UUID.randomUUID();
+    static LocalDateTime NOW1 = LocalDateTime.now();
+
     @DisplayName("Can inject entity manager and user transaction")
     @Test
     void canInject_entityManager() {
@@ -150,41 +146,66 @@ class NewsGroupCrudServiceImplTest {
         Assertions.assertNotNull(userTransaction);
     }
 
-    static UUID UUID1 = UUID.randomUUID();
-    static LocalDateTime NOW1 = LocalDateTime.now();
-
     @Test
     void create() throws Exception {
-        NewsGroupFullDto newsEntryDto = NewsGroupFullDto.builder()
+        String roleName = "roleTest" + UUID1.toString().substring(0,24);
+        RoleFullDto role = RoleFullDto.builder()
+                .id(UUID1)
+                .roleName(roleName)
+                .build();
+        UserLoginFullDto userLogin = UserLoginFullDto.builder()
                 .id(UUID1)
                 .dateTime(NOW1)
-                .group("groupTest" + UUID1)
+                .login("loginTest" + UUID1)
+                .password("passwordTest" + UUID1)
+                .build();
+        UserRoleFullDto userRole = UserRoleFullDto.builder()
+                .id(UUID1)
+                .dateTime(NOW1)
+                .role(role)
+                .userLogin(userLogin)
+                .roleName(roleName)
                 .build();
         userTransaction.begin();
-        service.create(newsEntryDto);
+        service.create(userRole);
         userTransaction.rollback();
     }
 
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        NewsGroupFullDto test = service.readById(UUID10);
+        UserRoleFullDto test = service.readById(UUID10);
         userTransaction.rollback();
+        System.out.println("test = " + test);
+
     }
 
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<NewsGroupFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        List<UserRoleFullDto> test= service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
+        System.out.println("test = " + test);
     }
 
     @Test
     void update() throws Exception {
-        NewsGroupFullDto newsEntryDto = NewsGroupFullDto.builder()
+        RoleFullDto role = RoleFullDto.builder()
+                .id(UUID10)
+                .roleName("testRole10")
+                .build();
+        UserLoginFullDto userLogin = UserLoginFullDto.builder()
                 .id(UUID10)
                 .dateTime(NOW1)
-                .group("groupTest1")
+                .login("loginTest10")
+                .password("passwordTest10")
+                .build();
+        UserRoleFullDto newsEntryDto = UserRoleFullDto.builder()
+                .id(UUID10)
+                .dateTime(NOW1)
+                .role(role)
+                .roleName("testRole10")
+                .userLogin(userLogin)
                 .build();
         userTransaction.begin();
         service.update(newsEntryDto);
@@ -192,7 +213,6 @@ class NewsGroupCrudServiceImplTest {
     }
 
     @Test
-    void delete(NewsGroupCrudService service) {
-        // TODO
+    void delete(UserRoleCrudService service) {
     }
 }

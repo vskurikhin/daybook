@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCrudServiceImpl.java
@@ -17,6 +17,7 @@ import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.enums.ArticleDtoEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.ArticleCrudService;

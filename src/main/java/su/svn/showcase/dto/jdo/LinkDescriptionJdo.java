@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionJdo.java
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- * The base DTO of LinkDescription.
+ * The JDO of LinkDescription.
  *
  * @author Victor N. Skurikhin
  */
