@@ -1,15 +1,16 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:48 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionFullDto.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -29,7 +30,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"newsLinks"})
 @ToString(exclude = {"newsLinks"})
-public class LinkDescriptionFullDto implements LinkDescriptionDto, Serializable {
+public class LinkDescriptionJdo implements LinkDescriptionDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
 
@@ -48,7 +49,12 @@ public class LinkDescriptionFullDto implements LinkDescriptionDto, Serializable 
     @Size(max = 8192)
     private String details;
 
-    public LinkDescriptionFullDto(@Nonnull LinkDescription entity) {
+    public LinkDescriptionJdo(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Deprecated
+    public LinkDescriptionJdo(@Nonnull LinkDescription entity) {
         this.id = entity.getId();
         this.newsLinks = new NewsLinksBaseDto(entity.getNewsLinks());
         this.link = new LinkFullDto(entity.getLink());
@@ -57,11 +63,13 @@ public class LinkDescriptionFullDto implements LinkDescriptionDto, Serializable 
         this.details = entity.getDescription();
     }
 
+    @Deprecated
     @Override
-    public Class<LinkDescriptionFullDto> getDtoClass() {
-        return LinkDescriptionFullDto.class;
+    public Class<LinkDescriptionJdo> getDtoClass() {
+        return LinkDescriptionJdo.class;
     }
 
+    @Deprecated
     @Override
     public LinkDescription update(@Nonnull LinkDescription entity) {
         if (this.newsLinks != null) {
@@ -79,6 +87,7 @@ public class LinkDescriptionFullDto implements LinkDescriptionDto, Serializable 
         return entity;
     }
 
+    @Deprecated
     @Override
     public LinkDescription update(@Nonnull LinkDescription entity, UserLogin userLogin) {
         return update(entity);

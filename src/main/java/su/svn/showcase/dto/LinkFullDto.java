@@ -13,6 +13,7 @@ import su.svn.showcase.domain.Article;
 import su.svn.showcase.domain.LinkDescription;
 import su.svn.showcase.domain.Link;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -55,6 +56,7 @@ public class LinkFullDto implements LinkDto, Serializable {
     @Valid
     private Set<LinkDescriptionDto> descriptions;
 
+    @Deprecated
     public LinkFullDto(@Nonnull Link entity) {
         this.id = entity.getId();
         this.article = entity.getArticle() != null
@@ -64,7 +66,7 @@ public class LinkFullDto implements LinkDto, Serializable {
         this.visible = entity.getVisible();
         this.link = entity.getLink();
         this.descriptions = entity.getDescriptions().stream()
-                .map(LinkDescriptionBaseDto::new)
+                .map(LinkDescriptionJdo::new)
                 .collect(Collectors.toSet());
     }
 
