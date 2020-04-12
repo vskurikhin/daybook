@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.12 11:48 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * LinkDescriptionFullDto.java
+ * LinkDescriptionJdo.java
  * $Id$
  */
 
@@ -53,20 +53,19 @@ public class LinkDescriptionJdo implements LinkDescriptionDto, Serializable {
         this.id = id;
     }
 
+    @Override
+    public Class<LinkDescriptionJdo> getDtoClass() {
+        return LinkDescriptionJdo.class;
+    }
+
     @Deprecated
     public LinkDescriptionJdo(@Nonnull LinkDescription entity) {
         this.id = entity.getId();
         this.newsLinks = new NewsLinksBaseDto(entity.getNewsLinks());
-        this.link = new LinkFullDto(entity.getLink());
+        this.link = new LinkJdo(entity.getLink());
         this.dateTime = entity.getDateTime();
         this.description = entity.getDescription();
         this.details = entity.getDescription();
-    }
-
-    @Deprecated
-    @Override
-    public Class<LinkDescriptionJdo> getDtoClass() {
-        return LinkDescriptionJdo.class;
     }
 
     @Deprecated

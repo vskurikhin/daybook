@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleEditModel.java
@@ -14,7 +14,10 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
-import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.LinkJdo;
+import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
@@ -69,12 +72,12 @@ class ArticleEditModel extends AbstractModel {
                 .type(ArticleJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        LinkBaseDto linkBaseDto = LinkBaseDto.builder()
+        LinkJdo linkJdo = LinkJdo.builder()
                 .id(uuid)
                 .dateTime(currentDateTime)
                 .link(this.link)
                 .build();
-        // TODO linkBaseCrudService.create(linkBaseDto);
+        // TODO linkCrudService.create(LinkJdo);
         ArticleJdo articleDto = ArticleJdo.builder()
                 .id(uuid)
                 .record(recordDto)
@@ -83,7 +86,7 @@ class ArticleEditModel extends AbstractModel {
                 .include(this.include)
                 .anchor(this.anchor)
                 .summary(this.summary)
-                .link(linkBaseDto)
+                .link(linkJdo)
                 .build();
         LOGGER.info("articleDto = {}", articleDto); // TODO remove
         recordDto.setArticle(articleDto);

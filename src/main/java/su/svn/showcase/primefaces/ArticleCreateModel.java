@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCreateModel.java
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.LinkJdo;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
@@ -70,7 +71,7 @@ class ArticleCreateModel extends AbstractModel {
                 .type(ArticleJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        LinkFullDto linkFullDto = LinkFullDto.builder()
+        LinkJdo linkJdo = LinkJdo.builder()
                 .id(uuid)
                 .dateTime(currentDateTime)
                 .link(this.link)
@@ -84,7 +85,7 @@ class ArticleCreateModel extends AbstractModel {
                 .include(this.include)
                 .anchor(this.anchor)
                 .summary(this.summary)
-                .link(linkFullDto)
+                .link(linkJdo)
                 .build();
         LOGGER.info("articleDto = {}", articleDto); // TODO remove
         recordDto.setArticle(articleDto);
