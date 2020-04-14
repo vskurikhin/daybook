@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -8,9 +8,7 @@
 
 package su.svn.showcase.dto;
 
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.LinkJdo;
-import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.*;
 
 import java.util.Collections;
 
@@ -50,11 +48,11 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
-    private static final UserOnlyLoginDto USER_ONLY_LOGIN_DTO_0 = UserOnlyLoginDto.builder()
+    private static final UserOnlyLoginDto userOnlyLoginDto0 = UserOnlyLoginDto.builder()
             .id(UUID0)
             .login("loginTest0")
             .build();
-    private static final UserOnlyLoginDto USER_ONLY_LOGIN_DTO_1 = UserOnlyLoginDto.builder()
+    private static final UserOnlyLoginDto userOnlyLoginDto1 = UserOnlyLoginDto.builder()
             .id(UUID1)
             .login("loginTest1")
             .build();
@@ -128,23 +126,12 @@ public class TestData {
             .type(NewsEntryJdo.class.getSimpleName())
             .build();
 
-    private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()
+    private static final NewsGroupJdo NEWS_GROUP_JDO_0 = NewsGroupJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .group("groupTest0")
             .build();
-    private static final NewsGroupBaseDto newsGroupBaseDto1 = NewsGroupBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .group("groupTest1")
-            .build();
-
-    private static final NewsGroupFullDto newsGroupFullDto0 = NewsGroupFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .group("groupTest0")
-            .build();
-    private static final NewsGroupFullDto newsGroupFullDto1 = NewsGroupFullDto.builder()
+    private static final NewsGroupJdo NEWS_GROUP_JDO_1 = NewsGroupJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .group("groupTest1")
@@ -169,7 +156,6 @@ public class TestData {
             .link("linkTest0")
             .visible(true)
             .build();
-
     private static final LinkJdo linksFullDto1 = LinkJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
@@ -177,29 +163,18 @@ public class TestData {
             .visible(true)
             .build();
 
-    private static final NewsLinksBaseDto newsLinksBaseDto0 = NewsLinksBaseDto.builder()
+    private static final NewsLinksJdo newsLinksJdo0 = NewsLinksJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .build();
-    private static final NewsLinksBaseDto newsLinksBaseDto1 = NewsLinksBaseDto.builder()
+    private static final NewsLinksJdo newsLinksJdo1 = NewsLinksJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .build();
 
-    private static final NewsLinksFullDto newsLinksFullDto0 = NewsLinksFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .build();
-    private static final NewsLinksFullDto newsLinksFullDto1 = NewsLinksFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .build();
-
-    private static final ArticleJdo ARTICLE_JDO_0 = ArticleJdo.builder()
+    private static final ArticleJdo articleJdo0 = ArticleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
@@ -207,7 +182,7 @@ public class TestData {
             .anchor("titleAnchor0")
             .summary("titleSummary0")
             .build();
-    private static final ArticleJdo ARTICLE_JDO_1 = ArticleJdo.builder()
+    private static final ArticleJdo articleJdo1 = ArticleJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
@@ -228,11 +203,11 @@ public class TestData {
         userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
         userLoginFullDto1.setRoles(newList(cloneUserRoleBaseDto1()));
 
-        newsEntryJdo0.setNewsGroup(cloneNewsGroupBaseDto0());
-        newsEntryJdo1.setNewsGroup(cloneNewsGroupBaseDto1());
+        newsEntryJdo0.setNewsGroup(cloneNewsGroupFullDto0());
+        newsEntryJdo1.setNewsGroup(cloneNewsGroupFullDto1());
 
-        newsGroupFullDto0.setNewsEntries(newSet(cloneNewsEntryJdo0()));
-        newsGroupFullDto1.setNewsEntries(newSet(cloneNewsEntryJdo1()));
+        NEWS_GROUP_JDO_0.setNewsEntries(newSet(cloneNewsEntryJdo0()));
+        NEWS_GROUP_JDO_1.setNewsEntries(newSet(cloneNewsEntryJdo1()));
 
         recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
@@ -267,10 +242,10 @@ public class TestData {
     }
 
     public static UserOnlyLoginDto cloneUserOnlyLoginBaseDto0() {
-        return assertClone(USER_ONLY_LOGIN_DTO_0);
+        return assertClone(userOnlyLoginDto0);
     }
     public static UserOnlyLoginDto cloneUserOnlyLoginBaseDto1() {
-        return assertClone(USER_ONLY_LOGIN_DTO_1);
+        return assertClone(userOnlyLoginDto1);
     }
 
     public static UserLoginFullDto cloneUserLoginFullDto0() {
@@ -314,18 +289,11 @@ public class TestData {
         return dto;
     }
 
-    public static NewsGroupBaseDto cloneNewsGroupBaseDto0() {
-        return assertClone(newsGroupBaseDto0);
+    public static NewsGroupJdo cloneNewsGroupFullDto0() {
+        return assertClone(NEWS_GROUP_JDO_0);
     }
-    public static NewsGroupBaseDto cloneNewsGroupBaseDto1() {
-        return assertClone(newsGroupBaseDto1);
-    }
-
-    public static NewsGroupFullDto cloneNewsGroupFullDto0() {
-        return assertClone(newsGroupFullDto0);
-    }
-    public static NewsGroupFullDto cloneNewsGroupFullDto1() {
-        return assertClone(newsGroupFullDto1);
+    public static NewsGroupJdo cloneNewsGroupFullDto1() {
+        return assertClone(NEWS_GROUP_JDO_1);
     }
 
     public static NewsEntryJdo cloneNewsEntryJdo0() {
@@ -342,25 +310,18 @@ public class TestData {
         return assertClone(linksFullDto1);
     }
 
-    public static NewsLinksBaseDto cloneNewsLinksBaseDto0() {
-        return assertClone(newsLinksBaseDto0);
+    public static NewsLinksJdo cloneNewsLinksJdo0() {
+        return assertClone(newsLinksJdo0);
     }
-    public static NewsLinksBaseDto cloneNewsLinksBaseDto1() {
-        return assertClone(newsLinksBaseDto1);
-    }
-
-    public static NewsLinksFullDto cloneNewsLinksFullDto0() {
-        return assertClone(newsLinksFullDto0);
-    }
-    public static NewsLinksFullDto cloneNewsLinksFullDto1() {
-        return assertClone(newsLinksFullDto1);
+    public static NewsLinksJdo cloneNewsLinksJdo1() {
+        return assertClone(newsLinksJdo1);
     }
 
     public static ArticleJdo cloneArticleJdo0() {
-        return assertClone(ARTICLE_JDO_0);
+        return assertClone(articleJdo0);
     }
     public static ArticleJdo cloneArticleJdo1() {
-        return assertClone(ARTICLE_JDO_1);
+        return assertClone(articleJdo1);
     }
 }
 //EOF

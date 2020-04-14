@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 18:57 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordBaseDtoTest.java
@@ -11,6 +11,7 @@ package su.svn.showcase.dto;
 import org.junit.jupiter.api.*;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.dto.jdo.NewsGroupJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
@@ -86,13 +87,13 @@ class RecordBaseDtoTest {
     @DisplayName("when new with all args constructor")
     class WhenNewAllArgsConstructor {
 
-        NewsGroupBaseDto newsGroupBaseDto;
+        NewsGroupJdo newsGroupJdo;
 
         Set<TagBaseDto> tagBaseDtos;
 
         @BeforeEach
         void createNew() {
-            newsGroupBaseDto = cloneNewsGroupBaseDto0();
+            newsGroupJdo = cloneNewsGroupFullDto0();
             recordBaseDto = cloneRecordBaseDto0();
             tagBaseDtos = Collections.singleton(cloneTagBaseDto0());
         }

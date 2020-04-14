@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -12,8 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import su.svn.showcase.domain.Record;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.NewsLinksJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
@@ -22,7 +22,6 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.Types.UUID.ZERO;
-import static su.svn.showcase.domain.TestData.*;
 import static su.svn.showcase.dto.TestData.*;
 import static su.svn.utils.TestData.NOW;
 import static su.svn.utils.TestData.ROLE_UUID0;
@@ -34,7 +33,7 @@ class RecordFullDtoTest {
 
     private NewsEntryJdo newsEntryDto;
 
-    private NewsLinksBaseDto newsLinksDto;
+    private NewsLinksJdo newsLinksJdo;
 
     private RecordFullDto recordFullDto;
 
@@ -55,7 +54,7 @@ class RecordFullDtoTest {
         void createNew() {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             newsEntryDto = cloneNewsEntryJdo0();
-            newsLinksDto = cloneNewsLinksBaseDto0();
+            newsLinksJdo = cloneNewsLinksJdo0();
             articleDto = cloneArticleJdo0();
             recordFullDto = new RecordFullDto();
         }
@@ -101,9 +100,9 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
             assertEquals(newsEntryDto, recordFullDto.getNewsEntry());
 
-            recordFullDto.setNewsLinks(newsLinksDto);
-            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
-            assertEquals(newsLinksDto, recordFullDto.getNewsLinks());
+            recordFullDto.setNewsLinks(newsLinksJdo);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksJdo);
+            assertEquals(newsLinksJdo, recordFullDto.getNewsLinks());
         }
 
         @Test
@@ -130,7 +129,7 @@ class RecordFullDtoTest {
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
             recordFullDto = new RecordFullDto(ROLE_UUID0,
-                    NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, newsLinksDto, articleDto, tagDtos);
+                    NOW, NOW, 13, "testType", userLoginDto, newsEntryDto, newsLinksJdo, articleDto, tagDtos);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("createDateTime", NOW);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("editDateTime", NOW);
@@ -138,7 +137,7 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("type", "testType");
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
-            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksJdo);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("tags", tagDtos);
         }
 
@@ -153,7 +152,7 @@ class RecordFullDtoTest {
                     .type("testType")
                     .userLogin(userLoginDto)
                     .newsEntry(newsEntryDto)
-                    .newsLinks(newsLinksDto)
+                    .newsLinks(newsLinksJdo)
                     .tags(tagDtos)
                     .build();
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("id", ZERO);
@@ -163,7 +162,7 @@ class RecordFullDtoTest {
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("type", "testType");
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsEntry", newsEntryDto);
-            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksDto);
+            assertThat(recordFullDto).hasFieldOrPropertyWithValue("newsLinks", newsLinksJdo);
             assertThat(recordFullDto).hasFieldOrPropertyWithValue("tags", tagDtos);
         }
 

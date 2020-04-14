@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -10,7 +10,6 @@ package su.svn.it;
 
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.dto.RecordBaseDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.RoleBaseDto;
@@ -19,6 +18,7 @@ import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.LinkJdo;
+import su.svn.showcase.dto.jdo.NewsGroupJdo;
 
 import java.util.*;
 
@@ -82,7 +82,7 @@ public class IntegrationTestData extends TestData
             .build(),
     };
 
-    private static final UserOnlyLoginDto[] USER_ONLY_LOGIN_DTOS = {
+    private static final UserOnlyLoginDto[] userOnlyLoginDtos = {
         UserOnlyLoginDto.builder()
             .id(UUID0)
             .login("loginTest0")
@@ -138,27 +138,27 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final NewsGroupBaseDto[] newsGroupBaseDtos = {
-        NewsGroupBaseDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .group("groupTest0")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .group("groupTest1")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .group("groupTest2")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .group("groupTest3")
-            .build()
+    private static final NewsGroupJdo[] newsGroupJdos = {
+            NewsGroupJdo.builder()
+                    .id(UUID0)
+                    .dateTime(NOW)
+                    .group("groupTest0")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID1)
+                    .dateTime(NOW)
+                    .group("groupTest1")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID2)
+                    .dateTime(NOW)
+                    .group("groupTest2")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID3)
+                    .dateTime(NOW)
+                    .group("groupTest3")
+                    .build()
     };
 
     private static final Record[] records = {
@@ -443,7 +443,7 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final LinkJdo[] LINK_FULL_JDOS = {
+    private static final LinkJdo[] linkJdos = {
         LinkJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
@@ -553,7 +553,7 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final ArticleJdo[] ARTICLE_JDOS = {
+    private static final ArticleJdo[] articleJdos = {
         ArticleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
@@ -619,28 +619,28 @@ public class IntegrationTestData extends TestData
             userRoles[i].setRole(roles[i]);
             userRoles[i].setUserLogin(userLogins[i]);
             userRoleFullDtos[i].setRole(roleBaseDtos[i]);
-            userRoleFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i]);
+            userRoleFullDtos[i].setUserLogin(userOnlyLoginDtos[i]);
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
-            recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i]);
+            recordFullDtos[i].setUserLogin(userOnlyLoginDtos[i]);
             recordFullDtos[i].setNewsEntry(newsEntryJdos[i]);
             recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);
             newsEntryJdos[i].setRecord(recordFullDtos[i]);
-            newsEntryJdos[i].setNewsGroup(newsGroupBaseDtos[i]);
+            newsEntryJdos[i].setNewsGroup(newsGroupJdos[i]);
         }
         for (int i = 4; i < UPPER_BOUND + 4; ++i) {
             records[i].setArticle(articles[i]);
             articles[i].setRecord(records[i]);
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
-            ARTICLE_JDOS[i].setRecord(recordFullDtos[i]);
-            recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i - 4]);
-            recordFullDtos[i].setArticle(ARTICLE_JDOS[i]);
+            articleJdos[i].setRecord(recordFullDtos[i]);
+            recordFullDtos[i].setUserLogin(userOnlyLoginDtos[i - 4]);
+            recordFullDtos[i].setArticle(articleJdos[i]);
         }
     }
 
@@ -730,13 +730,6 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static NewsGroupBaseDto cloneNewsGroupBaseDto(int i)
-    {
-        NewsGroupBaseDto dto = clone(newsGroupBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
     public static Record cloneRecord(int i)
     {
         Record entity = clone(records[i]);
@@ -811,7 +804,7 @@ public class IntegrationTestData extends TestData
 
     public static LinkJdo cloneLinkJdo(int i)
     {
-        LinkJdo dto = clone(LINK_FULL_JDOS[i]);
+        LinkJdo dto = clone(linkJdos[i]);
         assert dto != null;
         return dto;
     }
@@ -832,7 +825,7 @@ public class IntegrationTestData extends TestData
 
     public static ArticleJdo cloneArticleJdo(int i)
     {
-        ArticleJdo dto = clone(ARTICLE_JDOS[i]);
+        ArticleJdo dto = clone(articleJdos[i]);
         assert dto != null;
         return dto;
     }

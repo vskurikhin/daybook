@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupCrudServiceImplTest.java
@@ -18,7 +18,7 @@ import su.svn.showcase.converters.*;
 import su.svn.showcase.converters.impl.*;
 import su.svn.showcase.dao.NewsGroupDao;
 import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
-import su.svn.showcase.dto.NewsGroupFullDto;
+import su.svn.showcase.dto.jdo.NewsGroupJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.NewsGroupCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -137,7 +137,7 @@ class NewsGroupCrudServiceImplTest {
 
     @Test
     void create() throws Exception {
-        NewsGroupFullDto newsEntryDto = NewsGroupFullDto.builder()
+        NewsGroupJdo newsEntryDto = NewsGroupJdo.builder()
                 .id(UUID1)
                 .dateTime(NOW1)
                 .group("groupTest" + UUID1)
@@ -150,20 +150,20 @@ class NewsGroupCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        NewsGroupFullDto test = service.readById(UUID10);
+        NewsGroupJdo test = service.readById(UUID10);
         userTransaction.rollback();
     }
 
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<NewsGroupFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        List<NewsGroupJdo> test= service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
     }
 
     @Test
     void update() throws Exception {
-        NewsGroupFullDto newsEntryDto = NewsGroupFullDto.builder()
+        NewsGroupJdo newsEntryDto = NewsGroupJdo.builder()
                 .id(UUID10)
                 .dateTime(NOW1)
                 .group("groupTest1")

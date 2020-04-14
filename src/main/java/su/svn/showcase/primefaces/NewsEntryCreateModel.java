@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateModel.java
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.NewsGroupJdo;
 import su.svn.showcase.services.*;
 
 import java.time.LocalDateTime;
@@ -65,14 +66,14 @@ class NewsEntryCreateModel extends AbstractModel {
                 .type(NewsEntryJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        NewsGroupFullDto newsGroupFullDto = newsGroupCrudService.readByGroup(group);
+        NewsGroupJdo newsGroupJdo = newsGroupCrudService.readByGroup(group);
         NewsEntryJdo newsEntryDto = NewsEntryJdo.builder()
                 .id(uuid)
                 .record(recordDto)
                 .dateTime(currentDateTime)
                 .title(title)
                 .content(content)
-                .newsGroup(newsGroupFullDto)
+                .newsGroup(newsGroupJdo)
                 .build();
         LOGGER.info("newsEntryDto = {}", newsEntryDto); // TODO remove
         recordDto.setNewsEntry(newsEntryDto);

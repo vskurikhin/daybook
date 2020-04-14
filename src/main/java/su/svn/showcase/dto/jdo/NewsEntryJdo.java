@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryJdo.java
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * The extended JDO of NewsEntry.
+ * The JDO of NewsEntry.
  *
  * @author Victor N. Skurikhin
  */
@@ -66,7 +66,7 @@ public class NewsEntryJdo implements NewsEntryDto, Serializable {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.newsGroup = entity.getNewsGroup() != null
-                ? new NewsGroupBaseDto(entity.getNewsGroup())
+                ? new NewsGroupJdo(entity.getNewsGroup())
                 : null;
     }
 
