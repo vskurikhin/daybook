@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
@@ -27,7 +28,7 @@ public class NewsEntryBaseConverter extends AbstractConverter<UUID, NewsEntry, N
     }
 
     @Override
-    public NewsEntryJdo convert(@Nonnull NewsEntry entity, ReadyMap ready) {
+    public NewsEntryJdo convert(@Nonnull NewsEntry entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new NewsEntryJdo(), entity);
     }
 
@@ -37,17 +38,28 @@ public class NewsEntryBaseConverter extends AbstractConverter<UUID, NewsEntry, N
     }
 
     @Override
-    public NewsEntry convert(@Nonnull NewsEntryJdo dto, ReadyMap ready) {
+    public NewsEntry convert(@Nonnull NewsEntryJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new NewsEntry(dto.getId()), dto);
     }
 
     @Override
-    Class<NewsEntry> getEClass() {
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<NewsEntry> getEClass() {
         return NewsEntry.class;
     }
 
     @Override
-    Class<NewsEntryJdo> getDClass() {
+    protected Class<NewsEntryJdo> getDClass() {
         return NewsEntryJdo.class;
     }
 }
+//EOF

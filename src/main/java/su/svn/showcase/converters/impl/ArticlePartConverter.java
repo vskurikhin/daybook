@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticlePartConverter.java
@@ -34,7 +34,7 @@ public class ArticlePartConverter extends ArticleAbstractConverter implements Ar
     }
 
     @Override
-    public ArticleJdo convert(@Nonnull Article entity, ReadyMap ready) {
+    public ArticleJdo convert(@Nonnull Article entity, @Nonnull ReadyMap ready) {
         return doConvert(new ArticleJdo(entity.getId()), entity, ready);
     }
 
@@ -44,8 +44,18 @@ public class ArticlePartConverter extends ArticleAbstractConverter implements Ar
     }
 
     @Override
-    public Article convert(@Nonnull ArticleJdo dto, ReadyMap ready) {
+    public Article convert(@Nonnull ArticleJdo dto, @Nonnull ReadyMap ready) {
         return doConvert(new Article(dto.getId()), dto, ready);
+    }
+
+    @Override
+    public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto) {
+        return doConvert(entity, dto, new ReadyMap());
+    }
+
+    @Override
+    public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto, @Nonnull ReadyMap ready) {
+        return doConvert(entity, dto, ready);
     }
 
     @Override
@@ -58,3 +68,4 @@ public class ArticlePartConverter extends ArticleAbstractConverter implements Ar
         return linkConverter;
     }
 }
+//EOF

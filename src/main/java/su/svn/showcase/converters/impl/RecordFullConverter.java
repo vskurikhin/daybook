@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverter.java
@@ -45,7 +45,7 @@ public class RecordFullConverter extends RecordAbstractConverter implements Reco
     }
 
     @Override
-    public RecordJdo convert(@Nonnull Record entity, ReadyMap ready) {
+    public RecordJdo convert(@Nonnull Record entity, @Nonnull ReadyMap ready) {
         return doConvert(new RecordJdo(entity.getId()), entity, ready);
     }
 
@@ -55,8 +55,18 @@ public class RecordFullConverter extends RecordAbstractConverter implements Reco
     }
 
     @Override
-    public Record convert(@Nonnull RecordJdo dto, ReadyMap ready) {
+    public Record convert(@Nonnull RecordJdo dto, @Nonnull ReadyMap ready) {
         return doConvert(new Record(dto.getId()), dto, ready);
+    }
+
+    @Override
+    public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto) {
+        return doConvert(entity, dto, new ReadyMap());
+    }
+
+    @Override
+    public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto, @Nonnull ReadyMap ready) {
+        return doConvert(entity, dto, ready);
     }
 
     @Override
@@ -85,12 +95,12 @@ public class RecordFullConverter extends RecordAbstractConverter implements Reco
     }
 
     @Override
-    Class<Record> getEClass() {
+    protected Class<Record> getEClass() {
         return Record.class;
     }
 
     @Override
-    Class<RecordJdo> getDClass() {
+    protected Class<RecordJdo> getDClass() {
         return RecordJdo.class;
     }
 }

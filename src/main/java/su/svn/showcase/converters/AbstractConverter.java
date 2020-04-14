@@ -1,14 +1,13 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractConverter.java
  * $Id$
  */
 
-package su.svn.showcase.converters.impl;
+package su.svn.showcase.converters;
 
-import su.svn.showcase.converters.EntityConverter;
 import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.dto.Dto;
 import su.svn.showcase.utils.FieldUtil;
@@ -20,16 +19,16 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> implements EntityConverter<K, E, D> {
+public abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> implements EntityConverter<K, E, D> {
 
     /**
      * The entityClass fields are protected so that subclasses.
      *
      * @return Entity Class field.
      */
-    abstract Class<E> getEClass();
+    protected abstract Class<E> getEClass();
 
-    abstract Class<D> getDClass();
+    protected abstract Class<D> getDClass();
 
     protected final Getters entityGetters;
 
@@ -39,7 +38,7 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
 
     protected final Setters dtoSetters;
 
-    AbstractConverter() {
+    protected AbstractConverter() {
         entityGetters = new Getters(getEClass());
         entitySetters = new Setters(getEClass());
         dtoGetters = new Getters(getDClass());
@@ -86,4 +85,5 @@ abstract class AbstractConverter<K, E extends DBEntity<K>, D extends Dto<K>> imp
         return dtoSetters.getBiConsumer(fieldName);
     }
 }
+//EOF
 

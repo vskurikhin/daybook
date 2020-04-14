@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryAbstractConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.NewsEntry;
@@ -37,7 +38,6 @@ abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEn
             ready.put(dto);
         }
         if (entity.getRecord() != null) {
-            System.err.println("getRecordConverter() = " + getRecordConverter()); // TODO remove
             dto.setRecord(getRecordConverter().convert(entity.getRecord(), ready));
         }
         if (entity.getNewsGroup() != null) {
@@ -67,12 +67,13 @@ abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEn
     }
 
     @Override
-    Class<NewsEntry> getEClass() {
+    protected Class<NewsEntry> getEClass() {
         return NewsEntry.class;
     }
 
     @Override
-    Class<NewsEntryJdo> getDClass() {
+    protected Class<NewsEntryJdo> getDClass() {
         return NewsEntryJdo.class;
     }
 }
+//EOF

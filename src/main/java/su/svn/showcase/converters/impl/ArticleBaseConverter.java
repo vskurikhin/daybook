@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.domain.Article;
 import su.svn.showcase.dto.jdo.ArticleJdo;
@@ -27,7 +28,7 @@ public class ArticleBaseConverter extends AbstractConverter<UUID, Article, Artic
     }
 
     @Override
-    public ArticleJdo convert(@Nonnull Article entity, ReadyMap ready) {
+    public ArticleJdo convert(@Nonnull Article entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new ArticleJdo(), entity);
     }
 
@@ -37,17 +38,28 @@ public class ArticleBaseConverter extends AbstractConverter<UUID, Article, Artic
     }
 
     @Override
-    public Article convert(@Nonnull ArticleJdo dto, ReadyMap ready) {
+    public Article convert(@Nonnull ArticleJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new Article(dto.getId()), dto);
     }
 
     @Override
-    Class<Article> getEClass() {
+    public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<Article> getEClass() {
         return Article.class;
     }
 
     @Override
-    Class<ArticleJdo> getDClass() {
+    protected Class<ArticleJdo> getDClass() {
         return ArticleJdo.class;
     }
 }
+//EOF

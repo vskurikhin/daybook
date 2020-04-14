@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.domain.NewsGroup;
 import su.svn.showcase.dto.jdo.NewsGroupJdo;
@@ -27,7 +28,7 @@ public class NewsGroupBaseConverter extends AbstractConverter<UUID, NewsGroup, N
     }
 
     @Override
-    public NewsGroupJdo convert(@Nonnull NewsGroup entity, ReadyMap ready) {
+    public NewsGroupJdo convert(@Nonnull NewsGroup entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new NewsGroupJdo(), entity);
     }
 
@@ -37,17 +38,28 @@ public class NewsGroupBaseConverter extends AbstractConverter<UUID, NewsGroup, N
     }
 
     @Override
-    public NewsGroup convert(@Nonnull NewsGroupJdo dto, ReadyMap ready) {
+    public NewsGroup convert(@Nonnull NewsGroupJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new NewsGroup(dto.getId()), dto);
     }
 
     @Override
-    Class<NewsGroup> getEClass() {
+    public NewsGroup update(@Nonnull NewsGroup entity, @Nonnull NewsGroupJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public NewsGroup update(@Nonnull NewsGroup entity, @Nonnull NewsGroupJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<NewsGroup> getEClass() {
         return NewsGroup.class;
     }
 
     @Override
-    Class<NewsGroupJdo> getDClass() {
+    protected Class<NewsGroupJdo> getDClass() {
         return NewsGroupJdo.class;
     }
 }
+//EOF
