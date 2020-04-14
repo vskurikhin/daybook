@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterTest.java
@@ -136,7 +136,7 @@ class RecordFullConverterTest {
     @Test
     void when_convert_DTO_to_Entity() {
         Assertions.assertNotNull(converter);
-        dto.setNewsEntry(cloneNewsEntryFullDto0());
+        dto.setNewsEntry(cloneNewsEntryJdo0());
         dto.setTags(newSet(cloneTagFullDto0()));
         ((NewsEntryJdo) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
         ((NewsEntryJdo) dto.getNewsEntry()).setRecord(dto);

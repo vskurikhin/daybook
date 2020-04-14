@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.util.Collections;
@@ -31,7 +32,7 @@ class RecordFullDtoTest {
 
     private UserOnlyLoginDto userLoginDto;
 
-    private NewsEntryBaseDto newsEntryDto;
+    private NewsEntryJdo newsEntryDto;
 
     private NewsLinksBaseDto newsLinksDto;
 
@@ -53,7 +54,7 @@ class RecordFullDtoTest {
         @BeforeEach
         void createNew() {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
-            newsEntryDto = cloneNewsEntryBaseDto0();
+            newsEntryDto = cloneNewsEntryJdo0();
             newsLinksDto = cloneNewsLinksBaseDto0();
             articleDto = cloneArticleJdo0();
             recordFullDto = new RecordFullDto();
@@ -119,7 +120,7 @@ class RecordFullDtoTest {
         @BeforeEach
         void createNew() {
             userLoginDto = cloneUserOnlyLoginBaseDto0();
-            newsEntryDto = cloneNewsEntryBaseDto0();
+            newsEntryDto = cloneNewsEntryJdo0();
             recordFullDto = cloneRecordFullDto0();
             articleDto = cloneArticleJdo0();
             tagDtos = Collections.singleton(cloneTagBaseDto0());

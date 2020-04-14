@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -150,26 +150,13 @@ public class TestData {
             .group("groupTest1")
             .build();
 
-    private static final NewsEntryBaseDto newsEntryBaseDto0 = NewsEntryBaseDto.builder()
+    private static final NewsEntryJdo newsEntryJdo0 = NewsEntryJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build();
-    private static final NewsEntryBaseDto newsEntryBaseDto1 = NewsEntryBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .content("contentTest1")
-            .build();
-
-    private static final NewsEntryJdo newsEntryFullDto0 = NewsEntryJdo.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .content("contentTest0")
-            .build();
-    private static final NewsEntryJdo newsEntryFullDto1 = NewsEntryJdo.builder()
+    private static final NewsEntryJdo newsEntryJdo1 = NewsEntryJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
@@ -241,21 +228,21 @@ public class TestData {
         userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
         userLoginFullDto1.setRoles(newList(cloneUserRoleBaseDto1()));
 
-        newsEntryFullDto0.setNewsGroup(cloneNewsGroupBaseDto0());
-        newsEntryFullDto1.setNewsGroup(cloneNewsGroupBaseDto1());
+        newsEntryJdo0.setNewsGroup(cloneNewsGroupBaseDto0());
+        newsEntryJdo1.setNewsGroup(cloneNewsGroupBaseDto1());
 
-        newsGroupFullDto0.setNewsEntries(newSet(cloneNewsEntryFullDto0()));
-        newsGroupFullDto1.setNewsEntries(newSet(cloneNewsEntryFullDto1()));
+        newsGroupFullDto0.setNewsEntries(newSet(cloneNewsEntryJdo0()));
+        newsGroupFullDto1.setNewsEntries(newSet(cloneNewsEntryJdo1()));
 
         recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
-        recordFullDto0.setNewsEntry(cloneNewsEntryFullDto0());
-        recordFullDto1.setNewsEntry(cloneNewsEntryFullDto1());
+        recordFullDto0.setNewsEntry(cloneNewsEntryJdo0());
+        recordFullDto1.setNewsEntry(cloneNewsEntryJdo1());
         recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
         recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
 
-        newsEntryFullDto0.setRecord(cloneRecordFullDto0());
-        newsEntryFullDto1.setRecord(cloneRecordFullDto1());
+        newsEntryJdo0.setRecord(cloneRecordFullDto0());
+        newsEntryJdo1.setRecord(cloneRecordFullDto1());
     }
 
     public static RoleBaseDto cloneRoleBaseDto0() {
@@ -341,18 +328,11 @@ public class TestData {
         return assertClone(newsGroupFullDto1);
     }
 
-    public static NewsEntryBaseDto cloneNewsEntryBaseDto0() {
-        return assertClone(newsEntryBaseDto0);
+    public static NewsEntryJdo cloneNewsEntryJdo0() {
+        return assertClone(newsEntryJdo0);
     }
-    public static NewsEntryBaseDto cloneNewsEntryBaseDto1() {
-        return assertClone(newsEntryBaseDto1);
-    }
-
-    public static NewsEntryJdo cloneNewsEntryFullDto0() {
-        return assertClone(newsEntryFullDto0);
-    }
-    public static NewsEntryJdo cloneNewsEntryFullDto1() {
-        return assertClone(newsEntryFullDto1);
+    public static NewsEntryJdo cloneNewsEntryJdo1() {
+        return assertClone(newsEntryJdo1);
     }
 
     public static LinkJdo cloneLinkFullDto0() {
