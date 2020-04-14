@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleAbstractConverter.java
@@ -12,6 +12,7 @@ import su.svn.showcase.converters.RoleConverter;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
@@ -56,7 +57,7 @@ abstract class UserRoleAbstractConverter extends AbstractConverter<UUID, UserRol
             ready.put(entity);
         }
         if (dto.getRole() != null) {
-            entity.setRole(getRoleConverter().convert((RoleFullDto) dto.getRole(), ready));
+            entity.setRole(getRoleConverter().convert((RoleJdo) dto.getRole(), ready));
         }
         if (dto.getUserLogin() != null) {
             entity.setUserLogin(getUserLoginConverter().convert((UserLoginFullDto) dto.getUserLogin(), ready));

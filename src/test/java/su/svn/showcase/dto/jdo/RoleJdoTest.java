@@ -1,18 +1,19 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RoleBaseDtoTest.java
+ * RoleJdoTest.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Role;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.time.LocalDateTime;
@@ -23,16 +24,16 @@ import static su.svn.shared.Constants.Types.UUID.ZERO;
 import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class RoleDto")
-class RoleBaseDtoTest {
+class RoleJdoTest {
 
     private final static LocalDateTime NOW = LocalDateTime.now();
 
-    private RoleBaseDto roleBaseDto;
+    private RoleJdo roleBaseDto;
 
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
-        new RoleBaseDto();
+        new RoleJdo();
     }
 
     @Nested
@@ -40,7 +41,7 @@ class RoleBaseDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            roleBaseDto = new RoleBaseDto();
+            roleBaseDto = new RoleJdo();
         }
 
         @Test
@@ -70,20 +71,20 @@ class RoleBaseDtoTest {
     class WhenNewAllArgsConstructor {
         @BeforeEach
         void createNew() {
-            roleBaseDto = new RoleBaseDto(ZERO, "testRole");
+            roleBaseDto = new RoleJdo(ZERO, "testRole");
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            roleBaseDto = new RoleBaseDto(ROLE_UUID0, "testRole");
+            roleBaseDto = new RoleJdo(ROLE_UUID0, "testRole");
             assertThat(roleBaseDto).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            roleBaseDto = RoleBaseDto.builder().id(ZERO).roleName("testRole").build();
+            roleBaseDto = RoleJdo.builder().id(ZERO).roleName("testRole").build();
             assertThat(roleBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
             assertThat(roleBaseDto).hasFieldOrPropertyWithValue("roleName", "testRole");
         }
@@ -91,8 +92,8 @@ class RoleBaseDtoTest {
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new RoleBaseDto(), roleBaseDto);
-            RoleBaseDto expected = new RoleBaseDto(ZERO, "testRole");
+            assertNotEquals(new RoleJdo(), roleBaseDto);
+            RoleJdo expected = new RoleJdo(ZERO, "testRole");
             assertEquals(expected.hashCode(), roleBaseDto.hashCode());
             assertEquals(expected, roleBaseDto);
         }
@@ -114,7 +115,7 @@ class RoleBaseDtoTest {
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
             Role entity = new Role(ZERO, "testRole");
-            RoleBaseDto expected = new RoleBaseDto(entity);
+            RoleJdo expected = new RoleJdo(entity);
             assertEquals(expected, roleBaseDto);
         }
     }

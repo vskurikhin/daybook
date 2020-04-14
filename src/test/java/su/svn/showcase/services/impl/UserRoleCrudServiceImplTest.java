@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleCrudServiceImplTest.java
@@ -21,7 +21,7 @@ import su.svn.showcase.converters.impl.UserLoginBaseConverter;
 import su.svn.showcase.converters.impl.UserRolePartConverter;
 import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
-import su.svn.showcase.dto.RoleFullDto;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.dto.UserLoginFullDto;
 import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.services.CrudService;
@@ -146,7 +146,7 @@ class UserRoleCrudServiceImplTest {
     @Test
     void create() throws Exception {
         String roleName = "roleTest" + UUID1.toString().substring(0,24);
-        RoleFullDto role = RoleFullDto.builder()
+        RoleJdo role = RoleJdo.builder()
                 .id(UUID1)
                 .roleName(roleName)
                 .build();
@@ -187,7 +187,7 @@ class UserRoleCrudServiceImplTest {
 
     @Test
     void update() throws Exception {
-        RoleFullDto role = RoleFullDto.builder()
+        RoleJdo role = RoleJdo.builder()
                 .id(UUID10)
                 .roleName("testRole10")
                 .build();

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleCrudServiceImpl.java
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.RoleConverter;
 import su.svn.showcase.dao.RoleDao;
 import su.svn.showcase.domain.Role;
-import su.svn.showcase.dto.RoleFullDto;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RoleCrudService;
 
@@ -38,19 +38,19 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
 
     @Override
     @Transactional
-    public void create(@Nonnull RoleFullDto dto) {
+    public void create(@Nonnull RoleJdo dto) {
         createAndSave(dto);
     }
 
     @Override
     @Transactional
-    public RoleFullDto readById(@Nonnull UUID id) {
+    public RoleJdo readById(@Nonnull UUID id) {
         return roleConverter.convert(roleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<RoleFullDto> readRange(int start, int size) {
+    public List<RoleJdo> readRange(int start, int size) {
         return roleDao.rangeOrderByRoleAsc(start, size).stream()
                 .map(roleConverter::convert)
                 .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
 
     @Override
     @Transactional
-    public void update(@Nonnull RoleFullDto dto) {
+    public void update(@Nonnull RoleJdo dto) {
         validateId(dto);
         createAndSave(dto); // TODO update
     }
@@ -80,7 +80,7 @@ public class RoleCrudServiceImpl extends AbstractCrudService implements RoleCrud
         return LOGGER;
     }
 
-    private void createAndSave(RoleFullDto dto) {
+    private void createAndSave(RoleJdo dto) {
         Role entity = roleConverter.convert(dto);
         roleDao.save(entity);
     }
