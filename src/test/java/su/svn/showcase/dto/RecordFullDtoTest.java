@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDtoTest.java
@@ -179,24 +179,6 @@ class RecordFullDtoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(recordFullDto.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            Record expected = clean(cloneRecord0());
-            RecordFullDto dto = su.svn.showcase.dto.TestData.clean(cloneRecordFullDto0());
-            assertEquals(expected, dto.update(new Record(ZERO, expected.getUserLogin())));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            Record entity = cloneRecord0();
-            entity.setNewsEntry(cloneNewsEntry0());
-            RecordFullDto expected = cloneRecordFullDto0();
-            RecordFullDto test = new RecordFullDto(entity);
-            assertEquals(expected, test);
         }
     }
 }

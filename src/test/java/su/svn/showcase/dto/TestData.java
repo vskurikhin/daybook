@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -10,6 +10,7 @@ package su.svn.showcase.dto;
 
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.LinkJdo;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 
 import java.util.Collections;
 
@@ -117,14 +118,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build();
     private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build();
 
     private static final NewsGroupBaseDto newsGroupBaseDto0 = NewsGroupBaseDto.builder()
@@ -162,13 +163,13 @@ public class TestData {
             .content("contentTest1")
             .build();
 
-    private static final NewsEntryFullDto newsEntryFullDto0 = NewsEntryFullDto.builder()
+    private static final NewsEntryJdo newsEntryFullDto0 = NewsEntryJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build();
-    private static final NewsEntryFullDto newsEntryFullDto1 = NewsEntryFullDto.builder()
+    private static final NewsEntryJdo newsEntryFullDto1 = NewsEntryJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
@@ -347,10 +348,10 @@ public class TestData {
         return assertClone(newsEntryBaseDto1);
     }
 
-    public static NewsEntryFullDto cloneNewsEntryFullDto0() {
+    public static NewsEntryJdo cloneNewsEntryFullDto0() {
         return assertClone(newsEntryFullDto0);
     }
-    public static NewsEntryFullDto cloneNewsEntryFullDto1() {
+    public static NewsEntryJdo cloneNewsEntryFullDto1() {
         return assertClone(newsEntryFullDto1);
     }
 

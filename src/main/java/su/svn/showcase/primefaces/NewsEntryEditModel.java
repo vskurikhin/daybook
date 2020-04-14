@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditModel.java
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.services.*;
 
 import java.time.LocalDateTime;
@@ -57,10 +58,10 @@ class NewsEntryEditModel extends AbstractModel {
                 .id(uuid)
                 .editDateTime(currentDateTime)
                 .index(13)
-                .type(NewsEntryFullDto.class.getSimpleName())
+                .type(NewsEntryJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
+        NewsEntryJdo newsEntryDto = NewsEntryJdo.builder()
                 .id(uuid)
                 .record(recordDto)
                 .dateTime(currentDateTime)

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryAbstractConverter.java
@@ -11,7 +11,7 @@ package su.svn.showcase.converters.impl;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -19,18 +19,18 @@ import su.svn.showcase.utils.ReadyMap;
 
 import java.util.UUID;
 
-abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEntry, NewsEntryFullDto> {
+abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEntry, NewsEntryJdo> {
 
     abstract RecordConverter getRecordConverter();
 
     abstract NewsGroupConverter getNewsGroupConverter();
 
-    NewsEntryFullDto doConvert(NewsEntryFullDto dto, NewsEntry entity, ReadyMap ready) {
-        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), NewsEntryFullDto.class);
+    NewsEntryJdo doConvert(NewsEntryJdo dto, NewsEntry entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), NewsEntryJdo.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
-            if (value instanceof NewsEntryFullDto) {
-                return (NewsEntryFullDto) value;
+            if (value instanceof NewsEntryJdo) {
+                return (NewsEntryJdo) value;
             }
             throw ErrorCase.badType(value.getClass().getSimpleName());
         } else {
@@ -46,7 +46,7 @@ abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEn
         return super.convertByGetter(dto, entity);
     }
 
-    NewsEntry doConvert(NewsEntry entity, NewsEntryFullDto dto, ReadyMap ready) {
+    NewsEntry doConvert(NewsEntry entity, NewsEntryJdo dto, ReadyMap ready) {
         ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), NewsEntry.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
@@ -72,7 +72,7 @@ abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEn
     }
 
     @Override
-    Class<NewsEntryFullDto> getDClass() {
-        return NewsEntryFullDto.class;
+    Class<NewsEntryJdo> getDClass() {
+        return NewsEntryJdo.class;
     }
 }

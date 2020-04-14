@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -10,7 +10,7 @@ package su.svn.it;
 
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.NewsEntryBaseDto;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.dto.RecordBaseDto;
 import su.svn.showcase.dto.RecordFullDto;
@@ -168,28 +168,28 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(1)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID2)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(2)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID3)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(3)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID4)
@@ -286,28 +286,28 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(1)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID2)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(2)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID3)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(3)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         RecordFullDto.builder()
             .id(UUID4)
@@ -393,26 +393,26 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final NewsEntryFullDto[] newsEntryFullDtos = {
-        NewsEntryFullDto.builder()
+    private static final NewsEntryJdo[] newsEntryFullDtos = {
+        NewsEntryJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build(),
-        NewsEntryFullDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .content("contentTest1")
             .build(),
-        NewsEntryFullDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .title("titleTest2")
             .content("contentTest2")
             .build(),
-        NewsEntryFullDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .title("titleTest3")
@@ -796,8 +796,8 @@ public class IntegrationTestData extends TestData
 
     public static RecordFullDto clean(RecordFullDto dto)
     {
-        if (dto.getNewsEntry() instanceof NewsEntryFullDto) {
-            ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(null);
+        if (dto.getNewsEntry() instanceof NewsEntryJdo) {
+            ((NewsEntryJdo) dto.getNewsEntry()).setRecord(null);
         }
         dto.setTags(Collections.emptySet());
         return dto;
@@ -823,9 +823,9 @@ public class IntegrationTestData extends TestData
         return dto;
     }
 
-    public static NewsEntryFullDto cloneNewsEntryFullDto(int i)
+    public static NewsEntryJdo cloneNewsEntryFullDto(int i)
     {
-        NewsEntryFullDto dto = clone(newsEntryFullDtos[i]);
+        NewsEntryJdo dto = clone(newsEntryFullDtos[i]);
         assert dto != null;
         return dto;
     }

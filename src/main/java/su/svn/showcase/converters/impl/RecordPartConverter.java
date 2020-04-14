@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordPartConverter.java
@@ -14,6 +14,7 @@ import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.enums.RecordTypesEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
 import su.svn.showcase.utils.ReadyMap;
@@ -72,8 +73,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             case ArticleJdo:
                 dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
                 break;
-            case NewsEntryBaseDto:
-            case NewsEntryFullDto:
+            case NewsEntryJdo:
                 dto.setNewsEntry(newsEntryConverter.convert(entity.getNewsEntry(), ready));
                 break;
             case NewsLinksBaseDto:
@@ -122,9 +122,8 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             case ArticleJdo:
                 entity.setArticle(articleConverter.convert((ArticleJdo) dto.getArticle(), ready));
                 break;
-            case NewsEntryBaseDto:
-            case NewsEntryFullDto:
-                entity.setNewsEntry(newsEntryConverter.convert((NewsEntryFullDto) dto.getNewsEntry(), ready));
+            case NewsEntryJdo:
+                entity.setNewsEntry(newsEntryConverter.convert((NewsEntryJdo) dto.getNewsEntry(), ready));
                 break;
             case NewsLinksBaseDto:
             case NewsLinksFullDto:

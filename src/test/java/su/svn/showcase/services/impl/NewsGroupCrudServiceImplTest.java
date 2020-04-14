@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupCrudServiceImplTest.java
@@ -16,21 +16,10 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
 import su.svn.showcase.converters.impl.*;
-import su.svn.showcase.dao.NewsEntryDao;
 import su.svn.showcase.dao.NewsGroupDao;
-import su.svn.showcase.dao.RecordDao;
-import su.svn.showcase.dao.UserLoginDao;
-import su.svn.showcase.dao.jpa.NewsEntryDaoEjb;
 import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
-import su.svn.showcase.dao.jpa.RecordDaoEjb;
-import su.svn.showcase.dao.jpa.UserLoginDaoEjb;
-import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.dto.NewsEntryFullDto;
-import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.dto.NewsGroupFullDto;
-import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.services.CrudService;
-import su.svn.showcase.services.NewsEntryCrudService;
 import su.svn.showcase.services.NewsGroupCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
@@ -45,8 +34,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -55,11 +42,6 @@ import java.util.function.Function;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.internal.util.collections.Sets.newSet;
-import static su.svn.showcase.domain.TestData.*;
-import static su.svn.showcase.domain.TestData.cloneUserLogin1;
-import static su.svn.showcase.dto.TestData.*;
 import static su.svn.showcase.services.impl.support.EntityManagerFactoryProducer.configure;
 
 @DisplayName("A NewsGroupBaseCrudServiceImplTest unit test cases")
