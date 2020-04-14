@@ -1,17 +1,19 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleJdoTest.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import org.junit.jupiter.api.*;
 import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dto.UserOnlyLoginDto;
+import su.svn.showcase.dto.UserRoleFullDto;
 import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.utils.ValidateUtil;
 
