@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagCrudServiceImplTest.java
@@ -19,7 +19,7 @@ import su.svn.showcase.converters.impl.TagBaseConverter;
 import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.services.TagCrudService;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -106,7 +106,7 @@ class TagCrudServiceImplTest {
     TagCrudService service;
 
     private Tag entity;
-    private TagFullDto dto;
+    private TagJdo dto;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -145,7 +145,7 @@ class TagCrudServiceImplTest {
 
     @Test
     void create() throws Exception {
-        TagFullDto dto = TagFullDto.builder()
+        TagJdo dto = TagJdo.builder()
                 .id(SID1)
                 .dateTime(NOW1)
                 .tag("tagTest" + SID1)
@@ -158,7 +158,7 @@ class TagCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        TagFullDto test = service.readById(SID10);
+        TagJdo test = service.readById(SID10);
         System.err.println("test = " + test);
         userTransaction.rollback();
     }
@@ -166,14 +166,14 @@ class TagCrudServiceImplTest {
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<TagFullDto> test = service.readRange(0, Integer.MAX_VALUE);
+        List<TagJdo> test = service.readRange(0, Integer.MAX_VALUE);
         System.err.println("test = " + test);
         userTransaction.rollback();
     }
 
     @Test
     void update() throws Exception {
-        TagFullDto dto = TagFullDto.builder()
+        TagJdo dto = TagJdo.builder()
                 .id(SID10)
                 .dateTime(NOW1)
                 .tag("groupTest1")

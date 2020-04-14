@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateModel.java
@@ -17,6 +17,8 @@ import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsGroupJdo;
+import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.services.*;
 
 import java.time.LocalDateTime;
@@ -79,7 +81,7 @@ class NewsEntryCreateModel extends AbstractModel {
         recordDto.setNewsEntry(newsEntryDto);
         newsEntryCrudService.create(newsEntryDto);
         if (tags != null) {
-            Set<TagBaseDto> tagSet = StringTagSetConverter.map(tags);
+            Set<TagJdo> tagSet = StringTagSetConverter.map(tags);
             LOGGER.info("recordDto = {}", recordDto); // TODO remove
             recordTagsStorageService.addTagsToRecord(recordDto, tagSet);
         }

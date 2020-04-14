@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 13:16 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleEditModel.java
@@ -14,9 +14,9 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.StringTagSetConverter;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.dto.jdo.LinkJdo;
 import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.services.ArticleCrudService;
@@ -92,7 +92,7 @@ class ArticleEditModel extends AbstractModel {
         recordDto.setArticle(articleDto);
         articleCrudService.update(articleDto);
         if (tags != null) {
-            Set<TagBaseDto> tagSet = StringTagSetConverter.map(tags);
+            Set<TagJdo> tagSet = StringTagSetConverter.map(tags);
             LOGGER.info("recordDto = {}", recordDto); // TODO remove
             recordTagsStorageService.addTagsToRecord(recordDto, tagSet);
         }

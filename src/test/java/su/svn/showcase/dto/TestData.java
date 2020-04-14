@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -57,39 +57,26 @@ public class TestData {
             .login("loginTest1")
             .build();
 
-    private static final UserLoginFullDto userLoginFullDto0 = UserLoginFullDto.builder()
+    private static final UserLoginJdo USER_LOGIN_JDO_0 = UserLoginJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .login("loginTest0")
             .password("passwordTest0")
             .build();
-    public static final UserLoginFullDto userLoginFullDto1 = UserLoginFullDto.builder()
+    public static final UserLoginJdo USER_LOGIN_JDO_1 = UserLoginJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .login("loginTest1")
             .password("passwordTest1")
             .build();
 
-    private static final TagBaseDto tagBaseDto0 = TagBaseDto.builder()
+    private static final TagJdo TAG_JDO_0 = TagJdo.builder()
             .id(SID0)
             .tag("tagTest0")
             .dateTime(NOW)
             .visible(true)
             .build();
-    private static final TagBaseDto tagBaseDto1 = TagBaseDto.builder()
-            .id(SID1)
-            .tag("tagTest1")
-            .dateTime(NOW)
-            .visible(true)
-            .build();
-
-    private static final TagFullDto tagFullDto0 = TagFullDto.builder()
-            .id(SID0)
-            .tag("tagTest0")
-            .dateTime(NOW)
-            .visible(true)
-            .build();
-    private static final TagFullDto tagFullDto1 = TagFullDto.builder()
+    private static final TagJdo TAG_JDO_1 = TagJdo.builder()
             .id(SID1)
             .tag("tagTest1")
             .dateTime(NOW)
@@ -192,16 +179,16 @@ public class TestData {
             .build();
 
     static {
-        tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
-        tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
+        TAG_JDO_0.setRecords(newSet(cloneRecordBaseDto0()));
+        TAG_JDO_1.setRecords(newSet(cloneRecordBaseDto1()));
 
         userRoleFullDto0.setRole(cloneRoleJdo0());
         userRoleFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
         userRoleFullDto1.setRole(cloneRoleJdo1());
         userRoleFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
 
-        userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
-        userLoginFullDto1.setRoles(newList(cloneUserRoleBaseDto1()));
+        USER_LOGIN_JDO_0.setRoles(newList(cloneUserRoleBaseDto0()));
+        USER_LOGIN_JDO_1.setRoles(newList(cloneUserRoleBaseDto1()));
 
         newsEntryJdo0.setNewsGroup(cloneNewsGroupFullDto0());
         newsEntryJdo1.setNewsGroup(cloneNewsGroupFullDto1());
@@ -248,25 +235,25 @@ public class TestData {
         return assertClone(userOnlyLoginDto1);
     }
 
-    public static UserLoginFullDto cloneUserLoginFullDto0() {
-        return assertClone(userLoginFullDto0);
+    public static UserLoginJdo cloneUserLoginFullDto0() {
+        return assertClone(USER_LOGIN_JDO_0);
     }
-    public static UserLoginFullDto cloneUserLoginFullDto1() {
-        return assertClone(userLoginFullDto1);
-    }
-
-    public static TagBaseDto cloneTagBaseDto0() {
-        return assertClone(tagBaseDto0);
-    }
-    public static TagBaseDto cloneTagBaseDto1() {
-        return assertClone(tagBaseDto1);
+    public static UserLoginJdo cloneUserLoginFullDto1() {
+        return assertClone(USER_LOGIN_JDO_1);
     }
 
-    public static TagFullDto cloneTagFullDto0() {
-        return assertClone(tagFullDto0);
+    public static TagJdo cloneTagBaseDto0() {
+        return assertClone(TAG_JDO_0);
     }
-    public static TagFullDto cloneTagFullDto1() {
-        return assertClone(tagFullDto1);
+    public static TagJdo cloneTagBaseDto1() {
+        return assertClone(TAG_JDO_1);
+    }
+
+    public static TagJdo cloneTagFullDto0() {
+        return assertClone(TAG_JDO_0);
+    }
+    public static TagJdo cloneTagFullDto1() {
+        return assertClone(TAG_JDO_1);
     }
 
     public static RecordBaseDto cloneRecordBaseDto0() {

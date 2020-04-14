@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -14,6 +14,7 @@ import su.svn.showcase.dto.enums.RecordTypesEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsLinksJdo;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
@@ -89,7 +90,7 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
                 break;
         }
         this.tags = entity.getTags().stream()
-                .map(TagBaseDto::new)
+                .map(TagJdo::new)
                 .collect(Collectors.toSet());
     }
 

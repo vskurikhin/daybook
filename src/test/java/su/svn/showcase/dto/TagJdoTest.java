@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagFullDtoTest.java
+ * TagJdoTest.java
  * $Id$
  */
 
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.utils.TestData;
 import su.svn.utils.ValidateUtil;
 
@@ -27,14 +28,14 @@ import static su.svn.showcase.dto.TestData.cloneRecordBaseDto0;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class TagFullDto")
-class TagFullDtoTest {
+class TagJdoTest {
 
-    private TagFullDto tagFullDto;
+    private TagJdo tagJdo;
 
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
-        new TagFullDto();
+        new TagJdo();
     }
 
     @Nested
@@ -42,27 +43,27 @@ class TagFullDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            tagFullDto = new TagFullDto();
+            tagJdo = new TagJdo();
         }
 
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertThat(tagFullDto).hasFieldOrPropertyWithValue("records", null);
+            assertThat(tagJdo).hasFieldOrPropertyWithValue("records", null);
         }
 
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            tagFullDto.setRecords(EMPTY_RECORD_DTOS);
-            assertThat(tagFullDto).hasFieldOrPropertyWithValue("records", TestData.EMPTY_RECORD_DTOS);
-            assertEquals(EMPTY_RECORD_DTOS, tagFullDto.getRecords());
+            tagJdo.setRecords(EMPTY_RECORD_DTOS);
+            assertThat(tagJdo).hasFieldOrPropertyWithValue("records", TestData.EMPTY_RECORD_DTOS);
+            assertEquals(EMPTY_RECORD_DTOS, tagJdo.getRecords());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(1, tagFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, tagJdo).hasNext());
         }
     }
 
@@ -77,28 +78,28 @@ class TagFullDtoTest {
         void createNew() {
             records = Collections.singleton(cloneRecord0());
             recordDtos = Collections.singleton(cloneRecordBaseDto0());
-            tagFullDto = new TagFullDto(ZERO, "testTag", true, NOW, recordDtos);
+            tagJdo = new TagJdo(ZERO, "testTag", true, NOW, recordDtos);
         }
 
         @Test
         @DisplayName("initialized values")
         void defaults() {
-            assertThat(tagFullDto).hasFieldOrPropertyWithValue("records", recordDtos);
+            assertThat(tagJdo).hasFieldOrPropertyWithValue("records", recordDtos);
         }
 
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new TagFullDto(), tagFullDto);
-            TagFullDto expected = new TagFullDto(ZERO, "testTag", true, NOW, recordDtos);
-            assertEquals(expected.hashCode(), tagFullDto.hashCode());
-            assertEquals(expected, tagFullDto);
+            assertNotEquals(new TagJdo(), tagJdo);
+            TagJdo expected = new TagJdo(ZERO, "testTag", true, NOW, recordDtos);
+            assertEquals(expected.hashCode(), tagJdo.hashCode());
+            assertEquals(expected, tagJdo);
         }
 
         @Test
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
-            assertTrue(tagFullDto.toString().length() > 0);
+            assertTrue(tagJdo.toString().length() > 0);
         }
 
         @Test
@@ -108,11 +109,11 @@ class TagFullDtoTest {
             Map<String, Object> values = new HashMap<String, Object>() {{
                 put("records", records);
             }};
-            assertEquals(expected1, tagFullDto.update(new Tag(ZERO), values));
+            assertEquals(expected1, tagJdo.update(new Tag(ZERO), values));
 
             Tag expected2 = new Tag(ZERO, "testTag", true, NOW, records);
             Tag updating2 = new Tag(ZERO, "testTag", true, NOW, records);
-            Tag test2 = tagFullDto.update(updating2);
+            Tag test2 = tagJdo.update(updating2);
             assertEquals(expected2, test2);
             // TODO assertEquals(expected2.getRecords(), test2.getRecords());
         }
@@ -121,8 +122,8 @@ class TagFullDtoTest {
         @DisplayName("Instantiated DTO by entity")
         void instantiatedEntity() {
             Tag entity = new Tag(ZERO, "testTag", true, NOW, Collections.singleton(cloneRecord0()));
-            TagFullDto expected = new TagFullDto(entity);
-            assertEquals(expected, tagFullDto);
+            TagJdo expected = new TagJdo(entity);
+            assertEquals(expected, tagJdo);
         }
     }
 }

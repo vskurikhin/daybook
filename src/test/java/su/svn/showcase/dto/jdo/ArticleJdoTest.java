@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleJdoTest.java
@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.TagFullDto;
 import su.svn.utils.TestData;
 import su.svn.utils.ValidateUtil;
 
@@ -93,7 +92,7 @@ class ArticleJdoTest {
 
         NewsGroupJdo newsGroupJdo;
 
-        Set<TagFullDto> tags;
+        Set<TagJdo> tags;
 
         @BeforeEach
         void createNew() {

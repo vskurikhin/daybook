@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 18:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * StringTagSetConverter.java
@@ -8,7 +8,7 @@
 
 package su.svn.showcase.converters;
 
-import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class StringTagSetConverter {
 
-    public static Set<TagBaseDto> map(String tags) {
+    public static Set<TagJdo> map(String tags) {
 
         Set<String> setOfLabels = Arrays.stream(tags.split("\\|"))
                 .filter(Objects::nonNull)
@@ -25,12 +25,12 @@ public class StringTagSetConverter {
                 .filter(s -> s.length() > 0)
                 .collect(Collectors.toSet());
         return setOfLabels.stream()
-                .map(StringTagSetConverter::constructTagBaseDto)
+                .map(StringTagSetConverter::constructTagFullDto)
                 .collect(Collectors.toSet());
     }
 
-    private static TagBaseDto constructTagBaseDto(String tag) {
-        return TagBaseDto.builder()
+    private static TagJdo constructTagFullDto(String tag) {
+        return TagJdo.builder()
                 .tag(tag)
                 .build();
     }
