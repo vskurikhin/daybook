@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleCrudServiceImplTest.java
@@ -21,7 +21,6 @@ import su.svn.showcase.converters.impl.UserLoginBaseConverter;
 import su.svn.showcase.converters.impl.UserRolePartConverter;
 import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
-import su.svn.showcase.dto.NewsGroupFullDto;
 import su.svn.showcase.dto.RoleFullDto;
 import su.svn.showcase.dto.UserLoginFullDto;
 import su.svn.showcase.dto.UserRoleFullDto;
@@ -40,8 +39,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import java.io.InputStream;
 import java.time.LocalDateTime;

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 23:13 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksDto.java
@@ -38,6 +38,7 @@ public interface NewsLinksDto extends Dto<UUID>, Updating<NewsLinks> {
 
     NewsLinks update(@Nonnull NewsLinks entity, @Nonnull UserLogin userLogin);
 
+    @Deprecated
     default NewsLinks update(@Nonnull NewsLinks entity, @Nonnull Map<String, Object> values) {
         convertIfContainsKey(Record.class, values, "record").ifPresent(entity::setRecord);
         convertIfContainsKey(NewsGroup.class, values, "newsGroup").ifPresent(entity::setNewsGroup);

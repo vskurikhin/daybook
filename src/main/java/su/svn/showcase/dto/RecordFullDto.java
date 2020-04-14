@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullDto.java
@@ -13,6 +13,7 @@ import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.enums.RecordTypesEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.NewsLinksJdo;
 import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
@@ -76,11 +77,10 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
                 newsEntryDto.setRecord(this);
                 this.newsEntry = newsEntryDto;
                 break;
-            case NewsLinksBaseDto:
-            case NewsLinksFullDto:
-                NewsLinksFullDto newsLinksDto = new NewsLinksFullDto(entity.getNewsLinks());
+            case NewsLinksJdo:
+                NewsLinksJdo newsLinksDto = new NewsLinksJdo(entity.getNewsLinks());
                 newsLinksDto.setRecord(this);
-                this.newsLinks = new NewsLinksFullDto(entity.getNewsLinks());
+                this.newsLinks = new NewsLinksJdo(entity.getNewsLinks());
                 break;
             case ArticleJdo:
                 ArticleJdo articleDto = new ArticleJdo(entity.getArticle());
@@ -129,8 +129,7 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
         switch (type) {
             case NewsEntryJdo:
                 return updateByNewsEntryBaseDto(entity);
-            case NewsLinksBaseDto:
-            case NewsLinksFullDto:
+            case NewsLinksJdo:
                 return updateByNewsLinksBaseDto(entity);
             case ArticleJdo:
                 return updateByArticleBaseDto(entity);

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCrudServiceImplTest.java
@@ -29,6 +29,7 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.NewsGroupJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -150,7 +151,7 @@ class ArticleCrudServiceImplTest {
 
     private Article entity;
     private ArticleJdo dto;
-    private NewsGroupBaseDto newsGroupDto;
+    private NewsGroupJdo newsGroupDto;
     private Record record;
     private RecordDto recordDto;
     private UserLogin userLogin;
@@ -169,7 +170,7 @@ class ArticleCrudServiceImplTest {
         entity.getRecord().setArticle(entity);
         entity.getRecord().setType(ArticleJdo.class.getSimpleName());
         dto = cloneArticleJdo1();
-        newsGroupDto = cloneNewsGroupBaseDto1();
+        newsGroupDto = cloneNewsGroupFullDto1();
         record = cloneRecord1();
         recordDto = cloneRecordFullDto1();
         recordDto.setType(ArticleJdo.class.getSimpleName());

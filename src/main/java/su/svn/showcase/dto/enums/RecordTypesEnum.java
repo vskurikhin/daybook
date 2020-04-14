@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTypesEnum.java
@@ -9,8 +9,8 @@
 package su.svn.showcase.dto.enums;
 
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.NewsLinksBaseDto;
 import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.NewsLinksJdo;
 import su.svn.showcase.utils.MapUtil;
 
 import java.util.Map;
@@ -18,15 +18,13 @@ import java.util.Map;
 public enum RecordTypesEnum {
 
     NewsEntryJdo(NewsEntryJdo.class.getSimpleName()),
-    NewsLinksBaseDto(su.svn.showcase.dto.NewsLinksBaseDto.class.getSimpleName()),
-    NewsLinksFullDto(su.svn.showcase.dto.NewsLinksFullDto.class.getSimpleName()),
+    NewsLinksJdo(NewsLinksJdo.class.getSimpleName()),
     ArticleJdo(ArticleJdo.class.getSimpleName());
 
     private static final Map<Class<?>, RecordTypesEnum> map
         = new MapUtil.Builder<Class<?>, RecordTypesEnum>()
         .key(NewsEntryJdo.class).value(NewsEntryJdo)
-        .key(NewsLinksBaseDto.class).value(NewsLinksBaseDto)
-        .key(NewsLinksBaseDto.class).value(NewsLinksFullDto)
+        .key(NewsLinksJdo.class).value(NewsLinksJdo)
         .key(ArticleJdo.class).value(ArticleJdo)
         .unmodifiableMap();
 

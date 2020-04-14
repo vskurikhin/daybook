@@ -1,16 +1,16 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsLinksFullDto.java
+ * NewsLinksJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.jdo.LinkDescriptionJdo;
+import su.svn.showcase.dto.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
- * The extended DTO of NewsLinks.
+ * The JDO of NewsLinks.
  *
  * @author Victor N. Skurikhin
  */
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"record"})
 @ToString(exclude = {"record"})
-public class NewsLinksFullDto implements NewsLinksDto, Serializable {
+public class NewsLinksJdo implements NewsLinksDto, Serializable {
 
     private static final long serialVersionUID = 9251L;
 
@@ -51,13 +51,22 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
 
     private Set<LinkDescriptionDto> descriptions;
 
+    public NewsLinksJdo(UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<NewsLinksJdo> getDtoClass() {
+        return NewsLinksJdo.class;
+    }
+
     @Deprecated
-    public NewsLinksFullDto(@Nonnull NewsLinks entity) {
+    public NewsLinksJdo(@Nonnull NewsLinks entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.title = entity.getTitle();
         this.newsGroup = entity.getNewsGroup() != null
-                ? new NewsGroupBaseDto(entity.getNewsGroup())
+                ? new NewsGroupJdo(entity.getNewsGroup())
                 : null;
 
         this.descriptions = entity.getDescriptions().stream()
@@ -65,15 +74,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
                 .collect(Collectors.toSet());
     }
 
-    public NewsLinksFullDto(UUID id) {
-        this.id = id;
-    }
-
-    @Override
-    public Class<NewsLinksFullDto> getDtoClass() {
-        return NewsLinksFullDto.class;
-    }
-
+    @Deprecated
     @Override
     public NewsLinks update(@Nonnull NewsLinks entity) {
         if (this.record instanceof RecordBaseDto) {
@@ -98,6 +99,7 @@ public class NewsLinksFullDto implements NewsLinksDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public NewsLinks update(@Nonnull NewsLinks entity, @Nonnull UserLogin userLogin) {
         assert this.record != null;

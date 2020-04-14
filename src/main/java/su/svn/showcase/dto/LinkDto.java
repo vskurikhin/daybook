@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 22:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDto.java
@@ -35,6 +35,7 @@ public interface LinkDto extends Dto<UUID>, Updating<Link> {
 
     void setLink(String link);
 
+    @Deprecated
     default Link update(@Nonnull Link entity, @Nonnull Map<String, Object> values) {
         return update(entity);
     }

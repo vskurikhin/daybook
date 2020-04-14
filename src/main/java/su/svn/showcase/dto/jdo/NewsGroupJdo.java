@@ -1,22 +1,27 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsGroupBaseDto.java
+ * NewsGroupJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.dto.NewsEntryDto;
+import su.svn.showcase.dto.NewsGroupDto;
 
 import javax.annotation.Nonnull;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * The base DTO of NewsGroup.
@@ -27,7 +32,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
+public class NewsGroupJdo implements NewsGroupDto, Serializable {
 
     private static final long serialVersionUID = 9230L;
 
@@ -39,17 +44,28 @@ public class NewsGroupBaseDto implements NewsGroupDto, Serializable {
     @Size(min = 1, max = 64)
     private String group;
 
-    public NewsGroupBaseDto(@Nonnull NewsGroup entity) {
+    @Getter
+    @Setter
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "newsGroup")
+    private Set<NewsEntryDto> newsEntries;
+
+    public NewsGroupJdo(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<NewsGroupJdo> getDtoClass() {
+        return NewsGroupJdo.class;
+    }
+
+    @Deprecated
+    public NewsGroupJdo(@Nonnull NewsGroup entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.group = entity.getGroup();
     }
 
-    @Override
-    public Class<NewsGroupBaseDto> getDtoClass() {
-        return NewsGroupBaseDto.class;
-    }
-
+    @Deprecated
     @Override
     public NewsGroup update(@Nonnull NewsGroup entity) {
         updateIfNotNull(entity::setDateTime, this.dateTime);
