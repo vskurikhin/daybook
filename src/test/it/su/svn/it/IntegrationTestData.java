@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -12,7 +12,7 @@ import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.RecordBaseDto;
 import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.RoleBaseDto;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.dto.TagBaseDto;
 import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.UserRoleFullDto;
@@ -34,11 +34,11 @@ public class IntegrationTestData extends TestData
         Role.builder().id(UUID3).roleName("testRole3").build(),
     };
 
-    private static final RoleBaseDto[] roleBaseDtos = {
-        RoleBaseDto.builder().id(UUID0).roleName("testRole0").build(),
-        RoleBaseDto.builder().id(UUID1).roleName("testRole1").build(),
-        RoleBaseDto.builder().id(UUID2).roleName("testRole2").build(),
-        RoleBaseDto.builder().id(UUID3).roleName("testRole3").build(),
+    private static final RoleJdo[] roleBaseDtos = {
+        RoleJdo.builder().id(UUID0).roleName("testRole0").build(),
+        RoleJdo.builder().id(UUID1).roleName("testRole1").build(),
+        RoleJdo.builder().id(UUID2).roleName("testRole2").build(),
+        RoleJdo.builder().id(UUID3).roleName("testRole3").build(),
     };
 
     private static final UserRole[] userRoles = {
@@ -651,9 +651,9 @@ public class IntegrationTestData extends TestData
         return role;
     }
 
-    public static RoleBaseDto cloneRoleBaseDto(int i)
+    public static RoleJdo cloneRoleFullDto(int i)
     {
-        RoleBaseDto role = clone(roleBaseDtos[i]);
+        RoleJdo role = clone(roleBaseDtos[i]);
         assert role != null;
         return role;
     }

@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleFullDtoTest.java
+ * UserRoleJdoTest.java
  * $Id$
  */
 
@@ -12,6 +12,7 @@ import org.junit.jupiter.api.*;
 import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.util.HashMap;
@@ -26,11 +27,11 @@ import static su.svn.utils.TestData.NOW;
 import static su.svn.utils.TestData.ROLE_UUID0;
 
 @DisplayName("Class UserRoleFullDtoTest")
-class UserRoleFullDtoTest {
+class UserRoleJdoTest {
 
     private Role role;
 
-    private RoleBaseDto roleBaseDto;
+    private RoleJdo roleJdo;
 
     private UserRoleFullDto userRoleFullDto;
 
@@ -47,7 +48,7 @@ class UserRoleFullDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            roleBaseDto = cloneRoleBaseDto0();
+            roleJdo = cloneRoleJdo0();
             userLoginDto = new UserOnlyLoginDto();
             userRoleFullDto = new UserRoleFullDto();
         }
@@ -65,9 +66,9 @@ class UserRoleFullDtoTest {
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            userRoleFullDto.setRole(roleBaseDto);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleBaseDto);
-            assertEquals(roleBaseDto, userRoleFullDto.getRole());
+            userRoleFullDto.setRole(roleJdo);
+            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
+            assertEquals(roleJdo, userRoleFullDto.getRole());
 
             userRoleFullDto.setRoleName("testRole");
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
@@ -95,7 +96,7 @@ class UserRoleFullDtoTest {
         @BeforeEach
         void createNew() {
             role = cloneRole0();
-            roleBaseDto = cloneRoleBaseDto0();
+            roleJdo = cloneRoleJdo0();
             userLoginDto = cloneUserOnlyLoginBaseDto0();
             userRoleFullDto = cloneUserRoleFullDto0();
         }
@@ -103,8 +104,8 @@ class UserRoleFullDtoTest {
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userRoleFullDto = new UserRoleFullDto(ROLE_UUID0, roleBaseDto, NOW, "testRole", userLoginDto);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleBaseDto);
+            userRoleFullDto = new UserRoleFullDto(ROLE_UUID0, roleJdo, NOW, "testRole", userLoginDto);
+            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
@@ -115,13 +116,13 @@ class UserRoleFullDtoTest {
         void isInstantiatedWithBuilder() {
             userRoleFullDto = UserRoleFullDto.builder()
                     .id(ZERO)
-                    .role(roleBaseDto)
+                    .role(roleJdo)
                     .dateTime(NOW)
                     .roleName("testRole")
                     .userLogin(userLoginDto)
                     .build();
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleBaseDto);
+            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", NOW);
             assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
@@ -166,7 +167,7 @@ class UserRoleFullDtoTest {
             entity.setId(ZERO);
             entity.setRoleName("testRole");
             entity.setDateTime(NOW);
-            UserRoleFullDto expected = new UserRoleFullDto(ZERO, roleBaseDto, NOW, "testRole", userLoginDto);
+            UserRoleFullDto expected = new UserRoleFullDto(ZERO, roleJdo, NOW, "testRole", userLoginDto);
             // TODO assertEquals(expected, userRoleFullDto);
         }
     }

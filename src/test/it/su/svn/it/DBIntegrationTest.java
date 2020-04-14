@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -26,6 +26,7 @@ import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.services.*;
 
 import java.util.Collection;
@@ -170,7 +171,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @Test
     @InSequence(2102)
     public void test_roleBaseCrudService_create() throws Exception {
-        RoleBaseDto entity = cloneRoleBaseDto(2);
+        RoleJdo entity = cloneRoleFullDto(2);
         // TODO roleCrudService.create(entity);
     }
 

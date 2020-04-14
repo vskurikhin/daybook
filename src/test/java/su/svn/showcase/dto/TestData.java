@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -17,11 +17,11 @@ import static su.svn.utils.TestData.*;
 @SuppressWarnings("WeakerAccess")
 public class TestData {
 
-    private static final RoleBaseDto roleBaseDto0 = RoleBaseDto.builder()
+    private static final RoleJdo roleJdo0 = RoleJdo.builder()
             .id(UUID0)
             .roleName("testRole0")
             .build();
-    private static final RoleBaseDto roleBaseDto1 = RoleBaseDto.builder()
+    private static final RoleJdo roleJdo1 = RoleJdo.builder()
             .id(UUID1)
             .roleName("testRole1")
             .build();
@@ -195,9 +195,9 @@ public class TestData {
         tagFullDto0.setRecords(newSet(cloneRecordBaseDto0()));
         tagFullDto1.setRecords(newSet(cloneRecordBaseDto1()));
 
-        userRoleFullDto0.setRole(cloneRoleBaseDto0());
+        userRoleFullDto0.setRole(cloneRoleJdo0());
         userRoleFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
-        userRoleFullDto1.setRole(cloneRoleBaseDto1());
+        userRoleFullDto1.setRole(cloneRoleJdo1());
         userRoleFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
 
         userLoginFullDto0.setRoles(newList(cloneUserRoleBaseDto0()));
@@ -220,11 +220,11 @@ public class TestData {
         newsEntryJdo1.setRecord(cloneRecordFullDto1());
     }
 
-    public static RoleBaseDto cloneRoleBaseDto0() {
-        return assertClone(roleBaseDto0);
+    public static RoleJdo cloneRoleJdo0() {
+        return assertClone(roleJdo0);
     }
-    public static RoleBaseDto cloneRoleBaseDto1() {
-        return assertClone(roleBaseDto1);
+    public static RoleJdo cloneRoleJdo1() {
+        return assertClone(roleJdo1);
     }
 
     public static UserRoleBaseDto cloneUserRoleBaseDto0() {
