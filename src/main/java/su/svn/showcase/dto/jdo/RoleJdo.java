@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleJdo.java
@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import su.svn.showcase.domain.Role;
 import su.svn.showcase.dto.RoleDto;
 
 import javax.annotation.Nonnull;
@@ -47,19 +46,6 @@ public class RoleJdo implements RoleDto, Serializable {
     @Override
     public Class<RoleJdo> getDtoClass() {
         return RoleJdo.class;
-    }
-
-    @Deprecated
-    public RoleJdo(@Nonnull Role entity) {
-        this.id = entity.getId();
-        this.roleName = entity.getRoleName();
-    }
-
-    @Deprecated
-    @Override
-    public Role update(@Nonnull Role entity) {
-        updateIfNotNull(entity::setRoleName, this.roleName);
-        return entity;
     }
 }
 //EOF

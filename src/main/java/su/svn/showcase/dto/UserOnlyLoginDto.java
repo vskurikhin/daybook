@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginDto.java
@@ -49,17 +49,6 @@ public class UserOnlyLoginDto implements UserLoginDto, Serializable {
     @Override
     public Class<UserOnlyLoginDto> getDtoClass() {
         return UserOnlyLoginDto.class;
-    }
-
-    @Override
-    public UserLogin update(@Nonnull UserLogin entity) {
-        if (entity.getLogin().equals(this.login)) {
-            return entity;
-        }
-        throw new IllegalArgumentException("The login isn't equals in DTO "
-                + this.login
-                + " and entity "
-                + entity.getLogin());
     }
 
     @Override

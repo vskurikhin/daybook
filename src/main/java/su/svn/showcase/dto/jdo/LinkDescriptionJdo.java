@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkDescriptionJdo.java
@@ -8,9 +8,15 @@
 
 package su.svn.showcase.dto.jdo;
 
-import lombok.*;
-import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import su.svn.showcase.dto.LinkDescriptionDto;
+import su.svn.showcase.dto.LinkDto;
+import su.svn.showcase.dto.NewsLinksDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -56,40 +62,6 @@ public class LinkDescriptionJdo implements LinkDescriptionDto, Serializable {
     @Override
     public Class<LinkDescriptionJdo> getDtoClass() {
         return LinkDescriptionJdo.class;
-    }
-
-    @Deprecated
-    public LinkDescriptionJdo(@Nonnull LinkDescription entity) {
-        this.id = entity.getId();
-        this.newsLinks = new NewsLinksJdo(entity.getNewsLinks());
-        this.link = new LinkJdo(entity.getLink());
-        this.dateTime = entity.getDateTime();
-        this.description = entity.getDescription();
-        this.details = entity.getDescription();
-    }
-
-    @Deprecated
-    @Override
-    public LinkDescription update(@Nonnull LinkDescription entity) {
-        if (this.newsLinks != null) {
-            NewsLinks newsLinks = new NewsLinks(this.newsLinks.getId());
-            entity.setNewsLinks(this.newsLinks.update(newsLinks));
-        }
-        if (this.link != null) {
-            Link link = new Link(this.link.getId());
-            entity.setLink(this.link.update(link));
-        }
-        updateIfNotNull(entity::setDateTime, this.dateTime);
-        updateIfNotNull(entity::setDescription, this.description);
-        updateIfNotNull(entity::setDetails, this.details);
-
-        return entity;
-    }
-
-    @Deprecated
-    @Override
-    public LinkDescription update(@Nonnull LinkDescription entity, UserLogin userLogin) {
-        return update(entity);
     }
 }
 //EOF

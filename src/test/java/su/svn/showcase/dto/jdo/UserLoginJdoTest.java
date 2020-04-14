@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginJdoTest.java
@@ -138,28 +138,6 @@ class UserLoginJdoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(userLoginJdo.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            UserLogin expected = new UserLogin(ZERO);
-            expected.setLogin("testLogin");
-            expected.setPassword("testPassword");
-            expected.setDateTime(NOW);
-            assertEquals(expected, userLoginJdo.update(new UserLogin(ZERO)));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            UserLogin entity = new UserLogin(ZERO);
-            entity.setLogin("testLogin");
-            entity.setPassword("testPassword");
-            entity.setDateTime(NOW);
-            entity.setRoles(EMPTY_USER_ROLES);
-            UserLoginJdo expected = new UserLoginJdo(entity);
-            assertEquals(expected, userLoginJdo);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagJdo.java
@@ -14,8 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordDto;
 import su.svn.showcase.dto.TagDto;
 
@@ -25,9 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * The extended DTO of Tag.
@@ -64,34 +60,6 @@ public class TagJdo implements TagDto, Serializable {
     @Override
     public Class<TagJdo> getDtoClass() {
         return TagJdo.class;
-    }
-
-    @Deprecated
-    public TagJdo(@Nonnull Tag entity) {
-        this.id = entity.getId();
-        this.tag = entity.getTag();
-        this.visible = entity.getVisible();
-        this.dateTime = entity.getDateTime();
-        this.records = entity.getRecords().stream()
-                .map(RecordJdo::new)
-                .collect(Collectors.toSet());
-    }
-
-    @Deprecated
-    @Override
-    public Tag update(@Nonnull Tag entity) {
-        updateIfNotNull(entity::setTag, this.tag);
-        updateIfNotNull(entity::setDateTime, this.dateTime);
-        entity.setVisible(this.visible != null ? this.visible : false);
-        if (this.records != null) {
-            Set<Record> records = this.records.stream()
-                    .map(dto -> dto.update(new Record(dto.getId())))
-                    .collect(Collectors.toSet());
-            entity.setRecords(records);
-        } else {
-            entity.setRecords(Collections.emptySet());
-        }
-        return entity;
     }
 }
 //EOF

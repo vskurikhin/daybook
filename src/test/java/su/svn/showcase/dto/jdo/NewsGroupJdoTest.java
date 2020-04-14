@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupJdoTest.java
@@ -118,26 +118,6 @@ class NewsGroupJdoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(newsGroupBaseDto.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            NewsGroup expected = new NewsGroup(ZERO, NOW, "testGroup", EMPTY_NEWS_ENTRIES);
-            Map<String, Object> values = new HashMap<String, Object>() {{
-                put("newsEntries", EMPTY_NEWS_ENTRIES);
-            }};
-            assertEquals(expected, newsGroupBaseDto.update(new NewsGroup(ZERO), values));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            NewsGroup entity = new NewsGroup(ZERO);
-            entity.setDateTime(NOW);
-            entity.setGroup("testGroup");
-            NewsGroupJdo expected = new NewsGroupJdo(entity);
-            assertEquals(expected, newsGroupBaseDto);
         }
     }
 }
