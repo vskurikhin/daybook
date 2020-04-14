@@ -1,16 +1,19 @@
 /*
- * This file was last modified at 2020.04.01 15:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagFullDto.java
+ * TagJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
+import su.svn.showcase.dto.RecordBaseDto;
+import su.svn.showcase.dto.RecordDto;
+import su.svn.showcase.dto.TagDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -32,7 +35,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"records"})
 @ToString(exclude = {"records"})
-public class TagFullDto implements TagDto, Serializable {
+public class TagJdo implements TagDto, Serializable {
 
     private static final long serialVersionUID = 9131L;
 
@@ -49,7 +52,17 @@ public class TagFullDto implements TagDto, Serializable {
     @Valid
     private Set<RecordDto> records;
 
-    public TagFullDto(@Nonnull Tag entity) {
+    public TagJdo(@Nonnull String id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<TagJdo> getDtoClass() {
+        return TagJdo.class;
+    }
+
+    @Deprecated
+    public TagJdo(@Nonnull Tag entity) {
         this.id = entity.getId();
         this.tag = entity.getTag();
         this.visible = entity.getVisible();
@@ -59,11 +72,7 @@ public class TagFullDto implements TagDto, Serializable {
                 .collect(Collectors.toSet());
     }
 
-    @Override
-    public Class<TagFullDto> getDtoClass() {
-        return TagFullDto.class;
-    }
-
+    @Deprecated
     @Override
     public Tag update(@Nonnull Tag entity) {
         updateIfNotNull(entity::setTag, this.tag);

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.14 20:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginAuthServiceImplTest.java
@@ -120,7 +120,7 @@ class UserLoginAuthServiceImplTest {
     void readById(UserLoginAuthService service) {
         Assertions.assertNotNull(service);
         when(mockDao.findById(any())).thenReturn(Optional.of(entity));
-        Assertions.assertEquals(TestData.userLoginFullDto1, service.readById(entity.getId())); // TODO fix
+        Assertions.assertEquals(TestData.USER_LOGIN_JDO_1, service.readById(entity.getId())); // TODO fix
     }
 
     @Test

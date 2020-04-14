@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * TagBaseConverterImpl.java
+ * TagBaseConverter.java
  * $Id$
  */
 
@@ -10,32 +10,32 @@ package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
 import javax.ejb.Stateless;
 
 @Stateless(name = "TagBaseConverter")
-public class TagBaseConverter extends AbstractConverter<String, Tag, TagFullDto> implements TagConverter {
+public class TagBaseConverter extends AbstractConverter<String, Tag, TagJdo> implements TagConverter {
 
     @Override
-    public TagFullDto convert(@Nonnull Tag entity) {
-        return super.convertByGetter(new TagFullDto(), entity);
+    public TagJdo convert(@Nonnull Tag entity) {
+        return super.convertByGetter(new TagJdo(), entity);
     }
 
     @Override
-    public TagFullDto convert(@Nonnull Tag entity, ReadyMap ready) {
-        return super.convertByGetter(new TagFullDto(), entity);
+    public TagJdo convert(@Nonnull Tag entity, ReadyMap ready) {
+        return super.convertByGetter(new TagJdo(), entity);
     }
 
     @Override
-    public Tag convert(@Nonnull TagFullDto dto) {
+    public Tag convert(@Nonnull TagJdo dto) {
         return super.convertBySetter(new Tag(dto.getId()), dto);
     }
 
     @Override
-    public Tag convert(@Nonnull TagFullDto dto, ReadyMap ready) {
+    public Tag convert(@Nonnull TagJdo dto, ReadyMap ready) {
         return super.convertBySetter(new Tag(dto.getId()), dto);
     }
 
@@ -45,7 +45,7 @@ public class TagBaseConverter extends AbstractConverter<String, Tag, TagFullDto>
     }
 
     @Override
-    Class<TagFullDto> getDClass() {
-        return TagFullDto.class;
+    Class<TagJdo> getDClass() {
+        return TagJdo.class;
     }
 }

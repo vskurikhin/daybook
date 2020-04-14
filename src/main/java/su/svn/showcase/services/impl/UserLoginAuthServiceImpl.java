@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.14 13:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginAuthServiceImpl.java
@@ -14,7 +14,7 @@ import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.UserLoginAuthDto;
 import su.svn.showcase.dto.UserLoginDto;
-import su.svn.showcase.dto.UserLoginFullDto;
+import su.svn.showcase.dto.jdo.UserLoginJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserLoginAuthService;
 
@@ -42,20 +42,20 @@ public class UserLoginAuthServiceImpl extends AbstractCrudService implements Use
 
     @Override
     public UserLoginAuthDto readById(@Nonnull UUID id) {
-        return new UserLoginFullDto(userLoginDao.findById(id)
+        return new UserLoginJdo(userLoginDao.findById(id)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     public UserLoginAuthDto readByLogin(String login) {
-        return new UserLoginFullDto(userLoginDao.findWhereLogin(login)
+        return new UserLoginJdo(userLoginDao.findWhereLogin(login)
                 .orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     public List<UserLoginAuthDto> readRange(int start, int size) {
         return userLoginDao.range(start, size).stream()
-                .map(UserLoginFullDto::new)
+                .map(UserLoginJdo::new)
                 .collect(Collectors.toList());
     }
 

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverter.java
@@ -20,6 +20,8 @@ import su.svn.showcase.dto.enums.RecordTypesEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsLinksJdo;
+import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
 import su.svn.showcase.utils.ReadyMap;
@@ -97,7 +99,7 @@ public class RecordFullConverter extends AbstractConverter<UUID, Record, RecordF
         return super.convertByGetter(dto, entity);
     }
 
-    private Function<Tag, TagFullDto> functionTagToDto(ReadyMap ready) {
+    private Function<Tag, TagJdo> functionTagToDto(ReadyMap ready) {
         return entity -> tagConverter.convert(entity, ready);
     }
 
@@ -155,7 +157,7 @@ public class RecordFullConverter extends AbstractConverter<UUID, Record, RecordF
     }
 
     private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
-        return dto -> tagConverter.convert((TagFullDto) dto, ready);
+        return dto -> tagConverter.convert((TagJdo) dto, ready);
     }
 
     @Override

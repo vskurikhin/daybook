@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.16 11:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -10,8 +10,7 @@ package su.svn.it;
 
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.RecordDto;
-import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -37,8 +36,7 @@ public class TestData {
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();
     public static final Set<Record> EMPTY_RECORDS = Collections.emptySet();
 
-    public static final Set<TagBaseDto> EMPTY_BASEDTO_TAGS = Collections.emptySet();
-    public static final Set<TagFullDto> EMPTY_FULLDTO_TAGS = Collections.emptySet();
+    public static final Set<TagJdo> EMPTY_FULLDTO_TAGS = Collections.emptySet();
     public static final Set<RecordDto> EMPTY_RECORD_DTOS = Collections.emptySet();
 
     public static final List<UserRole> EMPTY_USER_ROLES = Collections.emptyList();

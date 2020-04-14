@@ -1,16 +1,19 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserLoginFullDto.java
+ * UserLoginJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
+import su.svn.showcase.dto.UserLoginAuthDto;
+import su.svn.showcase.dto.UserRoleBaseDto;
+import su.svn.showcase.dto.UserRoleDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.Valid;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
+public class UserLoginJdo implements UserLoginAuthDto, Serializable {
 
     private static final long serialVersionUID = 9201L;
 
@@ -45,12 +48,12 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
     @Valid
     private List<UserRoleDto> roles;
 
-    public UserLoginFullDto(@Nonnull UUID id) {
+    public UserLoginJdo(@Nonnull UUID id) {
         this.id = id;
     }
 
     @Deprecated
-    public UserLoginFullDto(@Nonnull UserLogin entity) {
+    public UserLoginJdo(@Nonnull UserLogin entity) {
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
         this.login = entity.getLogin();
@@ -86,8 +89,8 @@ public class UserLoginFullDto implements UserLoginAuthDto, Serializable {
 
     @Deprecated
     @Override
-    public Class<UserLoginFullDto> getDtoClass() {
-        return UserLoginFullDto.class;
+    public Class<UserLoginJdo> getDtoClass() {
+        return UserLoginJdo.class;
     }
 }
 //EOF

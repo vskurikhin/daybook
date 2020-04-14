@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.08 20:43 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagCrudServiceImpl.java
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.TagCrudService;
 
@@ -36,19 +36,19 @@ public class TagCrudServiceImpl extends AbstractCrudService implements TagCrudSe
     private TagConverter tagConverter;
 
     @Override
-    public void create(@Nonnull TagFullDto dto) {
+    public void create(@Nonnull TagJdo dto) {
         save(dto);
     }
 
     @Override
     @Transactional
-    public TagFullDto readById(@Nonnull String id) {
+    public TagJdo readById(@Nonnull String id) {
         return tagConverter.convert(tagDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<TagFullDto> readRange(int start, int size) {
+    public List<TagJdo> readRange(int start, int size) {
         return tagDao.rangeOrderByTagAsc(start, size).stream()
                 .map(tagConverter::convert)
                 .collect(Collectors.toList());
@@ -56,7 +56,7 @@ public class TagCrudServiceImpl extends AbstractCrudService implements TagCrudSe
 
     @Override
     @Transactional
-    public void update(@Nonnull TagFullDto dto) {
+    public void update(@Nonnull TagJdo dto) {
         validateId(dto);
         save(dto);
     }
@@ -78,7 +78,7 @@ public class TagCrudServiceImpl extends AbstractCrudService implements TagCrudSe
         return LOGGER;
     }
 
-    private void save(TagFullDto dto) {
+    private void save(TagJdo dto) {
         Tag entity = tagConverter.convert(dto);
         tagDao.save(entity);
     }

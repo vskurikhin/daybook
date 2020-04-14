@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -9,16 +9,8 @@
 package su.svn.it;
 
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordBaseDto;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.jdo.RoleJdo;
-import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.dto.UserOnlyLoginDto;
-import su.svn.showcase.dto.UserRoleFullDto;
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.LinkJdo;
-import su.svn.showcase.dto.jdo.NewsGroupJdo;
+import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.*;
 
 import java.util.*;
 
@@ -108,11 +100,11 @@ public class IntegrationTestData extends TestData
         Tag.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
     };
 
-    private static final TagBaseDto[] tagBaseDtos = {
-        TagBaseDto.builder().id(SID0).tag("tagTest0").visible(false).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID1).tag("tagTest1").visible(true).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID2).tag("tagTest2").visible(false).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
+    private static final TagJdo[] TAG_JDOS = {
+        TagJdo.builder().id(SID0).tag("tagTest0").visible(false).dateTime(NOW).build(),
+        TagJdo.builder().id(SID1).tag("tagTest1").visible(true).dateTime(NOW).build(),
+        TagJdo.builder().id(SID2).tag("tagTest2").visible(false).dateTime(NOW).build(),
+        TagJdo.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
     };
 
     private static final NewsGroup[] newsGroups = {
@@ -627,7 +619,7 @@ public class IntegrationTestData extends TestData
             records[i].setNewsEntry(newsEntries[i]);
             recordFullDtos[i].setUserLogin(userOnlyLoginDtos[i]);
             recordFullDtos[i].setNewsEntry(newsEntryJdos[i]);
-            recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
+            recordFullDtos[i].setTags(newSet(TAG_JDOS[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);
             newsEntryJdos[i].setRecord(recordFullDtos[i]);
@@ -710,9 +702,9 @@ public class IntegrationTestData extends TestData
         return tag;
     }
 
-    public static TagBaseDto cloneTagBaseDto(int i)
+    public static TagJdo cloneTagFullDto(int i)
     {
-        TagBaseDto tag = clone(tagBaseDtos[i]);
+        TagJdo tag = clone(TAG_JDOS[i]);
         assert tag != null;
         return tag;
     }
