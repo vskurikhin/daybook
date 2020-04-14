@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.01 12:55 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -8,7 +8,7 @@
 
 package su.svn.showcase.domain;
 
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 
 import java.util.*;
 
@@ -93,14 +93,14 @@ public class TestData {
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build();
     private static final Record record1 = Record.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(11)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build();
 
     private static final NewsGroup newsGroup0 = NewsGroup.builder()

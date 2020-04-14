@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryFullConverter.java
@@ -12,7 +12,7 @@ import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.NewsEntry;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.utils.ReadyMap;
 
 import javax.annotation.Nonnull;
@@ -29,13 +29,13 @@ public class NewsEntryFullConverter extends NewsEntryAbstractConverter implement
     private NewsGroupConverter newsGroupConverter;
 
     @Override
-    public NewsEntryFullDto convert(@Nonnull NewsEntry entity) {
-        return doConvert(new NewsEntryFullDto(entity.getId()), entity, new ReadyMap());
+    public NewsEntryJdo convert(@Nonnull NewsEntry entity) {
+        return doConvert(new NewsEntryJdo(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
-    public NewsEntryFullDto convert(@Nonnull NewsEntry entity, ReadyMap ready) {
-        return doConvert(new NewsEntryFullDto(entity.getId()), entity, ready);
+    public NewsEntryJdo convert(@Nonnull NewsEntry entity, ReadyMap ready) {
+        return doConvert(new NewsEntryJdo(entity.getId()), entity, ready);
     }
 
     @Override
@@ -49,12 +49,12 @@ public class NewsEntryFullConverter extends NewsEntryAbstractConverter implement
     }
 
     @Override
-    public NewsEntry convert(@Nonnull NewsEntryFullDto dto) {
+    public NewsEntry convert(@Nonnull NewsEntryJdo dto) {
         return doConvert(new NewsEntry(dto.getId()), dto, new ReadyMap());
     }
 
     @Override
-    public NewsEntry convert(@Nonnull NewsEntryFullDto dto, ReadyMap ready) {
+    public NewsEntry convert(@Nonnull NewsEntryJdo dto, ReadyMap ready) {
         return doConvert(new NewsEntry(dto.getId()), dto, ready);
     }
 }

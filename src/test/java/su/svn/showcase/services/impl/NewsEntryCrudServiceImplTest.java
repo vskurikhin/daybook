@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCrudServiceImplTest.java
@@ -22,6 +22,7 @@ import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.NewsEntryCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -143,7 +144,7 @@ class NewsEntryCrudServiceImplTest {
     NewsEntryCrudService service;
 
     private NewsEntry entity;
-    private NewsEntryFullDto dto;
+    private NewsEntryJdo dto;
     private NewsGroupFullDto newsGroupDto;
     private Record record;
     private UserLogin userLogin;
@@ -200,10 +201,10 @@ class NewsEntryCrudServiceImplTest {
                 .createDateTime(NOW1)
                 .editDateTime(NOW1)
                 .index(13)
-                .type(NewsEntryFullDto.class.getSimpleName())
+                .type(NewsEntryJdo.class.getSimpleName())
                 .userLogin(userLoginDto)
                 .build();
-        NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
+        NewsEntryJdo newsEntryDto = NewsEntryJdo.builder()
                 .id(UUID1)
                 .record(recordDto)
                 .dateTime(NOW1)
@@ -220,20 +221,20 @@ class NewsEntryCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        NewsEntryFullDto test = service.readById(UUID10);
+        NewsEntryJdo test = service.readById(UUID10);
         userTransaction.rollback();
     }
 
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<NewsEntryFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        List<NewsEntryJdo> test= service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
     }
 
     @Test
     void update() throws Exception {
-        NewsEntryFullDto newsEntryDto = NewsEntryFullDto.builder()
+        NewsEntryJdo newsEntryDto = NewsEntryJdo.builder()
                 .id(UUID10)
                 .dateTime(NOW1)
                 .title("titleTest10")

@@ -1,15 +1,16 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * NewsEntryFullDto.java
+ * NewsEntryJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
 import lombok.*;
 import su.svn.showcase.domain.*;
+import su.svn.showcase.dto.*;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -29,30 +30,36 @@ import java.util.*;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"record"})
 @ToString(exclude = {"record"})
-public class NewsEntryFullDto implements NewsEntryDto, Serializable {
+public class NewsEntryJdo implements NewsEntryDto, Serializable {
 
     private static final long serialVersionUID = 9251L;
 
     @NotNull
     private UUID id;
 
-    @NotNull
     private LocalDateTime dateTime;
 
-    @NotNull
     @Size(min = 1, max = 128)
     private String title;
 
     @Size(min = 1, max = 1024)
     private String content;
 
-    @NotNull
     private RecordDto record;
 
-    @NotNull
     private NewsGroupDto newsGroup;
 
-    public NewsEntryFullDto(@NotNull NewsEntry entity) {
+    public NewsEntryJdo(@NotNull UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<NewsEntryJdo> getDtoClass() {
+        return NewsEntryJdo.class;
+    }
+
+    @Deprecated
+    public NewsEntryJdo(@NotNull NewsEntry entity) {
         assert entity != null;
         this.id = entity.getId();
         this.dateTime = entity.getDateTime();
@@ -63,15 +70,7 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
                 : null;
     }
 
-    public NewsEntryFullDto(UUID id) {
-        this.id = id;
-    }
-
-    @Override
-    public Class<NewsEntryFullDto> getDtoClass() {
-        return NewsEntryFullDto.class;
-    }
-
+    @Deprecated
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity) {
         if (this.record instanceof RecordBaseDto) {
@@ -89,6 +88,7 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
         return entity;
     }
 
+    @Deprecated
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull UserLogin userLogin) {
         assert this.record != null;
@@ -99,10 +99,12 @@ public class NewsEntryFullDto implements NewsEntryDto, Serializable {
         return update(entity);
     }
 
+    @Deprecated
     private Record updateRecord(RecordDto dto) {
         return dto.update(new Record(dto.getId()));
     }
 
+    @Deprecated
     private Record updateRecord(RecordFullDto dto, UserLogin userLogin) {
         return dto.update(new Record(dto.getId(), userLogin));
     }

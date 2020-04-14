@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterTest.java
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.RecordFullDto;
 
 import javax.ejb.EJB;
@@ -127,10 +127,10 @@ class RecordFullConverterTest {
         Assertions.assertNotNull(converter);
         entity.setNewsEntry(cloneNewsEntry0());
         entity.getNewsEntry().setRecord(entity);
-        entity.setType(NewsEntryFullDto.class.getSimpleName());
+        entity.setType(NewsEntryJdo.class.getSimpleName());
         RecordFullDto test = converter.convert(entity);
         // TODO Assertions.assertEquals(dto, test);
-        Assertions.assertTrue(test == ((NewsEntryFullDto) test.getNewsEntry()).getRecord());
+        Assertions.assertTrue(test == ((NewsEntryJdo) test.getNewsEntry()).getRecord());
     }
 
     @Test
@@ -138,8 +138,8 @@ class RecordFullConverterTest {
         Assertions.assertNotNull(converter);
         dto.setNewsEntry(cloneNewsEntryFullDto0());
         dto.setTags(newSet(cloneTagFullDto0()));
-        ((NewsEntryFullDto) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
-        ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(dto);
+        ((NewsEntryJdo) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
+        ((NewsEntryJdo) dto.getNewsEntry()).setRecord(dto);
         Record test = converter.convert(dto);
         entity.setNewsEntry(cloneNewsEntry0());
         // TODO Assertions.assertEquals(entity, test);

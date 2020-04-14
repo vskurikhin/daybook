@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.07 23:20 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditView.java
@@ -12,7 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.RecordFullDto;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.services.*;
@@ -69,7 +69,7 @@ public class NewsEntryEditView extends AbstractView {
                     .recordTagsStorageService(recordTagsStorageService)
                     .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
-            NewsEntryFullDto newsEntry = newsEntryService.readById(uuid);
+            NewsEntryJdo newsEntry = newsEntryService.readById(uuid);
             newsEntryModelBuilder.uuid(getIdParameter(request))
                     .title(loadTitle(newsEntry))
                     .tags(loadTags(newsEntry))
@@ -80,13 +80,13 @@ public class NewsEntryEditView extends AbstractView {
         }
     }
 
-    private String loadTitle(NewsEntryFullDto newsEntry) {
+    private String loadTitle(NewsEntryJdo newsEntry) {
         this.title = newsEntry.getTitle();
         return this.title;
     }
 
     @Nullable
-    private String loadTags(NewsEntryFullDto newsEntry) {
+    private String loadTags(NewsEntryJdo newsEntry) {
         if (newsEntry.getRecord() instanceof RecordFullDto) {
             RecordFullDto recordFullDto = (RecordFullDto) newsEntry.getRecord();
             this.tags = recordFullDto.getTags().stream()
@@ -97,12 +97,12 @@ public class NewsEntryEditView extends AbstractView {
         return null;
     }
 
-    private String loadDate(NewsEntryFullDto newsEntry) {
+    private String loadDate(NewsEntryJdo newsEntry) {
         this.date = newsEntry.toDateDDMMYYYY();
         return this.date;
     }
 
-    private String loadContent(NewsEntryFullDto newsEntry) {
+    private String loadContent(NewsEntryJdo newsEntry) {
         this.content = newsEntry.getContent();
         return this.content;
     }

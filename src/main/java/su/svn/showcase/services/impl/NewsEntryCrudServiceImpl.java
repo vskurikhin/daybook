@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCrudServiceImpl.java
@@ -19,6 +19,7 @@ import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.enums.NewsEntryDtoEnum;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.NewsEntryCrudService;
 
@@ -53,20 +54,20 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
 
     @Override
     @Transactional
-    public void create(@Nonnull NewsEntryFullDto dto) {
+    public void create(@Nonnull NewsEntryJdo dto) {
         validateOrFillRecordNewsEntryId(dto);
         create(dto, getUserLogin(dto));
     }
 
     @Override
     @Transactional
-    public NewsEntryFullDto readById(@Nonnull UUID id) {
+    public NewsEntryJdo readById(@Nonnull UUID id) {
         return newsEntryPartConverter.convert(newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<NewsEntryFullDto> readRange(int start, int size) {
+    public List<NewsEntryJdo> readRange(int start, int size) {
         return newsEntryDao.range(start, size).stream()
                 .map(newsEntryPartConverter::convert)
                 .collect(Collectors.toList());
@@ -74,7 +75,7 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
 
     @Override
     @Transactional
-    public void update(@Nonnull NewsEntryFullDto dto) {
+    public void update(@Nonnull NewsEntryJdo dto) {
         validateId(dto);
         // TODO validate login
         update(getNewsEntry(dto.getId()), dto);
@@ -97,14 +98,14 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
         return LOGGER;
     }
 
-    private void create(NewsEntryFullDto dto, UserLogin userLogin) {
+    private void create(NewsEntryJdo dto, UserLogin userLogin) {
         NewsEntry entity = newsEntryFullConverter.convert(dto);
         Record record = entity.getRecord();
         record.setUserLogin(userLogin);
         newsEntryDao.save(entity);
     }
 
-    private void update(NewsEntry entity, NewsEntryFullDto dto) {
+    private void update(NewsEntry entity, NewsEntryJdo dto) {
         NewsEntryConverter.Updater.update(entity, dto);
         recordDao.save(entity.getRecord());
     }
@@ -114,7 +115,7 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
         return newsEntryDao.findById(id).orElseThrow(ErrorCase::notFound);
     }
 
-    private UserLogin getUserLogin(NewsEntryFullDto dto) {
+    private UserLogin getUserLogin(NewsEntryJdo dto) {
         UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
         return getUserLogin(userLogin);
     }
@@ -126,7 +127,7 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
         return userLoginDao.findWhereLogin(userLogin.getLogin()).orElseThrow(ErrorCase::notFound);
     }
 
-    private void validateOrFillRecordNewsEntryId(NewsEntryFullDto dto) {
+    private void validateOrFillRecordNewsEntryId(NewsEntryJdo dto) {
         Objects.requireNonNull(dto.getRecord());
         Objects.requireNonNull(dto.getNewsGroup());
         validateRecordUserLogin(dto.getRecord());

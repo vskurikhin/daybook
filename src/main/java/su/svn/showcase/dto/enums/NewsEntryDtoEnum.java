@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryDtoEnum.java
@@ -9,19 +9,17 @@
 package su.svn.showcase.dto.enums;
 
 import su.svn.showcase.dto.NewsEntryBaseDto;
-import su.svn.showcase.dto.NewsEntryFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.utils.MapUtil;
 
 import java.util.Map;
 
 public enum NewsEntryDtoEnum {
 
-    NewsEntryBaseDto(su.svn.showcase.dto.NewsEntryBaseDto.class.getSimpleName()),
-    NewsEntryFullDto(su.svn.showcase.dto.NewsEntryFullDto.class.getSimpleName());
+    NewsEntryJdo(NewsEntryJdo.class.getSimpleName());
 
     private static final Map<Class<?>, NewsEntryDtoEnum> map = new MapUtil.Builder<Class<?>, NewsEntryDtoEnum>()
-            .key(NewsEntryBaseDto.class).value(NewsEntryBaseDto)
-            .key(NewsEntryFullDto.class).value(NewsEntryFullDto)
+            .key(NewsEntryJdo.class).value(NewsEntryJdo)
             .unmodifiableMap();
 
     private String value;
