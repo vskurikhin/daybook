@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleCrudServiceImpl.java
@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.UserRoleConverter;
 import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.domain.UserRole;
-import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.jdo.UserRoleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.UserRoleCrudService;
 
@@ -39,20 +39,20 @@ public class UserRoleCrudServiceImpl extends AbstractCrudService implements User
 
     @Override
     @Transactional
-    public void create(@Nonnull UserRoleFullDto dto) {
+    public void create(@Nonnull UserRoleJdo dto) {
         validateUserRoleId(dto);
         createAndSave(dto);
     }
 
     @Override
     @Transactional
-    public UserRoleFullDto readById(@Nonnull UUID id) {
+    public UserRoleJdo readById(@Nonnull UUID id) {
         return userRoleConverter.convert(userRoleDao.findById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<UserRoleFullDto> readRange(int start, int size) {
+    public List<UserRoleJdo> readRange(int start, int size) {
         return userRoleDao.range(start, size).stream()
                 .map(userRoleConverter::convert)
                 .collect(Collectors.toList());
@@ -60,7 +60,7 @@ public class UserRoleCrudServiceImpl extends AbstractCrudService implements User
 
     @Override
     @Transactional
-    public void update(@Nonnull UserRoleFullDto dto) {
+    public void update(@Nonnull UserRoleJdo dto) {
         validateId(dto);
         validateUserRoleId(dto);
         createAndSave(dto);
@@ -83,7 +83,7 @@ public class UserRoleCrudServiceImpl extends AbstractCrudService implements User
         return LOGGER;
     }
 
-    private void validateUserRoleId(UserRoleFullDto dto) {
+    private void validateUserRoleId(UserRoleJdo dto) {
         Objects.requireNonNull(dto.getRole());
         if (dto.getId() == null) {
             UUID id = UUID.randomUUID();
@@ -95,7 +95,7 @@ public class UserRoleCrudServiceImpl extends AbstractCrudService implements User
         }
     }
 
-    private void createAndSave(UserRoleFullDto dto) {
+    private void createAndSave(UserRoleJdo dto) {
         UserRole entity = userRoleConverter.convert(dto);
         userRoleDao.save(entity);
     }

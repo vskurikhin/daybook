@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagJdo.java
@@ -8,10 +8,14 @@
 
 package su.svn.showcase.dto.jdo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.RecordBaseDto;
 import su.svn.showcase.dto.RecordDto;
 import su.svn.showcase.dto.TagDto;
 
@@ -21,7 +25,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -68,7 +73,7 @@ public class TagJdo implements TagDto, Serializable {
         this.visible = entity.getVisible();
         this.dateTime = entity.getDateTime();
         this.records = entity.getRecords().stream()
-                .map(RecordBaseDto::new)
+                .map(RecordJdo::new)
                 .collect(Collectors.toSet());
     }
 

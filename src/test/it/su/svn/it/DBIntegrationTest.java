@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * DBIntegrationTest.java
@@ -23,12 +23,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import su.svn.showcase.dao.*;
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.*;
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.jdo.RoleJdo;
-import su.svn.showcase.dto.jdo.TagJdo;
+import su.svn.showcase.dto.jdo.*;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.services.*;
 
 import java.util.Collection;
@@ -196,7 +192,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @Test
     @InSequence(2202)
     public void test_userRoleFullCrudService_create() throws Exception {
-        UserRoleFullDto dto = cloneUserRoleFullDto(2);
+        UserRoleJdo dto = cloneUserRoleFullDto(2);
         userRoleCrudService.create(dto);
     }
 
@@ -257,7 +253,7 @@ public class DBIntegrationTest extends BaseIntegrationTest {
     @Test
     @InSequence(2452)
     public void test_recordFullCrudService_create() throws Exception {
-        RecordFullDto dto = cloneRecordFullDto(2);
+        RecordJdo dto = cloneRecordFullDto(2);
         dto.setTags(Collections.emptySet());
         recordCrudService.create(dto);
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryEditView.java
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.services.*;
 
@@ -87,9 +87,9 @@ public class NewsEntryEditView extends AbstractView {
 
     @Nullable
     private String loadTags(NewsEntryJdo newsEntry) {
-        if (newsEntry.getRecord() instanceof RecordFullDto) {
-            RecordFullDto recordFullDto = (RecordFullDto) newsEntry.getRecord();
-            this.tags = recordFullDto.getTags().stream()
+        if (newsEntry.getRecord() instanceof RecordJdo) {
+            RecordJdo recordJdo = (RecordJdo) newsEntry.getRecord();
+            this.tags = recordJdo.getTags().stream()
                     .map(TagDto::getTag)
                     .reduce("", (s1, s2) -> s1 + " | " + s2);
             return this.tags;

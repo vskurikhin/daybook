@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleCrudServiceImplTest.java
@@ -23,7 +23,7 @@ import su.svn.showcase.dao.UserRoleDao;
 import su.svn.showcase.dao.jpa.UserRoleDaoEjb;
 import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.dto.jdo.UserLoginJdo;
-import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.jdo.UserRoleJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.UserRoleCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -156,7 +156,7 @@ class UserRoleCrudServiceImplTest {
                 .login("loginTest" + UUID1)
                 .password("passwordTest" + UUID1)
                 .build();
-        UserRoleFullDto userRole = UserRoleFullDto.builder()
+        UserRoleJdo userRole = UserRoleJdo.builder()
                 .id(UUID1)
                 .dateTime(NOW1)
                 .role(role)
@@ -171,7 +171,7 @@ class UserRoleCrudServiceImplTest {
     @Test
     void readById() throws Exception {
         userTransaction.begin();
-        UserRoleFullDto test = service.readById(UUID10);
+        UserRoleJdo test = service.readById(UUID10);
         userTransaction.rollback();
         System.out.println("test = " + test);
 
@@ -180,7 +180,7 @@ class UserRoleCrudServiceImplTest {
     @Test
     void readRange() throws Exception {
         userTransaction.begin();
-        List<UserRoleFullDto> test= service.readRange(0, Integer.MAX_VALUE);
+        List<UserRoleJdo> test= service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
         System.out.println("test = " + test);
     }
@@ -197,7 +197,7 @@ class UserRoleCrudServiceImplTest {
                 .login("loginTest10")
                 .password("passwordTest10")
                 .build();
-        UserRoleFullDto newsEntryDto = UserRoleFullDto.builder()
+        UserRoleJdo newsEntryDto = UserRoleJdo.builder()
                 .id(UUID10)
                 .dateTime(NOW1)
                 .role(role)

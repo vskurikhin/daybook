@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -26,23 +26,12 @@ public class TestData {
             .roleName("testRole1")
             .build();
 
-    private static final UserRoleBaseDto userRoleBaseDto0 = UserRoleBaseDto.builder()
+    private static final UserRoleJdo userRoleJdo0 = UserRoleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .roleName("testRole0")
             .build();
-    private static final UserRoleBaseDto userRoleBaseDto1 = UserRoleBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .roleName("testRole1")
-            .build();
-
-    private static final UserRoleFullDto userRoleFullDto0 = UserRoleFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .roleName("testRole0")
-            .build();
-    private static final UserRoleFullDto userRoleFullDto1 = UserRoleFullDto.builder()
+    private static final UserRoleJdo userRoleJdo1 = UserRoleJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .roleName("testRole1")
@@ -57,55 +46,40 @@ public class TestData {
             .login("loginTest1")
             .build();
 
-    private static final UserLoginJdo USER_LOGIN_JDO_0 = UserLoginJdo.builder()
+    private static final UserLoginJdo userLoginJdo0 = UserLoginJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .login("loginTest0")
             .password("passwordTest0")
             .build();
-    public static final UserLoginJdo USER_LOGIN_JDO_1 = UserLoginJdo.builder()
+    public static final UserLoginJdo userLoginJdo1 = UserLoginJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .login("loginTest1")
             .password("passwordTest1")
             .build();
 
-    private static final TagJdo TAG_JDO_0 = TagJdo.builder()
+    private static final TagJdo tagJdo0 = TagJdo.builder()
             .id(SID0)
             .tag("tagTest0")
             .dateTime(NOW)
             .visible(true)
             .build();
-    private static final TagJdo TAG_JDO_1 = TagJdo.builder()
+    private static final TagJdo tagJdo1 = TagJdo.builder()
             .id(SID1)
             .tag("tagTest1")
             .dateTime(NOW)
             .visible(true)
             .build();
 
-    private static final RecordBaseDto recordBaseDto0 = RecordBaseDto.builder()
-            .id(UUID0)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(13)
-            .type(RecordBaseDto.class.getSimpleName())
-            .build();
-    private static final RecordBaseDto recordBaseDto1 = RecordBaseDto.builder()
-            .id(UUID1)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(11)
-            .type(RecordBaseDto.class.getSimpleName())
-            .build();
-
-    private static final RecordFullDto recordFullDto0 = RecordFullDto.builder()
+    private static final RecordJdo RECORD_JDO_0 = RecordJdo.builder()
             .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
             .type(NewsEntryJdo.class.getSimpleName())
             .build();
-    private static final RecordFullDto recordFullDto1 = RecordFullDto.builder()
+    private static final RecordJdo RECORD_JDO_1 = RecordJdo.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
@@ -113,12 +87,12 @@ public class TestData {
             .type(NewsEntryJdo.class.getSimpleName())
             .build();
 
-    private static final NewsGroupJdo NEWS_GROUP_JDO_0 = NewsGroupJdo.builder()
+    private static final NewsGroupJdo newsGroupJdo0 = NewsGroupJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .group("groupTest0")
             .build();
-    private static final NewsGroupJdo NEWS_GROUP_JDO_1 = NewsGroupJdo.builder()
+    private static final NewsGroupJdo newsGroupJdo1 = NewsGroupJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .group("groupTest1")
@@ -179,29 +153,29 @@ public class TestData {
             .build();
 
     static {
-        TAG_JDO_0.setRecords(newSet(cloneRecordBaseDto0()));
-        TAG_JDO_1.setRecords(newSet(cloneRecordBaseDto1()));
+        tagJdo0.setRecords(newSet(cloneRecordFullDto0()));
+        tagJdo1.setRecords(newSet(cloneRecordFullDto1()));
 
-        userRoleFullDto0.setRole(cloneRoleJdo0());
-        userRoleFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
-        userRoleFullDto1.setRole(cloneRoleJdo1());
-        userRoleFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
+        userRoleJdo0.setRole(cloneRoleJdo0());
+        userRoleJdo0.setUserLogin(cloneUserOnlyLoginBaseDto0());
+        userRoleJdo1.setRole(cloneRoleJdo1());
+        userRoleJdo1.setUserLogin(cloneUserOnlyLoginBaseDto1());
 
-        USER_LOGIN_JDO_0.setRoles(newList(cloneUserRoleBaseDto0()));
-        USER_LOGIN_JDO_1.setRoles(newList(cloneUserRoleBaseDto1()));
+        userLoginJdo0.setRoles(newList(cloneUserRoleFullDto0()));
+        userLoginJdo1.setRoles(newList(cloneUserRoleFullDto1()));
 
         newsEntryJdo0.setNewsGroup(cloneNewsGroupFullDto0());
         newsEntryJdo1.setNewsGroup(cloneNewsGroupFullDto1());
 
-        NEWS_GROUP_JDO_0.setNewsEntries(newSet(cloneNewsEntryJdo0()));
-        NEWS_GROUP_JDO_1.setNewsEntries(newSet(cloneNewsEntryJdo1()));
+        newsGroupJdo0.setNewsEntries(newSet(cloneNewsEntryJdo0()));
+        newsGroupJdo1.setNewsEntries(newSet(cloneNewsEntryJdo1()));
 
-        recordFullDto0.setUserLogin(cloneUserOnlyLoginBaseDto0());
-        recordFullDto1.setUserLogin(cloneUserOnlyLoginBaseDto1());
-        recordFullDto0.setNewsEntry(cloneNewsEntryJdo0());
-        recordFullDto1.setNewsEntry(cloneNewsEntryJdo1());
-        recordFullDto0.setTags(newSet(cloneTagBaseDto0()));
-        recordFullDto1.setTags(newSet(cloneTagBaseDto1()));
+        RECORD_JDO_0.setUserLogin(cloneUserOnlyLoginBaseDto0());
+        RECORD_JDO_1.setUserLogin(cloneUserOnlyLoginBaseDto1());
+        RECORD_JDO_0.setNewsEntry(cloneNewsEntryJdo0());
+        RECORD_JDO_1.setNewsEntry(cloneNewsEntryJdo1());
+        RECORD_JDO_0.setTags(newSet(cloneTagBaseDto0()));
+        RECORD_JDO_1.setTags(newSet(cloneTagBaseDto1()));
 
         newsEntryJdo0.setRecord(cloneRecordFullDto0());
         newsEntryJdo1.setRecord(cloneRecordFullDto1());
@@ -214,18 +188,11 @@ public class TestData {
         return assertClone(roleJdo1);
     }
 
-    public static UserRoleBaseDto cloneUserRoleBaseDto0() {
-        return assertClone(userRoleBaseDto0);
+    public static UserRoleJdo cloneUserRoleFullDto0() {
+        return assertClone(userRoleJdo0);
     }
-    public static UserRoleBaseDto cloneUserRoleBaseDto1() {
-        return assertClone(userRoleBaseDto1);
-    }
-
-    public static UserRoleFullDto cloneUserRoleFullDto0() {
-        return assertClone(userRoleFullDto0);
-    }
-    public static UserRoleFullDto cloneUserRoleFullDto1() {
-        return assertClone(userRoleFullDto1);
+    public static UserRoleJdo cloneUserRoleFullDto1() {
+        return assertClone(userRoleJdo1);
     }
 
     public static UserOnlyLoginDto cloneUserOnlyLoginBaseDto0() {
@@ -236,51 +203,44 @@ public class TestData {
     }
 
     public static UserLoginJdo cloneUserLoginFullDto0() {
-        return assertClone(USER_LOGIN_JDO_0);
+        return assertClone(userLoginJdo0);
     }
     public static UserLoginJdo cloneUserLoginFullDto1() {
-        return assertClone(USER_LOGIN_JDO_1);
+        return assertClone(userLoginJdo1);
     }
 
     public static TagJdo cloneTagBaseDto0() {
-        return assertClone(TAG_JDO_0);
+        return assertClone(tagJdo0);
     }
     public static TagJdo cloneTagBaseDto1() {
-        return assertClone(TAG_JDO_1);
+        return assertClone(tagJdo1);
     }
 
     public static TagJdo cloneTagFullDto0() {
-        return assertClone(TAG_JDO_0);
+        return assertClone(tagJdo0);
     }
     public static TagJdo cloneTagFullDto1() {
-        return assertClone(TAG_JDO_1);
+        return assertClone(tagJdo1);
     }
 
-    public static RecordBaseDto cloneRecordBaseDto0() {
-        return assertClone(recordBaseDto0);
+    public static RecordJdo cloneRecordFullDto0() {
+        return assertClone(RECORD_JDO_0);
     }
-    public static RecordBaseDto cloneRecordBaseDto1() {
-        return assertClone(recordBaseDto1);
-    }
-
-    public static RecordFullDto cloneRecordFullDto0() {
-        return assertClone(recordFullDto0);
-    }
-    public static RecordFullDto cloneRecordFullDto1() {
-        return assertClone(recordFullDto1);
+    public static RecordJdo cloneRecordFullDto1() {
+        return assertClone(RECORD_JDO_1);
     }
 
-    public static RecordFullDto clean(RecordFullDto dto) {
+    public static RecordJdo clean(RecordJdo dto) {
         dto.setNewsEntry(null);
         dto.setTags(Collections.emptySet());
         return dto;
     }
 
     public static NewsGroupJdo cloneNewsGroupFullDto0() {
-        return assertClone(NEWS_GROUP_JDO_0);
+        return assertClone(newsGroupJdo0);
     }
     public static NewsGroupJdo cloneNewsGroupFullDto1() {
-        return assertClone(NEWS_GROUP_JDO_1);
+        return assertClone(newsGroupJdo1);
     }
 
     public static NewsEntryJdo cloneNewsEntryJdo0() {

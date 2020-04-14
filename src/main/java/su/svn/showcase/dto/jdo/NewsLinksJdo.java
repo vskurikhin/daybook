@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksJdo.java
@@ -8,9 +8,21 @@
 
 package su.svn.showcase.dto.jdo;
 
-import lombok.*;
-import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import su.svn.showcase.domain.LinkDescription;
+import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.domain.NewsLinks;
+import su.svn.showcase.domain.Record;
+import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.LinkDescriptionDto;
+import su.svn.showcase.dto.NewsGroupDto;
+import su.svn.showcase.dto.NewsLinksDto;
+import su.svn.showcase.dto.RecordDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -77,10 +89,6 @@ public class NewsLinksJdo implements NewsLinksDto, Serializable {
     @Deprecated
     @Override
     public NewsLinks update(@Nonnull NewsLinks entity) {
-        if (this.record instanceof RecordBaseDto) {
-            entity.setRecord(updateRecord(this.record));
-            entity.getRecord().setNewsLinks(entity);
-        }
         updateIfNotNull(entity::setDateTime, this.dateTime);
         updateIfNotNull(entity::setTitle, this.title);
         if (this.newsGroup != null) {
@@ -103,8 +111,8 @@ public class NewsLinksJdo implements NewsLinksDto, Serializable {
     @Override
     public NewsLinks update(@Nonnull NewsLinks entity, @Nonnull UserLogin userLogin) {
         assert this.record != null;
-        if (this.record instanceof RecordFullDto) {
-            entity.setRecord(updateRecord((RecordFullDto)this.record, userLogin));
+        if (this.record instanceof RecordJdo) {
+            entity.setRecord(updateRecord((RecordJdo)this.record, userLogin));
         }
 
         return update(entity);
@@ -114,7 +122,7 @@ public class NewsLinksJdo implements NewsLinksDto, Serializable {
         return dto.update(new Record(dto.getId()));
     }
 
-    private Record updateRecord(RecordFullDto dto, UserLogin userLogin) {
+    private Record updateRecord(RecordJdo dto, UserLogin userLogin) {
         return dto.update(new Record(dto.getId(), userLogin));
     }
 }

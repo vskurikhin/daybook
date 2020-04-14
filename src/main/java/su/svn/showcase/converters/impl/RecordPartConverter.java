@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordPartConverter.java
@@ -16,7 +16,7 @@ import su.svn.showcase.dto.enums.RecordTypesEnum;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsLinksJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("DuplicatedCode")
 @Stateless(name = "RecordPartConverter")
-public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordJdo>  implements RecordConverter {
 
     @EJB(beanName = "ArticleBaseConverter")
     private ArticleConverter articleConverter;
@@ -52,21 +52,21 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     private TagConverter tagConverter;
 
     @Override
-    public RecordFullDto convert(@Nonnull Record entity) {
-        return doConvert(new RecordFullDto(entity.getId()), entity, new ReadyMap());
+    public RecordJdo convert(@Nonnull Record entity) {
+        return doConvert(new RecordJdo(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
-    public RecordFullDto convert(@Nonnull Record entity, ReadyMap ready) {
-        return doConvert(new RecordFullDto(entity.getId()), entity, ready);
+    public RecordJdo convert(@Nonnull Record entity, ReadyMap ready) {
+        return doConvert(new RecordJdo(entity.getId()), entity, ready);
     }
 
-    private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
-        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), RecordFullDto.class);
+    private RecordJdo doConvert(RecordJdo dto, Record entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), RecordJdo.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
-            if (value instanceof RecordFullDto) {
-                return (RecordFullDto) value;
+            if (value instanceof RecordJdo) {
+                return (RecordJdo) value;
             }
             throw ErrorCase.badType(value.getClass().getSimpleName());
         } else {
@@ -100,16 +100,16 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     }
 
     @Override
-    public Record convert(@Nonnull RecordFullDto dto) {
+    public Record convert(@Nonnull RecordJdo dto) {
         return doConvert(new Record(dto.getId()), dto, new ReadyMap());
     }
 
     @Override
-    public Record convert(@Nonnull RecordFullDto dto, ReadyMap ready) {
+    public Record convert(@Nonnull RecordJdo dto, ReadyMap ready) {
         return doConvert(new Record(dto.getId()), dto, ready);
     }
 
-    private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
+    private Record doConvert(Record entity, RecordJdo dto, ReadyMap ready) {
         ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Record.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
@@ -161,7 +161,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     }
 
     @Override
-    Class<RecordFullDto> getDClass() {
-        return RecordFullDto.class;
+    Class<RecordJdo> getDClass() {
+        return RecordJdo.class;
     }
 }

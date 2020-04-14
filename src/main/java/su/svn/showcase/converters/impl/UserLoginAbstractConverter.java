@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginAbstractConverter.java
@@ -13,7 +13,7 @@ import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.jdo.UserLoginJdo;
 import su.svn.showcase.dto.UserRoleDto;
-import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.jdo.UserRoleJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.utils.ReadyMap;
 
@@ -47,7 +47,7 @@ abstract class UserLoginAbstractConverter extends AbstractConverter<UUID, UserLo
         return super.convertByGetter(dto, entity);
     }
 
-    private Function<UserRole, UserRoleFullDto> functionUserRoleToDto(ReadyMap ready) {
+    private Function<UserRole, UserRoleJdo> functionUserRoleToDto(ReadyMap ready) {
         return entity -> getUserRoleConverter().convert(entity, ready);
     }
 
@@ -72,7 +72,7 @@ abstract class UserLoginAbstractConverter extends AbstractConverter<UUID, UserLo
     }
 
     private Function<UserRoleDto, UserRole> functionUserRoleDtoToEntity(ReadyMap ready) {
-        return dto -> getUserRoleConverter().convert((UserRoleFullDto) dto, ready);
+        return dto -> getUserRoleConverter().convert((UserRoleJdo) dto, ready);
     }
 
     public <T> void updateIfNotNull(Consumer<T> consumer, T o) {

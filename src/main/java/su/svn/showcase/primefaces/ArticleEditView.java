@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleEditView.java
@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
@@ -109,9 +109,9 @@ public class ArticleEditView extends AbstractView {
 
     @Nullable
     private String loadTags(ArticleJdo article) {
-        if (article.getRecord() instanceof RecordFullDto) {
-            RecordFullDto recordFullDto = (RecordFullDto) article.getRecord();
-            this.tags = recordFullDto.getTags().stream()
+        if (article.getRecord() instanceof RecordJdo) {
+            RecordJdo recordJdo = (RecordJdo) article.getRecord();
+            this.tags = recordJdo.getTags().stream()
                 .map(TagDto::getTag)
                 .reduce("", (s1, s2) -> s1 + " | " + s2);
             return this.tags;

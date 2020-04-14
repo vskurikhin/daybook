@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagJdoTest.java
@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.RecordDto;
-import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.utils.TestData;
 import su.svn.utils.ValidateUtil;
 
@@ -25,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static su.svn.shared.Constants.Types.String.ZERO;
 import static su.svn.showcase.domain.TestData.cloneRecord0;
-import static su.svn.showcase.dto.TestData.cloneRecordBaseDto0;
+import static su.svn.showcase.dto.TestData.cloneRecordFullDto0;
 import static su.svn.utils.TestData.*;
 
 @DisplayName("Class TagFullDto")
@@ -78,7 +77,7 @@ class TagJdoTest {
         @BeforeEach
         void createNew() {
             records = Collections.singleton(cloneRecord0());
-            recordDtos = Collections.singleton(cloneRecordBaseDto0());
+            recordDtos = Collections.singleton(cloneRecordFullDto0());
             tagJdo = new TagJdo(ZERO, "testTag", true, NOW, recordDtos);
         }
 

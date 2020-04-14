@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterTest.java
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
@@ -89,7 +89,7 @@ class RecordFullConverterTest {
     RecordConverter converter;
 
     private Record entity;
-    private RecordFullDto dto;
+    private RecordJdo dto;
 
     private static void set(Class<?> tClass, String filedName, Object o, Object v) throws Exception {
         Field field = tClass.getDeclaredField(filedName);
@@ -112,7 +112,7 @@ class RecordFullConverterTest {
         return entity;
     }
 
-    private RecordFullDto clean(RecordFullDto dto) {
+    private RecordJdo clean(RecordJdo dto) {
         dto.setArticle(null);
         dto.setNewsEntry(null);
         dto.setNewsLinks(null);
@@ -128,7 +128,7 @@ class RecordFullConverterTest {
         entity.setNewsEntry(cloneNewsEntry0());
         entity.getNewsEntry().setRecord(entity);
         entity.setType(NewsEntryJdo.class.getSimpleName());
-        RecordFullDto test = converter.convert(entity);
+        RecordJdo test = converter.convert(entity);
         // TODO Assertions.assertEquals(dto, test);
         Assertions.assertTrue(test == ((NewsEntryJdo) test.getNewsEntry()).getRecord());
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImplTest.java
@@ -23,7 +23,7 @@ import su.svn.showcase.dao.jpa.UserLoginDaoEjb;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.services.CrudService;
 import su.svn.showcase.services.RecordCrudService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
@@ -141,7 +141,7 @@ class RecordCrudServiceImplTest {
     RecordCrudService service;
 
     private Record entity;
-    private RecordFullDto dto;
+    private RecordJdo dto;
     private UserLogin userLogin;
 
 
@@ -189,14 +189,14 @@ class RecordCrudServiceImplTest {
     @Test
     void readById() throws Exception {
          userTransaction.begin();
-         RecordFullDto test = service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
+         RecordJdo test = service.readById(UUID.fromString("00000000-0000-0000-0000-000000000010"));
          userTransaction.rollback();
     }
 
     @Test
     void readRange(RecordCrudService service) throws Exception {
         userTransaction.begin();
-        List<RecordFullDto> test = service.readRange(0, Integer.MAX_VALUE);
+        List<RecordJdo> test = service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
     }
 

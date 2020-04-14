@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.11 11:07 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleDto.java
@@ -8,7 +8,10 @@
 
 package su.svn.showcase.dto;
 
-import su.svn.showcase.domain.*;
+import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.Link;
+import su.svn.showcase.domain.Record;
+import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.interfaces.Updating;
 
 import javax.annotation.Nonnull;

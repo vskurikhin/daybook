@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -40,11 +40,11 @@ public class IntegrationTestData extends TestData
         UserRole.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
     };
 
-    private static final UserRoleFullDto[] userRoleFullDtos = {
-        UserRoleFullDto.builder().id(UUID0).roleName("testUserRole0").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID1).roleName("testUserRole1").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID2).roleName("testUserRole2").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
+    private static final UserRoleJdo[] USER_ROLE_JDOS = {
+        UserRoleJdo.builder().id(UUID0).roleName("testUserRole0").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID1).roleName("testUserRole1").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID2).roleName("testUserRole2").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
     };
 
     private static final UserLogin[] userLogins = {
@@ -212,116 +212,57 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final RecordBaseDto[] recordBaseDtos = {
-        RecordBaseDto.builder()
-            .id(UUID0)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(13)
-            .type(null)
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID1)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(1)
-            .type(null)
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID2)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(2)
-            .type(null)
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID3)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(3)
-            .type(null)
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID4)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(4)
-            .type(ArticleJdo.class.getSimpleName())
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID5)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(5)
-            .type(ArticleJdo.class.getSimpleName())
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID6)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(6)
-            .type(ArticleJdo.class.getSimpleName())
-            .build(),
-        RecordBaseDto.builder()
-            .id(UUID7)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(7)
-            .type(ArticleJdo.class.getSimpleName())
-            .build()
-    };
-
-    private static final RecordFullDto[] recordFullDtos = {
-        RecordFullDto.builder()
+    private static final RecordJdo[] RECORD_JDOS = {
+        RecordJdo.builder()
             .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
             .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(1)
             .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID2)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(2)
             .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID3)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(3)
             .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID4)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
             .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
             .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
             .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordFullDto.builder()
+        RecordJdo.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
@@ -610,19 +551,19 @@ public class IntegrationTestData extends TestData
         for (int i = 0; i < UPPER_BOUND; ++i) {
             userRoles[i].setRole(roles[i]);
             userRoles[i].setUserLogin(userLogins[i]);
-            userRoleFullDtos[i].setRole(roleBaseDtos[i]);
-            userRoleFullDtos[i].setUserLogin(userOnlyLoginDtos[i]);
+            USER_ROLE_JDOS[i].setRole(roleBaseDtos[i]);
+            USER_ROLE_JDOS[i].setUserLogin(userOnlyLoginDtos[i]);
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginDtos[i]);
-            recordFullDtos[i].setNewsEntry(newsEntryJdos[i]);
-            recordFullDtos[i].setTags(newSet(TAG_JDOS[i]));
+            RECORD_JDOS[i].setUserLogin(userOnlyLoginDtos[i]);
+            RECORD_JDOS[i].setNewsEntry(newsEntryJdos[i]);
+            RECORD_JDOS[i].setTags(newSet(TAG_JDOS[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);
-            newsEntryJdos[i].setRecord(recordFullDtos[i]);
+            newsEntryJdos[i].setRecord(RECORD_JDOS[i]);
             newsEntryJdos[i].setNewsGroup(newsGroupJdos[i]);
         }
         for (int i = 4; i < UPPER_BOUND + 4; ++i) {
@@ -630,9 +571,9 @@ public class IntegrationTestData extends TestData
             articles[i].setRecord(records[i]);
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
-            articleJdos[i].setRecord(recordFullDtos[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginDtos[i - 4]);
-            recordFullDtos[i].setArticle(articleJdos[i]);
+            articleJdos[i].setRecord(RECORD_JDOS[i]);
+            RECORD_JDOS[i].setUserLogin(userOnlyLoginDtos[i - 4]);
+            RECORD_JDOS[i].setArticle(articleJdos[i]);
         }
     }
 
@@ -663,14 +604,14 @@ public class IntegrationTestData extends TestData
         return role;
     }
 
-    public static UserRoleFullDto cloneUserRoleFullDto(int i)
+    public static UserRoleJdo cloneUserRoleFullDto(int i)
     {
-        UserRoleFullDto role = clone(userRoleFullDtos[i]);
+        UserRoleJdo role = clone(USER_ROLE_JDOS[i]);
         assert role != null;
         return role;
     }
 
-    public static UserRoleFullDto clean(UserRoleFullDto role)
+    public static UserRoleJdo clean(UserRoleJdo role)
     {
         role.setUserLogin(null);
         return role;
@@ -737,21 +678,14 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static RecordBaseDto cloneRecordBaseDto(int i)
+    public static RecordJdo cloneRecordFullDto(int i)
     {
-        RecordBaseDto dto = clone(recordBaseDtos[i]);
+        RecordJdo dto = clone(RECORD_JDOS[i]);
         assert dto != null;
         return dto;
     }
 
-    public static RecordFullDto cloneRecordFullDto(int i)
-    {
-        RecordFullDto dto = clone(recordFullDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static RecordFullDto clean(RecordFullDto dto)
+    public static RecordJdo clean(RecordJdo dto)
     {
         if (dto.getNewsEntry() instanceof NewsEntryJdo) {
             ((NewsEntryJdo) dto.getNewsEntry()).setRecord(null);

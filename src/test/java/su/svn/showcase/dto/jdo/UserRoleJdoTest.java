@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:03 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleJdoTest.java
@@ -13,8 +13,6 @@ import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserOnlyLoginDto;
-import su.svn.showcase.dto.UserRoleFullDto;
-import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.util.HashMap;
@@ -35,14 +33,14 @@ class UserRoleJdoTest {
 
     private RoleJdo roleJdo;
 
-    private UserRoleFullDto userRoleFullDto;
+    private UserRoleJdo userRoleJdo;
 
     private UserOnlyLoginDto userLoginDto;
 
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
-        new UserRoleFullDto();
+        new UserRoleJdo();
     }
 
     @Nested
@@ -52,43 +50,43 @@ class UserRoleJdoTest {
         void createNew() {
             roleJdo = cloneRoleJdo0();
             userLoginDto = new UserOnlyLoginDto();
-            userRoleFullDto = new UserRoleFullDto();
+            userRoleJdo = new UserRoleJdo();
         }
 
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("id", null);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", null);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", null);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", null);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", null);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("id", null);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("role", null);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("roleName", null);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("dateTime", null);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("userLogin", null);
         }
 
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            userRoleFullDto.setRole(roleJdo);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
-            assertEquals(roleJdo, userRoleFullDto.getRole());
+            userRoleJdo.setRole(roleJdo);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("role", roleJdo);
+            assertEquals(roleJdo, userRoleJdo.getRole());
 
-            userRoleFullDto.setRoleName("testRole");
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
-            assertEquals("testRole", userRoleFullDto.getRoleName());
+            userRoleJdo.setRoleName("testRole");
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("roleName", "testRole");
+            assertEquals("testRole", userRoleJdo.getRoleName());
 
-            userRoleFullDto.setDateTime(NOW);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertEquals(NOW , userRoleFullDto.getDateTime());
+            userRoleJdo.setDateTime(NOW);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertEquals(NOW , userRoleJdo.getDateTime());
 
-            userRoleFullDto.setUserLogin(userLoginDto);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
-            assertEquals(userLoginDto, userRoleFullDto.getUserLogin());
+            userRoleJdo.setUserLogin(userLoginDto);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
+            assertEquals(userLoginDto, userRoleJdo.getUserLogin());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(1, userRoleFullDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, userRoleJdo).hasNext());
         }
     }
 
@@ -100,49 +98,49 @@ class UserRoleJdoTest {
             role = cloneRole0();
             roleJdo = cloneRoleJdo0();
             userLoginDto = cloneUserOnlyLoginBaseDto0();
-            userRoleFullDto = cloneUserRoleFullDto0();
+            userRoleJdo = cloneUserRoleFullDto0();
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userRoleFullDto = new UserRoleFullDto(ROLE_UUID0, roleJdo, NOW, "testRole", userLoginDto);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
+            userRoleJdo = new UserRoleJdo(ROLE_UUID0, roleJdo, NOW, "testRole", userLoginDto);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("role", roleJdo);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("roleName", "testRole");
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            userRoleFullDto = UserRoleFullDto.builder()
+            userRoleJdo = UserRoleJdo.builder()
                     .id(ZERO)
                     .role(roleJdo)
                     .dateTime(NOW)
                     .roleName("testRole")
                     .userLogin(userLoginDto)
                     .build();
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("role", roleJdo);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("roleName", "testRole");
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(userRoleFullDto).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("role", roleJdo);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("roleName", "testRole");
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(userRoleJdo).hasFieldOrPropertyWithValue("userLogin", userLoginDto);
         }
 
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new UserRoleFullDto(), userRoleFullDto);
-            UserRoleFullDto expected = cloneUserRoleFullDto0();
-            assertEquals(expected.hashCode(), userRoleFullDto.hashCode());
-            assertEquals(expected, userRoleFullDto);
+            assertNotEquals(new UserRoleJdo(), userRoleJdo);
+            UserRoleJdo expected = cloneUserRoleFullDto0();
+            assertEquals(expected.hashCode(), userRoleJdo.hashCode());
+            assertEquals(expected, userRoleJdo);
         }
 
         @Test
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
-            assertTrue(userRoleFullDto.toString().length() > 0);
+            assertTrue(userRoleJdo.toString().length() > 0);
         }
 
         @Test
@@ -150,7 +148,7 @@ class UserRoleJdoTest {
         void update() {
             UserRole expected1 = cloneUserRole0();
             UserRole userRoleTest0 = cloneUserRole0();
-            assertEquals(expected1, userRoleFullDto.update(userRoleTest0));
+            assertEquals(expected1, userRoleJdo.update(userRoleTest0));
 
             UserLogin userLogin = cloneUserLogin0();
             Map<String, Object> values = new HashMap<String, Object>() {{
@@ -159,7 +157,7 @@ class UserRoleJdoTest {
                 put("userLogin", userLogin);
             }};
             UserRole expected2 = cloneUserRole0();
-            assertEquals(expected2, userRoleFullDto.update(cloneUserRole0(), values));
+            assertEquals(expected2, userRoleJdo.update(cloneUserRole0(), values));
         }
 
         @Test
@@ -169,7 +167,7 @@ class UserRoleJdoTest {
             entity.setId(ZERO);
             entity.setRoleName("testRole");
             entity.setDateTime(NOW);
-            UserRoleFullDto expected = new UserRoleFullDto(ZERO, roleJdo, NOW, "testRole", userLoginDto);
+            UserRoleJdo expected = new UserRoleJdo(ZERO, roleJdo, NOW, "testRole", userLoginDto);
             // TODO assertEquals(expected, userRoleFullDto);
         }
     }

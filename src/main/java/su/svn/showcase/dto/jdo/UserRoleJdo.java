@@ -1,18 +1,24 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * UserRoleFullDto.java
+ * UserRoleJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import su.svn.showcase.domain.Role;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
-import su.svn.showcase.dto.jdo.RoleJdo;
+import su.svn.showcase.dto.RoleDto;
+import su.svn.showcase.dto.UserLoginDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
+import su.svn.showcase.dto.UserRoleDto;
 
 import javax.annotation.Nonnull;
 import javax.validation.constraints.NotNull;
@@ -30,7 +36,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleFullDto implements UserRoleDto, Serializable {
+public class UserRoleJdo implements UserRoleDto, Serializable {
 
     private static final long serialVersionUID = 9210L;
 
@@ -46,23 +52,22 @@ public class UserRoleFullDto implements UserRoleDto, Serializable {
 
     private UserLoginDto userLogin;
 
-    public UserRoleFullDto(@Nonnull UUID id) {
+    public UserRoleJdo(@Nonnull UUID id) {
         this.id = id;
     }
 
+    @Override
+    public Class<UserRoleJdo> getDtoClass() {
+        return UserRoleJdo.class;
+    }
+
     @Deprecated
-    public UserRoleFullDto(@Nonnull UserRole entity) {
+    public UserRoleJdo(@Nonnull UserRole entity) {
         this.id = entity.getId();
         this.role = new RoleJdo(entity.getRole());
         this.dateTime = entity.getDateTime();
         this.roleName = entity.getRoleName();
         this.userLogin = new UserOnlyLoginDto(entity.getUserLogin());
-    }
-
-    @Deprecated
-    @Override
-    public Class<UserRoleFullDto> getDtoClass() {
-        return UserRoleFullDto.class;
     }
 
     @Deprecated
