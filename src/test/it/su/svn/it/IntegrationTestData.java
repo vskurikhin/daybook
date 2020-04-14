@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 17:33 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -9,7 +9,6 @@
 package su.svn.it;
 
 import su.svn.showcase.domain.*;
-import su.svn.showcase.dto.NewsEntryBaseDto;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.NewsGroupBaseDto;
 import su.svn.showcase.dto.RecordBaseDto;
@@ -366,34 +365,7 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final NewsEntryBaseDto[] newsEntryBaseDtos = {
-        NewsEntryBaseDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .content("contentTest0")
-            .build(),
-        NewsEntryBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .content("contentTest1")
-            .build(),
-        NewsEntryBaseDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .title("titleTest2")
-            .content("contentTest2")
-            .build(),
-        NewsEntryBaseDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .title("titleTest3")
-            .content("contentTest3")
-            .build()
-    };
-
-    private static final NewsEntryJdo[] newsEntryFullDtos = {
+    private static final NewsEntryJdo[] newsEntryJdos = {
         NewsEntryJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
@@ -654,12 +626,12 @@ public class IntegrationTestData extends TestData
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
             recordFullDtos[i].setUserLogin(USER_ONLY_LOGIN_DTOS[i]);
-            recordFullDtos[i].setNewsEntry(newsEntryFullDtos[i]);
+            recordFullDtos[i].setNewsEntry(newsEntryJdos[i]);
             recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);
-            newsEntryFullDtos[i].setRecord(recordFullDtos[i]);
-            newsEntryFullDtos[i].setNewsGroup(newsGroupBaseDtos[i]);
+            newsEntryJdos[i].setRecord(recordFullDtos[i]);
+            newsEntryJdos[i].setNewsGroup(newsGroupBaseDtos[i]);
         }
         for (int i = 4; i < UPPER_BOUND + 4; ++i) {
             records[i].setArticle(articles[i]);
@@ -816,16 +788,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static NewsEntryBaseDto cloneNewsEntryBaseDto(int i)
-    {
-        NewsEntryBaseDto dto = clone(newsEntryBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
     public static NewsEntryJdo cloneNewsEntryFullDto(int i)
     {
-        NewsEntryJdo dto = clone(newsEntryFullDtos[i]);
+        NewsEntryJdo dto = clone(newsEntryJdos[i]);
         assert dto != null;
         return dto;
     }
