@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImpl.java
@@ -63,7 +63,6 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Override
     @Transactional
     public List<RecordJdo> readRange(int start, int size) {
-        System.err.println("recordPartConverter = " + recordPartConverter);
         return recordDao.range(start, size).stream()
                 .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
@@ -98,7 +97,6 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
         UserLogin userLogin = getUserLogin(dto.getUserLogin());
         validateUserLoginDto(userLogin, dto.getUserLogin());
         entity.setUserLogin(userLogin);
-        // entity = dto.update(entity);
         entity = recordFullConverter.convert(dto);
         recordDao.save(entity);
     }

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Getters.java
@@ -13,7 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,7 +60,7 @@ public class Getters {
         }
     }
 
-    private static Map<String, Method> getters(Class aClass) {
+    private static Map<String, Method> getters(Class<?> aClass) {
         Map<String, Method> methods = Arrays.stream(aClass.getDeclaredMethods())
             .filter(MethodUtil::isGetter)
             .collect(Collectors.toMap(Method::getName, Function.identity()));

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagCrudServiceImplTest.java
@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.TagConverter;
-import su.svn.showcase.converters.impl.TagBaseConverter;
+import su.svn.showcase.converters.base.TagBaseConverter;
 import su.svn.showcase.dao.TagDao;
 import su.svn.showcase.dao.jpa.TagDaoEjb;
 import su.svn.showcase.domain.Tag;
