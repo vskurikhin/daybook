@@ -1,8 +1,8 @@
 /*
- * This file was last modified at 2020.04.01 22:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordBaseConverterImplTest.java
+ * RecordBaseConverterTest.java
  * $Id$
  */
 
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -57,7 +57,7 @@ class RecordBaseConverterTest {
     RecordConverter converter;
 
     private Record entity;
-    private RecordFullDto dto;
+    private RecordJdo dto;
 
     @BeforeEach
     void setUp() {
@@ -75,7 +75,7 @@ class RecordBaseConverterTest {
         return entity;
     }
 
-    private RecordFullDto clean(RecordFullDto dto) {
+    private RecordJdo clean(RecordJdo dto) {
         dto.setArticle(null);
         dto.setNewsEntry(null);
         dto.setNewsLinks(null);
@@ -88,8 +88,8 @@ class RecordBaseConverterTest {
     @Test
     void when_convert_Entity_to_DTO() {
         Assertions.assertNotNull(converter);
-        RecordFullDto expected = clean(dto);
-        RecordFullDto test = converter.convert(entity);
+        RecordJdo expected = clean(dto);
+        RecordJdo test = converter.convert(entity);
         Assertions.assertEquals(expected, test);
     }
 

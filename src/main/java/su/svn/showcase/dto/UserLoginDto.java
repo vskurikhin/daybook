@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginDto.java
@@ -14,7 +14,8 @@ import su.svn.showcase.interfaces.Updating;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The DTO of UserLogin is interface as a contract.

@@ -1,20 +1,32 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
- * RecordFullDto.java
+ * RecordJdo.java
  * $Id$
  */
 
-package su.svn.showcase.dto;
+package su.svn.showcase.dto.jdo;
 
-import lombok.*;
-import su.svn.showcase.domain.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.NewsLinks;
+import su.svn.showcase.domain.Record;
+import su.svn.showcase.domain.Tag;
+import su.svn.showcase.dto.ArticleDto;
+import su.svn.showcase.dto.NewsEntryDto;
+import su.svn.showcase.dto.NewsLinksDto;
+import su.svn.showcase.dto.RecordDto;
+import su.svn.showcase.dto.TagDto;
+import su.svn.showcase.dto.UserLoginDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.enums.RecordTypesEnum;
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.jdo.NewsLinksJdo;
-import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
@@ -38,7 +50,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"tags"})
 @ToString(exclude = {"tags"})
-public class RecordFullDto implements RecordDto, Serializable, Typing {
+public class RecordJdo implements RecordDto, Serializable, Typing {
 
     private static final long serialVersionUID = 9241L;
 
@@ -64,7 +76,17 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
     @Valid
     private Set<TagDto> tags;
 
-    public RecordFullDto(@Nonnull Record entity) {
+    public RecordJdo(@Nonnull UUID id) {
+        this.id = id;
+    }
+
+    @Override
+    public Class<RecordJdo> getDtoClass() {
+        return RecordJdo.class;
+    }
+
+    @Deprecated
+    public RecordJdo(@Nonnull Record entity) {
         this.id = entity.getId();
         this.createDateTime = entity.getCreateDateTime();
         this.editDateTime = entity.getEditDateTime();
@@ -94,15 +116,7 @@ public class RecordFullDto implements RecordDto, Serializable, Typing {
                 .collect(Collectors.toSet());
     }
 
-    public RecordFullDto(UUID id) {
-        this.id = id;
-    }
-
-    @Override
-    public Class<RecordFullDto> getDtoClass() {
-        return RecordFullDto.class;
-    }
-
+    @Deprecated
     @Override
     public Record update(@Nonnull Record entity) {
         updateIfNotNull(entity::setCreateDateTime, this.createDateTime);

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleAbstractConverter.java
@@ -10,7 +10,7 @@ package su.svn.showcase.converters.impl;
 
 import su.svn.showcase.converters.RoleConverter;
 import su.svn.showcase.domain.UserRole;
-import su.svn.showcase.dto.UserRoleFullDto;
+import su.svn.showcase.dto.jdo.UserRoleJdo;
 import su.svn.showcase.dto.jdo.RoleJdo;
 import su.svn.showcase.dto.jdo.UserLoginJdo;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -19,18 +19,18 @@ import su.svn.showcase.utils.ReadyMap;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-abstract class UserRoleAbstractConverter extends AbstractConverter<UUID, UserRole, UserRoleFullDto> {
+abstract class UserRoleAbstractConverter extends AbstractConverter<UUID, UserRole, UserRoleJdo> {
 
     abstract RoleConverter getRoleConverter();
 
     abstract UserLoginBaseConverter getUserLoginConverter();
 
-    UserRoleFullDto doConvert(UserRoleFullDto dto, UserRole entity, ReadyMap ready) {
-        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), UserRoleFullDto.class);
+    UserRoleJdo doConvert(UserRoleJdo dto, UserRole entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), UserRoleJdo.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
-            if (value instanceof UserRoleFullDto) {
-                return (UserRoleFullDto) value;
+            if (value instanceof UserRoleJdo) {
+                return (UserRoleJdo) value;
             }
             throw ErrorCase.badType(value.getClass().getSimpleName());
         } else {
@@ -45,7 +45,7 @@ abstract class UserRoleAbstractConverter extends AbstractConverter<UUID, UserRol
         return super.convertByGetter(dto, entity);
     }
 
-    UserRole doConvert(UserRole entity, UserRoleFullDto dto, ReadyMap ready) {
+    UserRole doConvert(UserRole entity, UserRoleJdo dto, ReadyMap ready) {
         ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), UserRole.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
@@ -75,7 +75,7 @@ abstract class UserRoleAbstractConverter extends AbstractConverter<UUID, UserRol
     }
 
     @Override
-    Class<UserRoleFullDto> getDClass() {
-        return UserRoleFullDto.class;
+    Class<UserRoleJdo> getDClass() {
+        return UserRoleJdo.class;
     }
 }

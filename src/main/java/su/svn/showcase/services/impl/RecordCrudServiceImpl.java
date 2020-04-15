@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImpl.java
@@ -15,8 +15,9 @@ import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.*;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.UserLoginDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordCrudService;
 
@@ -25,7 +26,8 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Stateless(name = "RecordFullCrudService")
@@ -47,20 +49,20 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
 
     @Override
     @Transactional
-    public void create(@Nonnull RecordFullDto dto) {
+    public void create(@Nonnull RecordJdo dto) {
         validateId(dto);
         saveUpdatedEntity(new Record(getOrGenerateUuidKey(dto)), dto);
     }
 
     @Override
     @Transactional
-    public RecordFullDto readById(@Nonnull UUID id) {
+    public RecordJdo readById(@Nonnull UUID id) {
         return recordFullConverter.convert(recordDao.fetchById(id).orElseThrow(ErrorCase::notFound));
     }
 
     @Override
     @Transactional
-    public List<RecordFullDto> readRange(int start, int size) {
+    public List<RecordJdo> readRange(int start, int size) {
         System.err.println("recordPartConverter = " + recordPartConverter);
         return recordDao.range(start, size).stream()
                 .map(recordPartConverter::convert)
@@ -69,7 +71,7 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
 
     @Override
     @Transactional
-    public void update(@Nonnull RecordFullDto dto) {
+    public void update(@Nonnull RecordJdo dto) {
         validateId(dto);
         validateRecordUserLogin(dto.getUserLogin());
         saveUpdatedEntity(getRecord(dto.getId()), dto);
@@ -92,7 +94,7 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
         return LOGGER;
     }
 
-    private void saveUpdatedEntity(Record entity, RecordFullDto dto) {
+    private void saveUpdatedEntity(Record entity, RecordJdo dto) {
         UserLogin userLogin = getUserLogin(dto.getUserLogin());
         validateUserLoginDto(userLogin, dto.getUserLogin());
         entity.setUserLogin(userLogin);
@@ -130,7 +132,7 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     }
 
     @Override
-    public List<RecordFullDto> readRangeByDay(LocalDate localDate, int first, int pageSize) {
+    public List<RecordJdo> readRangeByDay(LocalDate localDate, int first, int pageSize) {
         return recordDao.rangeByDay(first, pageSize, localDate).stream()
                 .map(recordPartConverter::convert)
                 .collect(Collectors.toList());

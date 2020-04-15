@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudUtxServiceImpl.java
@@ -13,8 +13,9 @@ import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.*;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.UserLoginDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordCrudUtxService;
 
@@ -53,20 +54,20 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
     private RecordConverter recordPartConverter;
 
     @Override
-    public void create(@Nonnull RecordFullDto dto) {
+    public void create(@Nonnull RecordJdo dto) {
         validateId(dto);
         utxConsumeByFunction(this::createFunction, dto);
     }
 
     @Override
-    public RecordFullDto readById(@Nonnull UUID id) {
+    public RecordJdo readById(@Nonnull UUID id) {
         return utxFindById(emf.createEntityManager(), Record.class, id)
                 .map(recordFullConverter::convert)
                 .orElseThrow(ErrorCase::notFound);
     }
 
     @Override
-    public List<RecordFullDto> readRange(int start, int size) {
+    public List<RecordJdo> readRange(int start, int size) {
         return utxRange(emf.createEntityManager(), Record.class, Record.RANGE, start, size)
                 .stream()
                 .map(recordPartConverter::convert)
@@ -74,7 +75,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
     }
 
     @Override
-    public void update(@Nonnull RecordFullDto dto) {
+    public void update(@Nonnull RecordJdo dto) {
         validateId(dto);
         validateRecordUserLogin(dto.getUserLogin());
         utxConsumeByFunction(this::updateFunction, dto);
@@ -100,7 +101,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
         return LOGGER;
     }
 
-    private EntityManager createFunction(RecordFullDto dto) {
+    private EntityManager createFunction(RecordJdo dto) {
         EntityManager entityManager = emf.createEntityManager();
         UserLogin userLogin = getUserLogin(entityManager, dto);
         validateUserLoginDto(userLogin, dto.getUserLogin());
@@ -111,7 +112,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
         return entityManager;
     }
 
-    private EntityManager updateFunction(RecordFullDto dto) {
+    private EntityManager updateFunction(RecordJdo dto) {
         EntityManager entityManager = emf.createEntityManager();
         UserLogin userLogin = getUserLogin(entityManager, dto);
         validateUserLoginDto(userLogin, dto.getUserLogin());
@@ -123,7 +124,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
         return entityManager;
     }
 
-    private UserLogin getUserLogin(EntityManager em, RecordFullDto dto) {
+    private UserLogin getUserLogin(EntityManager em, RecordJdo dto) {
         return UserLoginEntityUtil.get(em, dto.getUserLogin());
     }
 

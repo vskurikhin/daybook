@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCrudServiceImpl.java
@@ -17,10 +17,12 @@ import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.domain.NewsEntry;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.RecordDto;
+import su.svn.showcase.dto.UserLoginDto;
+import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.enums.NewsEntryDtoEnum;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.NewsEntryCrudService;
 
@@ -117,7 +119,7 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
     }
 
     private UserLogin getUserLogin(NewsEntryJdo dto) {
-        UserLoginDto userLogin = ((RecordFullDto) dto.getRecord()).getUserLogin();
+        UserLoginDto userLogin = ((RecordJdo) dto.getRecord()).getUserLogin();
         return getUserLogin(userLogin);
     }
 
@@ -147,10 +149,10 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
     }
 
     private void validateRecordUserLogin(RecordDto dto) {
-        if (dto instanceof RecordFullDto) {
-            RecordFullDto recordFullDto = (RecordFullDto) dto;
-            if ( ! (recordFullDto.getUserLogin() instanceof UserOnlyLoginDto)) {
-                throw ErrorCase.bad("user login DTO", String.valueOf(recordFullDto.getUserLogin()));
+        if (dto instanceof RecordJdo) {
+            RecordJdo recordJdo = (RecordJdo) dto;
+            if ( ! (recordJdo.getUserLogin() instanceof UserOnlyLoginDto)) {
+                throw ErrorCase.bad("user login DTO", String.valueOf(recordJdo.getUserLogin()));
             }
         }
     }

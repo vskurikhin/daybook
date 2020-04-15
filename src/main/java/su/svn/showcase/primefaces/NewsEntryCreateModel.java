@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCreateModel.java
@@ -17,7 +17,7 @@ import su.svn.showcase.converters.StringTagSetConverter;
 import su.svn.showcase.dto.*;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsGroupJdo;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.services.*;
 
@@ -60,7 +60,7 @@ class NewsEntryCreateModel extends AbstractModel {
         UUID uuid = UUID.randomUUID();
         LocalDateTime nowDateTime = LocalDateTime.now();
         LocalDateTime currentDateTime = parseLocalDateTime(this.date);
-        RecordFullDto recordDto = RecordFullDto.builder()
+        RecordJdo recordDto = RecordJdo.builder()
                 .id(uuid)
                 .createDateTime(nowDateTime)
                 .editDateTime(currentDateTime)

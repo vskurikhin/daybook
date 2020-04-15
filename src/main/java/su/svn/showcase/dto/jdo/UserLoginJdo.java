@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginJdo.java
@@ -8,11 +8,15 @@
 
 package su.svn.showcase.dto.jdo;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.UserLoginAuthDto;
-import su.svn.showcase.dto.UserRoleBaseDto;
 import su.svn.showcase.dto.UserRoleDto;
 
 import javax.annotation.Nonnull;
@@ -21,7 +25,10 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -59,7 +66,7 @@ public class UserLoginJdo implements UserLoginAuthDto, Serializable {
         this.login = entity.getLogin();
         this.password = entity.getPassword();
         this.roles = entity.getRoles().stream()
-                .map(UserRoleBaseDto::new)
+                .map(UserRoleJdo::new)
                 .collect(Collectors.toList());
     }
 
