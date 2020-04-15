@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.02.24 20:09 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * IntegrationTestData.java
@@ -10,6 +10,7 @@ package su.svn.it;
 
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.jdo.*;
 
 import java.util.*;
 
@@ -25,11 +26,11 @@ public class IntegrationTestData extends TestData
         Role.builder().id(UUID3).roleName("testRole3").build(),
     };
 
-    private static final RoleBaseDto[] roleBaseDtos = {
-        RoleBaseDto.builder().id(UUID0).roleName("testRole0").build(),
-        RoleBaseDto.builder().id(UUID1).roleName("testRole1").build(),
-        RoleBaseDto.builder().id(UUID2).roleName("testRole2").build(),
-        RoleBaseDto.builder().id(UUID3).roleName("testRole3").build(),
+    private static final RoleJdo[] roleBaseDtos = {
+        RoleJdo.builder().id(UUID0).roleName("testRole0").build(),
+        RoleJdo.builder().id(UUID1).roleName("testRole1").build(),
+        RoleJdo.builder().id(UUID2).roleName("testRole2").build(),
+        RoleJdo.builder().id(UUID3).roleName("testRole3").build(),
     };
 
     private static final UserRole[] userRoles = {
@@ -39,11 +40,11 @@ public class IntegrationTestData extends TestData
         UserRole.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
     };
 
-    private static final UserRoleFullDto[] userRoleFullDtos = {
-        UserRoleFullDto.builder().id(UUID0).roleName("testUserRole0").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID1).roleName("testUserRole1").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID2).roleName("testUserRole2").dateTime(NOW).build(),
-        UserRoleFullDto.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
+    private static final UserRoleJdo[] USER_ROLE_JDOS = {
+        UserRoleJdo.builder().id(UUID0).roleName("testUserRole0").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID1).roleName("testUserRole1").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID2).roleName("testUserRole2").dateTime(NOW).build(),
+        UserRoleJdo.builder().id(UUID3).roleName("testUserRole3").dateTime(NOW).build(),
     };
 
     private static final UserLogin[] userLogins = {
@@ -73,20 +74,20 @@ public class IntegrationTestData extends TestData
             .build(),
     };
 
-    private static final UserOnlyLoginBaseDto[] userOnlyLoginBaseDtos = {
-        UserOnlyLoginBaseDto.builder()
+    private static final UserOnlyLoginDto[] userOnlyLoginDtos = {
+        UserOnlyLoginDto.builder()
             .id(UUID0)
             .login("loginTest0")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID1)
             .login("loginTest1")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID2)
             .login("loginTest2")
             .build(),
-        UserOnlyLoginBaseDto.builder()
+        UserOnlyLoginDto.builder()
             .id(UUID3)
             .login("loginTest3")
             .build(),
@@ -99,11 +100,11 @@ public class IntegrationTestData extends TestData
         Tag.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
     };
 
-    private static final TagBaseDto[] tagBaseDtos = {
-        TagBaseDto.builder().id(SID0).tag("tagTest0").visible(false).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID1).tag("tagTest1").visible(true).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID2).tag("tagTest2").visible(false).dateTime(NOW).build(),
-        TagBaseDto.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
+    private static final TagJdo[] TAG_JDOS = {
+        TagJdo.builder().id(SID0).tag("tagTest0").visible(false).dateTime(NOW).build(),
+        TagJdo.builder().id(SID1).tag("tagTest1").visible(true).dateTime(NOW).build(),
+        TagJdo.builder().id(SID2).tag("tagTest2").visible(false).dateTime(NOW).build(),
+        TagJdo.builder().id(SID3).tag("tagTest3").visible(true).dateTime(NOW).build(),
     };
 
     private static final NewsGroup[] newsGroups = {
@@ -129,27 +130,27 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final NewsGroupBaseDto[] newsGroupBaseDtos = {
-        NewsGroupBaseDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .group("groupTest0")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .group("groupTest1")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .group("groupTest2")
-            .build(),
-        NewsGroupBaseDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .group("groupTest3")
-            .build()
+    private static final NewsGroupJdo[] newsGroupJdos = {
+            NewsGroupJdo.builder()
+                    .id(UUID0)
+                    .dateTime(NOW)
+                    .group("groupTest0")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID1)
+                    .dateTime(NOW)
+                    .group("groupTest1")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID2)
+                    .dateTime(NOW)
+                    .group("groupTest2")
+                    .build(),
+            NewsGroupJdo.builder()
+                    .id(UUID3)
+                    .dateTime(NOW)
+                    .group("groupTest3")
+                    .build()
     };
 
     private static final Record[] records = {
@@ -158,174 +159,115 @@ public class IntegrationTestData extends TestData
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(1)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID2)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(2)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID3)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(3)
-            .type(NewsEntryFullDto.class.getSimpleName())
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID4)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
         Record.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build()
     };
 
-    private static final RecordBaseDto[] recordBaseDtos = {
-        RecordBaseDto.builder()
+    private static final RecordJdo[] RECORD_JDOS = {
+        RecordJdo.builder()
             .id(UUID0)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(13)
-            .type(null)
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID1)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(1)
-            .type(null)
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID2)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(2)
-            .type(null)
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID3)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(3)
-            .type(null)
+            .type(NewsEntryJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID4)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID5)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID6)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build(),
-        RecordBaseDto.builder()
+        RecordJdo.builder()
             .id(UUID7)
             .createDateTime(NOW)
             .editDateTime(NOW)
             .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
-            .build()
-    };
-
-    private static final RecordFullDto[] recordFullDtos = {
-        RecordFullDto.builder()
-            .id(UUID0)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(13)
-            .type(NewsEntryFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID1)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(1)
-            .type(NewsEntryFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID2)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(2)
-            .type(NewsEntryFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID3)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(3)
-            .type(NewsEntryFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID4)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(4)
-            .type(ArticleFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID5)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(5)
-            .type(ArticleFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID6)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(6)
-            .type(ArticleFullDto.class.getSimpleName())
-            .build(),
-        RecordFullDto.builder()
-            .id(UUID7)
-            .createDateTime(NOW)
-            .editDateTime(NOW)
-            .index(7)
-            .type(ArticleFullDto.class.getSimpleName())
+            .type(ArticleJdo.class.getSimpleName())
             .build()
     };
 
@@ -356,53 +298,26 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final NewsEntryBaseDto[] newsEntryBaseDtos = {
-        NewsEntryBaseDto.builder()
+    private static final NewsEntryJdo[] newsEntryJdos = {
+        NewsEntryJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .content("contentTest0")
             .build(),
-        NewsEntryBaseDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .content("contentTest1")
             .build(),
-        NewsEntryBaseDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .title("titleTest2")
             .content("contentTest2")
             .build(),
-        NewsEntryBaseDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .title("titleTest3")
-            .content("contentTest3")
-            .build()
-    };
-
-    private static final NewsEntryFullDto[] newsEntryFullDtos = {
-        NewsEntryFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .content("contentTest0")
-            .build(),
-        NewsEntryFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .content("contentTest1")
-            .build(),
-        NewsEntryFullDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .title("titleTest2")
-            .content("contentTest2")
-            .build(),
-        NewsEntryFullDto.builder()
+        NewsEntryJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .title("titleTest3")
@@ -461,101 +376,50 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final LinkBaseDto[] linkBaseDtos = {
-        LinkBaseDto.builder()
+    private static final LinkJdo[] linkJdos = {
+        LinkJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest0")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest1")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest2")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest3")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID4)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest4")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID5)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest5")
             .build(),
-        LinkBaseDto.builder()
+        LinkJdo.builder()
             .id(UUID6)
             .dateTime(NOW)
             .visible(true)
             .link("linkTest6")
             .build(),
-        LinkBaseDto.builder()
-            .id(UUID7)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest7")
-            .build()
-    };
-
-    private static final LinkFullDto[] linkFullDtos = {
-        LinkFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest0")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest1")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest2")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest3")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID4)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest4")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID5)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest5")
-            .build(),
-        LinkFullDto.builder()
-            .id(UUID6)
-            .dateTime(NOW)
-            .visible(true)
-            .link("linkTest6")
-            .build(),
-        LinkFullDto.builder()
+        LinkJdo.builder()
             .id(UUID7)
             .dateTime(NOW)
             .visible(true)
@@ -622,116 +486,57 @@ public class IntegrationTestData extends TestData
             .build()
     };
 
-    private static final ArticleBaseDto[] articleBaseDtos = {
-        ArticleBaseDto.builder()
+    private static final ArticleJdo[] articleJdos = {
+        ArticleJdo.builder()
             .id(UUID0)
             .dateTime(NOW)
             .title("titleTest0")
             .include("includeTest0")
             .summary("summaryTest0")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID1)
             .dateTime(NOW)
             .title("titleTest1")
             .include("includeTest1")
             .summary("summaryTest1")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID2)
             .dateTime(NOW)
             .title("titleTest2")
             .include("includeTest2")
             .summary("summaryTest2")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID3)
             .dateTime(NOW)
             .title("titleTest3")
             .include("includeTest3")
             .summary("summaryTest3")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID4)
             .dateTime(NOW)
             .title("titleTest4")
             .include("includeTest4")
             .summary("summaryTest4")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID5)
             .dateTime(NOW)
             .title("titleTest5")
             .include("includeTest5")
             .summary("summaryTest5")
             .build(),
-        ArticleBaseDto.builder()
+        ArticleJdo.builder()
             .id(UUID6)
             .dateTime(NOW)
             .title("titleTest6")
             .include("includeTest6")
             .summary("summaryTest6")
             .build(),
-        ArticleBaseDto.builder()
-            .id(UUID7)
-            .dateTime(NOW)
-            .title("titleTest7")
-            .include("includeTest7")
-            .summary("summaryTest7")
-            .build()
-    };
-
-    private static final ArticleFullDto[] articleFullDtos = {
-        ArticleFullDto.builder()
-            .id(UUID0)
-            .dateTime(NOW)
-            .title("titleTest0")
-            .include("includeTest0")
-            .summary("summaryTest0")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID1)
-            .dateTime(NOW)
-            .title("titleTest1")
-            .include("includeTest1")
-            .summary("summaryTest1")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID2)
-            .dateTime(NOW)
-            .title("titleTest2")
-            .include("includeTest2")
-            .summary("summaryTest2")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID3)
-            .dateTime(NOW)
-            .title("titleTest3")
-            .include("includeTest3")
-            .summary("summaryTest3")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID4)
-            .dateTime(NOW)
-            .title("titleTest4")
-            .include("includeTest4")
-            .summary("summaryTest4")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID5)
-            .dateTime(NOW)
-            .title("titleTest5")
-            .include("includeTest5")
-            .summary("summaryTest5")
-            .build(),
-        ArticleFullDto.builder()
-            .id(UUID6)
-            .dateTime(NOW)
-            .title("titleTest6")
-            .include("includeTest6")
-            .summary("summaryTest6")
-            .build(),
-        ArticleFullDto.builder()
+        ArticleJdo.builder()
             .id(UUID7)
             .dateTime(NOW)
             .title("titleTest7")
@@ -746,29 +551,29 @@ public class IntegrationTestData extends TestData
         for (int i = 0; i < UPPER_BOUND; ++i) {
             userRoles[i].setRole(roles[i]);
             userRoles[i].setUserLogin(userLogins[i]);
-            userRoleFullDtos[i].setRole(roleBaseDtos[i]);
-            userRoleFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
+            USER_ROLE_JDOS[i].setRole(roleBaseDtos[i]);
+            USER_ROLE_JDOS[i].setUserLogin(userOnlyLoginDtos[i]);
             userLogins[i].setRoles(newList(userRoles[i]));
             // tags[i].setRecords(newSet());
             newsGroups[0].getNewsEntries().add(newsEntries[i]);
             records[i].setUserLogin(userLogins[i]);
             records[i].setNewsEntry(newsEntries[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i]);
-            recordFullDtos[i].setNewsEntry(newsEntryFullDtos[i]);
-            recordFullDtos[i].setTags(newSet(tagBaseDtos[i]));
+            RECORD_JDOS[i].setUserLogin(userOnlyLoginDtos[i]);
+            RECORD_JDOS[i].setNewsEntry(newsEntryJdos[i]);
+            RECORD_JDOS[i].setTags(newSet(TAG_JDOS[i]));
             newsEntries[i].setNewsGroup(newsGroups[0]);
             newsEntries[i].setRecord(records[i]);
-            newsEntryFullDtos[i].setRecord(recordFullDtos[i]);
-            newsEntryFullDtos[i].setNewsGroup(newsGroupBaseDtos[i]);
+            newsEntryJdos[i].setRecord(RECORD_JDOS[i]);
+            newsEntryJdos[i].setNewsGroup(newsGroupJdos[i]);
         }
         for (int i = 4; i < UPPER_BOUND + 4; ++i) {
             records[i].setArticle(articles[i]);
             articles[i].setRecord(records[i]);
             articles[i].setLink(links[i]);
             links[i].setArticle(articles[i]);
-            articleFullDtos[i].setRecord(recordFullDtos[i]);
-            recordFullDtos[i].setUserLogin(userOnlyLoginBaseDtos[i - 4]);
-            recordFullDtos[i].setArticle(articleFullDtos[i]);
+            articleJdos[i].setRecord(RECORD_JDOS[i]);
+            RECORD_JDOS[i].setUserLogin(userOnlyLoginDtos[i - 4]);
+            RECORD_JDOS[i].setArticle(articleJdos[i]);
         }
     }
 
@@ -779,9 +584,9 @@ public class IntegrationTestData extends TestData
         return role;
     }
 
-    public static RoleBaseDto cloneRoleBaseDto(int i)
+    public static RoleJdo cloneRoleFullDto(int i)
     {
-        RoleBaseDto role = clone(roleBaseDtos[i]);
+        RoleJdo role = clone(roleBaseDtos[i]);
         assert role != null;
         return role;
     }
@@ -799,14 +604,14 @@ public class IntegrationTestData extends TestData
         return role;
     }
 
-    public static UserRoleFullDto cloneUserRoleFullDto(int i)
+    public static UserRoleJdo cloneUserRoleFullDto(int i)
     {
-        UserRoleFullDto role = clone(userRoleFullDtos[i]);
+        UserRoleJdo role = clone(USER_ROLE_JDOS[i]);
         assert role != null;
         return role;
     }
 
-    public static UserRoleFullDto clean(UserRoleFullDto role)
+    public static UserRoleJdo clean(UserRoleJdo role)
     {
         role.setUserLogin(null);
         return role;
@@ -838,9 +643,9 @@ public class IntegrationTestData extends TestData
         return tag;
     }
 
-    public static TagBaseDto cloneTagBaseDto(int i)
+    public static TagJdo cloneTagFullDto(int i)
     {
-        TagBaseDto tag = clone(tagBaseDtos[i]);
+        TagJdo tag = clone(TAG_JDOS[i]);
         assert tag != null;
         return tag;
     }
@@ -858,13 +663,6 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static NewsGroupBaseDto cloneNewsGroupBaseDto(int i)
-    {
-        NewsGroupBaseDto dto = clone(newsGroupBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
     public static Record cloneRecord(int i)
     {
         Record entity = clone(records[i]);
@@ -880,24 +678,17 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static RecordBaseDto cloneRecordBaseDto(int i)
+    public static RecordJdo cloneRecordFullDto(int i)
     {
-        RecordBaseDto dto = clone(recordBaseDtos[i]);
+        RecordJdo dto = clone(RECORD_JDOS[i]);
         assert dto != null;
         return dto;
     }
 
-    public static RecordFullDto cloneRecordFullDto(int i)
+    public static RecordJdo clean(RecordJdo dto)
     {
-        RecordFullDto dto = clone(recordFullDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static RecordFullDto clean(RecordFullDto dto)
-    {
-        if (dto.getNewsEntry() instanceof NewsEntryFullDto) {
-            ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(null);
+        if (dto.getNewsEntry() instanceof NewsEntryJdo) {
+            ((NewsEntryJdo) dto.getNewsEntry()).setRecord(null);
         }
         dto.setTags(Collections.emptySet());
         return dto;
@@ -916,16 +707,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static NewsEntryBaseDto cloneNewsEntryBaseDto(int i)
+    public static NewsEntryJdo cloneNewsEntryFullDto(int i)
     {
-        NewsEntryBaseDto dto = clone(newsEntryBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static NewsEntryFullDto cloneNewsEntryFullDto(int i)
-    {
-        NewsEntryFullDto dto = clone(newsEntryFullDtos[i]);
+        NewsEntryJdo dto = clone(newsEntryJdos[i]);
         assert dto != null;
         return dto;
     }
@@ -944,16 +728,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static LinkBaseDto cloneLinkBaseDto(int i)
+    public static LinkJdo cloneLinkJdo(int i)
     {
-        LinkBaseDto dto = clone(linkBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static LinkFullDto cloneLinkFullDto(int i)
-    {
-        LinkFullDto dto = clone(linkFullDtos[i]);
+        LinkJdo dto = clone(linkJdos[i]);
         assert dto != null;
         return dto;
     }
@@ -972,16 +749,9 @@ public class IntegrationTestData extends TestData
         return entity;
     }
 
-    public static ArticleBaseDto cloneArticleBaseDto(int i)
+    public static ArticleJdo cloneArticleJdo(int i)
     {
-        ArticleBaseDto dto = clone(articleBaseDtos[i]);
-        assert dto != null;
-        return dto;
-    }
-
-    public static ArticleFullDto cloneArticleFullDto(int i)
-    {
-        ArticleFullDto dto = clone(articleFullDtos[i]);
+        ArticleJdo dto = clone(articleJdos[i]);
         assert dto != null;
         return dto;
     }

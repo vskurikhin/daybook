@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.02 18:19 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ErrorCase.java
@@ -11,7 +11,6 @@ package su.svn.showcase.exceptions;
 import org.slf4j.Logger;
 import org.slf4j.helpers.FormattingTuple;
 import org.slf4j.helpers.MessageFormatter;
-import su.svn.showcase.dto.UserOnlyLoginBaseDto;
 
 public class ErrorCase extends RuntimeException {
     private ErrorCase(String message) {

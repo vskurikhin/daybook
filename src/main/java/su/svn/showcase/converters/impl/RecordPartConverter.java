@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordPartConverter.java
@@ -12,6 +12,12 @@ import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.*;
+import su.svn.showcase.dto.enums.RecordTypesEnum;
+import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.NewsLinksJdo;
+import su.svn.showcase.dto.jdo.RecordJdo;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
 import su.svn.showcase.utils.ReadyMap;
@@ -28,7 +34,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("DuplicatedCode")
 @Stateless(name = "RecordPartConverter")
-public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordFullDto>  implements RecordConverter {
+public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordJdo>  implements RecordConverter {
 
     @EJB(beanName = "ArticleBaseConverter")
     private ArticleConverter articleConverter;
@@ -40,43 +46,40 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     private NewsLinksConverter newsLinksConverter;
 
     @EJB(beanName = "UserOnlyLoginConverter")
-    private UserLoginConverter userLoginConverter;
+    private UserOnlyLoginConverter userLoginConverter;
 
     @EJB(beanName = "TagBaseConverter")
     private TagConverter tagConverter;
 
     @Override
-    public RecordFullDto convert(@Nonnull Record entity) {
-        return doConvert(new RecordFullDto(entity.getId()), entity, new ReadyMap());
+    public RecordJdo convert(@Nonnull Record entity) {
+        return doConvert(new RecordJdo(entity.getId()), entity, new ReadyMap());
     }
 
     @Override
-    public RecordFullDto convert(@Nonnull Record entity, ReadyMap ready) {
-        return doConvert(new RecordFullDto(entity.getId()), entity, ready);
+    public RecordJdo convert(@Nonnull Record entity, ReadyMap ready) {
+        return doConvert(new RecordJdo(entity.getId()), entity, ready);
     }
 
-    private RecordFullDto doConvert(RecordFullDto dto, Record entity, ReadyMap ready) {
-        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), RecordFullDto.class);
+    private RecordJdo doConvert(RecordJdo dto, Record entity, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(dto.getId(), RecordJdo.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
-            if (value instanceof RecordFullDto) {
-                return (RecordFullDto) value;
+            if (value instanceof RecordJdo) {
+                return (RecordJdo) value;
             }
             throw ErrorCase.badType(value.getClass().getSimpleName());
         } else {
             ready.put(dto);
         }
         switch (Objects.requireNonNull(getPosition(entity))) {
-            case ArticleBaseDto:
-            case ArticleFullDto:
+            case ArticleJdo:
                 dto.setArticle(articleConverter.convert(entity.getArticle(), ready));
                 break;
-            case NewsEntryBaseDto:
-            case NewsEntryFullDto:
+            case NewsEntryJdo:
                 dto.setNewsEntry(newsEntryConverter.convert(entity.getNewsEntry(), ready));
                 break;
-            case NewsLinksBaseDto:
-            case NewsLinksFullDto:
+            case NewsLinksJdo:
                 dto.setNewsLinks(newsLinksConverter.convert(entity.getNewsLinks(), ready));
                 break;
         }
@@ -92,21 +95,21 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
         return super.convertByGetter(dto, entity);
     }
 
-    private Function<Tag, TagFullDto> functionTagToDto(ReadyMap ready) {
+    private Function<Tag, TagJdo> functionTagToDto(ReadyMap ready) {
         return entity -> tagConverter.convert(entity, ready);
     }
 
     @Override
-    public Record convert(@Nonnull RecordFullDto dto) {
+    public Record convert(@Nonnull RecordJdo dto) {
         return doConvert(new Record(dto.getId()), dto, new ReadyMap());
     }
 
     @Override
-    public Record convert(@Nonnull RecordFullDto dto, ReadyMap ready) {
+    public Record convert(@Nonnull RecordJdo dto, ReadyMap ready) {
         return doConvert(new Record(dto.getId()), dto, ready);
     }
 
-    private Record doConvert(Record entity, RecordFullDto dto, ReadyMap ready) {
+    private Record doConvert(Record entity, RecordJdo dto, ReadyMap ready) {
         ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Record.class);
         if (ready.containsKey(key)) {
             Object value = ready.get(key);
@@ -118,21 +121,18 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
             ready.put(entity);
         }
         switch (Objects.requireNonNull(getPosition(dto))) {
-            case ArticleBaseDto:
-            case ArticleFullDto:
-                entity.setArticle(articleConverter.convert((ArticleFullDto) dto.getArticle(), ready));
+            case ArticleJdo:
+                entity.setArticle(articleConverter.convert((ArticleJdo) dto.getArticle(), ready));
                 break;
-            case NewsEntryBaseDto:
-            case NewsEntryFullDto:
-                entity.setNewsEntry(newsEntryConverter.convert((NewsEntryFullDto) dto.getNewsEntry(), ready));
+            case NewsEntryJdo:
+                entity.setNewsEntry(newsEntryConverter.convert((NewsEntryJdo) dto.getNewsEntry(), ready));
                 break;
-            case NewsLinksBaseDto:
-            case NewsLinksFullDto:
-                entity.setNewsLinks(newsLinksConverter.convert((NewsLinksFullDto) dto.getNewsLinks(), ready));
+            case NewsLinksJdo:
+                entity.setNewsLinks(newsLinksConverter.convert((NewsLinksJdo) dto.getNewsLinks(), ready));
                 break;
         }
         if (dto.getUserLogin() != null) {
-            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginBaseDto) dto.getUserLogin(), ready));
+            entity.setUserLogin(userLoginConverter.convert((UserOnlyLoginDto) dto.getUserLogin(), ready));
         }
         if (dto.getTags() != null) {
             Set<Tag> set = dto.getTags().stream()
@@ -152,7 +152,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     }
 
     private Function<TagDto, Tag> functionTagDtoToEntity(ReadyMap ready) {
-        return dto -> tagConverter.convert((TagFullDto) dto, ready);
+        return dto -> tagConverter.convert((TagJdo) dto, ready);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class RecordPartConverter extends AbstractConverter<UUID, Record, RecordF
     }
 
     @Override
-    Class<RecordFullDto> getDClass() {
-        return RecordFullDto.class;
+    Class<RecordJdo> getDClass() {
+        return RecordJdo.class;
     }
 }

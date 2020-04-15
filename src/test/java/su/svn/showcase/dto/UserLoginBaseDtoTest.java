@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.15 12:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginBaseDtoTest.java
@@ -9,7 +9,7 @@
 package su.svn.showcase.dto;
 
 import org.junit.jupiter.api.*;
-import su.svn.showcase.domain.UserLogin;
+import su.svn.showcase.dto.jdo.UserLoginJdo;
 import su.svn.utils.ValidateUtil;
 
 import java.time.LocalDateTime;
@@ -24,12 +24,12 @@ import static su.svn.utils.TestData.USER_LOGIN_UUID0;
 class UserLoginBaseDtoTest {
     private final static LocalDateTime NOW = LocalDateTime.now();
 
-    private UserLoginBaseDto userLoginBaseDto;
+    private UserLoginJdo userLoginJdo;
 
     @Test
     @DisplayName("is instantiated")
     void isInstantiatedWithNew() {
-        new UserLoginBaseDto();
+        new UserLoginJdo();
     }
 
     @Nested
@@ -37,38 +37,38 @@ class UserLoginBaseDtoTest {
     class WhenNew {
         @BeforeEach
         void createNew() {
-            userLoginBaseDto = new UserLoginBaseDto();
+            userLoginJdo = new UserLoginJdo();
         }
 
         @Test
         @DisplayName("default values")
         void defaults() {
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("id", null);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", null);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", null);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", null);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("id", null);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("dateTime", null);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("login", null);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("password", null);
         }
 
         @Test
         @DisplayName("Setters and getters")
         void testSettersAndGetters () {
-            userLoginBaseDto.setDateTime(NOW);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertEquals(NOW, userLoginBaseDto.getDateTime());
+            userLoginJdo.setDateTime(NOW);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertEquals(NOW, userLoginJdo.getDateTime());
 
-            userLoginBaseDto.setLogin("testLogin");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
-            assertEquals("testLogin", userLoginBaseDto.getLogin());
+            userLoginJdo.setLogin("testLogin");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertEquals("testLogin", userLoginJdo.getLogin());
 
-            userLoginBaseDto.setPassword("testPassword");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", "testPassword");
-            assertEquals("testPassword", userLoginBaseDto.getPassword());
+            userLoginJdo.setPassword("testPassword");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("password", "testPassword");
+            assertEquals("testPassword", userLoginJdo.getPassword());
         }
 
         @Test
         @DisplayName("violation on code is null")
         void codeIsNull() {
-            assertFalse(ValidateUtil.isNull(3, userLoginBaseDto).hasNext());
+            assertFalse(ValidateUtil.isNull(1, userLoginJdo).hasNext());
         }
     }
 
@@ -77,76 +77,55 @@ class UserLoginBaseDtoTest {
     class WhenNewAllArgsConstructor {
         @BeforeEach
         void createNew() {
-            userLoginBaseDto = new UserLoginBaseDto(ZERO, NOW, "testLogin", "testPassword");
+            userLoginJdo = new UserLoginJdo(ZERO, NOW, "testLogin", "testPassword", null);
         }
 
         @Test
         @DisplayName("is instantiated partial constructor")
         void isInstantiatedWithNew() {
-            userLoginBaseDto = new UserLoginBaseDto(USER_LOGIN_UUID0, NOW, "testLogin", "testPassword");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", "testPassword");
+            userLoginJdo = new UserLoginJdo(USER_LOGIN_UUID0, NOW, "testLogin", "testPassword", null);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("password", "testPassword");
         }
 
         @Test
         @DisplayName("is instantiated with builder")
         void isInstantiatedWithBuilder() {
-            userLoginBaseDto = UserLoginBaseDto.builder()
+            userLoginJdo = UserLoginJdo.builder()
                     .id(ZERO)
                     .dateTime(NOW)
                     .login("testLogin")
                     .password("testPassword")
                     .build();
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", "testPassword");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("password", "testPassword");
         }
 
         @Test
         @DisplayName("initialized values")
         void defaults() {
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("id", ZERO);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("dateTime", NOW);
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("login", "testLogin");
-            assertThat(userLoginBaseDto).hasFieldOrPropertyWithValue("password", "testPassword");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("id", ZERO);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("dateTime", NOW);
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("login", "testLogin");
+            assertThat(userLoginJdo).hasFieldOrPropertyWithValue("password", "testPassword");
         }
 
         @Test
         @DisplayName("Equals and hashCode")
         void testEqualsAndHashCode() {
-            assertNotEquals(new UserLoginBaseDto(), userLoginBaseDto);
-            UserLoginBaseDto expected = new UserLoginBaseDto(NEWS_GROUP_UUID0, NOW, "testLogin", "testPassword");
-            assertEquals(expected.hashCode(), userLoginBaseDto.hashCode());
-            assertEquals(expected, userLoginBaseDto);
+            assertNotEquals(new UserLoginJdo(), userLoginJdo);
+            UserLoginJdo expected = new UserLoginJdo(NEWS_GROUP_UUID0, NOW, "testLogin", "testPassword", null);
+            assertEquals(expected.hashCode(), userLoginJdo.hashCode());
+            assertEquals(expected, userLoginJdo);
         }
 
         @Test
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
-            assertTrue(userLoginBaseDto.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            UserLogin expected = new UserLogin(ZERO);
-            expected.setLogin("testLogin");
-            expected.setPassword("testPassword");
-            expected.setDateTime(NOW);
-            assertEquals(expected, userLoginBaseDto.update(new UserLogin(ZERO)));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            UserLogin entity = new UserLogin(ZERO);
-            entity.setLogin("testLogin");
-            entity.setPassword("testPassword");
-            entity.setDateTime(NOW);
-            UserLoginBaseDto expected = new UserLoginBaseDto(entity);
-            assertEquals(expected, userLoginBaseDto);
+            assertTrue(userLoginJdo.toString().length() > 0);
         }
     }
 }

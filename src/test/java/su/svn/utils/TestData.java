@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.18 15:08 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TestData.java
@@ -11,8 +11,7 @@ package su.svn.utils;
 import su.svn.shared.Constants;
 import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.RecordDto;
-import su.svn.showcase.dto.TagBaseDto;
-import su.svn.showcase.dto.TagFullDto;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.dto.UserRoleDto;
 
 import java.io.Serializable;
@@ -31,10 +30,8 @@ public class TestData {
     public static final Set<Tag> EMPTY_TAGS = Collections.emptySet();
     public static final Set<Record> EMPTY_RECORDS = Collections.emptySet();
     public static final Set<LinkDescription> EMPTY_LINK_DESCRIPTIONS = Collections.emptySet();
-    public static final Set<NewsLinks> EMPTY_NEWS_LINKS = Collections.emptySet();
 
-    public static final Set<TagBaseDto> EMPTY_BASEDTO_TAGS = Collections.emptySet();
-    public static final Set<TagFullDto> EMPTY_FULLDTO_TAGS = Collections.emptySet();
+    public static final Set<TagJdo> EMPTY_FULLDTO_TAGS = Collections.emptySet();
     public static final Set<RecordDto> EMPTY_RECORD_DTOS = Collections.emptySet();
 
     public static final List<UserRole> EMPTY_USER_ROLES = Collections.emptyList();

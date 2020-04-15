@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.21 21:02 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkBaseCrudServiceImpl.java
@@ -10,9 +10,10 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.dao.LinkDao;
 import su.svn.showcase.domain.Link;
-import su.svn.showcase.dto.LinkBaseDto;
+import su.svn.showcase.dto.jdo.LinkJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.exceptions.NotFound;
 import su.svn.showcase.services.LinkBaseCrudService;
@@ -34,31 +35,33 @@ public class LinkBaseCrudServiceImpl extends AbstractCrudService implements Link
     @EJB(beanName = "LinkDaoEjb")
     private LinkDao linkDao;
 
+    @EJB(beanName = "LinkBaseConverter")
+    LinkConverter linkConverter;
+
     @Override
     @Transactional
-    public void create(@Nonnull LinkBaseDto dto) {
+    public void create(@Nonnull LinkJdo dto) {
         checkAndSetId(dto);
         saveUpdatedEntity(new Link(dto.getId()), dto);
     }
 
     @Override
     @Transactional
-    public LinkBaseDto readById(@Nonnull UUID id) {
-        return new LinkBaseDto(linkDao.findById(id)
-                .orElseThrow(NotFound::is));
+    public LinkJdo readById(@Nonnull UUID id) {
+        return linkConverter.convert(linkDao.findById(id).orElseThrow(NotFound::is));
     }
 
     @Override
     @Transactional
-    public List<LinkBaseDto> readRange(int start, int size) {
+    public List<LinkJdo> readRange(int start, int size) {
         return linkDao.range(start, size).stream()
-                .map(LinkBaseDto::new)
+                .map(linkConverter::convert)
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void update(@Nonnull LinkBaseDto dto) {
+    public void update(@Nonnull LinkJdo dto) {
         validateId(dto);
         saveUpdatedEntity(getLink(dto.getId()), dto);
     }
@@ -81,8 +84,8 @@ public class LinkBaseCrudServiceImpl extends AbstractCrudService implements Link
         return LOGGER;
     }
 
-    private void saveUpdatedEntity(Link entity, LinkBaseDto dto) {
-        entity = dto.update(entity);
+    private void saveUpdatedEntity(Link entity, LinkJdo dto) {
+        entity = linkConverter.convert(dto);
         linkDao.save(entity);
     }
 

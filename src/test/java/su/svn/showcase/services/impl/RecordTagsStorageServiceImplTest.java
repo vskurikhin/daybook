@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTagsStorageServiceImplTest.java
@@ -20,8 +20,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.services.RecordTagsStorageService;
 import su.svn.showcase.services.impl.support.EntityManagerFactoryProducer;
 import su.svn.showcase.services.impl.support.EntityManagerProducer;
@@ -79,14 +79,14 @@ class RecordTagsStorageServiceImplTest {
     private UserTransaction userTransaction;
 
     private Record entity;
-    private RecordFullDto dto;
-    private TagBaseDto tagDto;
+    private RecordJdo dto;
+    private TagJdo tagDto;
 
     @BeforeEach
     void setUp() throws Exception {
         entity = cloneRecord0();
         dto = cloneRecordFullDto0();
-        tagDto = cloneTagBaseDto1();
+        tagDto = cloneTagFullDto1();
         userTransaction.begin();
         entity.setNewsEntry(null);
         entity.setTags(Collections.emptySet());

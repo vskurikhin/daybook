@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordFullConverterTest.java
@@ -16,8 +16,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.NewsEntryFullDto;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.RecordJdo;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.ApplicationScoped;
@@ -89,7 +89,7 @@ class RecordFullConverterTest {
     RecordConverter converter;
 
     private Record entity;
-    private RecordFullDto dto;
+    private RecordJdo dto;
 
     private static void set(Class<?> tClass, String filedName, Object o, Object v) throws Exception {
         Field field = tClass.getDeclaredField(filedName);
@@ -112,7 +112,7 @@ class RecordFullConverterTest {
         return entity;
     }
 
-    private RecordFullDto clean(RecordFullDto dto) {
+    private RecordJdo clean(RecordJdo dto) {
         dto.setArticle(null);
         dto.setNewsEntry(null);
         dto.setNewsLinks(null);
@@ -127,19 +127,19 @@ class RecordFullConverterTest {
         Assertions.assertNotNull(converter);
         entity.setNewsEntry(cloneNewsEntry0());
         entity.getNewsEntry().setRecord(entity);
-        entity.setType(NewsEntryFullDto.class.getSimpleName());
-        RecordFullDto test = converter.convert(entity);
+        entity.setType(NewsEntryJdo.class.getSimpleName());
+        RecordJdo test = converter.convert(entity);
         // TODO Assertions.assertEquals(dto, test);
-        Assertions.assertTrue(test == ((NewsEntryFullDto) test.getNewsEntry()).getRecord());
+        Assertions.assertTrue(test == ((NewsEntryJdo) test.getNewsEntry()).getRecord());
     }
 
     @Test
     void when_convert_DTO_to_Entity() {
         Assertions.assertNotNull(converter);
-        dto.setNewsEntry(cloneNewsEntryFullDto0());
+        dto.setNewsEntry(cloneNewsEntryJdo0());
         dto.setTags(newSet(cloneTagFullDto0()));
-        ((NewsEntryFullDto) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
-        ((NewsEntryFullDto) dto.getNewsEntry()).setRecord(dto);
+        ((NewsEntryJdo) dto.getNewsEntry()).setNewsGroup(cloneNewsGroupFullDto0());
+        ((NewsEntryJdo) dto.getNewsEntry()).setRecord(dto);
         Record test = converter.convert(dto);
         entity.setNewsEntry(cloneNewsEntry0());
         // TODO Assertions.assertEquals(entity, test);

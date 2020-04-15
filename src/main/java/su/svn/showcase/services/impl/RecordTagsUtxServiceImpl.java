@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 22:49 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordTagsUtxServiceImpl.java
@@ -14,8 +14,8 @@ import su.svn.showcase.dao.jpa.RecordDaoJpa;
 import su.svn.showcase.dao.jpa.TagDaoJpa;
 import su.svn.showcase.domain.Record;
 import su.svn.showcase.domain.Tag;
-import su.svn.showcase.dto.RecordFullDto;
-import su.svn.showcase.dto.TagBaseDto;
+import su.svn.showcase.dto.jdo.RecordJdo;
+import su.svn.showcase.dto.jdo.TagJdo;
 import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.services.RecordTagsStorageService;
 import su.svn.showcase.utils.CollectionUtil;
@@ -31,7 +31,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static su.svn.shared.Constants.Db.PERSISTENCE_UNIT_NAME;
@@ -50,11 +53,11 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
     private UserTransaction userTransaction;
 
     @Override
-    public void addTagsToRecord(@Nonnull RecordFullDto record, @Nonnull Iterable<TagBaseDto> tags) {
+    public void addTagsToRecord(@Nonnull RecordJdo record, @Nonnull Iterable<TagJdo> tags) {
         utxExecuteBySupplier(() -> acceptTagsToRecord(record, tags));
     }
 
-    private EntityManager acceptTagsToRecord(RecordFullDto dto, Iterable<TagBaseDto> tags) {
+    private EntityManager acceptTagsToRecord(RecordJdo dto, Iterable<TagJdo> tags) {
         EntityManager entityManager = emf.createEntityManager();
         RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
         Record record = recordDaoJpa.findById(dto.getId()).orElseThrow(ErrorCase::notFound);
@@ -73,11 +76,11 @@ public class RecordTagsUtxServiceImpl extends AbstractUserTransactionService
         return LOGGER;
     }
 
-    private void acceptTagsToRecord(EntityManager entityManager, Record record, Iterable<TagBaseDto> tags) {
+    private void acceptTagsToRecord(EntityManager entityManager, Record record, Iterable<TagJdo> tags) {
         RecordDaoJpa recordDaoJpa = new RecordDaoJpa(entityManager);
         TagDaoJpa tagDaoJpa = new TagDaoJpa(entityManager);
         Set<String> setLabels = CollectionUtil.iterableToStream(tags)
-                .map(TagBaseDto::getTag)
+                .map(TagJdo::getTag)
                 .collect(Collectors.toSet());
         getLogger().info("acceptTagsToRecord setLabels: {}", setLabels);
         Set<String> newTagLabels = new HashSet<>(tagDaoJpa.outerSection(setLabels));

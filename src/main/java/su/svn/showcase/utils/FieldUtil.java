@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 22:22 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.06 22:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * FieldUtil.java
@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class FieldUtil {
     public static boolean isTransientOrStatic(Field field) {
@@ -50,5 +51,9 @@ public class FieldUtil {
             // TODO || value instanceof java.sql.Date
             // TODO || value instanceof Time
             // TODO || value instanceof Timestamp
+    }
+
+    public static  <T> void updateIfNotNull(Consumer<T> consumer, T o) {
+        if (o != null) consumer.accept(o);
     }
 }

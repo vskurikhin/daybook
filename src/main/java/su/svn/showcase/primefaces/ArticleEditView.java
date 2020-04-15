@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleEditView.java
@@ -12,10 +12,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dto.ArticleFullDto;
-import su.svn.showcase.dto.RecordFullDto;
+import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.RecordJdo;
 import su.svn.showcase.dto.TagDto;
-import su.svn.showcase.services.ArticleFullCrudService;
+import su.svn.showcase.services.ArticleCrudService;
 import su.svn.showcase.services.LinkBaseCrudService;
 import su.svn.showcase.services.RecordTagsStorageService;
 
@@ -50,7 +50,7 @@ public class ArticleEditView extends AbstractView {
     private String tags;
 
     @EJB
-    private ArticleFullCrudService articleService;
+    private ArticleCrudService articleService;
 
     @EJB
     private LinkBaseCrudService linkBaseCrudService;
@@ -81,7 +81,7 @@ public class ArticleEditView extends AbstractView {
                     .recordTagsStorageService(recordTagsStorageService)
                     .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
-            ArticleFullDto article = articleService.readById(uuid);
+            ArticleJdo article = articleService.readById(uuid);
             articleModelBuilder.uuid(getIdParameter(request))
                     .title(loadTitle(article))
                     .tags(loadTags(article))
@@ -97,21 +97,21 @@ public class ArticleEditView extends AbstractView {
         }
     }
 
-    private String loadAnchor(ArticleFullDto article) {
+    private String loadAnchor(ArticleJdo article) {
         this.anchor = article.getAnchor();
         return article.getAnchor();
     }
 
-    private String loadTitle(ArticleFullDto article) {
+    private String loadTitle(ArticleJdo article) {
         this.title = article.getTitle();
         return this.title;
     }
 
     @Nullable
-    private String loadTags(ArticleFullDto article) {
-        if (article.getRecord() instanceof RecordFullDto) {
-            RecordFullDto recordFullDto = (RecordFullDto) article.getRecord();
-            this.tags = recordFullDto.getTags().stream()
+    private String loadTags(ArticleJdo article) {
+        if (article.getRecord() instanceof RecordJdo) {
+            RecordJdo recordJdo = (RecordJdo) article.getRecord();
+            this.tags = recordJdo.getTags().stream()
                 .map(TagDto::getTag)
                 .reduce("", (s1, s2) -> s1 + " | " + s2);
             return this.tags;
@@ -119,22 +119,22 @@ public class ArticleEditView extends AbstractView {
         return null;
     }
 
-    private String loadInclude(ArticleFullDto article) {
+    private String loadInclude(ArticleJdo article) {
         this.include = article.getInclude();
         return this.include;
     }
 
-    private String loadLink(ArticleFullDto article) {
+    private String loadLink(ArticleJdo article) {
         this.link = article.getLink() != null ? article.getLink().getLink() : null;
         return this.link;
     }
 
-    private String loadDate(ArticleFullDto article) {
+    private String loadDate(ArticleJdo article) {
         this.date = article.toDateDDMMYYYY();
         return this.date;
     }
 
-    private String loadSummary(ArticleFullDto article) {
+    private String loadSummary(ArticleJdo article) {
         this.summary = article.getSummary();
         return this.summary;
     }

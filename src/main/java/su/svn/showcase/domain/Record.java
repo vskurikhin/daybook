@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -8,12 +8,30 @@
 
 package su.svn.showcase.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.wildfly.common.annotation.Nullable;
 import su.svn.showcase.interfaces.Typing;
 
 import javax.annotation.Nonnull;
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -228,6 +246,26 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     @Getter
     @Setter
+    @Nullable
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "record")
+    private Article article;
+
+    @Getter
+    @Setter
+    @Nullable
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "record")
+    private NewsEntry newsEntry;
+
+    @Getter
+    @Setter
+    @Nullable
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "id")
+    private NewsLinks newsLinks;
+
+    @Getter
+    @Setter
     @NotNull
     @Column(name = "create_date_time", nullable = false)
     private LocalDateTime createDateTime;
@@ -254,28 +292,6 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH})
     @JoinColumn(name = "db_user_login_id", nullable = false)
     private UserLogin userLogin;
-
-    @Getter
-    @Setter
-    @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
-    private NewsEntry newsEntry;
-
-    @Getter
-    @Setter
-    @Nullable
-    @OneToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
-    @JoinColumn(name = "id")
-    private NewsLinks newsLinks;
-
-    @Getter
-    @Setter
-    @Nullable
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = true, mappedBy = "record")
-    private Article article;
 
     @Getter
     @Setter

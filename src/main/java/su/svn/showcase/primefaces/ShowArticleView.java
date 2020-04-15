@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.22 17:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.12 11:21 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ShowArticleView.java
@@ -12,8 +12,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.dto.ArticleFullDto;
-import su.svn.showcase.services.ArticleFullCrudService;
+import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.services.ArticleCrudService;
 
 import javax.annotation.Nullable;
 import javax.annotation.PostConstruct;
@@ -37,7 +37,7 @@ public class ShowArticleView extends AbstractView {
     private String link;
 
     @EJB
-    private ArticleFullCrudService articleService;
+    private ArticleCrudService articleService;
 
     private HttpServletRequest request;
 
@@ -52,7 +52,7 @@ public class ShowArticleView extends AbstractView {
             request = getHttpServletRequest();
             UUID uuid = getIdParameter(request);
             this.id = uuid.toString();
-            ArticleFullDto dto = articleService.readById(uuid);
+            ArticleJdo dto = articleService.readById(uuid);
             include = dto.getInclude();
             link = dto.getLink() != null ? dto.getLink().getLink() : null;
         } catch (Exception e) {
