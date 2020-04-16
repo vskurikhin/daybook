@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.16 20:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticlePartConverter.java
@@ -50,12 +50,12 @@ public class ArticlePartConverter extends ArticleAbstractConverter implements Ar
 
     @Override
     public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto) {
-        return doConvert(entity, dto, new ReadyMap());
+        return doUpdate(entity, dto, new ReadyMap());
     }
 
     @Override
     public Article update(@Nonnull Article entity, @Nonnull ArticleJdo dto, @Nonnull ReadyMap ready) {
-        return doConvert(entity, dto, ready);
+        return doUpdate(entity, dto, ready);
     }
 
     @Override
