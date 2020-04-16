@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImplTest.java
@@ -15,7 +15,16 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
-import su.svn.showcase.converters.impl.*;
+import su.svn.showcase.converters.article.ArticleBaseConverter;
+import su.svn.showcase.converters.article.ArticleFullConverter;
+import su.svn.showcase.converters.base.*;
+import su.svn.showcase.converters.news.NewsEntryBaseConverter;
+import su.svn.showcase.converters.news.NewsEntryFullConverter;
+import su.svn.showcase.converters.news.NewsGroupBaseConverter;
+import su.svn.showcase.converters.news.NewsLinksFullConverter;
+import su.svn.showcase.converters.record.RecordFullConverter;
+import su.svn.showcase.converters.record.RecordPartConverter;
+import su.svn.showcase.converters.user.UserOnlyLoginBaseConverter;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.RecordDaoEjb;
@@ -79,7 +88,7 @@ class RecordCrudServiceImplTest {
     static RecordConverter recordFullConverter = new RecordFullConverter();
     static RecordConverter recordPartConverter = new RecordPartConverter();
     static TagConverter tagBaseConverter = new TagBaseConverter();
-    static UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
+    static UserOnlyLoginConverter userOnlyLoginConverter = new UserOnlyLoginBaseConverter();
 
     static RecordCrudService recordCrudService = new RecordCrudServiceImpl();
 
@@ -97,7 +106,7 @@ class RecordCrudServiceImplTest {
         put("RecordFullConverter", recordFullConverter);
         put("RecordPartConverter", recordPartConverter);
         put("TagBaseConverter", tagBaseConverter);
-        put("UserOnlyLoginConverter", userOnlyLoginConverter);
+        put("UserOnlyLoginBaseConverter", userOnlyLoginConverter);
 
         put("RecordCrudService", recordCrudService);
     }};

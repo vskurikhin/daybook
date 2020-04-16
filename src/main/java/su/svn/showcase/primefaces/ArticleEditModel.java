@@ -47,14 +47,11 @@ class ArticleEditModel extends AbstractModel {
 
     private final ArticleCrudService articleCrudService;
 
-    private final LinkBaseCrudService linkBaseCrudService;
-
     private final RecordTagsStorageService recordTagsStorageService;
 
     public void save() {
         Objects.requireNonNull(uuid);
         Objects.requireNonNull(articleCrudService);
-        Objects.requireNonNull(linkBaseCrudService);
         Objects.requireNonNull(recordTagsStorageService);
         Objects.requireNonNull(title);
         Objects.requireNonNull(anchor);
@@ -77,7 +74,6 @@ class ArticleEditModel extends AbstractModel {
                 .dateTime(currentDateTime)
                 .link(this.link)
                 .build();
-        // TODO linkCrudService.create(LinkJdo);
         ArticleJdo articleDto = ArticleJdo.builder()
                 .id(uuid)
                 .record(recordDto)

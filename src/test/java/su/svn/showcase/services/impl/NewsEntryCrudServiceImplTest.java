@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryCrudServiceImplTest.java
@@ -15,7 +15,15 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
-import su.svn.showcase.converters.impl.*;
+import su.svn.showcase.converters.base.*;
+import su.svn.showcase.converters.news.NewsEntryBaseConverter;
+import su.svn.showcase.converters.news.NewsEntryFullConverter;
+import su.svn.showcase.converters.news.NewsEntryPartConverter;
+import su.svn.showcase.converters.news.NewsGroupBaseConverter;
+import su.svn.showcase.converters.record.RecordBaseConverter;
+import su.svn.showcase.converters.record.RecordFullConverter;
+import su.svn.showcase.converters.record.RecordPartConverter;
+import su.svn.showcase.converters.user.UserOnlyLoginBaseConverter;
 import su.svn.showcase.dao.*;
 import su.svn.showcase.dao.jpa.*;
 import su.svn.showcase.domain.NewsEntry;
@@ -73,7 +81,7 @@ class NewsEntryCrudServiceImplTest {
     static final RecordConverter recordFullConverter = new RecordFullConverter();
     static final RecordConverter recordPartConverter = new RecordPartConverter();
     static final TagConverter tagBaseConverter = new TagBaseConverter();
-    static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
+    static final UserOnlyLoginConverter userOnlyLoginConverter = new UserOnlyLoginBaseConverter();
 
     static final NewsEntryCrudService NEWS_ENTRY_CRUD_SERVICE = new NewsEntryCrudServiceImpl();
 
@@ -90,7 +98,7 @@ class NewsEntryCrudServiceImplTest {
         put("RecordFullConverter", recordFullConverter);
         put("RecordPartConverter", recordPartConverter);
         put("TagBaseConverter", tagBaseConverter);
-        put("UserOnlyLoginConverter", userOnlyLoginConverter);
+        put("UserOnlyLoginBaseConverter", userOnlyLoginConverter);
 
         put("NewsEntryCrudService", NEWS_ENTRY_CRUD_SERVICE);
     }};

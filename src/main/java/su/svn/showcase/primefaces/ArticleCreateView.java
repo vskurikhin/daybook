@@ -47,9 +47,6 @@ public class ArticleCreateView extends AbstractView {
     private ArticleCrudService articleService;
 
     @EJB
-    private LinkBaseCrudService linkBaseCrudService;
-
-    @EJB
     private RecordTagsStorageService recordTagsStorageService;
 
     private ArticleCreateModel.Builder articleModelBuilder;
@@ -61,7 +58,6 @@ public class ArticleCreateView extends AbstractView {
         LOGGER.trace("init");
         articleModelBuilder = ArticleCreateModel.builder()
                 .articleCrudService(articleService)
-                .linkBaseCrudService(linkBaseCrudService)
                 .recordTagsStorageService(recordTagsStorageService);
     }
 

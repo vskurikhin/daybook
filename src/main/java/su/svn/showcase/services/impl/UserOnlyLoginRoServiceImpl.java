@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImpl.java
@@ -10,7 +10,7 @@ package su.svn.showcase.services.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import su.svn.showcase.converters.impl.UserOnlyLoginConverter;
+import su.svn.showcase.converters.UserOnlyLoginConverter;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.exceptions.ErrorCase;
@@ -32,7 +32,7 @@ public class UserOnlyLoginRoServiceImpl extends AbstractCrudService implements U
     @EJB(beanName = "UserLoginDaoEjb")
     private UserLoginDao userLoginDao;
 
-    @EJB(beanName = "UserOnlyLoginConverter")
+    @EJB(beanName = "UserOnlyLoginBaseConverter")
     UserOnlyLoginConverter userLoginConverter;
 
     @Override

@@ -50,9 +50,14 @@ abstract class AbstractView {
         return null;
     }
 
+    @Nullable
     UUID getIdParameter(@Nonnull HttpServletRequest request) {
-        String id = request.getParameter("id");
-        return UUID.fromString(id);
+        try {
+            String id = request.getParameter("id");
+            return UUID.fromString(id);
+        } catch (NullPointerException ignore) {
+            return null;
+        }
     }
 
     FacesContext facesContextMessage(String summary, String detail) {
