@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.12 15:34 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * LinkJdo.java
@@ -8,10 +8,12 @@
 
 package su.svn.showcase.dto.jdo;
 
-import lombok.*;
-import su.svn.showcase.domain.Article;
-import su.svn.showcase.domain.LinkDescription;
-import su.svn.showcase.domain.Link;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import su.svn.showcase.dto.ArticleDto;
 import su.svn.showcase.dto.LinkDescriptionDto;
 import su.svn.showcase.dto.LinkDto;
@@ -22,10 +24,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * The JDO of Link.
@@ -64,41 +64,6 @@ public class LinkJdo implements LinkDto, Serializable {
     @Override
     public Class<LinkJdo> getDtoClass() {
         return LinkJdo.class;
-    }
-
-    @Deprecated
-    public LinkJdo(@Nonnull Link entity) {
-        this.id = entity.getId();
-        this.article = entity.getArticle() != null
-                ? new ArticleJdo(entity.getArticle())
-                : null;
-        this.dateTime = entity.getDateTime();
-        this.visible = entity.getVisible();
-        this.link = entity.getLink();
-        this.descriptions = entity.getDescriptions().stream()
-                .map(LinkDescriptionJdo::new)
-                .collect(Collectors.toSet());
-    }
-
-    @Deprecated
-    @Override
-    public Link update(@Nonnull Link entity) {
-        updateIfNotNull(entity::setLink, this.link);
-        updateIfNotNull(entity::setDateTime, this.dateTime);
-        entity.setVisible(this.visible != null ? this.visible : false);
-        if (this.article != null) {
-            Article article = new Article(this.article.getId());
-            entity.setArticle(this.article.update(article));
-        }
-        if (this.descriptions != null) {
-            Set<LinkDescription> records = this.descriptions.stream()
-                    .map(dto -> dto.update(new LinkDescription(dto.getId())))
-                    .collect(Collectors.toSet());
-            entity.setDescriptions(records);
-        } else {
-            entity.setDescriptions(Collections.emptySet());
-        }
-        return entity;
     }
 }
 //EOF

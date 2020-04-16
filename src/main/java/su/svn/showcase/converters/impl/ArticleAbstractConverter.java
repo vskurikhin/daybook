@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleAbstractConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
@@ -71,12 +72,13 @@ abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article,
     }
 
     @Override
-    Class<Article> getEClass() {
+    protected Class<Article> getEClass() {
         return Article.class;
     }
 
     @Override
-    Class<ArticleJdo> getDClass() {
+    protected Class<ArticleJdo> getDClass() {
         return ArticleJdo.class;
     }
 }
+//EOF

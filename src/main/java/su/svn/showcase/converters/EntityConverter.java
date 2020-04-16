@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 23:23 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * EntityConverter.java
@@ -39,7 +39,7 @@ public interface EntityConverter<K, E extends DBEntity<K>, D extends Dto<K>> {
      * @param ready
      * @return
      */
-    D convert(@Nonnull E entity, ReadyMap ready);
+    D convert(@Nonnull E entity, @Nonnull ReadyMap ready);
 
     /**
      * TODO
@@ -47,7 +47,24 @@ public interface EntityConverter<K, E extends DBEntity<K>, D extends Dto<K>> {
      * @param ready
      * @return
      */
-    E convert(@Nonnull D dto, ReadyMap ready);
+    E convert(@Nonnull D dto, @Nonnull ReadyMap ready);
+
+    /**
+     * TODO
+     * @param entity
+     * @param dto
+     * @return
+     */
+    E update(@Nonnull E entity, @Nonnull D dto);
+
+    /**
+     * TODO
+     * @param entity
+     * @param dto
+     * @param ready
+     * @return
+     */
+    E update(@Nonnull E entity, @Nonnull D dto, @Nonnull ReadyMap ready);
 
     default <T> void updateIfNotNull(Consumer<T> consumer, T o) {
         if (o != null) consumer.accept(o);

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleJdo.java
@@ -64,66 +64,6 @@ public class ArticleJdo implements ArticleDto, Serializable {
     @Override
     public Class<ArticleJdo> getDtoClass() {
         return ArticleJdo.class;
-    }
-
-    @Deprecated
-    public ArticleJdo(@Nonnull Article entity) {
-        this.id = entity.getId();
-        this.dateTime = entity.getDateTime();
-        this.title = entity.getTitle();
-        this.include = entity.getInclude();
-        this.anchor = entity.getAnchor();
-        this.summary = entity.getSummary();
-        if (entity.getLink() != null) {
-            this.link = su.svn.showcase.dto.jdo.LinkJdo.builder()
-                .id(entity.getLink().getId())
-                .dateTime(entity.getLink().getDateTime())
-                .link(entity.getLink().getLink())
-                .visible(entity.getLink().getVisible())
-                .build();
-        }
-    }
-
-    @Deprecated
-    @Override
-    public Article update(@Nonnull Article entity) {
-        if (this.link instanceof LinkJdo) {
-            entity.setLink(updateLink(this.link));
-            entity.getLink().setArticle(entity);
-        }
-        updateIfNotNull(entity::setDateTime, this.dateTime);
-        updateIfNotNull(entity::setTitle, this.title);
-        updateIfNotNull(entity::setInclude, this.include);
-        updateIfNotNull(entity::setAnchor, this.anchor);
-        updateIfNotNull(entity::setSummary, this.summary);
-
-        return entity;
-    }
-
-    @Deprecated
-    @Override
-    public Article update(@Nonnull Article entity, @Nonnull UserLogin userLogin) {
-        assert this.record != null;
-        if (this.record instanceof RecordJdo) {
-            entity.setRecord(updateRecord((RecordJdo)this.record, userLogin));
-        }
-
-        return update(entity);
-    }
-
-    @Deprecated
-    private Record updateRecord(RecordDto dto) {
-        return dto.update(new Record(dto.getId()));
-    }
-
-    @Deprecated
-    private Record updateRecord(RecordJdo dto, UserLogin userLogin) {
-        return dto.update(new Record(dto.getId(), userLogin));
-    }
-
-    @Deprecated
-    private Link updateLink(LinkDto dto) {
-        return dto.update(new Link(dto.getId()));
     }
 }
 //EOF

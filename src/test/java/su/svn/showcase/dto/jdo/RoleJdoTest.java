@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:12 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RoleJdoTest.java
@@ -102,21 +102,6 @@ class RoleJdoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(roleBaseDto.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            Role expected = new Role(ZERO, "testRole");
-            assertEquals(expected, roleBaseDto.update(new Role(ZERO)));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            Role entity = new Role(ZERO, "testRole");
-            RoleJdo expected = new RoleJdo(entity);
-            assertEquals(expected, roleBaseDto);
         }
     }
 }

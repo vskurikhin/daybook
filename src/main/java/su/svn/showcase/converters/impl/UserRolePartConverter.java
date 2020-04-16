@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRolePartConverter.java
@@ -33,7 +33,7 @@ public class UserRolePartConverter extends UserRoleAbstractConverter implements 
     }
 
     @Override
-    public UserRoleJdo convert(@Nonnull UserRole entity, ReadyMap ready) {
+    public UserRoleJdo convert(@Nonnull UserRole entity, @Nonnull ReadyMap ready) {
         return doConvert(new UserRoleJdo(entity.getId()), entity, ready);
     }
 
@@ -43,8 +43,18 @@ public class UserRolePartConverter extends UserRoleAbstractConverter implements 
     }
 
     @Override
-    public UserRole convert(@Nonnull UserRoleJdo dto, ReadyMap ready) {
+    public UserRole convert(@Nonnull UserRoleJdo dto, @Nonnull ReadyMap ready) {
         return doConvert(new UserRole(dto.getId()), dto, ready);
+    }
+
+    @Override
+    public UserRole update(@Nonnull UserRole entity, @Nonnull UserRoleJdo dto) {
+        return doConvert(entity, dto, new ReadyMap());
+    }
+
+    @Override
+    public UserRole update(@Nonnull UserRole entity, @Nonnull UserRoleJdo dto, @Nonnull ReadyMap ready) {
+        return doConvert(entity, dto, ready);
     }
 
     @Override
@@ -57,3 +67,4 @@ public class UserRolePartConverter extends UserRoleAbstractConverter implements 
         return userLoginBaseConverter;
     }
 }
+//EOF

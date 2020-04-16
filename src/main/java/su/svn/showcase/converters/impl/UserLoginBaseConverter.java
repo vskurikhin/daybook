@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.UserLoginConverter;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.jdo.UserLoginJdo;
@@ -27,7 +28,7 @@ public class UserLoginBaseConverter extends AbstractConverter<UUID, UserLogin, U
     }
 
     @Override
-    public UserLoginJdo convert(@Nonnull UserLogin entity, ReadyMap ready) {
+    public UserLoginJdo convert(@Nonnull UserLogin entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new UserLoginJdo(), entity);
     }
 
@@ -37,17 +38,28 @@ public class UserLoginBaseConverter extends AbstractConverter<UUID, UserLogin, U
     }
 
     @Override
-    public UserLogin convert(@Nonnull UserLoginJdo dto, ReadyMap ready) {
+    public UserLogin convert(@Nonnull UserLoginJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new UserLogin(dto.getId()), dto);
     }
 
     @Override
-    Class<UserLogin> getEClass() {
+    public UserLogin update(@Nonnull UserLogin entity, @Nonnull UserLoginJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public UserLogin update(@Nonnull UserLogin entity, @Nonnull UserLoginJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<UserLogin> getEClass() {
         return UserLogin.class;
     }
 
     @Override
-    Class<UserLoginJdo> getDClass() {
+    protected Class<UserLoginJdo> getDClass() {
         return UserLoginJdo.class;
     }
 }
+//EOF

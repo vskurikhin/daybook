@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleJdoTest.java
@@ -141,34 +141,6 @@ class UserRoleJdoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(userRoleJdo.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            UserRole expected1 = cloneUserRole0();
-            UserRole userRoleTest0 = cloneUserRole0();
-            assertEquals(expected1, userRoleJdo.update(userRoleTest0));
-
-            UserLogin userLogin = cloneUserLogin0();
-            Map<String, Object> values = new HashMap<String, Object>() {{
-                put("role", role);
-                put("dateTime", NOW);
-                put("userLogin", userLogin);
-            }};
-            UserRole expected2 = cloneUserRole0();
-            assertEquals(expected2, userRoleJdo.update(cloneUserRole0(), values));
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            UserRole entity = new UserRole();
-            entity.setId(ZERO);
-            entity.setRoleName("testRole");
-            entity.setDateTime(NOW);
-            UserRoleJdo expected = new UserRoleJdo(ZERO, roleJdo, NOW, "testRole", userLoginDto);
-            // TODO assertEquals(expected, userRoleFullDto);
         }
     }
 }

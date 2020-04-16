@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsLinksDto.java
@@ -8,16 +8,7 @@
 
 package su.svn.showcase.dto;
 
-import su.svn.showcase.domain.NewsLinks;
-import su.svn.showcase.domain.NewsGroup;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.UserLogin;
-import su.svn.showcase.interfaces.Updating;
-
-import javax.annotation.Nonnull;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -25,7 +16,7 @@ import java.util.UUID;
  *
  * @author Victor N. Skurikhin
  */
-public interface NewsLinksDto extends Dto<UUID>, Updating<NewsLinks> {
+public interface NewsLinksDto extends Dto<UUID> {
 
     LocalDateTime getDateTime();
 
@@ -34,21 +25,5 @@ public interface NewsLinksDto extends Dto<UUID>, Updating<NewsLinks> {
     String getTitle();
 
     void setTitle(String title);
-
-    NewsLinks update(@Nonnull NewsLinks entity, @Nonnull UserLogin userLogin);
-
-    @Deprecated
-    default NewsLinks update(@Nonnull NewsLinks entity, @Nonnull Map<String, Object> values) {
-        convertIfContainsKey(Record.class, values, "record").ifPresent(entity::setRecord);
-        convertIfContainsKey(NewsGroup.class, values, "newsGroup").ifPresent(entity::setNewsGroup);
-
-        return update(entity);
-    }
-
-    default String toDateDDMMYYYY() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        return getDateTime().format(formatter);
-    }
 }
 //EOF

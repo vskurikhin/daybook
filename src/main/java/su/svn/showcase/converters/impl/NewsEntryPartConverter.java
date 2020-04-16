@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 16:50 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntryPartConverter.java
@@ -34,7 +34,7 @@ public class NewsEntryPartConverter extends NewsEntryAbstractConverter implement
     }
 
     @Override
-    public NewsEntryJdo convert(@Nonnull NewsEntry entity, ReadyMap ready) {
+    public NewsEntryJdo convert(@Nonnull NewsEntry entity, @Nonnull ReadyMap ready) {
         return doConvert(new NewsEntryJdo(entity.getId()), entity, ready);
     }
 
@@ -54,7 +54,18 @@ public class NewsEntryPartConverter extends NewsEntryAbstractConverter implement
     }
 
     @Override
-    public NewsEntry convert(@Nonnull NewsEntryJdo dto, ReadyMap ready) {
+    public NewsEntry convert(@Nonnull NewsEntryJdo dto, @Nonnull ReadyMap ready) {
         return doConvert(new NewsEntry(dto.getId()), dto, ready);
     }
+
+    @Override
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto) {
+        return doConvert(entity, dto, new ReadyMap());
+    }
+
+    @Override
+    public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto, @Nonnull ReadyMap ready) {
+        return doConvert(entity, dto, ready);
+    }
 }
+//EOF

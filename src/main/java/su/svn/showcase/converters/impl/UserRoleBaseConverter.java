@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRoleBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.UserRoleConverter;
 import su.svn.showcase.domain.UserRole;
 import su.svn.showcase.dto.jdo.UserRoleJdo;
@@ -27,7 +28,7 @@ public class UserRoleBaseConverter extends AbstractConverter<UUID, UserRole, Use
     }
 
     @Override
-    public UserRoleJdo convert(@Nonnull UserRole entity, ReadyMap ready) {
+    public UserRoleJdo convert(@Nonnull UserRole entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new UserRoleJdo(), entity);
     }
 
@@ -37,17 +38,27 @@ public class UserRoleBaseConverter extends AbstractConverter<UUID, UserRole, Use
     }
 
     @Override
-    public UserRole convert(@Nonnull UserRoleJdo dto, ReadyMap ready) {
+    public UserRole convert(@Nonnull UserRoleJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new UserRole(dto.getId()), dto);
     }
 
     @Override
-    Class<UserRole> getEClass() {
+    public UserRole update(@Nonnull UserRole entity, @Nonnull UserRoleJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public UserRole update(@Nonnull UserRole entity, @Nonnull UserRoleJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<UserRole> getEClass() {
         return UserRole.class;
     }
 
     @Override
-    Class<UserRoleJdo> getDClass() {
+    protected Class<UserRoleJdo> getDClass() {
         return UserRoleJdo.class;
     }
 }

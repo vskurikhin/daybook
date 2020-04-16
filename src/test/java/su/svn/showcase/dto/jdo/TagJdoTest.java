@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagJdoTest.java
@@ -100,30 +100,6 @@ class TagJdoTest {
         @DisplayName("The length of string from toString is great than zero")
         void testToString() {
             assertTrue(tagJdo.toString().length() > 0);
-        }
-
-        @Test
-        @DisplayName("Update entity by DTO")
-        void update() {
-            Tag expected1 = new Tag(ZERO, "testTag", true, NOW, records);
-            Map<String, Object> values = new HashMap<String, Object>() {{
-                put("records", records);
-            }};
-            assertEquals(expected1, tagJdo.update(new Tag(ZERO), values));
-
-            Tag expected2 = new Tag(ZERO, "testTag", true, NOW, records);
-            Tag updating2 = new Tag(ZERO, "testTag", true, NOW, records);
-            Tag test2 = tagJdo.update(updating2);
-            assertEquals(expected2, test2);
-            // TODO assertEquals(expected2.getRecords(), test2.getRecords());
-        }
-
-        @Test
-        @DisplayName("Instantiated DTO by entity")
-        void instantiatedEntity() {
-            Tag entity = new Tag(ZERO, "testTag", true, NOW, Collections.singleton(cloneRecord0()));
-            TagJdo expected = new TagJdo(entity);
-            assertEquals(expected, tagJdo);
         }
     }
 }

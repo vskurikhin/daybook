@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.03 20:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Updating.java
@@ -15,11 +15,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-public interface Updating<E extends DBEntity> {
-
-    E update(@Nonnull E entity);
-
-    E update(@Nonnull E entity, @Nonnull Map<String, Object> values);
+public interface Updating {
 
     default void updateIfNotNull(Runnable runnable, Object o) {
         if (o != null) runnable.run();

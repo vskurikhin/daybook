@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * TagBaseConverter.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.converters.impl;
 
+import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.domain.Tag;
 import su.svn.showcase.dto.jdo.TagJdo;
@@ -25,7 +26,7 @@ public class TagBaseConverter extends AbstractConverter<String, Tag, TagJdo> imp
     }
 
     @Override
-    public TagJdo convert(@Nonnull Tag entity, ReadyMap ready) {
+    public TagJdo convert(@Nonnull Tag entity, @Nonnull ReadyMap ready) {
         return super.convertByGetter(new TagJdo(), entity);
     }
 
@@ -35,17 +36,28 @@ public class TagBaseConverter extends AbstractConverter<String, Tag, TagJdo> imp
     }
 
     @Override
-    public Tag convert(@Nonnull TagJdo dto, ReadyMap ready) {
+    public Tag convert(@Nonnull TagJdo dto, @Nonnull ReadyMap ready) {
         return super.convertBySetter(new Tag(dto.getId()), dto);
     }
 
     @Override
-    Class<Tag> getEClass() {
+    public Tag update(@Nonnull Tag entity, @Nonnull TagJdo dto) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    public Tag update(@Nonnull Tag entity, @Nonnull TagJdo dto, @Nonnull ReadyMap ready) {
+        return super.convertBySetter(entity, dto);
+    }
+
+    @Override
+    protected Class<Tag> getEClass() {
         return Tag.class;
     }
 
     @Override
-    Class<TagJdo> getDClass() {
+    protected Class<TagJdo> getDClass() {
         return TagJdo.class;
     }
 }
+//EOF

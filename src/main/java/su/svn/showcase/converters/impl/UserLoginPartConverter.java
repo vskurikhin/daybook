@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 20:47 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 00:03 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLoginPartConverter.java
@@ -8,7 +8,8 @@
 
 package su.svn.showcase.converters.impl;
 
-import su.svn.showcase.converters.*;
+import su.svn.showcase.converters.UserLoginConverter;
+import su.svn.showcase.converters.UserRoleConverter;
 import su.svn.showcase.domain.UserLogin;
 import su.svn.showcase.dto.jdo.UserLoginJdo;
 import su.svn.showcase.utils.ReadyMap;
@@ -29,7 +30,7 @@ public class UserLoginPartConverter extends UserLoginAbstractConverter implement
     }
 
     @Override
-    public UserLoginJdo convert(@Nonnull UserLogin entity, ReadyMap ready) {
+    public UserLoginJdo convert(@Nonnull UserLogin entity, @Nonnull ReadyMap ready) {
         return doConvert(new UserLoginJdo(entity.getId()), entity, ready);
     }
 
@@ -39,8 +40,18 @@ public class UserLoginPartConverter extends UserLoginAbstractConverter implement
     }
 
     @Override
-    public UserLogin convert(@Nonnull UserLoginJdo dto, ReadyMap ready) {
+    public UserLogin convert(@Nonnull UserLoginJdo dto, @Nonnull ReadyMap ready) {
         return doConvert(new UserLogin(dto.getId()), dto, ready);
+    }
+
+    @Override
+    public UserLogin update(@Nonnull UserLogin entity, @Nonnull UserLoginJdo dto) {
+        return doConvert(entity, dto, new ReadyMap());
+    }
+
+    @Override
+    public UserLogin update(@Nonnull UserLogin entity, @Nonnull UserLoginJdo dto, @Nonnull ReadyMap ready) {
+        return doConvert(entity, dto, ready);
     }
 
     @Override
@@ -48,3 +59,4 @@ public class UserLoginPartConverter extends UserLoginAbstractConverter implement
         return userRoleConverter;
     }
 }
+//EOF
