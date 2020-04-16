@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImpl.java
@@ -51,7 +51,15 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Transactional
     public void create(@Nonnull RecordJdo dto) {
         validateId(dto);
-        saveUpdatedEntity(new Record(getOrGenerateUuidKey(dto)), dto);
+        create(new Record(getOrGenerateUuidKey(dto)), dto);
+    }
+
+    private void create(Record entity, RecordJdo dto) {
+        UserLogin userLogin = getUserLogin(dto.getUserLogin());
+        validateUserLoginDto(userLogin, dto.getUserLogin());
+        entity.setUserLogin(userLogin);
+        entity = recordFullConverter.convert(dto);
+        recordDao.save(entity);
     }
 
     @Override
@@ -63,7 +71,6 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Override
     @Transactional
     public List<RecordJdo> readRange(int start, int size) {
-        System.err.println("recordPartConverter = " + recordPartConverter);
         return recordDao.range(start, size).stream()
                 .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
@@ -74,7 +81,15 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     public void update(@Nonnull RecordJdo dto) {
         validateId(dto);
         validateRecordUserLogin(dto.getUserLogin());
-        saveUpdatedEntity(getRecord(dto.getId()), dto);
+        update(getRecord(dto.getId()), dto);
+    }
+
+    private void update(Record entity, RecordJdo dto) {
+        UserLogin userLogin = getUserLogin(dto.getUserLogin());
+        validateUserLoginDto(userLogin, dto.getUserLogin());
+        entity.setUserLogin(userLogin);
+        entity = recordFullConverter.update(entity, dto);
+        recordDao.save(entity);
     }
 
     @Override
@@ -92,15 +107,6 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Override
     Logger getLogger() {
         return LOGGER;
-    }
-
-    private void saveUpdatedEntity(Record entity, RecordJdo dto) {
-        UserLogin userLogin = getUserLogin(dto.getUserLogin());
-        validateUserLoginDto(userLogin, dto.getUserLogin());
-        entity.setUserLogin(userLogin);
-        // entity = dto.update(entity);
-        entity = recordFullConverter.convert(dto);
-        recordDao.save(entity);
     }
 
     private Record getRecord(UUID id) {

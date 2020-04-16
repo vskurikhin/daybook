@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 19:52 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsGroupCrudServiceImplTest.java
@@ -15,7 +15,7 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
-import su.svn.showcase.converters.impl.*;
+import su.svn.showcase.converters.news.NewsGroupBaseConverter;
 import su.svn.showcase.dao.NewsGroupDao;
 import su.svn.showcase.dao.jpa.NewsGroupDaoEjb;
 import su.svn.showcase.dto.jdo.NewsGroupJdo;

@@ -64,17 +64,19 @@ public class NewsEntryEditView extends AbstractView {
         try {
             request = getHttpServletRequest();
             assert request != null;
-            newsEntryModelBuilder = NewsEntryEditModel.builder()
-                    .newsEntryCrudService(newsEntryService)
-                    .recordTagsStorageService(recordTagsStorageService)
-                    .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
-            NewsEntryJdo newsEntry = newsEntryService.readById(uuid);
-            newsEntryModelBuilder.uuid(getIdParameter(request))
-                    .title(loadTitle(newsEntry))
-                    .tags(loadTags(newsEntry))
-                    .date(loadDate(newsEntry))
-                    .content(loadContent(newsEntry));
+            if (uuid != null) {
+                newsEntryModelBuilder = NewsEntryEditModel.builder()
+                        .newsEntryCrudService(newsEntryService)
+                        .recordTagsStorageService(recordTagsStorageService)
+                        .login(getCurrentUserName());
+                NewsEntryJdo newsEntry = newsEntryService.readById(uuid);
+                newsEntryModelBuilder.uuid(getIdParameter(request))
+                        .title(loadTitle(newsEntry))
+                        .tags(loadTags(newsEntry))
+                        .date(loadDate(newsEntry))
+                        .content(loadContent(newsEntry));
+            }
         } catch (Exception e) {
             LOGGER.error("onload : ", e);
         }

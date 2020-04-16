@@ -53,9 +53,6 @@ public class ArticleEditView extends AbstractView {
     private ArticleCrudService articleService;
 
     @EJB
-    private LinkBaseCrudService linkBaseCrudService;
-
-    @EJB
     private RecordTagsStorageService recordTagsStorageService;
 
     private ArticleEditModel.Builder articleModelBuilder;
@@ -67,7 +64,6 @@ public class ArticleEditView extends AbstractView {
         LOGGER.trace("init");
         articleModelBuilder = ArticleEditModel.builder()
                 .articleCrudService(articleService)
-                .linkBaseCrudService(linkBaseCrudService)
                 .recordTagsStorageService(recordTagsStorageService);
     }
 
@@ -76,22 +72,24 @@ public class ArticleEditView extends AbstractView {
         try {
             request = getHttpServletRequest();
             assert request != null;
-            articleModelBuilder = ArticleEditModel.builder()
-                    .articleCrudService(articleService)
-                    .recordTagsStorageService(recordTagsStorageService)
-                    .login(getCurrentUserName());
             UUID uuid = getIdParameter(request);
-            ArticleJdo article = articleService.readById(uuid);
-            articleModelBuilder.uuid(getIdParameter(request))
-                    .title(loadTitle(article))
-                    .tags(loadTags(article))
-                    .include(loadInclude(article))
-                    .link(loadLink(article))
-                    .date(loadDate(article))
-                    .anchor(loadAnchor(article))
-                    .summary(loadSummary(article));
-            articleModelBuilder.login(getCurrentUserName());
-            request = getHttpServletRequest();
+            if (uuid != null) {
+                articleModelBuilder = ArticleEditModel.builder()
+                        .articleCrudService(articleService)
+                        .recordTagsStorageService(recordTagsStorageService)
+                        .login(getCurrentUserName());
+                ArticleJdo article = articleService.readById(uuid);
+                articleModelBuilder.uuid(getIdParameter(request))
+                        .title(loadTitle(article))
+                        .tags(loadTags(article))
+                        .include(loadInclude(article))
+                        .link(loadLink(article))
+                        .date(loadDate(article))
+                        .anchor(loadAnchor(article))
+                        .summary(loadSummary(article));
+                articleModelBuilder.login(getCurrentUserName());
+                request = getHttpServletRequest();
+            }
         } catch (Exception e) {
             LOGGER.error("onload : ", e);
         }

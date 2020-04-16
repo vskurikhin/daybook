@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.10 21:25 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserOnlyLoginRoServiceImplTest.java
@@ -14,8 +14,8 @@ import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import su.svn.showcase.converters.UserLoginConverter;
-import su.svn.showcase.converters.impl.UserOnlyLoginConverter;
+import su.svn.showcase.converters.UserOnlyLoginConverter;
+import su.svn.showcase.converters.user.UserOnlyLoginBaseConverter;
 import su.svn.showcase.dao.UserLoginDao;
 import su.svn.showcase.dao.jpa.UserLoginDaoEjb;
 import su.svn.showcase.domain.UserLogin;
@@ -59,12 +59,12 @@ class UserOnlyLoginRoServiceImplTest {
     static final UUID UUID10 = UUID.fromString("00000000-0000-0000-0000-000000000010");
 
     static final UserLoginDao userLoginDaoEjb = new UserLoginDaoEjb();
-    static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
+    static final UserOnlyLoginConverter userOnlyLoginConverter = new UserOnlyLoginBaseConverter();
     static final UserOnlyLoginRoService userOnlyLoginRoService = new UserOnlyLoginRoServiceImpl();
 
     private final Map<String, Object> ejbMap = new HashMap<String, Object>() {{
         put("UserLoginDaoEjb", userLoginDaoEjb);
-        put("UserOnlyLoginConverter", userOnlyLoginConverter);
+        put("UserOnlyLoginBaseConverter", userOnlyLoginConverter);
         put("UserOnlyLoginRoService", userOnlyLoginRoService);
     }};
 

@@ -62,6 +62,13 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
         create(dto, getUserLogin(dto));
     }
 
+    private void create(NewsEntryJdo dto, UserLogin userLogin) {
+        NewsEntry entity = newsEntryFullConverter.convert(dto);
+        Record record = entity.getRecord();
+        record.setUserLogin(userLogin);
+        recordDao.save(entity.getRecord());
+    }
+
     @Override
     @Transactional
     public NewsEntryJdo readById(@Nonnull UUID id) {
@@ -84,6 +91,13 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
         update(getNewsEntry(dto.getId()), dto);
     }
 
+    private void update(NewsEntry entity, NewsEntryJdo dto) {
+        LOGGER.debug("entity = {}", entity); // TODO remove
+        LOGGER.debug("dto = {}", dto); // TODO remove
+        entity = newsEntryFullConverter.update(entity, dto);
+        recordDao.save(entity.getRecord());
+    }
+
     @Override
     @Transactional
     public void delete(@Nonnull UUID id) {
@@ -99,18 +113,6 @@ public class NewsEntryCrudServiceImpl extends AbstractCrudService implements New
     @Override
     Logger getLogger() {
         return LOGGER;
-    }
-
-    private void create(NewsEntryJdo dto, UserLogin userLogin) {
-        NewsEntry entity = newsEntryFullConverter.convert(dto);
-        Record record = entity.getRecord();
-        record.setUserLogin(userLogin);
-        newsEntryDao.save(entity);
-    }
-
-    private void update(NewsEntry entity, NewsEntryJdo dto) {
-        NewsEntryConverter.Updater.update(entity, dto);
-        recordDao.save(entity.getRecord());
     }
 
 

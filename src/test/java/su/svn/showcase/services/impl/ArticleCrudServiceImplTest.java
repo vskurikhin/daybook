@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 21:45 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleCrudServiceImplTest.java
@@ -15,7 +15,13 @@ import org.jboss.weld.junit5.auto.AddPackages;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import su.svn.showcase.converters.*;
-import su.svn.showcase.converters.impl.*;
+import su.svn.showcase.converters.article.ArticleFullConverter;
+import su.svn.showcase.converters.article.ArticlePartConverter;
+import su.svn.showcase.converters.base.*;
+import su.svn.showcase.converters.news.NewsLinksFullConverter;
+import su.svn.showcase.converters.record.RecordBaseConverter;
+import su.svn.showcase.converters.record.RecordFullConverter;
+import su.svn.showcase.converters.user.UserOnlyLoginBaseConverter;
 import su.svn.showcase.dao.ArticleDao;
 import su.svn.showcase.dao.LinkDao;
 import su.svn.showcase.dao.RecordDao;
@@ -78,7 +84,7 @@ class ArticleCrudServiceImplTest {
     static final RecordConverter recordBaseConverter = new RecordBaseConverter();
     static final RecordConverter recordFullConverter = new RecordFullConverter();
     static final TagConverter tagBaseConverter = new TagBaseConverter();
-    static final UserLoginConverter userOnlyLoginConverter = new UserOnlyLoginConverter();
+    static final UserOnlyLoginConverter userOnlyLoginConverter = new UserOnlyLoginBaseConverter();
 
     static final ArticleCrudService ARTICLE_CRUD_SERVICE = new ArticleCrudServiceImpl();
 
@@ -95,7 +101,7 @@ class ArticleCrudServiceImplTest {
         put("RecordBaseConverter", recordBaseConverter);
         put("RecordFullConverter", recordFullConverter);
         put("TagBaseConverter", tagBaseConverter);
-        put("UserOnlyLoginConverter", userOnlyLoginConverter);
+        put("UserOnlyLoginBaseConverter", userOnlyLoginConverter);
 
         put("ArticleCrudService", ARTICLE_CRUD_SERVICE);
     }};
