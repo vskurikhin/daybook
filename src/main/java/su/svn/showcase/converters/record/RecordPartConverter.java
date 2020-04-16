@@ -57,12 +57,12 @@ public class RecordPartConverter extends RecordAbstractConverter implements Reco
 
     @Override
     public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto) {
-        return doConvert(entity, dto, new ReadyMap());
+        return doUpdate(entity, dto, new ReadyMap());
     }
 
     @Override
     public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto, @Nonnull ReadyMap ready) {
-        return doConvert(entity, dto, ready);
+        return doUpdate(entity, dto, ready);
     }
 
     @Override

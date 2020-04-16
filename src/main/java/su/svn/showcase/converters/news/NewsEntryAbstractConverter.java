@@ -12,6 +12,8 @@ import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.NewsEntry;
+import su.svn.showcase.domain.NewsGroup;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.dto.jdo.NewsEntryJdo;
 import su.svn.showcase.dto.jdo.NewsGroupJdo;
 import su.svn.showcase.dto.jdo.RecordJdo;
@@ -62,6 +64,30 @@ abstract class NewsEntryAbstractConverter extends AbstractConverter<UUID, NewsEn
         }
         if (dto.getNewsGroup() != null) {
             entity.setNewsGroup(getNewsGroupConverter().convert((NewsGroupJdo) dto.getNewsGroup(), ready));
+        }
+        return super.convertBySetter(entity, dto);
+    }
+
+    NewsEntry doUpdate(NewsEntry entity, NewsEntryJdo dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), NewsEntry.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof NewsEntry) {
+                return (NewsEntry) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
+        if (dto.getRecord() != null) {
+            Record record = entity.getRecord();
+            record = getRecordConverter().update(record, (RecordJdo) dto.getRecord(), ready);
+            entity.setRecord(record);
+        }
+        if (dto.getNewsGroup() != null) {
+            NewsGroup newsGroup = entity.getNewsGroup();
+            newsGroup = getNewsGroupConverter().update(newsGroup, (NewsGroupJdo) dto.getNewsGroup(), ready);
+            entity.setNewsGroup(newsGroup);
         }
         return super.convertBySetter(entity, dto);
     }

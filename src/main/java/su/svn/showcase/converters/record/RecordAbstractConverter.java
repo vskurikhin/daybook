@@ -14,8 +14,7 @@ import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.converters.NewsLinksConverter;
 import su.svn.showcase.converters.TagConverter;
 import su.svn.showcase.converters.UserOnlyLoginConverter;
-import su.svn.showcase.domain.Record;
-import su.svn.showcase.domain.Tag;
+import su.svn.showcase.domain.*;
 import su.svn.showcase.dto.TagDto;
 import su.svn.showcase.dto.UserOnlyLoginDto;
 import su.svn.showcase.dto.enums.RecordTypesEnum;
@@ -117,6 +116,40 @@ abstract class RecordAbstractConverter extends AbstractConverter<UUID, Record, R
                     .map(functionTagDtoToEntity(ready))
                     .collect(Collectors.toSet());
             entity.setTags(set);
+        }
+        return super.convertBySetter(entity, dto);
+    }
+
+    Record doUpdate(Record entity, RecordJdo dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Record.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof Record) {
+                return (Record) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
+        switch (Objects.requireNonNull(getPosition(dto))) {
+            case ArticleJdo:
+                Article article = entity.getArticle();
+                article = getArticleConverter().update(article, (ArticleJdo) dto.getArticle(), ready);
+                entity.setArticle(article);
+                break;
+            case NewsEntryJdo:
+                NewsEntry newsEntry = entity.getNewsEntry();
+                newsEntry = getNewsEntryConverter().update(newsEntry, (NewsEntryJdo) dto.getNewsEntry(), ready);
+                entity.setNewsEntry(newsEntry);
+                break;
+            case NewsLinksJdo:
+                NewsLinks newsLinks = entity.getNewsLinks();
+                newsLinks = getNewsLinksConverter().update(newsLinks, (NewsLinksJdo) dto.getNewsLinks(), ready);
+                entity.setNewsLinks(newsLinks);
+                break;
+        }
+        if (dto.getUserLogin() != null) { // TODO only check
+            UserOnlyLoginDto userLogin = ((UserOnlyLoginDto) dto.getUserLogin());
         }
         return super.convertBySetter(entity, dto);
     }

@@ -8,6 +8,8 @@
 
 package su.svn.showcase.converters.news;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.converters.NewsGroupConverter;
 import su.svn.showcase.converters.RecordConverter;
@@ -21,6 +23,8 @@ import javax.ejb.Stateless;
 
 @Stateless(name = "NewsEntryFullConverter")
 public class NewsEntryFullConverter extends NewsEntryAbstractConverter implements NewsEntryConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NewsEntryFullConverter.class);
 
     @EJB(beanName = "RecordFullConverter")
     private RecordConverter recordConverter;
@@ -60,12 +64,12 @@ public class NewsEntryFullConverter extends NewsEntryAbstractConverter implement
 
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto) {
-        return doConvert(entity, dto, new ReadyMap());
+        return doUpdate(entity, dto, new ReadyMap());
     }
 
     @Override
     public NewsEntry update(@Nonnull NewsEntry entity, @Nonnull NewsEntryJdo dto, @Nonnull ReadyMap ready) {
-        return doConvert(entity, dto, ready);
+        return doUpdate(entity, dto, ready);
     }
 }
 //EOF

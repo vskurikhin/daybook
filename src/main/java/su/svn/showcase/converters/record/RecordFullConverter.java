@@ -8,6 +8,8 @@
 
 package su.svn.showcase.converters.record;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import su.svn.showcase.converters.ArticleConverter;
 import su.svn.showcase.converters.NewsEntryConverter;
 import su.svn.showcase.converters.NewsLinksConverter;
@@ -24,6 +26,8 @@ import javax.ejb.Stateless;
 
 @Stateless(name = "RecordFullConverter")
 public class RecordFullConverter extends RecordAbstractConverter implements RecordConverter {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RecordFullConverter.class);
 
     @EJB(beanName = "ArticleFullConverter")
     private ArticleConverter articleConverter;
@@ -62,12 +66,12 @@ public class RecordFullConverter extends RecordAbstractConverter implements Reco
 
     @Override
     public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto) {
-        return doConvert(entity, dto, new ReadyMap());
+        return doUpdate(entity, dto, new ReadyMap());
     }
 
     @Override
     public Record update(@Nonnull Record entity, @Nonnull RecordJdo dto, @Nonnull ReadyMap ready) {
-        return doConvert(entity, dto, ready);
+        return doUpdate(entity, dto, ready);
     }
 
     @Override

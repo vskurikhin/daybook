@@ -51,7 +51,15 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Transactional
     public void create(@Nonnull RecordJdo dto) {
         validateId(dto);
-        saveUpdatedEntity(new Record(getOrGenerateUuidKey(dto)), dto);
+        create(new Record(getOrGenerateUuidKey(dto)), dto);
+    }
+
+    private void create(Record entity, RecordJdo dto) {
+        UserLogin userLogin = getUserLogin(dto.getUserLogin());
+        validateUserLoginDto(userLogin, dto.getUserLogin());
+        entity.setUserLogin(userLogin);
+        entity = recordFullConverter.convert(dto);
+        recordDao.save(entity);
     }
 
     @Override
@@ -73,7 +81,15 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     public void update(@Nonnull RecordJdo dto) {
         validateId(dto);
         validateRecordUserLogin(dto.getUserLogin());
-        saveUpdatedEntity(getRecord(dto.getId()), dto);
+        update(getRecord(dto.getId()), dto);
+    }
+
+    private void update(Record entity, RecordJdo dto) {
+        UserLogin userLogin = getUserLogin(dto.getUserLogin());
+        validateUserLoginDto(userLogin, dto.getUserLogin());
+        entity.setUserLogin(userLogin);
+        entity = recordFullConverter.update(entity, dto);
+        recordDao.save(entity);
     }
 
     @Override
@@ -91,14 +107,6 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Override
     Logger getLogger() {
         return LOGGER;
-    }
-
-    private void saveUpdatedEntity(Record entity, RecordJdo dto) {
-        UserLogin userLogin = getUserLogin(dto.getUserLogin());
-        validateUserLoginDto(userLogin, dto.getUserLogin());
-        entity.setUserLogin(userLogin);
-        entity = recordFullConverter.convert(dto);
-        recordDao.save(entity);
     }
 
     private Record getRecord(UUID id) {
