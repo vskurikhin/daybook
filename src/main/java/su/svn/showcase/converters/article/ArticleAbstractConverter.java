@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.16 20:57 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * ArticleAbstractConverter.java
@@ -12,6 +12,8 @@ import su.svn.showcase.converters.AbstractConverter;
 import su.svn.showcase.converters.LinkConverter;
 import su.svn.showcase.converters.RecordConverter;
 import su.svn.showcase.domain.Article;
+import su.svn.showcase.domain.Link;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.dto.jdo.ArticleJdo;
 import su.svn.showcase.dto.jdo.LinkJdo;
 import su.svn.showcase.dto.jdo.RecordJdo;
@@ -63,6 +65,30 @@ abstract class ArticleAbstractConverter extends AbstractConverter<UUID, Article,
         }
         if (dto.getLink() != null) {
             entity.setLink(getLinkConverter().convert((LinkJdo) dto.getLink(), ready));
+        }
+        return super.convertBySetter(entity, dto);
+    }
+
+    Article doUpdate(Article entity, ArticleJdo dto, ReadyMap ready) {
+        ReadyMap.Key key = new ReadyMap.UuidKey(entity.getId(), Article.class);
+        if (ready.containsKey(key)) {
+            Object value = ready.get(key);
+            if (value instanceof Article) {
+                return (Article) value;
+            }
+            throw ErrorCase.badType(value.getClass().getSimpleName());
+        } else {
+            ready.put(entity);
+        }
+        if (dto.getRecord() != null) {
+            Record record = entity.getRecord();
+            record = getRecordConverter().update(record, (RecordJdo) dto.getRecord(), ready);
+            entity.setRecord(record);
+        }
+        if (dto.getLink() != null) {
+            Link link = entity.getLink();
+            link = getLinkConverter().update(link, (LinkJdo) dto.getLink(), ready);
+            entity.setLink(link);
         }
         return super.convertBySetter(entity, dto);
     }
