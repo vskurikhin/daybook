@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.18 11:33 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.20 22:41 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NamedQueryUtil.java
@@ -8,12 +8,11 @@
 
 package su.svn.showcase.utils;
 
-import org.hibernate.SQLQuery;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class NamedQueryUtil {
@@ -22,9 +21,13 @@ public class NamedQueryUtil {
 
     private static final Pattern badQueryPattern = Pattern.compile("[^\\p{ASCII}]*");
 
+    private static org.hibernate.query.Query<UUID> queryUUID;
+
     public static String getNamedQueryString(EntityManager em, String queryName) throws SQLException {
+
         Query tmpQuery = em.createNamedQuery(queryName);
-        SQLQuery sqlQuery = tmpQuery.unwrap(SQLQuery.class);
+        @SuppressWarnings("rawtypes")
+        org.hibernate.query.Query sqlQuery = tmpQuery.unwrap(org.hibernate.query.Query.class);
         String queryString = sqlQuery.getQueryString();
         if (badQueryPattern.matcher(queryString).matches()) {
             throw new SQLException("Bad query string.");
