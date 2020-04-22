@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.15 22:24 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.22 23:01 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordCrudServiceImplTest.java
@@ -18,10 +18,7 @@ import su.svn.showcase.converters.*;
 import su.svn.showcase.converters.article.ArticleBaseConverter;
 import su.svn.showcase.converters.article.ArticleFullConverter;
 import su.svn.showcase.converters.base.*;
-import su.svn.showcase.converters.news.NewsEntryBaseConverter;
-import su.svn.showcase.converters.news.NewsEntryFullConverter;
-import su.svn.showcase.converters.news.NewsGroupBaseConverter;
-import su.svn.showcase.converters.news.NewsLinksFullConverter;
+import su.svn.showcase.converters.news.*;
 import su.svn.showcase.converters.record.RecordFullConverter;
 import su.svn.showcase.converters.record.RecordPartConverter;
 import su.svn.showcase.converters.user.UserOnlyLoginBaseConverter;
@@ -85,6 +82,7 @@ class RecordCrudServiceImplTest {
     static NewsEntryConverter newsEntryFullConverter = new NewsEntryFullConverter();
     static NewsGroupConverter newsGroupBaseConverter = new NewsGroupBaseConverter();
     static NewsLinksConverter newsLinksFullConverter = new NewsLinksFullConverter();
+    static NewsLinksConverter newsLinksBaseConverter = new NewsLinksBaseConverter();
     static RecordConverter recordFullConverter = new RecordFullConverter();
     static RecordConverter recordPartConverter = new RecordPartConverter();
     static TagConverter tagBaseConverter = new TagBaseConverter();
@@ -102,6 +100,7 @@ class RecordCrudServiceImplTest {
         put("NewsEntryBaseConverter", newsEntryBaseConverter);
         put("NewsEntryFullConverter", newsEntryFullConverter);
         put("NewsGroupBaseConverter", newsGroupBaseConverter);
+        put("NewsLinksBaseConverter", newsLinksBaseConverter);
         put("NewsLinksFullConverter", newsLinksFullConverter);
         put("RecordFullConverter", recordFullConverter);
         put("RecordPartConverter", recordPartConverter);
@@ -203,11 +202,12 @@ class RecordCrudServiceImplTest {
     }
 
     @Test
-    @Disabled // TODO !!!
+    // @Disabled // TODO !!!
     void readRange(RecordCrudService service) throws Exception {
         userTransaction.begin();
         List<RecordJdo> test = service.readRange(0, Integer.MAX_VALUE);
         userTransaction.rollback();
+        System.err.println("test = " + test);
     }
 
     @Test
@@ -228,7 +228,7 @@ class RecordCrudServiceImplTest {
         Assertions.assertNotNull(service);
         userTransaction.begin();
         int test = service.count();
-        Assertions.assertEquals(1, test);
+        Assertions.assertEquals(3, test);
         userTransaction.rollback();
     }
 
@@ -237,7 +237,7 @@ class RecordCrudServiceImplTest {
         Assertions.assertNotNull(service);
         userTransaction.begin();
         int test = service.countByDay(LocalDate.now());
-        Assertions.assertEquals(1, test);
+        Assertions.assertEquals(3, test);
         userTransaction.rollback();
     }
 }
