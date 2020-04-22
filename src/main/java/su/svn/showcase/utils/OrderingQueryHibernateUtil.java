@@ -8,6 +8,11 @@
 
 package su.svn.showcase.utils;
 
+import org.hibernate.Session;
+import org.hibernate.hql.internal.ast.ASTQueryTranslatorFactory;
+import org.hibernate.hql.internal.ast.QueryTranslatorImpl;
+import org.hibernate.hql.spi.QueryTranslatorFactory;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.sql.SQLException;
@@ -15,29 +20,34 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class NamedQueryUtil {
+public class OrderingQueryHibernateUtil {
 
-    public static String ORDER_BY_CLAUSE_START = " ORDER BY";
+    public static String ORDER_BY_CLAUSE_START = " ORDER BY ";
 
     private static final Pattern badQueryPattern = Pattern.compile("[^\\p{ASCII}]*");
 
     private static org.hibernate.query.Query<UUID> queryUUID;
 
-    public static String getNamedQueryString(EntityManager em, String queryName) throws SQLException {
+    public static String getNamedQueryString(EntityManager em, String queryName) {
 
         Query tmpQuery = em.createNamedQuery(queryName);
         @SuppressWarnings("rawtypes")
-        org.hibernate.query.Query sqlQuery = tmpQuery.unwrap(org.hibernate.query.Query.class);
+        org.hibernate.Query sqlQuery = tmpQuery.unwrap(org.hibernate.Query.class);
+
         String queryString = sqlQuery.getQueryString();
         if (badQueryPattern.matcher(queryString).matches()) {
-            throw new SQLException("Bad query string.");
+            throw new RuntimeException("Bad query string."); // TODO custom Exception
         }
 
         return queryString;
+
+//        Session session = em.unwrap(JpaEntityManager.class).getActiveSession();
+//        DatabaseQuery databaseQuery = ((EJBQueryImpl)query).getDatabaseQuery();
+//        databaseQuery.prepareCall(session, new DatabaseRecord());
+//        String sqlString = databaseQuery.getSQLString();
     }
 
-    public static Query getNamedQueryOrderedBy(EntityManager em, String queryName, Map<String, Boolean> columnNames)
-           throws SQLException {
+    public static Query getNamedQueryOrderedBy(EntityManager em, String queryName, Map<String, Boolean> columnNames) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(getNamedQueryString(em, queryName));
@@ -53,11 +63,11 @@ public class NamedQueryUtil {
             else
                 sb.append(" DESC");
 
-            if (i != (limit - 1)) {
+            if (i++ != (limit - 1)) {
                 sb.append(", \n");
             }
         }
 
-        return em.createNativeQuery(sb.toString());
+        return em.createQuery(sb.toString());
     }
 }

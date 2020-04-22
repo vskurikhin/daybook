@@ -366,6 +366,11 @@ public class NewsEntryDaoJpa extends AbstractDaoJpa<UUID, NewsEntry> implements 
     }
 
     @Override
+    Class<UUID> getKClass() {
+        return UUID.class;
+    }
+
+    @Override
     public Class<NewsEntry> getEClass() {
         return NewsEntry.class;
     }

@@ -399,6 +399,11 @@ public class UserRoleDaoJpa extends AbstractDaoJpa<UUID, UserRole> implements Us
         return LOGGER;
     }
 
+    @Override
+    public Class<UUID> getKClass() {
+        return UUID.class;
+    }
+
     /**
      * {@inheritDoc }
      */
