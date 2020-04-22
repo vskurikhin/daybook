@@ -330,6 +330,11 @@ public class ArticleDaoJpa extends AbstractDaoJpa<UUID, Article> implements Arti
     }
 
     @Override
+    Class<UUID> getKClass() {
+        return UUID.class;
+    }
+
+    @Override
     public Class<Article> getEClass() {
         return Article.class;
     }

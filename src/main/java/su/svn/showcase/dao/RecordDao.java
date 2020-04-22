@@ -41,6 +41,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @return records of entity type by condition.
      */
+    @Deprecated
     List<Record> findAllOrderByEditDateTimeDescIndex();
 
     /**
@@ -50,6 +51,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @return records of entity by condition.
      * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
      */
+    @Deprecated
     List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
 
     /**
@@ -58,6 +60,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param date - the specific day.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> findAllByDay(LocalDate date);
 
     /**
@@ -66,6 +69,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param date - the specific day.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> findAllByDayOrderByEditDateTimeDescIndex(LocalDate date);
 
 
@@ -85,6 +89,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> fetchAll();
 
     /**
@@ -93,6 +98,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      *
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> fetchAllOrderByEditDateTimeDescIndex();
 
     /**
@@ -111,6 +117,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param ids - set of possible key values.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
 
     /**
@@ -120,6 +127,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param date - the specific day.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> fetchAllByDay(LocalDate date);
 
     /**
@@ -129,6 +137,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param date - the specific day.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> fetchAllByDayOrderByEditDateTimeDescIndex(LocalDate date);
 
 
@@ -141,17 +150,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @return records of entity by condition.
      */
     List<Record> range(int start, int size);
-
-    /**
-     * Returns all instances of Record type from ordered query and
-     * falling within the range specified in the arguments of the initial
-     * position and size.
-     *
-     * @param start - initial position.
-     * @param size - size.
-     * @return records of entity by condition.
-     */
-    List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size);
 
     /**
      * Returns all instances of Record type from query with the given IDs and
@@ -167,6 +165,18 @@ public interface RecordDao extends Dao<UUID, Record> {
     List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids);
 
     /**
+     * Returns all instances of Record type from ordered query and
+     * falling within the range specified in the arguments of the initial
+     * position and size.
+     *
+     * @param start - initial position.
+     * @param size - size.
+     * @return records of entity by condition.
+     */
+    @Deprecated
+    List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size);
+
+    /**
      * Returns all instances of Record type from ordered query with the given IDs and
      * falling within the range specified in the arguments of the initial
      * position and size.
@@ -176,6 +186,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param ids - set of possible key values.
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids);
 
     /**
@@ -200,6 +211,7 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @param date -the given day
      * @return records of entity by condition.
      */
+    @Deprecated
     List<Record> rangeByDayOrderByEditDateTimeDescIndex(int start, int size, LocalDate date);
 
 

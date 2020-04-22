@@ -276,6 +276,11 @@ public class UserLoginDaoJpa extends AbstractDaoJpa<UUID, UserLogin> implements 
         return LOGGER;
     }
 
+    @Override
+    public Class<UUID> getKClass() {
+        return UUID.class;
+    }
+
     /**
      * {@inheritDoc }
      */
