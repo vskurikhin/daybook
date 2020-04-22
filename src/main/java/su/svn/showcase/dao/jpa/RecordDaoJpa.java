@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 19:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.22 23:01 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -8,6 +8,7 @@
 
 package su.svn.showcase.dao.jpa;
 
+import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
@@ -25,6 +26,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * The Record DAO implementation.
@@ -410,10 +413,55 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *          the query timeout value set and the transaction
      *          is rolled back
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public List<Record> range(int start, int size) {
-        Query queryIds = getNamedQueryOrderedBy(Record.FIND_ALL_IDS, Record.defaultOrderMap);
-        return jpaRange(queryIds, Record.FETCH_ALL_WHERE_ID_IN, start, size);
+        List l = getEntityManager().createQuery(
+                "SELECT DISTINCT e.id, e.editDateTime, e.index" +
+                        " FROM Record e" +
+                        " ORDER BY e.editDateTime DESC, e.index ASC")
+                .setFirstResult(start)
+                .setMaxResults(size)
+                .getResultList();
+        List<UUID> ids = new ArrayList<>();
+        for (Object o1 : l) {
+            if (o1 instanceof Object[]) {
+                for (Object o2 : (Object[]) o1) {
+                    if (o2 instanceof UUID) {
+                        ids.add((UUID) o2);
+                    }
+                }
+            }
+        }
+        List<Record> records = new ArrayList<>();
+        System.err.println("records = " + records);
+        List r = getEntityManager().createQuery(
+                "SELECT DISTINCT e" +
+                        " FROM Record e" +
+                        " LEFT JOIN FETCH e.userLogin u" +
+                        " LEFT JOIN FETCH e.article a" +
+                        " LEFT JOIN FETCH e.newsEntry n" +
+                        " LEFT JOIN FETCH e.newsLinks l" +
+                        " LEFT JOIN FETCH e.tags t" +
+                        " LEFT JOIN FETCH a.link al" +
+                        " LEFT JOIN FETCH n.newsGroup ng" +
+                        " LEFT JOIN FETCH l.newsGroup lg" +
+                        " LEFT JOIN FETCH l.descriptions ld" +
+                        " WHERE e.id IN (:ids)" +
+                        " ORDER BY e.editDateTime DESC, e.index ASC")
+                .setParameter("ids", ids)
+                // .setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
+                .getResultList();
+        for (Object o1 : r) {
+            System.err.println("o1 = " + o1);
+            if (o1 instanceof Record) {
+                records.add((Record) o1);
+            }
+        }
+        return records;
+
+        // Query queryIds = getNamedQueryOrderedBy(Record.FIND_ALL_IDS, Record.defaultOrderMap);
+        // return jpaRange(queryIds, Record.FETCH_ALL_WHERE_ID_IN, start, size);
     }
 
     /**
