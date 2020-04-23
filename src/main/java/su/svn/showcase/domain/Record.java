@@ -283,6 +283,7 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @Getter
     @Setter
     @NotNull
+    @Sort(decrease = true, cluster = {"index"})
     @Column(name = "edit_date_time", nullable = false)
     private LocalDateTime editDateTime;
 

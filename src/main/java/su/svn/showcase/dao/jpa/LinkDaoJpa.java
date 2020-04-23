@@ -193,7 +193,7 @@ public class LinkDaoJpa extends AbstractDaoJpa<UUID, Link> implements LinkDao {
     }
 
     @Override
-    Class<UUID> getKClass() {
+    public Class<UUID> getKClass() {
         return UUID.class;
     }
 
