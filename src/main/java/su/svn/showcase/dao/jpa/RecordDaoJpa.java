@@ -417,52 +417,35 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     @SuppressWarnings("rawtypes")
     @Override
     public List<Record> range(int start, int size) {
-        List l = getEntityManager().createQuery(
-                "SELECT DISTINCT e.id, e.editDateTime, e.index" +
-                        " FROM Record e" +
-                        " ORDER BY e.editDateTime DESC, e.index ASC")
-                .setFirstResult(start)
-                .setMaxResults(size)
-                .getResultList();
-        List<UUID> ids = new ArrayList<>();
-        for (Object o1 : l) {
-            if (o1 instanceof Object[]) {
-                for (Object o2 : (Object[]) o1) {
-                    if (o2 instanceof UUID) {
-                        ids.add((UUID) o2);
-                    }
-                }
-            }
-        }
+        String sqlIds = "SELECT DISTINCT e.id, e.editDateTime, e.index" +
+                " FROM Record e" +
+                " ORDER BY e.editDateTime DESC, e.index ASC";
+        List<UUID> ids = jpaGetRangeIds(sqlIds, start, size);
+
+        String sql = "SELECT DISTINCT e" +
+                " FROM Record e" +
+                " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
+                " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
+                " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
+                " WHERE e.id IN (:ids)" +
+                " ORDER BY e.editDateTime DESC, e.index ASC";
+
         List<Record> records = new ArrayList<>();
-        System.err.println("records = " + records);
-        List r = getEntityManager().createQuery(
-                "SELECT DISTINCT e" +
-                        " FROM Record e" +
-                        " LEFT JOIN FETCH e.userLogin u" +
-                        " LEFT JOIN FETCH e.article a" +
-                        " LEFT JOIN FETCH e.newsEntry n" +
-                        " LEFT JOIN FETCH e.newsLinks l" +
-                        " LEFT JOIN FETCH e.tags t" +
-                        " LEFT JOIN FETCH a.link al" +
-                        " LEFT JOIN FETCH n.newsGroup ng" +
-                        " LEFT JOIN FETCH l.newsGroup lg" +
-                        " LEFT JOIN FETCH l.descriptions ld" +
-                        " WHERE e.id IN (:ids)" +
-                        " ORDER BY e.editDateTime DESC, e.index ASC")
+        List r = getEntityManager().createQuery(sql)
                 .setParameter("ids", ids)
-                // .setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
                 .getResultList();
         for (Object o1 : r) {
-            System.err.println("o1 = " + o1);
             if (o1 instanceof Record) {
                 records.add((Record) o1);
             }
         }
         return records;
-
-        // Query queryIds = getNamedQueryOrderedBy(Record.FIND_ALL_IDS, Record.defaultOrderMap);
-        // return jpaRange(queryIds, Record.FETCH_ALL_WHERE_ID_IN, start, size);
     }
 
     /**
