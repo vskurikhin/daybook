@@ -18,10 +18,7 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static su.svn.showcase.utils.CollectionUtil.convertList;
@@ -450,6 +447,25 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
 
     Query getNamedQueryOrderedBy(String queryName, Map<String, Boolean> orderMap) {
         return OrderingQueryHibernateUtil.getNamedQueryOrderedBy(getEntityManager(), queryName, orderMap);
+    }
+
+    @SuppressWarnings("rawtypes")
+    List<K> jpaGetRangeIds(String sql, int start, int size) {
+        List l = getEntityManager().createQuery(sql)
+                .setFirstResult(start)
+                .setMaxResults(size)
+                .getResultList();
+        List<K> ids = new ArrayList<>();
+        for (Object o1 : l) {
+            if (o1 instanceof Object[]) {
+                for (Object o2 : (Object[]) o1) {
+                    if (getKClass().isInstance(o2)) {
+                        ids.add(getKClass().cast(o2));
+                    }
+                }
+            }
+        }
+        return ids;
     }
 
     void close() {
