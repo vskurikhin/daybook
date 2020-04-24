@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -10,7 +10,6 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,17 +35,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static su.svn.showcase.domain.Record.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"tags"})
 @ToString(exclude = {"tags"})
 @Entity
 @Table(schema = "db", name = "db_record")
@@ -274,27 +269,29 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @JoinColumn(name = "id")
     private NewsLinks newsLinks;
 
+    @Sort
     @Getter
     @Setter
     @NotNull
-    @Column(name = "create_date_time", nullable = false)
+    @Column(name = "create_date_time", nullable = false, updatable = false)
     private LocalDateTime createDateTime;
 
     @Getter
     @Setter
     @NotNull
-    @Sort(decrease = true, cluster = {"index"})
+    @Sort(decrease = true)
     @Column(name = "edit_date_time", nullable = false)
     private LocalDateTime editDateTime;
 
     @Getter
     @Setter
+    @Sort(cluster = {"editDateTime"})
     private int index;
 
     @Getter
     @Setter
     @NotNull
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, updatable = false)
     private String type;
 
     @Getter
@@ -331,6 +328,21 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
         this.type = Record.class.getSimpleName();
         this.userLogin = userLogin;
         this.tags = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Record record = (Record) o;
+        return Objects.equals(id, record.id) &&
+               Objects.equals(createDateTime, record.createDateTime) &&
+               Objects.equals(type, record.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDateTime, type);
     }
 }
 //EOF

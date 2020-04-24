@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserLogin.java
@@ -11,7 +11,6 @@ package su.svn.showcase.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import static su.svn.showcase.domain.UserLogin.*;
@@ -29,7 +29,6 @@ import static su.svn.showcase.domain.UserLogin.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"roles"})
 @ToString(exclude = {"roles"})
 @Entity
 @Table(schema = "db", name = "db_user_login")
@@ -108,6 +107,19 @@ public class UserLogin implements DBEntity<UUID>, Serializable {
     public UserLogin(@NotNull UUID id) {
         assert id != null;
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserLogin userLogin = (UserLogin) o;
+        return Objects.equals(id, userLogin.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 //EOF
