@@ -53,7 +53,7 @@ import static su.svn.showcase.domain.Record.*;
     ),
     @NamedQuery(
         name = FIND_ALL_IDS,
-        query = "SELECT DISTINCT e.id, e.editDateTime, e.index FROM Record e"
+        query = "SELECT DISTINCT e.id FROM Record e"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
@@ -237,10 +237,11 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     public static final String COUNT_BY_DAY
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";
 
-    public static final Map<String, Boolean> defaultOrderMap
+    @Getter
+    private static final Map<String, Boolean> defaultOrderMap
             = new MapUtil.Builder<String, Boolean>()
-            .key("e.editDateTime").value(false)
-            .key("e.index").value(true)
+            .key("editDateTime").value(false)
+            .key("index").value(true)
             .unmodifiableMap();
 
     @Getter
@@ -279,13 +280,13 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @Getter
     @Setter
     @NotNull
-    @Sort(decrease = true)
+    @Sort(decrease = true, cluster = {"index"})
     @Column(name = "edit_date_time", nullable = false)
     private LocalDateTime editDateTime;
 
     @Getter
     @Setter
-    @Sort(cluster = {"editDateTime"})
+    @Sort
     private int index;
 
     @Getter

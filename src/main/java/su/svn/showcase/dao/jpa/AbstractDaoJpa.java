@@ -11,6 +11,7 @@ package su.svn.showcase.dao.jpa;
 import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.utils.CollectionUtil;
 import su.svn.showcase.utils.OrderingQueryHibernateUtil;
 
@@ -466,6 +467,21 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
             }
         }
         return ids;
+    }
+
+    @SuppressWarnings("unchecked")
+    List<E> jpaGetValuesByIds(String sql, Iterable<K> ids) {
+
+        List<E> entities = new ArrayList<>();
+        List r = getEntityManager().createQuery(sql)
+                .setParameter("ids", ids)
+                .getResultList();
+        for (Object o1 : r) {
+            if (getEClass().isInstance(o1)) {
+                entities.add((E) o1);
+            }
+        }
+        return entities;
     }
 
     void close() {
