@@ -9,14 +9,14 @@
 package su.svn.showcase.utils;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MapUtil {
 
     public static class Builder<K, V> {
 
-        private final Map<K, V> map = new HashMap<K, V>();
+        private final Map<K, V> map = new LinkedHashMap<>();
 
         public Keys<K, V> key(K key) {
             return new Keys<K, V>(this, key);
@@ -28,12 +28,12 @@ public class MapUtil {
         }
 
         public Map<K, V> build() {
-            return new HashMap<K, V>(map);
+            return new LinkedHashMap<K, V>(map);
         }
 
         @SuppressWarnings("Java9CollectionFactory")
         public Map<K, V> unmodifiableMap() {
-            return Collections.unmodifiableMap(new HashMap<K, V>(map));
+            return Collections.unmodifiableMap(new LinkedHashMap<>(map));
         }
 
         public static <X, Y> Builder<X, Y> create() {

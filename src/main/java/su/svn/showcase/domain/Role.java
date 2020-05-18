@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Role.java
@@ -10,7 +10,6 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +23,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 import static su.svn.showcase.domain.Role.*;
@@ -31,7 +31,6 @@ import static su.svn.showcase.domain.Role.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Table(schema = "db", name = "db_role")
 @NamedQueries({
@@ -90,12 +89,26 @@ public class Role implements DBEntity<UUID>, Serializable {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "role_name", length = 32, nullable = false, unique = true)
+    @Column(name = "role_name", length = 32, nullable = false, unique = true, updatable = false)
     private String roleName;
 
     public Role(@NotNull UUID id) {
         assert id != null;
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Role role = (Role) o;
+        return Objects.equals(id, role.id) &&
+               Objects.equals(roleName, role.roleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleName);
     }
 }
 //EOF

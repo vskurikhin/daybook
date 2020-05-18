@@ -439,6 +439,11 @@ public class TagDaoJpa extends AbstractDaoJpa<String, Tag> implements TagDao {
         return LOGGER;
     }
 
+    @Override
+    public Class<String> getKClass() {
+        return String.class;
+    }
+
     /**
      * {@inheritDoc }
      */

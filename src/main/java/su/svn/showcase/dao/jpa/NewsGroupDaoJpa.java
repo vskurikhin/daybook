@@ -366,6 +366,11 @@ public class NewsGroupDaoJpa extends AbstractDaoJpa<UUID, NewsGroup> implements 
     }
 
     @Override
+    public Class<UUID> getKClass() {
+        return UUID.class;
+    }
+
+    @Override
     public Class<NewsGroup> getEClass() {
         return NewsGroup.class;
     }

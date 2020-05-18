@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.01 00:04 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.20 22:41 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * build.gradle
@@ -157,6 +157,7 @@ dependencies {
   providedCompile group: 'com.sun.faces', name: 'jsf-api', version: libVers.jsf
   providedCompile group: 'com.sun.faces', name: 'jsf-impl', version: libVers.jsf
   providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: libVers.javax_servlet_api
+  providedCompile group: 'org.hibernate', name: 'hibernate-core', version: libVers.hibernate
   providedCompile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: hibernate_jpa_2_1_api
 
   testCompile group: 'io.thorntail', name: 'arquillian', version: libVers.thorntail

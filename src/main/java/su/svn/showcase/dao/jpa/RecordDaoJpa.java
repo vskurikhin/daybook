@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 19:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.22 23:01 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -8,10 +8,17 @@
 
 package su.svn.showcase.dao.jpa;
 
+import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
+import su.svn.showcase.dto.enums.RecordTypesEnum;
+import su.svn.showcase.dto.jdo.ArticleJdo;
+import su.svn.showcase.dto.jdo.NewsEntryJdo;
+import su.svn.showcase.dto.jdo.NewsLinksJdo;
+import su.svn.showcase.utils.MapUtil;
+import su.svn.showcase.utils.OrderingQueryHibernateUtil;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -19,6 +26,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The Record DAO implementation.
@@ -226,6 +236,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *         is rolled back
      */
     @Override
+    @Deprecated
     public List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
         final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
         return jpaDaoFindAllWhereIn(query, "ids", toList(ids));
@@ -243,6 +254,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * {@inheritDoc }
      */
     @Override
+    @Deprecated
     public List<Record> findAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
         return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
     }
@@ -301,6 +313,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * @return
      */
     @Override
+    @Deprecated
     public List<Record> fetchAllOrderByEditDateTimeDescIndex() {
         return jpaDaoFindAll(Record.FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX);
     }
@@ -354,6 +367,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *         the query timeout value set and the transaction
      *         is rolled back
      */
+    @Deprecated
     @Override
     public List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
         final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
@@ -363,6 +377,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     /**
      * {@inheritDoc }
      */
+    @Deprecated
     @Override
     public List<Record> fetchAllByDay(LocalDate date) {
         return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY, date);
@@ -371,6 +386,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     /**
      * {@inheritDoc }
      */
+    @Deprecated
     @Override
     public List<Record> fetchAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
         return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
@@ -398,9 +414,38 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *          the query timeout value set and the transaction
      *          is rolled back
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public List<Record> range(int start, int size) {
-        return jpaRange(Record.RANGE, start, size);
+
+        String sqlIds = "SELECT DISTINCT e.id, e.editDateTime, e.index" +
+                " FROM Record e" +
+                " ORDER BY e.editDateTime DESC, e.index ASC";
+        List<UUID> ids = jpaGetRangeIds(sqlIds, start, size);
+
+        String sql = "SELECT DISTINCT e" +
+                " FROM Record e" +
+                " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
+                " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
+                " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
+                " WHERE e.id IN (:ids)" +
+                " ORDER BY e.editDateTime DESC, e.index ASC";
+
+        return jpaGetValuesByIds(sql, ids);
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
+        return jpaRangeIdIn(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
     }
 
     /**
@@ -425,6 +470,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *          the query timeout value set and the transaction
      *          is rolled back
      */
+    @Deprecated
     @Override
     public List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size) {
         return jpaRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size);
@@ -433,14 +479,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     /**
      * {@inheritDoc }
      */
-    @Override
-    public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
-        return jpaRangeIdIn(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
+    @Deprecated
     @Override
     public List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids) {
         return jpaRangeIdIn(Record.RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
@@ -457,6 +496,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     /**
      * {@inheritDoc }
      */
+    @Deprecated
     @Override
     public List<Record> rangeByDayOrderByEditDateTimeDescIndex(int start, int size, LocalDate date) {
         return jpaRecordRange(Record.RANGE_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, date);
@@ -494,6 +534,11 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     @Override
     Logger getLogger() {
         return LOGGER;
+    }
+
+    @Override
+    public Class<UUID> getKClass() {
+        return UUID.class;
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -10,13 +10,13 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.wildfly.common.annotation.Nullable;
 import su.svn.showcase.interfaces.Typing;
+import su.svn.showcase.utils.MapUtil;
 
 import javax.annotation.Nonnull;
 import javax.persistence.CascadeType;
@@ -35,16 +35,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static su.svn.showcase.domain.Record.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"tags"})
 @ToString(exclude = {"tags"})
 @Entity
 @Table(schema = "db", name = "db_record")
@@ -55,9 +52,8 @@ import static su.svn.showcase.domain.Record.*;
         query = "SELECT DISTINCT e FROM Record e"
     ),
     @NamedQuery(
-        name = FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
+        name = FIND_ALL_IDS,
+        query = "SELECT DISTINCT e.id FROM Record e"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
@@ -65,23 +61,15 @@ import static su.svn.showcase.domain.Record.*;
                 " WHERE e.id IN (:ids)"
     ),
     @NamedQuery(
-        name = FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.id IN (:ids)" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
         name = FIND_ALL_BY_DAY,
         query = "SELECT DISTINCT e FROM Record e" +
                 " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
     ),
     @NamedQuery(
-        name = FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
+        name = FIND_ALL_IDS_BY_DAY,
+        query = "SELECT DISTINCT e.id FROM Record e" +
+                " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
     ),
-
     @NamedQuery(
         name = FETCH_BY_ID,
         query = "SELECT DISTINCT e FROM Record e" +
@@ -96,7 +84,40 @@ import static su.svn.showcase.domain.Record.*;
                 " LEFT JOIN FETCH l.descriptions ld" +
                 " WHERE e.id = :id"
     ),
+    @NamedQuery(
+        name = FETCH_ALL_WHERE_ID_IN,
+        query = "SELECT DISTINCT e FROM Record e" +
+                " LEFT JOIN FETCH e.userLogin u" +
+                " LEFT JOIN FETCH e.article a" +
+                " LEFT JOIN FETCH e.newsEntry n" +
+                " LEFT JOIN FETCH e.newsLinks l" +
+                " LEFT JOIN FETCH e.tags t" +
+                " LEFT JOIN FETCH a.link al" +
+                " LEFT JOIN FETCH n.newsGroup ng" +
+                " LEFT JOIN FETCH l.newsGroup lg" +
+                " LEFT JOIN FETCH l.descriptions ld" +
+                " WHERE e.id IN :ids"
+    ),
 
+
+
+    @NamedQuery(
+        name = FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
+        query = "SELECT DISTINCT e FROM Record e" +
+                " ORDER BY e.editDateTime DESC, e.index ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
+        query = "SELECT DISTINCT e FROM Record e" +
+                " WHERE e.id IN (:ids)" +
+                " ORDER BY e.editDateTime DESC, e.index ASC"
+    ),
+    @NamedQuery(
+        name = FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
+        query = "SELECT DISTINCT e FROM Record e" +
+                " WHERE e.editDateTime BETWEEN :startDate AND :endDate" +
+                " ORDER BY e.editDateTime DESC, e.index ASC"
+    ),
     @NamedQuery(
         name = FETCH_ALL,
         query = "SELECT DISTINCT e FROM Record e" +
@@ -125,20 +146,6 @@ import static su.svn.showcase.domain.Record.*;
                 " ORDER BY e.editDateTime DESC, e.index ASC"
     ),
     @NamedQuery(
-        name = FETCH_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id IN (:id)"
-    ),
-    @NamedQuery(
         name = FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
         query = "SELECT DISTINCT e FROM Record e" +
                 " LEFT JOIN FETCH e.userLogin u" +
@@ -152,20 +159,6 @@ import static su.svn.showcase.domain.Record.*;
                 " LEFT JOIN FETCH l.descriptions ld" +
                 " WHERE e.id IN (:id)" +
                 " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL_BY_DAY,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
     ),
     @NamedQuery(
         name = FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
@@ -188,22 +181,27 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     public static final String FIND_ALL = "RecordDao.findAll";
 
-    public static final String FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.findAllOrderByEditDateTimeDescIndex";
+    public static final String FIND_ALL_IDS = "RecordDao.findAllIds";
 
     public static final String FIND_ALL_WHERE_ID_IN = "RecordDao.findAllWhereIdIn";
+
+    public static final String FIND_ALL_BY_DAY = "RecordDao.findAllByDay";
+
+    public static final String FIND_ALL_IDS_BY_DAY = "RecordDao.findAllIdsByDay";
+
+
+
+    public static final String FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
+            = "RecordDao.findAllOrderByEditDateTimeDescIndex";
 
     public static final String FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.findAllWhereIdInOrderByEditDateTimeDescIndex";
 
-    public static final String FIND_ALL_BY_DAY = "RecordDao.findAllByDay";
 
     public static final String FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.findAllByDayOrderByEditDateTimeDescIndex";
 
-
     public static final String FETCH_BY_ID = "RecordDao.fetchById";
-
 
     public static final String FETCH_ALL = "RecordDao.fetchAll";
 
@@ -221,9 +219,10 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
             = "RecordDao.fetchAllByDayOrderByEditDateTimeDescIndex";
 
 
-    public static final String RANGE = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
     public static final String RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
+
+    public static final String RANGE = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
     public static final String RANGE_WHERE_ID_IN = FETCH_ALL_WHERE_ID_IN;
 
@@ -237,6 +236,13 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     public static final String COUNT_BY_DAY
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";
+
+    @Getter
+    private static final Map<String, Boolean> defaultOrderMap
+            = new MapUtil.Builder<String, Boolean>()
+            .key("editDateTime").value(false)
+            .key("index").value(true)
+            .unmodifiableMap();
 
     @Getter
     @NotNull
@@ -264,26 +270,29 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @JoinColumn(name = "id")
     private NewsLinks newsLinks;
 
+    @Sort
     @Getter
     @Setter
     @NotNull
-    @Column(name = "create_date_time", nullable = false)
+    @Column(name = "create_date_time", nullable = false, updatable = false)
     private LocalDateTime createDateTime;
 
     @Getter
     @Setter
     @NotNull
+    @Sort(decrease = true, cluster = {"index"})
     @Column(name = "edit_date_time", nullable = false)
     private LocalDateTime editDateTime;
 
     @Getter
     @Setter
+    @Sort
     private int index;
 
     @Getter
     @Setter
     @NotNull
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, updatable = false)
     private String type;
 
     @Getter
@@ -320,6 +329,21 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
         this.type = Record.class.getSimpleName();
         this.userLogin = userLogin;
         this.tags = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Record record = (Record) o;
+        return Objects.equals(id, record.id) &&
+               Objects.equals(createDateTime, record.createDateTime) &&
+               Objects.equals(type, record.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDateTime, type);
     }
 }
 //EOF

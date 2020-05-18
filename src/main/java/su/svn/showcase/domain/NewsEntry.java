@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * NewsEntry.java
@@ -10,7 +10,6 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -30,13 +29,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import static su.svn.showcase.domain.NewsEntry.*;
 
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"record"})
 @ToString(exclude = {"record"})
 @Entity
 @Table(schema = "db", name = "db_news_entry")
@@ -137,6 +136,20 @@ public class NewsEntry implements DBEntity<UUID>, Serializable {
         assert id != null;
         this.id = id;
         this.record = new Record(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewsEntry newsEntry = (NewsEntry) o;
+        return Objects.equals(id, newsEntry.id) &&
+               Objects.equals(record, newsEntry.record);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, record);
     }
 }
 //EOF

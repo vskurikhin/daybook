@@ -11,15 +11,15 @@ package su.svn.showcase.dao.jpa;
 import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
+import su.svn.showcase.domain.Record;
 import su.svn.showcase.utils.CollectionUtil;
+import su.svn.showcase.utils.OrderingQueryHibernateUtil;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.metamodel.EntityType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 import static su.svn.showcase.utils.CollectionUtil.convertList;
@@ -40,6 +40,14 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
     abstract EntityManager getEntityManager();
 
     abstract Logger getLogger();
+
+    /**
+     * The entityClass fields are protected so that subclasses,
+     * i.e. specific DAO implementations, can access them.
+     *
+     * @return Key  Class field.
+     */
+    abstract Class<K> getKClass();
 
     /**
      * The entityClass fields are protected so that subclasses,
@@ -268,6 +276,16 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
         return typedQuery.getResultList();
     }
 
+    List<E> jpaRange(Query queryIds, String queryName, int start, int size) {
+        @SuppressWarnings("unchecked")
+        List<K> ids = queryIds.setFirstResult(start).setMaxResults(size).getResultList();
+        TypedQuery<E> typedQuery = getEntityManager().createNamedQuery(queryName, getEClass());
+        typedQuery.setParameter("ids", ids);
+
+        return typedQuery.getResultList();
+    }
+
+
     // Retrieves set of entity records with size of capacity
     // and start - the position of the first result to retrieve.
     //
@@ -425,6 +443,45 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
         }
         em.flush();
         getLogger().info("Save {} with ids: {}", getEClass().getSimpleName(), ids);
+    }
+
+
+    Query getNamedQueryOrderedBy(String queryName, Map<String, Boolean> orderMap) {
+        return OrderingQueryHibernateUtil.getNamedQueryOrderedBy(getEntityManager(), queryName, orderMap);
+    }
+
+    @SuppressWarnings("rawtypes")
+    List<K> jpaGetRangeIds(String sql, int start, int size) {
+        List l = getEntityManager().createQuery(sql)
+                .setFirstResult(start)
+                .setMaxResults(size)
+                .getResultList();
+        List<K> ids = new ArrayList<>();
+        for (Object o1 : l) {
+            if (o1 instanceof Object[]) {
+                for (Object o2 : (Object[]) o1) {
+                    if (getKClass().isInstance(o2)) {
+                        ids.add(getKClass().cast(o2));
+                    }
+                }
+            }
+        }
+        return ids;
+    }
+
+    @SuppressWarnings("unchecked")
+    List<E> jpaGetValuesByIds(String sql, Iterable<K> ids) {
+
+        List<E> entities = new ArrayList<>();
+        List r = getEntityManager().createQuery(sql)
+                .setParameter("ids", ids)
+                .getResultList();
+        for (Object o1 : r) {
+            if (getEClass().isInstance(o1)) {
+                entities.add((E) o1);
+            }
+        }
+        return entities;
     }
 
     void close() {

@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Tag.java
@@ -10,7 +10,6 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +28,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 import static su.svn.showcase.domain.Tag.*;
@@ -36,7 +36,6 @@ import static su.svn.showcase.domain.Tag.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"records"})
 @ToString(exclude = {"records"})
 @Entity
 @Table(schema = "dictionary", name = "tag")
@@ -105,7 +104,7 @@ public class Tag implements DBEntity<String>, Serializable {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "tag", length = 128, nullable = false, unique = true)
+    @Column(name = "tag", length = 128, nullable = false, unique = true, updatable = false)
     private String tag;
 
     @Getter
@@ -131,6 +130,20 @@ public class Tag implements DBEntity<String>, Serializable {
     public Tag(@NotNull String id) {
         assert id != null;
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag1 = (Tag) o;
+        return Objects.equals(id, tag1.id) &&
+               Objects.equals(tag, tag1.tag);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, tag);
     }
 }
 //EOF

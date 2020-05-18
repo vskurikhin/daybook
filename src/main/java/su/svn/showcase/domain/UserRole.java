@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * UserRole.java
@@ -11,7 +11,6 @@ package su.svn.showcase.domain;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +30,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import static su.svn.showcase.domain.UserRole.*;
@@ -39,7 +39,6 @@ import static su.svn.showcase.domain.UserRole.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @ToString
 @Entity
 @Table(schema = "db", name = "db_user_role")
@@ -140,6 +139,20 @@ public class UserRole implements DBEntity<UUID>, Serializable {
     public UserRole(@NotNull UUID id) {
         assert id != null;
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRole userRole = (UserRole) o;
+        return Objects.equals(id, userRole.id) &&
+               Objects.equals(role, userRole.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, role);
     }
 }
 //EOF
