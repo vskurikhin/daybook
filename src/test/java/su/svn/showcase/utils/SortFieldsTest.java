@@ -8,12 +8,10 @@
 
 package su.svn.showcase.utils;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import su.svn.showcase.domain.Record;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class SortFieldsTest {
 
@@ -21,13 +19,9 @@ class SortFieldsTest {
     void setUp() {
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
     void testToString() {
         SortFields test = new SortFields(Record.class);
-        System.out.println("test = " + test);
+        Assertions.assertTrue(test.contains(Record.getDefaultOrderMap()));
     }
 }

@@ -37,6 +37,13 @@ public class SortFields {
         this.clusters = Collections.unmodifiableSet(sortFields(aClass));
     }
 
+    public boolean contains(Map<String, Boolean> sorting) {
+        Cluster cluster = new Cluster();
+        cluster.setCluster(sorting);
+
+        return clusters.contains(cluster);
+    }
+
     @Override
     public String toString() {
         return "SortFields{" +

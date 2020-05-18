@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -10,7 +10,6 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,17 +35,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static su.svn.showcase.domain.Record.*;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"tags"})
 @ToString(exclude = {"tags"})
 @Entity
 @Table(schema = "db", name = "db_record")
@@ -58,7 +53,7 @@ import static su.svn.showcase.domain.Record.*;
     ),
     @NamedQuery(
         name = FIND_ALL_IDS,
-        query = "SELECT DISTINCT e.id, e.editDateTime, e.index FROM Record e"
+        query = "SELECT DISTINCT e.id FROM Record e"
     ),
     @NamedQuery(
         name = FIND_ALL_WHERE_ID_IN,
@@ -242,10 +237,11 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     public static final String COUNT_BY_DAY
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";
 
-    public static final Map<String, Boolean> defaultOrderMap
+    @Getter
+    private static final Map<String, Boolean> defaultOrderMap
             = new MapUtil.Builder<String, Boolean>()
-            .key("e.editDateTime").value(false)
-            .key("e.index").value(true)
+            .key("editDateTime").value(false)
+            .key("index").value(true)
             .unmodifiableMap();
 
     @Getter
@@ -274,10 +270,11 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     @JoinColumn(name = "id")
     private NewsLinks newsLinks;
 
+    @Sort
     @Getter
     @Setter
     @NotNull
-    @Column(name = "create_date_time", nullable = false)
+    @Column(name = "create_date_time", nullable = false, updatable = false)
     private LocalDateTime createDateTime;
 
     @Getter
@@ -289,12 +286,13 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     @Getter
     @Setter
+    @Sort
     private int index;
 
     @Getter
     @Setter
     @NotNull
-    @Column(name = "type", nullable = false)
+    @Column(name = "type", nullable = false, updatable = false)
     private String type;
 
     @Getter
@@ -331,6 +329,21 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
         this.type = Record.class.getSimpleName();
         this.userLogin = userLogin;
         this.tags = new HashSet<>();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Record record = (Record) o;
+        return Objects.equals(id, record.id) &&
+               Objects.equals(createDateTime, record.createDateTime) &&
+               Objects.equals(type, record.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, createDateTime, type);
     }
 }
 //EOF

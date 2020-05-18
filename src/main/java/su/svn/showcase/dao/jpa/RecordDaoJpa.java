@@ -417,6 +417,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     @SuppressWarnings("rawtypes")
     @Override
     public List<Record> range(int start, int size) {
+
         String sqlIds = "SELECT DISTINCT e.id, e.editDateTime, e.index" +
                 " FROM Record e" +
                 " ORDER BY e.editDateTime DESC, e.index ASC";
@@ -436,16 +437,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
                 " WHERE e.id IN (:ids)" +
                 " ORDER BY e.editDateTime DESC, e.index ASC";
 
-        List<Record> records = new ArrayList<>();
-        List r = getEntityManager().createQuery(sql)
-                .setParameter("ids", ids)
-                .getResultList();
-        for (Object o1 : r) {
-            if (o1 instanceof Record) {
-                records.add((Record) o1);
-            }
-        }
-        return records;
+        return jpaGetValuesByIds(sql, ids);
     }
 
     /**

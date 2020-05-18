@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.14 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Article.java
@@ -10,33 +10,22 @@ package su.svn.showcase.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.annotation.Nonnull;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 import static su.svn.showcase.domain.Article.*;
 
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"link", "record"})
 @ToString(exclude = {"link", "record"})
 @Entity
 @Table(schema = "db", name = "db_article")
@@ -148,6 +137,24 @@ public class Article implements DBEntity<UUID>, Serializable {
     public Article(@Nonnull UUID id) {
         this.id = id;
         this.record = new Record(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return Objects.equals(id, article.id) &&
+               Objects.equals(record, article.record);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, record);
+    }
+
+    protected boolean canEqual(final Object other) {
+        return other instanceof Article;
     }
 }
 //EOF
