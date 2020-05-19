@@ -36,6 +36,11 @@ public class MapUtil {
             return Collections.unmodifiableMap(new LinkedHashMap<>(map));
         }
 
+        @SuppressWarnings("Java9CollectionFactory")
+        public LinkedHashMap<K, V> linkedHashMap() {
+            return new LinkedHashMap<>(map);
+        }
+
         public static <X, Y> Builder<X, Y> create() {
             return new Builder<X, Y>();
         }

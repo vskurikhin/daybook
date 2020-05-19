@@ -8,17 +8,11 @@
 
 package su.svn.showcase.dao.jpa;
 
-import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import su.svn.showcase.dao.RecordDao;
 import su.svn.showcase.domain.Record;
-import su.svn.showcase.dto.enums.RecordTypesEnum;
-import su.svn.showcase.dto.jdo.ArticleJdo;
-import su.svn.showcase.dto.jdo.NewsEntryJdo;
-import su.svn.showcase.dto.jdo.NewsLinksJdo;
-import su.svn.showcase.utils.MapUtil;
-import su.svn.showcase.utils.OrderingQueryHibernateUtil;
+import su.svn.showcase.utils.OrderingQueryHibernate;
 
 import javax.annotation.Nonnull;
 import javax.persistence.*;
@@ -26,9 +20,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * The Record DAO implementation.
@@ -418,24 +409,20 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     @Override
     public List<Record> range(int start, int size) {
 
-        String sqlIds = "SELECT DISTINCT e.id, e.editDateTime, e.index" +
-                " FROM Record e" +
-                " ORDER BY e.editDateTime DESC, e.index ASC";
-        List<UUID> ids = jpaGetRangeIds(sqlIds, start, size);
+        String sqlIds = OrderingQueryHibernate
+                .getNamedQueryIdsOrderedBy(getEntityManager(), Record.FIND_ALL_IDS, Record.getDefaultOrderMap());
+        LOGGER.info("range ids from sql: {}", sqlIds);
 
-        String sql = "SELECT DISTINCT e" +
-                " FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id IN (:ids)" +
-                " ORDER BY e.editDateTime DESC, e.index ASC";
+        List<UUID> ids = jpaGetRangeIds(sqlIds, start, size);
+        LOGGER.info("range from ids: {}", ids);
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String sql = OrderingQueryHibernate
+                .getNamedQueryIdInOrderedBy(getEntityManager(), Record.FETCH_ALL_WHERE_ID_IN, Record.getDefaultOrderMap());
+        LOGGER.info("range values from sql: {}", sql);
 
         return jpaGetValuesByIds(sql, ids);
     }

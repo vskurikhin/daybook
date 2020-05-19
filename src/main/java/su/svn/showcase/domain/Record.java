@@ -96,7 +96,7 @@ import static su.svn.showcase.domain.Record.*;
                 " LEFT JOIN FETCH n.newsGroup ng" +
                 " LEFT JOIN FETCH l.newsGroup lg" +
                 " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id IN :ids"
+                " WHERE e.id IN (:ids)"
     ),
 
 
@@ -189,6 +189,10 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     public static final String FIND_ALL_IDS_BY_DAY = "RecordDao.findAllIdsByDay";
 
+    public static final String FETCH_BY_ID = "RecordDao.fetchById";
+
+    public static final String FETCH_ALL_WHERE_ID_IN = "RecordDao.fetchAllWhereIdIn";
+
 
 
     public static final String FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
@@ -197,28 +201,22 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
     public static final String FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.findAllWhereIdInOrderByEditDateTimeDescIndex";
 
-
     public static final String FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.findAllByDayOrderByEditDateTimeDescIndex";
 
-    public static final String FETCH_BY_ID = "RecordDao.fetchById";
-
     public static final String FETCH_ALL = "RecordDao.fetchAll";
+
+    public static final String FETCH_ALL_BY_DAY = "RecordDao.fetchAllByDay";
 
     public static final String FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.fetchAllOrderByEditDateTimeDescIndex";
 
-    public static final String FETCH_ALL_WHERE_ID_IN = "RecordDao.fetchAllWhereIdIn";
-
     public static final String FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.fetchAllWhereIdInOrderByEditDateTimeDescIndex";
 
-    public static final String FETCH_ALL_BY_DAY = "RecordDao.fetchAllByDay";
 
     public static final String FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
             = "RecordDao.fetchAllByDayOrderByEditDateTimeDescIndex";
-
-
 
     public static final String RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
@@ -238,11 +236,11 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";
 
     @Getter
-    private static final Map<String, Boolean> defaultOrderMap
+    private static final LinkedHashMap<String, Boolean> defaultOrderMap
             = new MapUtil.Builder<String, Boolean>()
             .key("editDateTime").value(false)
             .key("index").value(true)
-            .unmodifiableMap();
+            .linkedHashMap();
 
     @Getter
     @NotNull

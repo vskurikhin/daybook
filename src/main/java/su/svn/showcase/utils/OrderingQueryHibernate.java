@@ -64,7 +64,7 @@ public class OrderingQueryHibernate {
             throw new RuntimeException("Bad query string."); // TODO custom Exception
         }
 
-        return matcher.group(1) + fields.toString() + matcher.group(4) + orderBy.toString();
+        return matcher.group(1) + fields.toString() + ' ' + matcher.group(4) + orderBy.toString();
     }
 
     public static String getNamedQueryIdInOrderedBy(EntityManager em, String queryName, Map<String, Boolean> columnNames) {
