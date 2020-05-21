@@ -10,7 +10,7 @@ package su.svn.shared;
 
 public final class Constants
 {
-    public static final boolean RELEASE = true;
+    public static final boolean RELEASE = false;
 
     public static final java.lang.String DEV_LOGIN = "ADMIN@DOMAIN";
 

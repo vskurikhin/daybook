@@ -11,13 +11,20 @@ package su.svn.showcase.utils;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class OrderingQueryHibernate {
 
-    private static String ORDER_BY_CLAUSE_START = " ORDER BY ";
+    private static final String E = "e.";
+
+    private static final String ASC = " ASC";
+
+    private static final String DESC = " DESC";
+
+    private static final String ORDER_BY_CLAUSE_START = " ORDER BY ";
+
+    private static final String COMMA = ", ";
 
     private static final Pattern badQueryPattern = Pattern.compile("[^\\p{ASCII}]*");
 
@@ -46,25 +53,25 @@ public class OrderingQueryHibernate {
         orderBy.append(ORDER_BY_CLAUSE_START);
 
         for (String columnName: columnNames.keySet()) {
-            fields.append(", ");
+            fields.append(COMMA);
             if (notFirst) {
-                orderBy.append(", ");
+                orderBy.append(COMMA);
             }
             notFirst = true;
-            orderBy.append("e.").append(columnName);
-            fields.append("e.").append(columnName);
+            orderBy.append(E).append(columnName);
+            fields.append(E).append(columnName);
 
             if (columnNames.get(columnName))
-                orderBy.append(" ASC");
+                orderBy.append(ASC);
             else
-                orderBy.append(" DESC");
+                orderBy.append(DESC);
         }
         Matcher matcher = QUERY_GET_IDS.matcher(getNamedQueryString(em, queryName));
         if ( ! matcher.find()) {
             throw new RuntimeException("Bad query string."); // TODO custom Exception
         }
 
-        return matcher.group(1) + fields.toString() + matcher.group(4) + orderBy.toString();
+        return matcher.group(1) + fields.toString() + ' ' + matcher.group(4) + orderBy.toString();
     }
 
     public static String getNamedQueryIdInOrderedBy(EntityManager em, String queryName, Map<String, Boolean> columnNames) {
@@ -75,15 +82,15 @@ public class OrderingQueryHibernate {
 
         for (String columnName: columnNames.keySet()) {
             if (notFirst) {
-                orderBy.append(", ");
+                orderBy.append(COMMA);
             }
             notFirst = true;
-            orderBy.append("e.").append(columnName);
+            orderBy.append(E).append(columnName);
 
             if (columnNames.get(columnName))
-                orderBy.append(" ASC");
+                orderBy.append(ASC);
             else
-                orderBy.append(" DESC");
+                orderBy.append(DESC);
         }
 
         return getNamedQueryString(em, queryName) + orderBy.toString();
