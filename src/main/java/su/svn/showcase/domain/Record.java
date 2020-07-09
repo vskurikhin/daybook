@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.24 22:15 by Victor N. Skurikhin.
+ * This file was last modified at 2020.07.09 14:59 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * Record.java
@@ -47,133 +47,70 @@ import static su.svn.showcase.domain.Record.*;
 @Table(schema = "db", name = "db_record")
 @SuppressWarnings({"SingleElementAnnotation", "JpaQlInspection"})
 @NamedQueries({
-    @NamedQuery(
-        name = FIND_ALL,
-        query = "SELECT DISTINCT e FROM Record e"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_IDS,
-        query = "SELECT DISTINCT e.id FROM Record e"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.id IN (:ids)"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_BY_DAY,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_IDS_BY_DAY,
-        query = "SELECT DISTINCT e.id FROM Record e" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
-    ),
-    @NamedQuery(
-        name = FETCH_BY_ID,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id = :id"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL_WHERE_ID_IN,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id IN (:ids)"
-    ),
-
-
-
-    @NamedQuery(
-        name = FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.id IN (:ids)" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " WHERE e.editDateTime BETWEEN :startDate AND :endDate" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " WHERE e.id IN (:id)" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
-    @NamedQuery(
-        name = FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX,
-        query = "SELECT DISTINCT e FROM Record e" +
-                " LEFT JOIN FETCH e.userLogin u" +
-                " LEFT JOIN FETCH e.article a" +
-                " LEFT JOIN FETCH e.newsEntry n" +
-                " LEFT JOIN FETCH e.newsLinks l" +
-                " LEFT JOIN FETCH e.tags t" +
-                " LEFT JOIN FETCH a.link al" +
-                " LEFT JOIN FETCH n.newsGroup ng" +
-                " LEFT JOIN FETCH l.newsGroup lg" +
-                " LEFT JOIN FETCH l.descriptions ld" +
-                " ORDER BY e.editDateTime DESC, e.index ASC"
-    ),
+        @NamedQuery(
+                name = FIND_ALL,
+                query = "SELECT DISTINCT e FROM Record e"
+        ),
+        @NamedQuery(
+                name = FIND_ALL_IDS,
+                query = "SELECT DISTINCT e.id FROM Record e"
+        ),
+        @NamedQuery(
+                name = FIND_ALL_WHERE_ID_IN,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " WHERE e.id IN (:ids)"
+        ),
+        @NamedQuery(
+                name = FIND_ALL_BY_DAY,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
+        ),
+        @NamedQuery(
+                name = FIND_ALL_IDS_BY_DAY,
+                query = "SELECT DISTINCT e.id FROM Record e" +
+                        " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
+        ),
+        @NamedQuery(
+                name = FETCH_ALL,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " LEFT JOIN FETCH e.userLogin u" +
+                        " LEFT JOIN FETCH e.article a" +
+                        " LEFT JOIN FETCH e.newsEntry n" +
+                        " LEFT JOIN FETCH e.newsLinks l" +
+                        " LEFT JOIN FETCH e.tags t" +
+                        " LEFT JOIN FETCH a.link al" +
+                        " LEFT JOIN FETCH n.newsGroup ng" +
+                        " LEFT JOIN FETCH l.newsGroup lg" +
+                        " LEFT JOIN FETCH l.descriptions ld"
+        ),
+        @NamedQuery(
+                name = FETCH_BY_ID,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " LEFT JOIN FETCH e.userLogin u" +
+                        " LEFT JOIN FETCH e.article a" +
+                        " LEFT JOIN FETCH e.newsEntry n" +
+                        " LEFT JOIN FETCH e.newsLinks l" +
+                        " LEFT JOIN FETCH e.tags t" +
+                        " LEFT JOIN FETCH a.link al" +
+                        " LEFT JOIN FETCH n.newsGroup ng" +
+                        " LEFT JOIN FETCH l.newsGroup lg" +
+                        " LEFT JOIN FETCH l.descriptions ld" +
+                        " WHERE e.id = :id"
+        ),
+        @NamedQuery(
+                name = FETCH_ALL_WHERE_ID_IN,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " LEFT JOIN FETCH e.userLogin u" +
+                        " LEFT JOIN FETCH e.article a" +
+                        " LEFT JOIN FETCH e.newsEntry n" +
+                        " LEFT JOIN FETCH e.newsLinks l" +
+                        " LEFT JOIN FETCH e.tags t" +
+                        " LEFT JOIN FETCH a.link al" +
+                        " LEFT JOIN FETCH n.newsGroup ng" +
+                        " LEFT JOIN FETCH l.newsGroup lg" +
+                        " LEFT JOIN FETCH l.descriptions ld" +
+                        " WHERE e.id IN (:ids)"
+        ),
 })
 public class Record implements DBEntity<UUID>, Serializable, Typing {
 
@@ -191,46 +128,11 @@ public class Record implements DBEntity<UUID>, Serializable, Typing {
 
     public static final String FETCH_BY_ID = "RecordDao.fetchById";
 
-    public static final String FETCH_ALL_WHERE_ID_IN = "RecordDao.fetchAllWhereIdIn";
-
-
-
-    public static final String FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.findAllOrderByEditDateTimeDescIndex";
-
-    public static final String FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.findAllWhereIdInOrderByEditDateTimeDescIndex";
-
-    public static final String FIND_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.findAllByDayOrderByEditDateTimeDescIndex";
-
     public static final String FETCH_ALL = "RecordDao.fetchAll";
 
+    public static final String FETCH_ALL_WHERE_ID_IN = "RecordDao.fetchAllWhereIdIn";
+
     public static final String FETCH_ALL_BY_DAY = "RecordDao.fetchAllByDay";
-
-    public static final String FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.fetchAllOrderByEditDateTimeDescIndex";
-
-    public static final String FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.fetchAllWhereIdInOrderByEditDateTimeDescIndex";
-
-
-    public static final String FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-            = "RecordDao.fetchAllByDayOrderByEditDateTimeDescIndex";
-
-    public static final String RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-
-    public static final String RANGE = FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-
-    public static final String RANGE_WHERE_ID_IN = FETCH_ALL_WHERE_ID_IN;
-
-    public static final String RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-                             = FETCH_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-
-    public static final String RANGE_ALL_BY_DAY = FETCH_ALL_BY_DAY;
-
-    public static final String RANGE_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX
-                             = FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
 
     public static final String COUNT_BY_DAY
             = "SELECT COUNT(e.id) FROM Record e WHERE e.editDateTime BETWEEN :startDate AND :endDate";

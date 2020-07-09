@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.05 22:40 by Victor N. Skurikhin.
+ * This file was last modified at 2020.07.09 14:59 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDao.java
@@ -13,6 +13,7 @@ import su.svn.showcase.exceptions.ErrorCase;
 import su.svn.showcase.interfaces.Typing;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,24 +38,6 @@ public interface RecordDao extends Dao<UUID, Record> {
     List<Record> findAllByIdIn(Iterable<UUID> ids);
 
     /**
-     * Retrieves all records in ordered mode.
-     *
-     * @return records of entity type by condition.
-     */
-    @Deprecated
-    List<Record> findAllOrderByEditDateTimeDescIndex();
-
-    /**
-     * Retrieves all records of an Record type by the set of possible key values.
-     *
-     * @param ids - set of possible key values.
-     * @return records of entity by condition.
-     * @throws ErrorCase in case the given {@link Iterable} is {@literal null}.
-     */
-    @Deprecated
-    List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
-
-    /**
      * Retrieves all records of an Record type by the specific day.
      *
      * @param date - the specific day.
@@ -62,16 +45,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      */
     @Deprecated
     List<Record> findAllByDay(LocalDate date);
-
-    /**
-     * Retrieves all records of an Record type in ordered mode by the specific day.
-     *
-     * @param date - the specific day.
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> findAllByDayOrderByEditDateTimeDescIndex(LocalDate date);
-
 
     /**
      * Retrieves the record and fetch the related entities in a single query
@@ -83,7 +56,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      */
     Optional<Record> fetchById(UUID id);
 
-
     /**
      * Retrieves all records of the Record type and fetch fields of entity type in a single query.
      *
@@ -93,15 +65,6 @@ public interface RecordDao extends Dao<UUID, Record> {
     List<Record> fetchAll();
 
     /**
-     * Retrieves all records of the Record type in ordered mode and fetch fields of an entity type
-     * in a single query.
-     *
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> fetchAllOrderByEditDateTimeDescIndex();
-
-    /**
      * Retrieves all records of the Record type and fetch a fields of entity type
      * by the set of possible key values.
      *
@@ -109,37 +72,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @return records of entity by condition.
      */
     List<Record> fetchAllWhereIdIn(Iterable<UUID> ids);
-
-    /**
-     * Retrieves all records of the Record type in ordered mode by the set of possible key values
-     * and fetch fields of an entity type in a single query.
-     *
-     * @param ids - set of possible key values.
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids);
-
-    /**
-     * Retrieves all records of the Record type and fetch fields of entity type in a single query
-     * by the specific day.
-     *
-     * @param date - the specific day.
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> fetchAllByDay(LocalDate date);
-
-    /**
-     * Retrieves all records of the Record type in ordered mode and fetch fields of entity type
-     * in a single query by the specific day.
-     *
-     * @param date - the specific day.
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> fetchAllByDayOrderByEditDateTimeDescIndex(LocalDate date);
-
 
     /**
      * Returns all instances of Record type and falling within
@@ -165,29 +97,15 @@ public interface RecordDao extends Dao<UUID, Record> {
     List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids);
 
     /**
-     * Returns all instances of Record type from ordered query and
-     * falling within the range specified in the arguments of the initial
-     * position and size.
+     * Returns all instances of Record type and falling within
+     * the range specified in the records of the initial position and size.
      *
      * @param start - initial position.
      * @param size - size.
+     * @param orderMap - order map.
      * @return records of entity by condition.
      */
-    @Deprecated
-    List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size);
-
-    /**
-     * Returns all instances of Record type from ordered query with the given IDs and
-     * falling within the range specified in the arguments of the initial
-     * position and size.
-     *
-     * @param start - initial position.
-     * @param size - size.
-     * @param ids - set of possible key values.
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids);
+    List<Record> rangeOrderBy(int start, int size, LinkedHashMap<String, Boolean> orderMap);
 
     /**
      * Returns all instances of Record type from query with the given day and
@@ -200,20 +118,6 @@ public interface RecordDao extends Dao<UUID, Record> {
      * @return records of entity by condition.
      */
     List<Record> rangeByDay(int start, int size, LocalDate date);
-
-    /**
-     * Returns all instances of Record type from ordered query with the given day and
-     * falling within the range specified in the arguments of the initial
-     * position and size.
-     *
-     * @param start - initial position.
-     * @param size - size.
-     * @param date -the given day
-     * @return records of entity by condition.
-     */
-    @Deprecated
-    List<Record> rangeByDayOrderByEditDateTimeDescIndex(int start, int size, LocalDate date);
-
 
     /**
      * Returns the number of entities available in the specific day.

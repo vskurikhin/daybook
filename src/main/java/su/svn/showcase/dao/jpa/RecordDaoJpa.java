@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.04.22 23:01 by Victor N. Skurikhin.
+ * This file was last modified at 2020.07.09 14:59 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -181,73 +181,10 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
-     * @throws IllegalArgumentException if a query has not been
-     *         defined with the given name or if the query string is
-     *         found to be invalid or if the query result is found to
-     *         not be assignable to the specified type
-     * @throws QueryTimeoutException if the query execution exceeds
-     *         the query timeout value set and only the statement is
-     *         rolled back
-     * @throws TransactionRequiredException if a lock mode has
-     *         been set and there is no transaction
-     * @throws PessimisticLockException if pessimistic locking
-     *         fails and the transaction is rolled back
-     * @throws LockTimeoutException if pessimistic locking
-     *         fails and only the statement is rolled back
-     * @throws PersistenceException if the query execution exceeds
-     *         the query timeout value set and the transaction
-     *         is rolled back
-     * @return
-     */
-    @Override
-    public List<Record> findAllOrderByEditDateTimeDescIndex() {
-        return jpaDaoFindAll(Record.FIND_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX);
-    }
-
-    /**
-     * {@inheritDoc }
-     * @param ids - possible values.
-     * @return list of Records
-     * @throws IllegalArgumentException if a query has not been
-     *         defined with the given name or if the query string is
-     *         found to be invalid or if the query result is found to
-     *         not be assignable to the specified type
-     *         or if iterable is null
-     * @throws QueryTimeoutException if the query execution exceeds
-     *         the query timeout value set and only the statement is
-     *         rolled back
-     * @throws TransactionRequiredException if a lock mode has
-     *         been set and there is no transaction
-     * @throws PessimisticLockException if pessimistic locking
-     *         fails and the transaction is rolled back
-     * @throws LockTimeoutException if pessimistic locking
-     *         fails and only the statement is rolled back
-     * @throws PersistenceException if the query execution exceeds
-     *         the query timeout value set and the transaction
-     *         is rolled back
-     */
-    @Override
-    @Deprecated
-    public List<Record> findAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
-        final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-        return jpaDaoFindAllWhereIn(query, "ids", toList(ids));
-    }
-
-    /**
-     * {@inheritDoc }
      */
     @Override
     public List<Record> findAllByDay(LocalDate date) {
         return jpaRecordQueryByDay(Record.FIND_ALL_BY_DAY, date);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
-    @Deprecated
-    public List<Record> findAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
-        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
     }
 
     /**
@@ -285,32 +222,6 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
-     * @throws IllegalArgumentException if a query has not been
-     *         defined with the given name or if the query string is
-     *         found to be invalid or if the query result is found to
-     *         not be assignable to the specified type
-     * @throws QueryTimeoutException if the query execution exceeds
-     *         the query timeout value set and only the statement is
-     *         rolled back
-     * @throws TransactionRequiredException if a lock mode has
-     *         been set and there is no transaction
-     * @throws PessimisticLockException if pessimistic locking
-     *         fails and the transaction is rolled back
-     * @throws LockTimeoutException if pessimistic locking
-     *         fails and only the statement is rolled back
-     * @throws PersistenceException if the query execution exceeds
-     *         the query timeout value set and the transaction
-     *         is rolled back
-     * @return
-     */
-    @Override
-    @Deprecated
-    public List<Record> fetchAllOrderByEditDateTimeDescIndex() {
-        return jpaDaoFindAll(Record.FETCH_ALL_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX);
-    }
-
-    /**
-     * {@inheritDoc }
      * @param ids - possible values.
      * @return list of Records
      * @throws IllegalArgumentException if a query has not been
@@ -338,53 +249,6 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
 
     /**
      * {@inheritDoc }
-     * @param ids - possible values.
-     * @return list of Records
-     * @throws IllegalArgumentException if a query has not been
-     *         defined with the given name or if the query string is
-     *         found to be invalid or if the query result is found to
-     *         not be assignable to the specified type
-     *         or if iterable is null
-     * @throws QueryTimeoutException if the query execution exceeds
-     *         the query timeout value set and only the statement is
-     *         rolled back
-     * @throws TransactionRequiredException if a lock mode has
-     *         been set and there is no transaction
-     * @throws PessimisticLockException if pessimistic locking
-     *         fails and the transaction is rolled back
-     * @throws LockTimeoutException if pessimistic locking
-     *         fails and only the statement is rolled back
-     * @throws PersistenceException if the query execution exceeds
-     *         the query timeout value set and the transaction
-     *         is rolled back
-     */
-    @Deprecated
-    @Override
-    public List<Record> fetchAllWhereIdInOrderByEditDateTimeDescIndex(Iterable<UUID> ids) {
-        final String query = Record.FIND_ALL_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX;
-        return jpaDaoFindAllWhereIn(query, "ids", toList(ids));
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Deprecated
-    @Override
-    public List<Record> fetchAllByDay(LocalDate date) {
-        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY, date);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Deprecated
-    @Override
-    public List<Record> fetchAllByDayOrderByEditDateTimeDescIndex(LocalDate date) {
-        return jpaRecordQueryByDay(Record.FETCH_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, date);
-    }
-
-    /**
-     * {@inheritDoc }
      *  @throws IllegalArgumentException if a query has not been
      *          defined with the given name or if the query string is
      *          found to be invalid or if the query result is found to
@@ -405,12 +269,23 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      *          the query timeout value set and the transaction
      *          is rolled back
      */
-    @SuppressWarnings("rawtypes")
     @Override
     public List<Record> range(int start, int size) {
+        return rangeOrderBy(start, size, Record.getDefaultOrderMap());
+    }
+
+    /**
+     * {@inheritDoc }
+     */
+    @Override
+    public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
+        return jpaRangeIdIn(Record.FETCH_ALL_WHERE_ID_IN, start, size, ids);
+    }
+
+    public List<Record> rangeOrderBy(int start, int size, LinkedHashMap<String, Boolean> orderMap) {
 
         String sqlIds = OrderingQueryHibernate
-                .getNamedQueryIdsOrderedBy(getEntityManager(), Record.FIND_ALL_IDS, Record.getDefaultOrderMap());
+                .getNamedQueryIdsOrderedBy(getEntityManager(), Record.FIND_ALL_IDS, orderMap);
         LOGGER.info("range ids from sql: {}", sqlIds);
 
         List<UUID> ids = jpaGetRangeIds(sqlIds, start, size);
@@ -421,7 +296,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
         }
 
         String sql = OrderingQueryHibernate
-                .getNamedQueryIdInOrderedBy(getEntityManager(), Record.FETCH_ALL_WHERE_ID_IN, Record.getDefaultOrderMap());
+                .getNamedQueryIdInOrderedBy(getEntityManager(), Record.FETCH_ALL_WHERE_ID_IN, orderMap);
         LOGGER.info("range values from sql: {}", sql);
 
         return jpaGetValuesByIds(sql, ids);
@@ -431,62 +306,8 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
      * {@inheritDoc }
      */
     @Override
-    public List<Record> rangeWhereIdIn(int start, int size, Iterable<UUID> ids) {
-        return jpaRangeIdIn(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
-    }
-
-    /**
-     * {@inheritDoc }
-     *  @throws IllegalArgumentException if a query has not been
-     *          defined with the given name or if the query string is
-     *          found to be invalid or if the query result is found to
-     *          not be assignable to the specified type
-     *  @throws IllegalArgumentException if the argument is negative
-     *  @throws IllegalStateException if called for a Java
-     *          Persistence query language UPDATE or DELETE statement
-     *  @throws QueryTimeoutException if the query execution exceeds
-     *          the query timeout value set and only the statement is
-     *          rolled back
-     *  @throws TransactionRequiredException if a lock mode has
-     *          been set and there is no transaction
-     *  @throws PessimisticLockException if pessimistic locking
-     *          fails and the transaction is rolled back
-     *  @throws LockTimeoutException if pessimistic locking
-     *          fails and only the statement is rolled back
-     *  @throws PersistenceException if the query execution exceeds
-     *          the query timeout value set and the transaction
-     *          is rolled back
-     */
-    @Deprecated
-    @Override
-    public List<Record> rangeOrderByEditDateTimeDescIndex(int start, int size) {
-        return jpaRange(Record.RANGE_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Deprecated
-    @Override
-    public List<Record> rangeWhereIdInOrderByEditDateTimeDescIndex(int start, int size, Iterable<UUID> ids) {
-        return jpaRangeIdIn(Record.RANGE_WHERE_ID_IN_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, ids);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Override
     public List<Record> rangeByDay(int start, int size, LocalDate date) {
-        return jpaRecordRange(Record.RANGE_ALL_BY_DAY, start, size, date);
-    }
-
-    /**
-     * {@inheritDoc }
-     */
-    @Deprecated
-    @Override
-    public List<Record> rangeByDayOrderByEditDateTimeDescIndex(int start, int size, LocalDate date) {
-        return jpaRecordRange(Record.RANGE_ALL_BY_DAY_ORDER_BY_EDIT_DATE_TIME_DESC_INDEX, start, size, date);
+        return jpaRecordRange(Record.FETCH_ALL_BY_DAY, start, size, date);
     }
 
 
@@ -497,7 +318,7 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     public Integer countByDay(LocalDate date) {
         LocalDateTime startDateTime = LocalDateTime.of(date, LocalTime.MIN);
         LocalDateTime endDateTime = LocalDateTime.of(date.plusDays(1), LocalTime.MIN);
-        Query query = getEntityManager().createQuery(Record.COUNT_BY_DAY);;
+        Query query = getEntityManager().createQuery(Record.COUNT_BY_DAY);
         query.setParameter("startDate", startDateTime);
         query.setParameter("endDate", endDateTime);
         Long count = (Long) query.getSingleResult();
