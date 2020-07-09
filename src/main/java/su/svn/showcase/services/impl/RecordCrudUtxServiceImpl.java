@@ -68,7 +68,7 @@ public class RecordCrudUtxServiceImpl extends AbstractUserTransactionService imp
 
     @Override
     public List<RecordJdo> readRange(int start, int size) {
-        return utxRange(emf.createEntityManager(), Record.class, Record.RANGE, start, size)
+        return utxRange(emf.createEntityManager(), Record.class, Record.FETCH_ALL, start, size)
                 .stream()
                 .map(recordPartConverter::convert)
                 .collect(Collectors.toList());
