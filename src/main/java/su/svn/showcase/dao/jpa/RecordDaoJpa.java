@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.07.09 14:59 by Victor N. Skurikhin.
+ * This file was last modified at 2020.07.11 21:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * RecordDaoJpa.java
@@ -72,6 +72,27 @@ public class RecordDaoJpa extends AbstractRecordDaoJpa implements RecordDao {
     @Override
     public List<Record> findAll() {
         return jpaDaoFindAll(Record.FIND_ALL);
+    }
+
+    @Override
+    public List<Record> findAllOrderBy(LinkedHashMap<String, Boolean> orderMap) {
+
+        String sqlIds = OrderingQueryHibernate
+                .getNamedQueryIdsOrderedBy(getEntityManager(), Record.FIND_ALL_IDS, orderMap);
+        LOGGER.info("find ids from sql: {}", sqlIds);
+
+        List<UUID> ids = jpaGetIds(sqlIds);
+        LOGGER.info("find from ids: {}", ids);
+
+        if (ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String sql = OrderingQueryHibernate
+                .getNamedQueryIdInOrderedBy(getEntityManager(), Record.FETCH_ALL_WHERE_ID_IN, orderMap);
+        LOGGER.info("find values from sql: {}", sql);
+
+        return jpaGetValuesByIds(sql, ids);
     }
 
     /**

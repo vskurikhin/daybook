@@ -1,5 +1,5 @@
 /*
- * This file was last modified at 2020.03.28 19:35 by Victor N. Skurikhin.
+ * This file was last modified at 2020.07.11 21:08 by Victor N. Skurikhin.
  * This is free and unencumbered software released into the public domain.
  * For more information, please refer to <http://unlicense.org>
  * AbstractDaoJpa.java
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import su.svn.showcase.dao.Dao;
 import su.svn.showcase.domain.DBEntity;
 import su.svn.showcase.utils.CollectionUtil;
-import su.svn.showcase.utils.OrderingQueryHibernate;
 import su.svn.showcase.utils.OrderingQueryHibernateUtil;
 
 import javax.persistence.*;
@@ -448,6 +447,23 @@ abstract class AbstractDaoJpa<K, E extends DBEntity<K>> implements Dao<K, E> {
 
     Query getNamedQueryOrderedBy(String queryName, Map<String, Boolean> orderMap) {
         return OrderingQueryHibernateUtil.getNamedQueryOrderedBy(getEntityManager(), queryName, orderMap);
+    }
+
+    @SuppressWarnings("rawtypes")
+    List<K> jpaGetIds(String sql) {
+        List l = getEntityManager().createQuery(sql)
+                .getResultList();
+        List<K> ids = new ArrayList<>();
+        for (Object o1 : l) {
+            if (o1 instanceof Object[]) {
+                for (Object o2 : (Object[]) o1) {
+                    if (getKClass().isInstance(o2)) {
+                        ids.add(getKClass().cast(o2));
+                    }
+                }
+            }
+        }
+        return ids;
     }
 
     @SuppressWarnings("rawtypes")
