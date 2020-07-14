@@ -111,6 +111,20 @@ import static su.svn.showcase.domain.Record.*;
                         " LEFT JOIN FETCH l.descriptions ld" +
                         " WHERE e.id IN (:ids)"
         ),
+        @NamedQuery(
+                name = FETCH_ALL_BY_DAY,
+                query = "SELECT DISTINCT e FROM Record e" +
+                        " LEFT JOIN FETCH e.userLogin u" +
+                        " LEFT JOIN FETCH e.article a" +
+                        " LEFT JOIN FETCH e.newsEntry n" +
+                        " LEFT JOIN FETCH e.newsLinks l" +
+                        " LEFT JOIN FETCH e.tags t" +
+                        " LEFT JOIN FETCH a.link al" +
+                        " LEFT JOIN FETCH n.newsGroup ng" +
+                        " LEFT JOIN FETCH l.newsGroup lg" +
+                        " LEFT JOIN FETCH l.descriptions ld" +
+                        " WHERE e.editDateTime BETWEEN :startDate AND :endDate"
+        ),
 })
 public class Record implements DBEntity<UUID>, Serializable, Typing {
 
