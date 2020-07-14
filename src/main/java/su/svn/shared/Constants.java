@@ -15,6 +15,7 @@ public final class Constants
     public static final java.lang.String DEV_LOGIN = "ADMIN@DOMAIN";
 
     public static final String UPLOAD_DIRECTORY = "upload";
+    public static final String UNZIP_DIRECTORY = "resources/main/html";
     public static final String DEFAULT_FILENAME = "default.file";
 
     public static final int MEMORY_THRESHOLD = 1024 * 1024 * 3;

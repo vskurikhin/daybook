@@ -9,6 +9,9 @@
 package su.svn.servlets;
 
 import javax.servlet.annotation.WebServlet;
+
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -19,9 +22,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static su.svn.shared.Constants.*;
 
@@ -32,6 +38,8 @@ import static su.svn.shared.Constants.*;
 public class UploadServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Pattern zipFile = Pattern.compile(".*\\.zip$");
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UploadServlet.class);
 
@@ -61,6 +69,7 @@ public class UploadServlet extends HttpServlet {
                 List<FileItem> formItems = upload.parseRequest(request);
 
                 if (formItems != null && formItems.size() > 0) {
+                    String unzipPath = getServletContext().getRealPath("") + File.separator + UNZIP_DIRECTORY;
                     for (FileItem item : formItems) {
                         if ( ! item.isFormField()) {
                             String fileName = new File(item.getName()).getName();
@@ -68,6 +77,11 @@ public class UploadServlet extends HttpServlet {
                             File storeFile = new File(filePath);
                             item.write(storeFile);
                             request.setAttribute("message", "File " + fileName + " has uploaded successfully!");
+                            Matcher matcher = zipFile.matcher(fileName);
+                            if (matcher.find()) {
+                                LOGGER.info("unzipFile({}, {})", filePath, unzipPath);
+                                unzipFile(filePath, unzipPath);
+                            }
                         }
                     }
                 }
@@ -76,6 +90,28 @@ public class UploadServlet extends HttpServlet {
                 request.setAttribute("message", "There was an error: " + ex.getMessage());
             }
             getServletContext().getRequestDispatcher("/welcome.xhtml").forward(request, response);
+        }
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
+    }
+
+    private void unzipFile(String fileName, String destinationDirectory) {
+        try {
+            ZipFile zipFile = new ZipFile(fileName);
+            zipFile.extractAll(destinationDirectory);
+        } catch (ZipException e) {
+            e.printStackTrace();
         }
     }
 }
