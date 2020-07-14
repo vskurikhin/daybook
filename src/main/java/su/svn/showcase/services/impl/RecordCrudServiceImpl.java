@@ -72,7 +72,7 @@ public class RecordCrudServiceImpl extends AbstractCrudService implements Record
     @Transactional
     public List<RecordJdo> readRange(int start, int size) {
         return recordDao.range(start, size).stream()
-                .map(recordPartConverter::convert)
+                .map(recordFullConverter::convert)
                 .collect(Collectors.toList());
     }
 
